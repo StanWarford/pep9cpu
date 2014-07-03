@@ -16,5 +16,7 @@
         <file>images/stop.png</file>
         <file>images/Pep8cpu-icon.png</file>
         <file>images/Pep8cpu-icon-about.png</file>
+        <file>images/Pep9cpu-icon.png</file>
+        <file>images/Pep9cpu-icon-about.png</file>
     </qresource>
 </RCC>

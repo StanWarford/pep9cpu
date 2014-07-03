@@ -117,7 +117,7 @@ private slots:
     void on_actionHelp_Pep8Reference_triggered();
     void on_actionHelp_Examples_triggered();
     void on_actionHelp_triggered();
-    void on_actionHelp_About_Pep8CPU_triggered();
+    void on_actionHelp_About_Pep9CPU_triggered();
     void on_actionHelp_About_Qt_triggered();
 
     // Byte converter

@@ -517,7 +517,7 @@ void MainWindow::on_actionHelp_triggered()
     helpDialog->show();
 }
 
-void MainWindow::on_actionHelp_About_Pep8CPU_triggered()
+void MainWindow::on_actionHelp_About_Pep9CPU_triggered()
 {
     aboutPepDialog->show();
 }
