@@ -2,7 +2,7 @@
 
 <html>
 <head>
- <title> Pep/8 CPU: Using Pep/8 CPU </title>
+ <title> Pep/9 CPU: Using Pep/9 CPU </title>
   <style type="text/css" media="all">
    img { vertical-align:text-top; }
    code { font-family:Courier, 'Courier New', monospace; font-size:11pt }
@@ -12,13 +12,13 @@
 <table bgcolor="#FB9F14" width="100%" cellpadding="2" cellspacing="0" border="0">
 <tr><td>
 <p style="text-align:center; font-family:helvetica, arial, sans-serif; font-size:14pt; font-weight:bold; color: #29315E">
-Using Pep/8 CPU
+Using Pep/9 CPU
 </p>
 </td></tr>
 </table>
  <p>
 
-Pep/8 CPU is a central processing unit simulator for writing microcode programs.
+Pep/9 CPU is a central processing unit simulator for writing microcode programs.
 It is designed to be used with the textbook, <i>Computer Systems</i>, J. Stanley Warford, Fourth edition, Jones and Bartlett, Publishers, 2010.
 The goal of the book is to teach the fundamentals of the classic von Neumann machine.
 You should use the Pep/8 system in conjunction with the textbook to write microcode programs.
@@ -32,7 +32,7 @@ Reference: <i>Computer Systems</i>, Chapter 12, Section 12.1.
 
 <h3><a name="Modes">Interactive, microcode, and debugging use</a></h3>
 
- There are three ways to use the Pep/8 CPU simulator &mdash; interactive, microcode, and debugging.
+ There are three ways to use the Pep/9 CPU simulator &mdash; interactive, microcode, and debugging.
  When the application starts up, the two buttons Clock and Copy to Microcode are enabled
  and the two buttons Single Step and Resume are disabled.
  <p>
@@ -57,7 +57,7 @@ The following figure shows the first few lines of a microprogram.
  <img src="qrc:/help/images/microcodeuse.png" alt="microcodeuse" hspace=10 vspace=10>
 <p>
 Comments begin with <code>//</code> as in C++ and Java.
-Pep/8 CPU features automated unit code testing.
+Pep/9 CPU features automated unit code testing.
 The keywords <code>UnitPre</code> and <code>UnitPost</code> in the above figure specify a unit test for the program.
 <p>
 After writing a microprogram the user can either run the program or use the debugger to see the effect of each
@@ -69,14 +69,14 @@ two buttons Single Step and Resume are enabled.
 <p>
 <img src="qrc:/help/images/fourbuttonsmicrocodemode.png" alt="fourbuttonsmicrocodemode" hspace=10 vspace=10>
 <p>
-You can click the Single Step button to see the effect of each cycle on the state of the Pep/8 CPU.
+You can click the Single Step button to see the effect of each cycle on the state of the Pep/9 CPU.
 <h4>More details</h4>
-For more details about how to use Pep/8 CPU in each of these three ways, see the sections Interactive Use, Microcode Use,
+For more details about how to use Pep/9 CPU in each of these three ways, see the sections Interactive Use, Microcode Use,
 and Debugging Use in this Help system.
 <p>
 <h3><a name="File">Microcode files</a></h3>
-The Pep/8 CPU system uses the file extension <code>.pepcpu</code> to store microcode programs.
-The files are text files that you can modify with your favorite text editor or word processor outside the Pep/8 CPU application.
+The Pep/9 CPU system uses the file extension <code>.pepcpu</code> to store microcode programs.
+The files are text files that you can modify with your favorite text editor or word processor outside the Pep/9 CPU application.
 <p>
 When you write a microprogram the editor automatically numbers the statements that correspond to CPU cycles.
 The following figure shows the auto-cycle number feature of the editor.
@@ -109,7 +109,7 @@ When you open a previously saved microprogram the editor strips any cycle number
 <p>
 <h3><a name="Byte">Byte converter</a></h3>
 
-Any time the Pep/8 CPU application is running, the byte converter is available in the tool bar.
+Any time the Pep/9 CPU application is running, the byte converter is available in the tool bar.
 The four input fields represent the value of a single byte as displayed from left to right in decimal, hexadecimal, binary, and ASCII.
 Simply enter any value in any input field and the other fields will show the same value in the corresponding format.
 Here is the result of entering the letter <code>P</code> in the ASCII field.

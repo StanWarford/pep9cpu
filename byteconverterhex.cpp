@@ -1,7 +1,7 @@
 // File: byteconverterhex.cpp
 // File: aboutpep.cpp
 /*
-    Pep8CPU is a CPU simulator for executing microcode sequences to
+    Pep9CPU is a CPU simulator for executing microcode sequences to
     implement instructions in the instruction set of the Pep/8 computer.
 
     Copyright (C) 2010  J. Stanley Warford, Pepperdine University

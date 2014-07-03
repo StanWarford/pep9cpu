@@ -1,6 +1,6 @@
 // File: mainwindow.cpp
 /*
-    Pep8CPU is a CPU simulator for executing microcode sequences to
+    Pep9CPU is a CPU simulator for executing microcode sequences to
     implement instructions in the instruction set of the Pep/8 computer.
 
     Copyright (C) 2010  J. Stanley Warford, Pepperdine University
@@ -161,7 +161,7 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
 
 void MainWindow::readSettings()
 {
-    QSettings settings("Pep8CPU", "MainWindow");
+    QSettings settings("Pep9CPU", "MainWindow");
     QDesktopWidget *desktop = QApplication::desktop();
     int width = static_cast<int>(desktop->width() * 0.80);
     int height = static_cast<int>(desktop->height() * 0.70);
@@ -185,7 +185,7 @@ void MainWindow::readSettings()
 
 void MainWindow::writeSettings()
 {
-    QSettings settings("Pep8CPU", "MainWindow");
+    QSettings settings("Pep9CPU", "MainWindow");
     settings.setValue("pos", pos());
     settings.setValue("size", size());
     settings.setValue("filePath", curPath);
@@ -206,7 +206,7 @@ bool MainWindow::maybeSave()
 {
     if (microcodePane->isModified()) {
         QMessageBox::StandardButton ret;
-        ret = QMessageBox::warning(this, "Pep/8 CPU",
+        ret = QMessageBox::warning(this, "Pep/9 CPU",
                                    "The microcode has been modified.\n"
                                    "Do you want to save your changes?",
                                    QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
@@ -222,7 +222,7 @@ void MainWindow::loadFile(const QString &fileName)
 {
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        QMessageBox::warning(this, tr("Pep/8 CPU"), tr("Cannot read file %1:\n%2.")
+        QMessageBox::warning(this, tr("Pep/9 CPU"), tr("Cannot read file %1:\n%2.")
                              .arg(fileName).arg(file.errorString()));
         return;
     }
@@ -241,7 +241,7 @@ bool MainWindow::saveFile(const QString &fileName)
 {
     QFile file(fileName);
     if (!file.open(QFile::WriteOnly | QFile::Text)) {
-        QMessageBox::warning(this, tr("Pep/8 CPU"),
+        QMessageBox::warning(this, tr("Pep/9 CPU"),
                              tr("Cannot write file %1:\n%2.")
                              .arg(fileName)
                              .arg(file.errorString()));
@@ -316,7 +316,7 @@ bool MainWindow::on_actionFile_Save_As_triggered()
             this,
             "Save Microcode",
             curFile.isEmpty() ? curPath + "/untitled.pepcpu" : curPath + "/" + strippedName(curFile),
-            "Pep8 Source (*.pepcpu *.txt)");
+            "Pep9 Source (*.pepcpu *.txt)");
     if (fileName.isEmpty()) {
         return false;
     }
@@ -476,10 +476,10 @@ void MainWindow::on_actionSystem_Clear_Memory_triggered()
     mainMemory->clearMemory();
 }
 
-void MainWindow::on_actionHelp_UsingPep8CPU_triggered()
+void MainWindow::on_actionHelp_UsingPep9CPU_triggered()
 {
     helpDialog->show();
-    helpDialog->selectItem("Using Pep/8 CPU");
+    helpDialog->selectItem("Using Pep/9 CPU");
 }
 
 void MainWindow::on_actionHelp_InteractiveUse_triggered()
@@ -500,10 +500,10 @@ void MainWindow::on_actionHelp_DebuggingUse_triggered()
     helpDialog->selectItem("Debugging Use");
 }
 
-void MainWindow::on_actionHelp_Pep8Reference_triggered()
+void MainWindow::on_actionHelp_Pep9Reference_triggered()
 {
     helpDialog->show();
-    helpDialog->selectItem("Pep/8 Reference");
+    helpDialog->selectItem("Pep/9 Reference");
 }
 
 void MainWindow::on_actionHelp_Examples_triggered()
@@ -678,7 +678,7 @@ void MainWindow::simulationFinished()
     for (int i = 0; i < Sim::codeList.size(); i++) {
         if (!Sim::codeList.at(i)->testPostcondition(mainMemory, cpuPane, errorString)) {
             microcodePane->appendMessageInSourceCodePaneAt(-1, errorString);
-            QMessageBox::warning(this, "Pep8CPU", "Failed unit test");
+            QMessageBox::warning(this, "Pep9CPU", "Failed unit test");
             return;
         }
     }

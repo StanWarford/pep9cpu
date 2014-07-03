@@ -1,6 +1,6 @@
 // File: helpdialog.cpp
 /*
-    Pep8CPU is a CPU simulator for executing microcode sequences to
+    Pep9CPU is a CPU simulator for executing microcode sequences to
     implement instructions in the instruction set of the Pep/8 computer.
 
     Copyright (C) 2010  J. Stanley Warford, Pepperdine University
@@ -98,30 +98,30 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
 
 //    qDebug() << "Selected: " << ui->helpTreeWidget->currentIndex();
 
-    if (!isHelpSubCat && row == eUSINGPEP8CPU) { // Using Pep/8 CPU
+    if (!isHelpSubCat && row == eUSINGPEP9CPU) { // Using Pep/9 CPU
         ui->helpSplitter->widget(1)->hide();
         ui->helpTopWebView->show();
-        ui->helpTopWebView->load(QUrl("qrc:/help/usingpep8cpu.html"));
+        ui->helpTopWebView->load(QUrl("qrc:/help/usingpep9cpu.html"));
     }
-    else if (isHelpSubCat && parentRow == eUSINGPEP8CPU && row == eCPU) { // Interactive use
+    else if (isHelpSubCat && parentRow == eUSINGPEP9CPU && row == eCPU) { // Interactive use
         ui->helpSplitter->widget(1)->hide();
         ui->helpTopWebView->show();
         ui->helpTopWebView->load(QUrl("qrc:/help/cpu.html"));
     }
-    else if (isHelpSubCat && parentRow == eUSINGPEP8CPU && row == eMICROCODE) { // Microcode use
+    else if (isHelpSubCat && parentRow == eUSINGPEP9CPU && row == eMICROCODE) { // Microcode use
         ui->helpSplitter->widget(1)->hide();
         ui->helpTopWebView->show();
         ui->helpTopWebView->load(QUrl("qrc:/help/microcode.html"));
     }
-    else if (isHelpSubCat && parentRow == eUSINGPEP8CPU && row == eDEBUGGING) { // Debugging use
+    else if (isHelpSubCat && parentRow == eUSINGPEP9CPU && row == eDEBUGGING) { // Debugging use
         ui->helpSplitter->widget(1)->hide();
         ui->helpTopWebView->show();
         ui->helpTopWebView->load(QUrl("qrc:/help/debugging.html"));
     }
-    else if (!isHelpSubCat && row == ePEP8REFERENCE) { // Pep/8 Reference
+    else if (!isHelpSubCat && row == ePEP9REFERENCE) { // Pep/8 Reference
         ui->helpSplitter->widget(1)->hide();
         ui->helpTopWebView->show();
-        ui->helpTopWebView->load(QUrl("qrc:/help/pep8reference.html"));
+        ui->helpTopWebView->load(QUrl("qrc:/help/pep9reference.html"));
     }
     else if ((!isHelpSubCat && row == eEXAMPLES) || parentRow == eEXAMPLES) {
         if (!isHelpSubCat) {

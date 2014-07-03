@@ -23,7 +23,7 @@
    <enum>Qt::NoFocus</enum>
   </property>
   <property name="windowTitle">
-   <string>Pep/8 CPU Help</string>
+   <string>Pep/9 CPU Help</string>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -113,7 +113,7 @@
       </column>
       <item>
        <property name="text">
-        <string>Using Pep/8 CPU</string>
+        <string>Using Pep/9 CPU</string>
        </property>
        <item>
         <property name="text">
@@ -133,7 +133,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Pep/8 Reference</string>
+        <string>Pep/9 Reference</string>
        </property>
       </item>
       <item>
@@ -460,7 +460,7 @@
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-   <header>QtWebKit/QWebView</header>
+   <header>QtWebKitWidgets/QWebView</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -1,6 +1,6 @@
 // File: helpdialog.h
 /*
-    Pep8CPU is a CPU simulator for executing microcode sequences to
+    Pep9CPU is a CPU simulator for executing microcode sequences to
     implement instructions in the instruction set of the Pep/8 computer.
 
     Copyright (C) 2010  J. Stanley Warford, Pepperdine University
@@ -56,8 +56,8 @@ private:
     PepHighlighter *leftHighlighter;
 
     enum Row {
-        eUSINGPEP8CPU = 0,
-        ePEP8REFERENCE = 1,
+        eUSINGPEP9CPU = 0,
+        ePEP9REFERENCE = 1,
         eEXAMPLES = 2,
         eEXCERCISES = 3,
 

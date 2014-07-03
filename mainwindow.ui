@@ -130,11 +130,11 @@
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="actionHelp_UsingPep8CPU"/>
+    <addaction name="actionHelp_UsingPep9CPU"/>
     <addaction name="actionHelp_InteractiveUse"/>
     <addaction name="actionHelp_MicrocodeUse"/>
     <addaction name="actionHelp_DebuggingUse"/>
-    <addaction name="actionHelp_Pep8Reference"/>
+    <addaction name="actionHelp_Pep9Reference"/>
     <addaction name="actionHelp_Examples"/>
     <addaction name="separator"/>
     <addaction name="actionHelp_About_Pep9CPU"/>
@@ -356,13 +356,13 @@
     <bool>false</bool>
    </property>
   </action>
-  <action name="actionHelp_UsingPep8CPU">
+  <action name="actionHelp_UsingPep9CPU">
    <property name="icon">
     <iconset resource="pep9cpuresources.qrc">
      <normaloff>:/images/help.png</normaloff>:/images/help.png</iconset>
    </property>
    <property name="text">
-    <string>Using Pep/8 CPU</string>
+    <string>Using Pep/9 CPU</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>
@@ -498,9 +498,9 @@
     <string>Debugging Use</string>
    </property>
   </action>
-  <action name="actionHelp_Pep8Reference">
+  <action name="actionHelp_Pep9Reference">
    <property name="text">
-    <string>Pep/8 Reference</string>
+    <string>Pep/9 Reference</string>
    </property>
   </action>
   <action name="actionHelp_Examples">
