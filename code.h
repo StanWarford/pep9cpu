@@ -35,7 +35,7 @@ class Code
 public:
     virtual ~Code() { }
     virtual bool isMicrocode() { return false; }
-    virtual void setCpuLabels(CpuPaneGraphicsItems *) { }
+    virtual void setCpuLabels(CpuPaneBaseGraphicsItems *) { }
     virtual QString getObjectCode() { return ""; }
     virtual QString getSourceCode() { return ""; }
     virtual bool hasUnitPre() { return false; }
@@ -50,7 +50,7 @@ class MicroCode: public Code
 public:
     MicroCode();
     bool isMicrocode();
-    void setCpuLabels(CpuPaneGraphicsItems *cpuPaneItems);
+    void setCpuLabels(CpuPaneBaseGraphicsItems *cpuPaneItems);
     QString getObjectCode();
     QString getSourceCode();
     bool has(Enu::EMnemonic field);

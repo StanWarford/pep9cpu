@@ -20,7 +20,7 @@
 */
 
 #include "code.h"
-#include "cpupanegraphicsitems.h"
+#include "cpupanebasegraphicsitems.h"
 
 MicroCode::MicroCode()
 {
@@ -46,7 +46,7 @@ MicroCode::MicroCode()
 
 bool MicroCode::isMicrocode() { return true; }
 
-void MicroCode::setCpuLabels(CpuPaneGraphicsItems *cpuPaneItems)
+void MicroCode::setCpuLabels(CpuPaneBaseGraphicsItems *cpuPaneItems)
 {
     cpuPaneItems->loadCk->setChecked(cLoadCk != -1);
     cpuPaneItems->cLineEdit->setText(cC == -1 ? "" : QString("%1").arg(cC));

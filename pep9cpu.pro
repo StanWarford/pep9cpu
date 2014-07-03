@@ -32,14 +32,14 @@ SOURCES += main.cpp \
     microcodeeditor.cpp \
     memoryitemdelegate.cpp \
     objectcodepane.cpp \
-    cpupanegraphicsitems.cpp \
     code.cpp \
     asm.cpp \
     tristatelabel.cpp \
     objectcodelabel.cpp \
     specification.cpp \
     byteconverterinstr.cpp \
-    aboutpep.cpp
+    aboutpep.cpp \
+    cpupanebasegraphicsitems.cpp
 HEADERS += mainwindow.h \
     byteconverterhex.h \
     byteconverterdec.h \
@@ -56,14 +56,14 @@ HEADERS += mainwindow.h \
     microcodeeditor.h \
     memoryitemdelegate.h \
     objectcodepane.h \
-    cpupanegraphicsitems.h \
     code.h \
     asm.h \
     tristatelabel.h \
     objectcodelabel.h \
     specification.h \
     byteconverterinstr.h \
-    aboutpep.h
+    aboutpep.h \
+    cpupanebasegraphicsitems.h
 FORMS += mainwindow.ui \
     byteconverterhex.ui \
     byteconverterdec.ui \

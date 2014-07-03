@@ -30,7 +30,7 @@
 
 #include <QDebug>
 
-#include "cpupanegraphicsitems.h"
+#include "cpupanebasegraphicsitems.h"
 #include "tristatelabel.h"
 #include "pep.h"
 #include "code.h"
@@ -51,7 +51,7 @@ CpuPane::CpuPane(QWidget *parent) :
 
     ui->graphicsView->setFont(QFont(Pep::cpuFont, Pep::cpuFontSize));
 
-    cpuPaneItems = new CpuPaneGraphicsItems(ui->graphicsView, 0, scene);
+    cpuPaneItems = new CpuPaneBaseGraphicsItems(ui->graphicsView, 0, scene);
     ui->graphicsView->scene()->addItem(cpuPaneItems);
 
     ui->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);

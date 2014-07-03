@@ -1,4 +1,4 @@
-// File: cpupanegraphicsitems.cpp
+// File: cpupanebasegraphicsitems.cpp
 /*
     Pep9CPU is a CPU simulator for executing microcode sequences to
     implement instructions in the instruction set of the Pep/8 computer.
@@ -19,7 +19,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "cpupanegraphicsitems.h"
+#include "cpupanebasegraphicsitems.h"
 
 #include <QCheckBox>
 #include <QLabel>
@@ -31,7 +31,7 @@
 #include <QDebug>
 #include "sim.h"
 
-CpuPaneGraphicsItems::CpuPaneGraphicsItems(QWidget *widgetParent, QGraphicsItem *itemParent, QGraphicsScene *scene)
+CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraphicsItem *itemParent, QGraphicsScene *scene)
     : QGraphicsItem(itemParent),
       parent(widgetParent)
 {
@@ -650,12 +650,12 @@ CpuPaneGraphicsItems::CpuPaneGraphicsItems(QWidget *widgetParent, QGraphicsItem 
     scene->addLine(310, 477, 310, 559);
 }
 
-QRectF CpuPaneGraphicsItems::boundingRect() const
+QRectF CpuPaneBaseGraphicsItems::boundingRect() const
 {
     return QRectF(0,0, 650, 620);
 }
 
-bool CpuPaneGraphicsItems::aluHasCorrectOutput()
+bool CpuPaneBaseGraphicsItems::aluHasCorrectOutput()
 {
     if (ALULineEdit->text() == "") {
         return false;
@@ -692,7 +692,7 @@ bool CpuPaneGraphicsItems::aluHasCorrectOutput()
     return false;
 }
 
-void CpuPaneGraphicsItems::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+void CpuPaneBaseGraphicsItems::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setRenderHint(QPainter::Antialiasing, false);
     painter->setPen(Qt::black);
@@ -743,7 +743,7 @@ void CpuPaneGraphicsItems::paint(QPainter *painter, const QStyleOptionGraphicsIt
 
 }
 
-void CpuPaneGraphicsItems::repaintLoadCk(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintLoadCk(QPainter *painter)
 {
     QPolygon poly;
     QColor color;
@@ -760,7 +760,7 @@ void CpuPaneGraphicsItems::repaintLoadCk(QPainter *painter)
     painter->setRenderHint(QPainter::Antialiasing, false);
 }
 
-void CpuPaneGraphicsItems::repaintCSelect(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintCSelect(QPainter *painter)
 {
     bool ok;
     QPolygon poly;
@@ -781,7 +781,7 @@ void CpuPaneGraphicsItems::repaintCSelect(QPainter *painter)
     painter->setRenderHint(QPainter::Antialiasing, false);
 }
 
-void CpuPaneGraphicsItems::repaintBSelect(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintBSelect(QPainter *painter)
 {
     bool ok;
     QPolygon poly;
@@ -822,7 +822,7 @@ void CpuPaneGraphicsItems::repaintBSelect(QPainter *painter)
     painter->drawPolygon(poly);
 }
 
-void CpuPaneGraphicsItems::repaintASelect(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintASelect(QPainter *painter)
 {
 
     bool ok;
@@ -859,7 +859,7 @@ void CpuPaneGraphicsItems::repaintASelect(QPainter *painter)
 
 }
 
-void CpuPaneGraphicsItems::repaintMARCk(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintMARCk(QPainter *painter)
 {
     QPolygon poly;
     QColor color;
@@ -885,7 +885,7 @@ void CpuPaneGraphicsItems::repaintMARCk(QPainter *painter)
     painter->setRenderHint(QPainter::Antialiasing, false);
 }
 
-void CpuPaneGraphicsItems::repaintMDRCk(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintMDRCk(QPainter *painter)
 {
     QPolygon poly;
     QColor color;
@@ -907,7 +907,7 @@ void CpuPaneGraphicsItems::repaintMDRCk(QPainter *painter)
     painter->setRenderHint(QPainter::Antialiasing, false);
 }
 
-void CpuPaneGraphicsItems::repaintAMuxSelect(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintAMuxSelect(QPainter *painter)
 {
     QColor color;
     QPolygon poly;
@@ -955,7 +955,7 @@ void CpuPaneGraphicsItems::repaintAMuxSelect(QPainter *painter)
     painter->drawPolygon(poly);
 }
 
-void CpuPaneGraphicsItems::repaintCMuxSelect(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintCMuxSelect(QPainter *painter)
 {
     QPolygon poly;
     QColor color;
@@ -1007,7 +1007,7 @@ void CpuPaneGraphicsItems::repaintCMuxSelect(QPainter *painter)
     painter->drawPolygon(poly);
 }
 
-void CpuPaneGraphicsItems::repaintCCk(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintCCk(QPainter *painter)
 {
     QPolygon poly;
     QColor color;
@@ -1025,7 +1025,7 @@ void CpuPaneGraphicsItems::repaintCCk(QPainter *painter)
 
 }
 
-void CpuPaneGraphicsItems::repaintVCk(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintVCk(QPainter *painter)
 {
     QColor color;
     QPolygon poly;
@@ -1042,7 +1042,7 @@ void CpuPaneGraphicsItems::repaintVCk(QPainter *painter)
     painter->setRenderHint(QPainter::Antialiasing, false);
 }
 
-void CpuPaneGraphicsItems::repaintZCk(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintZCk(QPainter *painter)
 {
     QColor color;
     QPolygon poly;
@@ -1060,7 +1060,7 @@ void CpuPaneGraphicsItems::repaintZCk(QPainter *painter)
 
 }
 
-void CpuPaneGraphicsItems::repaintNCk(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintNCk(QPainter *painter)
 {
     QColor color;
     QPolygon poly;
@@ -1077,7 +1077,7 @@ void CpuPaneGraphicsItems::repaintNCk(QPainter *painter)
     painter->setRenderHint(QPainter::Antialiasing, false);
 }
 
-void CpuPaneGraphicsItems::repaintMemRead(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
 {
     QPolygon poly;
     QColor color;
@@ -1150,7 +1150,7 @@ void CpuPaneGraphicsItems::repaintMemRead(QPainter *painter)
     painter->drawPolygon(poly);
 }
 
-void CpuPaneGraphicsItems::repaintMemWrite(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
 {
     QPolygon poly;
     QColor color;
@@ -1221,7 +1221,7 @@ void CpuPaneGraphicsItems::repaintMemWrite(QPainter *painter)
     painter->drawPolygon(poly);
 }
 
-void CpuPaneGraphicsItems::repaintCBitOut(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintCBitOut(QPainter *painter)
 {
     cBitLabel->text() = Sim::cBit ? "1" : "0";
 
@@ -1247,7 +1247,7 @@ void CpuPaneGraphicsItems::repaintCBitOut(QPainter *painter)
     painter->setRenderHint(QPainter::Antialiasing, false);
 }
 
-void CpuPaneGraphicsItems::repaintVBitOut(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintVBitOut(QPainter *painter)
 {
     vBitLabel->text() = Sim::vBit ? "1" : "0";
 
@@ -1269,7 +1269,7 @@ void CpuPaneGraphicsItems::repaintVBitOut(QPainter *painter)
     painter->setRenderHint(QPainter::Antialiasing, false);
 }
 
-void CpuPaneGraphicsItems::repaintZBitOut(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintZBitOut(QPainter *painter)
 {
     zBitLabel->text() = Sim::zBit ? "1" : "0";
 
@@ -1294,7 +1294,7 @@ void CpuPaneGraphicsItems::repaintZBitOut(QPainter *painter)
     painter->setRenderHint(QPainter::Antialiasing, false);
 }
 
-void CpuPaneGraphicsItems::repaintNBitOut(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintNBitOut(QPainter *painter)
 {
     nBitLabel->text() = Sim::nBit ? "1" : "0";
 
@@ -1315,7 +1315,7 @@ void CpuPaneGraphicsItems::repaintNBitOut(QPainter *painter)
     painter->setRenderHint(QPainter::Antialiasing, false);
 }
 
-void CpuPaneGraphicsItems::repaintANDZSelect(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintANDZSelect(QPainter *painter)
 {
     QPolygon poly;
 
@@ -1351,7 +1351,7 @@ void CpuPaneGraphicsItems::repaintANDZSelect(QPainter *painter)
     painter->setRenderHint(QPainter::Antialiasing, false);
 }
 
-void CpuPaneGraphicsItems::repaintALUSelect(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
 {
     QPolygon poly;
     QColor color;
@@ -1445,7 +1445,7 @@ void CpuPaneGraphicsItems::repaintALUSelect(QPainter *painter)
     painter->setRenderHint(QPainter::Antialiasing, false);
 }
 
-void CpuPaneGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
 {
     QPolygon poly;
     QColor color = Qt::gray;

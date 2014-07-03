@@ -29,7 +29,7 @@
 
 #include "enu.h"
 
-#include "cpupanegraphicsitems.h"
+#include "cpupanebasegraphicsitems.h"
 
 namespace Ui {
     class CpuPane;
@@ -72,7 +72,7 @@ private:
 
     QGraphicsScene *scene;
 
-    CpuPaneGraphicsItems *cpuPaneItems;
+    CpuPaneBaseGraphicsItems *cpuPaneItems;
 
     //simulation helper
     void updateMainBusState();
