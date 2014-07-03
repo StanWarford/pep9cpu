@@ -476,6 +476,18 @@ void MainWindow::on_actionSystem_Clear_Memory_triggered()
     mainMemory->clearMemory();
 }
 
+void MainWindow::on_actionBase_CPU_Model_triggered()
+{
+
+}
+
+void MainWindow::on_actionIncrementer_CPU_Model_triggered()
+{
+
+}
+
+
+// help:
 void MainWindow::on_actionHelp_UsingPep9CPU_triggered()
 {
     helpDialog->show();

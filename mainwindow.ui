@@ -125,6 +125,9 @@
     <addaction name="separator"/>
     <addaction name="actionSystem_Clear_CPU"/>
     <addaction name="actionSystem_Clear_Memory"/>
+    <addaction name="separator"/>
+    <addaction name="actionBase_CPU_Model"/>
+    <addaction name="actionIncrementer_CPU_Model"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -506,6 +509,19 @@
   <action name="actionHelp_Examples">
    <property name="text">
     <string>Examples</string>
+   </property>
+  </action>
+  <action name="actionBase_CPU_Model">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Base CPU Model</string>
+   </property>
+  </action>
+  <action name="actionIncrementer_CPU_Model">
+   <property name="text">
+    <string>Incrementer CPU Model</string>
    </property>
   </action>
  </widget>

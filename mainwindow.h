@@ -109,6 +109,8 @@ private slots:
     void on_actionSystem_Stop_Debugging_triggered();
     void on_actionSystem_Clear_CPU_triggered();
     void on_actionSystem_Clear_Memory_triggered();
+    void on_actionBase_CPU_Model_triggered();
+    void on_actionIncrementer_CPU_Model_triggered();
     // Help
     void on_actionHelp_UsingPep9CPU_triggered();
     void on_actionHelp_InteractiveUse_triggered();
