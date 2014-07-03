@@ -35,8 +35,6 @@
         <file>help/figures/exer1207x.pepcpu</file>
         <file>help/figures/exer1205.pepcpu</file>
         <file>help/figures/exer1208.pepcpu</file>
-        <file>help/pep8reference.html</file>
-        <file>help/usingpep8cpu.html</file>
         <file>help/exercises.html</file>
         <file>help/images/fourbuttonsinteractivemode.png</file>
         <file>help/images/fourbuttonsmicrocodemode.png</file>
@@ -94,5 +92,7 @@
         <file>help/images/debugger6.png</file>
         <file>help/images/debugger7.png</file>
         <file>help/images/debugger8.png</file>
+        <file>help/pep9reference.html</file>
+        <file>help/usingpep9cpu.html</file>
     </qresource>
 </RCC>
