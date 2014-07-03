@@ -20,11 +20,12 @@
 */
 
 #include "sim.h"
-#include "enu.h"
 
 #include <QDebug>
 
 using namespace Enu;
+
+CPUType Sim::cpuFeatures = CPUType::Base;
 
 QVector<quint8> Sim::Mem(65536);
 bool Sim::nBit, Sim::zBit, Sim::vBit, Sim::cBit;

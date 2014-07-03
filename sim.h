@@ -25,10 +25,13 @@
 #include <QSet>
 
 #include "code.h"
+#include "enu.h"
 
 class Sim
 {
 public:
+    static Enu::CPUType cpuFeatures;
+
     static QVector<quint8> Mem;
     static bool nBit, zBit, vBit, cBit;
 

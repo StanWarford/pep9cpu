@@ -47,6 +47,11 @@ namespace Enu
         MARA, MARB, MDR,
     };
 
+    enum CPUType {
+        Base,
+        Incrementer
+    };
+
 }
 
 #endif // ENU_H
