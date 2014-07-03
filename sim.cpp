@@ -29,7 +29,7 @@ using namespace Enu;
 Enu::CPUType Sim::cpuFeatures = Base;
 
 QVector<quint8> Sim::Mem(65536);
-bool Sim::nBit, Sim::zBit, Sim::vBit, Sim::cBit;
+bool Sim::nBit, Sim::zBit, Sim::vBit, Sim::cBit, Sim::sBit;
 
 QVector<quint8> Sim::regBank(32);
 
@@ -45,7 +45,7 @@ bool Sim::memReadPrevStep = false;
 bool Sim::memWritePrevStep = false;
 
 QList<Code *> Sim::codeList;
-int Sim::cycleCount; // used to storing the number of cycles in a simulation
+int Sim::cycleCount; // used to store the number of cycles in a simulation
 int Sim::microProgramCounter;
 int Sim::microCodeCurrentLine;
 

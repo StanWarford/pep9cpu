@@ -67,6 +67,8 @@ private:
     int cMDRMux;
     int cCMux;
     int cALU;
+    int cCSMux;
+    int cSCk;
     int cCCk;
     int cVCk;
     int cANDZ;

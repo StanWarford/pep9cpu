@@ -34,6 +34,8 @@ MicroCode::MicroCode()
     cMDRMux = -1;
     cCMux = -1;
     cALU = -1;
+    cCSMux = -1;
+    cSCk = -1;
     cCCk = -1;
     cVCk = -1;
     cANDZ = -1;
@@ -134,6 +136,8 @@ bool MicroCode::has(Enu::EMnemonic field) {
     case Enu::MDRMux: return cMDRMux != -1;
     case Enu::CMux: return cCMux != -1;
     case Enu::ALU: return cALU != -1;
+    case Enu::CSMux: return cCSMux != -1;
+    case Enu::SCk: return cSCk != -1;
     case Enu::CCk: return cCCk != -1;
     case Enu::VCk: return cVCk != -1;
     case Enu::ANDZ: return cANDZ != -1;

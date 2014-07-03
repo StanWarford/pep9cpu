@@ -33,7 +33,7 @@ public:
     static Enu::CPUType cpuFeatures;
 
     static QVector<quint8> Mem;
-    static bool nBit, zBit, vBit, cBit;
+    static bool nBit, zBit, vBit, cBit, sBit;
 
     static QVector<quint8> regBank;
 
