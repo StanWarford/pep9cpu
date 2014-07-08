@@ -135,7 +135,7 @@ void MicrocodeEditor::unCommentSelection()
     }
 
     bool doCStyleUncomment = false;
-    bool doCStyleComment = false;
+    //bool doCStyleComment = false;
     bool doCppStyleUncomment = false;
 
     bool hasSelection = cursor.hasSelection();
@@ -143,7 +143,7 @@ void MicrocodeEditor::unCommentSelection()
     if (hasSelection) {
         QString startText = startBlock.text();
         int startPos = start - startBlock.position();
-        bool hasLeadingCharacters = !startText.left(startPos).trimmed().isEmpty();
+        //bool hasLeadingCharacters = !startText.left(startPos).trimmed().isEmpty();
         if ((startPos >= 2
             && startText.at(startPos-2) == QLatin1Char('/')
              && startText.at(startPos-1) == QLatin1Char('*'))) {
@@ -158,8 +158,8 @@ void MicrocodeEditor::unCommentSelection()
 
         QString endText = endBlock.text();
         int endPos = end - endBlock.position();
-        bool hasTrailingCharacters = !endText.left(endPos).remove(QLatin1String("//")).trimmed().isEmpty()
-                                     && !endText.mid(endPos).trimmed().isEmpty();
+        //bool hasTrailingCharacters = !endText.left(endPos).remove(QLatin1String("//")).trimmed().isEmpty()
+        //                             && !endText.mid(endPos).trimmed().isEmpty();
         if ((endPos <= endText.length() - 2
             && endText.at(endPos) == QLatin1Char('*')
              && endText.at(endPos+1) == QLatin1Char('/'))) {
@@ -172,7 +172,7 @@ void MicrocodeEditor::unCommentSelection()
                           && endText.at(endPos-1) == QLatin1Char('/'));
 
         doCStyleUncomment = hasSelStart && hasSelEnd;
-        doCStyleComment = !doCStyleUncomment && (hasLeadingCharacters || hasTrailingCharacters);
+        // doCStyleComment = !doCStyleUncomment && (hasLeadingCharacters || hasTrailingCharacters);
     }
 
     if (doCStyleUncomment) {

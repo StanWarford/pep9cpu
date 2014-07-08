@@ -71,6 +71,11 @@ public:
     QLabel *ALUFunctionLabel; // data section
     QGraphicsPolygonItem *ALUPoly; //data section
 
+    QLabel *CSMuxLabel;
+    QLabel *CSMuxerDataLabel;
+    TristateLabel *CSMuxTristateLabel;
+    QCheckBox *SCkCheckBox;
+
     QCheckBox *CCkCheckBox;
 
     QCheckBox *VCkCheckBox;
@@ -86,6 +91,7 @@ public:
     TristateLabel *zBitLabel; // data section
     TristateLabel *vBitLabel; // data section
     TristateLabel *cBitLabel; // data section
+    TristateLabel *sBitLabel; // data section
 
     QLabel *MemReadLabel;
     TristateLabel *MemReadTristateLabel;
@@ -126,17 +132,20 @@ private:
 
     void repaintCMuxSelect(QPainter *painter);
 
+    void repaintSCk(QPainter *painter);
     void repaintCCk(QPainter *painter);
     void repaintVCk(QPainter *painter);
     void repaintZCk(QPainter *painter);
     void repaintNCk(QPainter *painter);
     void repaintMemRead(QPainter *painter);
     void repaintMemWrite(QPainter *painter);
+    void repaintSBitOut(QPainter *painter);
     void repaintCBitOut(QPainter *painter);
     void repaintVBitOut(QPainter *painter);
     void repaintZBitOut(QPainter *painter);
     void repaintNBitOut(QPainter *painter);
 
+    void repaintCSMuxSelect(QPainter *painter);
     void repaintANDZSelect(QPainter *painter);
     void repaintALUSelect(QPainter *painter);
     void repaintMDRMuxSelect(QPainter *painter);

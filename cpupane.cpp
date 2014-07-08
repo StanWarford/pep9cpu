@@ -74,6 +74,10 @@ CpuPane::CpuPane(QWidget *parent) :
 
     connect(cpuPaneItems->ALULineEdit, SIGNAL(textChanged(QString)), scene, SLOT(invalidate()));
 
+    connect(cpuPaneItems->CSMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
+    connect(cpuPaneItems->CSMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+
+    connect(cpuPaneItems->SCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->CCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->VCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
 
@@ -92,6 +96,7 @@ CpuPane::CpuPane(QWidget *parent) :
     connect(cpuPaneItems->zBitLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
     connect(cpuPaneItems->vBitLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
     connect(cpuPaneItems->cBitLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
+    connect(cpuPaneItems->sBitLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
 
     // Simulation control connections
     connect(ui->clockPushButton, SIGNAL(clicked()), this, SLOT(clockButtonPushed()));
@@ -847,6 +852,9 @@ void CpuPane::labelClicked()
     Sim::zBit = cpuPaneItems->zBitLabel->text().toInt() == 0 ? false : true;
     Sim::vBit = cpuPaneItems->vBitLabel->text().toInt() == 0 ? false : true;
     Sim::cBit = cpuPaneItems->cBitLabel->text().toInt() == 0 ? false : true;
+    // todo: enable sBit
+    //Sim::sBit = cpuPaneItems->sBitLabel->text().toInt() == 0 ? false : true;
+
 }
 
 void CpuPane::clockButtonPushed()
