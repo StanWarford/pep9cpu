@@ -852,8 +852,7 @@ void CpuPane::labelClicked()
     Sim::zBit = cpuPaneItems->zBitLabel->text().toInt() == 0 ? false : true;
     Sim::vBit = cpuPaneItems->vBitLabel->text().toInt() == 0 ? false : true;
     Sim::cBit = cpuPaneItems->cBitLabel->text().toInt() == 0 ? false : true;
-    // todo: enable sBit
-    //Sim::sBit = cpuPaneItems->sBitLabel->text().toInt() == 0 ? false : true;
+    Sim::sBit = cpuPaneItems->sBitLabel->text().toInt() == 0 ? false : true;
 
 }
 
