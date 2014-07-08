@@ -1327,8 +1327,8 @@ void CpuPaneBaseGraphicsItems::repaintCBitOut(QPainter *painter)
     painter->drawLine(CSMuxerDataLabel->pos().x()+8,CSMuxerDataLabel->pos().y() + CSMuxerDataLabel->height()+8, CSMuxerDataLabel->pos().x()+8,cBitLabel->pos().y()-4);
 
     // CIN line back to the ALU
-    painter->drawLine(487,389, 443,389);
-    painter->drawLine(487,CSMuxerDataLabel->pos().y(), 487,389);
+    painter->drawLine(CSMuxerDataLabel->x()+35,389, 443,389);
+    painter->drawLine(CSMuxerDataLabel->x()+35,CSMuxerDataLabel->pos().y(), CSMuxerDataLabel->x()+35,389);
 
     painter->setRenderHint(QPainter::Antialiasing);
     // arrow to the NZVC data bus
