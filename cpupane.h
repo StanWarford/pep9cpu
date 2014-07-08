@@ -97,6 +97,7 @@ private slots:
 
     bool getALUOut(quint8& result, quint8& a, quint8& b, int& carry, int& overflow, QString& errorString);
     bool isCorrectALUInput(int ALUFn);
+    bool getCSMuxOut(bool &out, QString& errorString);
     bool getCMuxOut(quint8& out, QString& errorString);
     bool getAMuxOut(quint8& out, QString& errorString);
     bool getMDRMuxOut(quint8& out, QString& errorString);

@@ -78,7 +78,7 @@ void MainMemory::populateMemoryItems()
 
     rows.clear();
 
-    qDebug() << "scroll value: " << QString("%1").arg(ui->verticalScrollBar->value(), 4, 16, QLatin1Char('0'));
+    //qDebug() << "scroll value: " << QString("%1").arg(ui->verticalScrollBar->value(), 4, 16, QLatin1Char('0'));
     int scrollBarValue = ui->verticalScrollBar->value();
 
     for (int i = scrollBarValue; i < scrollBarValue + ui->tableWidget->rowCount(); i++) {

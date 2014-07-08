@@ -1081,6 +1081,7 @@ bool CpuPane::getALUOut(quint8 &result, quint8& a, quint8& b, int& carry, int& o
 {
     a = 0;
     b = 0;
+    bool cin = false;
     int output = 0;
     carry = 0;
     overflow = 0;
@@ -1116,10 +1117,10 @@ bool CpuPane::getALUOut(quint8 &result, quint8& a, quint8& b, int& carry, int& o
         }
         break;
     case 2: // A plus B plus Cin
-        if (getAMuxOut(a, errorString) && getBBusOut(b, errorString)) {
-            output = a + b + !!Sim::cBit;
+        if (getAMuxOut(a, errorString) && getBBusOut(b, errorString) && getCSMuxOut(cin, errorString)) {
+            output = a + b + !!cin;
             carry = ((output & 0x1ff) >> 8) & 0x1;
-            overflow = ((((a & 0x7f) + (b & 0x7f) + !!Sim::cBit) >> 7) & 0x1) ^ carry;
+            overflow = ((((a & 0x7f) + (b & 0x7f) + !!cin) >> 7) & 0x1) ^ carry;
             result = output;
         }
         break;
@@ -1132,10 +1133,10 @@ bool CpuPane::getALUOut(quint8 &result, quint8& a, quint8& b, int& carry, int& o
         }
         break;
     case 4: // A plus ~B plus Cin
-        if (getAMuxOut(a, errorString) && getBBusOut(b, errorString)) {
-            output = a + ((~b) & 0xff) + !!Sim::cBit;
+        if (getAMuxOut(a, errorString) && getBBusOut(b, errorString) && getCSMuxOut(cin, errorString)) {
+            output = a + ((~b) & 0xff) + !!cin;
             carry = ((output & 0x1ff) >> 8) & 0x1;
-            overflow = ((((a & 0x7f) + ((~b) & 0x7f) + !!Sim::cBit) >> 7) & 0x1) ^ carry;
+            overflow = ((((a & 0x7f) + ((~b) & 0x7f) + !!cin) >> 7) & 0x1) ^ carry;
             result = output;
         }
         break;
@@ -1184,8 +1185,8 @@ bool CpuPane::getALUOut(quint8 &result, quint8& a, quint8& b, int& carry, int& o
         }
         break;
     case 12: // ROL A
-        if (getAMuxOut(a, errorString)) {
-            output = ((a << 1) & 0xfe) + !!Sim::cBit;
+        if (getAMuxOut(a, errorString) && getCSMuxOut(cin, errorString)) {
+            output = ((a << 1) & 0xfe) + !!cin;
             carry = (a & 0x80) >> 7;
             result = output;
         }
@@ -1198,8 +1199,8 @@ bool CpuPane::getALUOut(quint8 &result, quint8& a, quint8& b, int& carry, int& o
         }
         break;
     case 14: // ROR A
-        if (getAMuxOut(a, errorString)) {
-            output = ((a >> 1) & 0x7f) | (!!Sim::cBit << 7);
+        if (getAMuxOut(a, errorString) && getCSMuxOut(cin, errorString)) {
+            output = ((a >> 1) & 0x7f) | (!!cin << 7);
             carry = a & 1;
             result = output;
         }
@@ -1275,6 +1276,23 @@ bool CpuPane::isCorrectALUInput(int ALUFn) {
         break;
     }
     return true;
+}
+
+bool CpuPane::getCSMuxOut(bool &out, QString &errorString)
+{
+    if (cpuPaneItems->cMuxTristateLabel->text() == "0") {
+        out = Sim::cBit;
+        return true;
+    }
+    else if (cpuPaneItems->cMuxTristateLabel->text() == "1") {
+        out = Sim::sBit;
+        return true;
+    }
+    else {
+        errorString.append("CSMux control signal not specified.\n");
+    }
+    return false;
+
 }
 
 bool CpuPane::getCMuxOut(quint8 &out, QString &errorString)
