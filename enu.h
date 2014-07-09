@@ -24,7 +24,7 @@
 namespace Enu
 {
     // Instruction mnemonics
-    enum EMask
+    enum EMask // For ALU function 15
     {
         NMask = 0x08,
         ZMask = 0x04,

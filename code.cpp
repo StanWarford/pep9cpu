@@ -113,7 +113,7 @@ QString MicroCode::getSourceCode()
     if (cA != -1) { str.append("A=" + QString("%1").arg(cA) + ", "); }
     if (cB != -1) { str.append("B=" + QString("%1").arg(cB) + ", "); }
     if (cAMux != -1) { str.append("AMux=" + QString("%1").arg(cAMux) + ", "); }
-    if (cCSMux  != 1) { str.append("CSMux=" + QString("%1").arg(cCSMux) + ", "); }
+    if (cCSMux  != -1) { str.append("CSMux=" + QString("%1").arg(cCSMux) + ", "); }
     if (cALU != -1) { str.append("ALU=" + QString("%1").arg(cALU) + ", "); }
     if (cANDZ != -1) { str.append("ANDZ=" + QString("%1").arg(cANDZ) + ", "); }
     if (cCMux != -1) { str.append("CMux=" + QString("%1").arg(cCMux) + ", "); }

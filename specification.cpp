@@ -123,33 +123,35 @@ QString RegSpecification::getSourceCode() {
 }
 
 StatusBitSpecification::StatusBitSpecification(Enu::EMnemonic statusBitAddress, bool statusBitValue) {
-    nzvcAddress = statusBitAddress;
-    nzvcValue = statusBitValue;
+    nzvcsAddress = statusBitAddress;
+    nzvcsValue = statusBitValue;
 }
 
 void StatusBitSpecification::setUnitPre(MainMemory *, CpuPane *cpuPane) {
-    cpuPane->setStatusPrecondition(nzvcAddress, nzvcValue);
+    cpuPane->setStatusPrecondition(nzvcsAddress, nzvcsValue);
 }
 
 bool StatusBitSpecification::testUnitPost(MainMemory *, CpuPane *cpuPane, QString &errorString) {
-    if (cpuPane->testStatusPostcondition(nzvcAddress, nzvcValue)) {
+    if (cpuPane->testStatusPostcondition(nzvcsAddress, nzvcsValue)) {
         return true;
     }
-    switch (nzvcAddress) {
+    switch (nzvcsAddress) {
     case Enu::N: errorString = "// ERROR: Unit test failed for status bit N."; return false;
     case Enu::Z: errorString = "// ERROR: Unit test failed for status bit Z."; return false;
     case Enu::V: errorString = "// ERROR: Unit test failed for status bit V."; return false;
     case Enu::C: errorString = "// ERROR: Unit test failed for status bit C."; return false;
+    case Enu::S: errorString = "// ERROR: Unit test failed for status bit S."; return false;
     default: return false;
     }
 }
 
 QString StatusBitSpecification::getSourceCode() {
-    switch (nzvcAddress) {
-    case Enu::N: return "N=" + QString("%1").arg(nzvcValue);
-    case Enu::Z: return "Z=" + QString("%1").arg(nzvcValue);
-    case Enu::V: return "V=" + QString("%1").arg(nzvcValue);
-    case Enu::C: return "C=" + QString("%1").arg(nzvcValue);
+    switch (nzvcsAddress) {
+    case Enu::N: return "N=" + QString("%1").arg(nzvcsValue);
+    case Enu::Z: return "Z=" + QString("%1").arg(nzvcsValue);
+    case Enu::V: return "V=" + QString("%1").arg(nzvcsValue);
+    case Enu::C: return "C=" + QString("%1").arg(nzvcsValue);
+    case Enu::S: return "S=" + QString("%1").arg(nzvcsValue);
     default: return "";
     }
 }

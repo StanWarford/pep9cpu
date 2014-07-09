@@ -64,8 +64,8 @@ public:
     bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString);
     QString getSourceCode();
 private:
-    Enu::EMnemonic nzvcAddress;
-    bool nzvcValue;
+    Enu::EMnemonic nzvcsAddress;
+    bool nzvcsValue;
 };
 
 #endif // SPECIFICATION_H
