@@ -478,6 +478,7 @@ void CpuPane::clearCpu()
     setRegister(Enu::MARB, 0);
     setRegister(Enu::MDR, 0);
 
+    setStatusBit(Enu::S, false);
     setStatusBit(Enu::C, false);
     setStatusBit(Enu::V, false);
     setStatusBit(Enu::Z, false);
@@ -496,6 +497,8 @@ void CpuPane::clearCpuControlSignals()
     cpuPaneItems->MDRMuxTristateLabel->setText("");
     cpuPaneItems->cMuxTristateLabel->setText("");
     cpuPaneItems->ALULineEdit->setText("");
+    cpuPaneItems->CSMuxTristateLabel->setText("");
+    cpuPaneItems->SCkCheckBox->setChecked(false);
     cpuPaneItems->CCkCheckBox->setChecked(false);
     cpuPaneItems->VCkCheckBox->setChecked(false);
     cpuPaneItems->ANDZTristateLabel->setText("");

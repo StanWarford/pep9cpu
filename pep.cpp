@@ -146,4 +146,5 @@ void Pep::initEnumMnemonMaps()
     statusSpecToMnemonMap.insert(Z, "Z"); mnemonToStatusSpecMap.insert("Z", Z);
     statusSpecToMnemonMap.insert(V, "V"); mnemonToStatusSpecMap.insert("V", V);
     statusSpecToMnemonMap.insert(C, "C"); mnemonToStatusSpecMap.insert("C", C);
+    statusSpecToMnemonMap.insert(S, "S"); mnemonToStatusSpecMap.insert("S", S);
 }
