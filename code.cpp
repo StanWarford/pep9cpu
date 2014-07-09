@@ -24,6 +24,8 @@
 
 MicroCode::MicroCode()
 {
+    // -1 is initialization value, didn't get set - tested elsewhere
+
     cLoadCk = -1;
     cC = -1;
     cB = -1;
@@ -60,6 +62,8 @@ void MicroCode::setCpuLabels(CpuPaneBaseGraphicsItems *cpuPaneItems)
     cpuPaneItems->MDRMuxTristateLabel->setState(cMDRMux);
     cpuPaneItems->cMuxTristateLabel->setState(cCMux);
     cpuPaneItems->ALULineEdit->setText(cALU == -1 ? "" : QString("%1").arg(cALU));
+    cpuPaneItems->CSMuxTristateLabel->setState(cCSMux);
+    cpuPaneItems->SCkCheckBox->setChecked(cSCk != -1);
     cpuPaneItems->CCkCheckBox->setChecked(cCCk != -1);
     cpuPaneItems->VCkCheckBox->setChecked(cVCk != -1);
     cpuPaneItems->ANDZTristateLabel->setState(cANDZ);
@@ -71,6 +75,12 @@ void MicroCode::setCpuLabels(CpuPaneBaseGraphicsItems *cpuPaneItems)
 
 QString MicroCode::getObjectCode()
 {
+    // QString QString::arg(int a, int fieldWidth = 0, ...)
+    // fieldWidth specifies the minimum amount of space that
+    //  a is padded to and filled with the character fillChar.
+    // A positive value produces right-aligned text; a negative
+    //  value produces left-aligned text.
+
     QString str = "";
     str.append(cLoadCk == -1 ? "  " : QString("%1").arg(cLoadCk, -2));
     str.append(cC == -1 ? "   " : QString("%1").arg(cC, -3));
@@ -82,6 +92,8 @@ QString MicroCode::getObjectCode()
     str.append(cMDRMux == -1 ? "  " : QString("%1").arg(cMDRMux, -2));
     str.append(cCMux == -1 ? "  " : QString("%1").arg(cCMux, -2));
     str.append(cALU == -1 ? "   " : QString("%1").arg(cALU, -3));
+    str.append(cCSMux == -1 ? "  " : QString("%1").arg(cCSMux, -2));
+    str.append(cSCk == -1 ? "  " : QString("%1").arg(cSCk, -2));
     str.append(cCCk == -1 ? "  " : QString("%1").arg(cCCk, -2));
     str.append(cVCk == -1 ? "  " : QString("%1").arg(cVCk, -2));
     str.append(cANDZ == -1 ? "  " : QString("%1").arg(cANDZ, -2));
@@ -101,6 +113,7 @@ QString MicroCode::getSourceCode()
     if (cA != -1) { str.append("A=" + QString("%1").arg(cA) + ", "); }
     if (cB != -1) { str.append("B=" + QString("%1").arg(cB) + ", "); }
     if (cAMux != -1) { str.append("AMux=" + QString("%1").arg(cAMux) + ", "); }
+    if (cCSMux  != 1) { str.append("CSMux=" + QString("%1").arg(cCSMux) + ", "); }
     if (cALU != -1) { str.append("ALU=" + QString("%1").arg(cALU) + ", "); }
     if (cANDZ != -1) { str.append("ANDZ=" + QString("%1").arg(cANDZ) + ", "); }
     if (cCMux != -1) { str.append("CMux=" + QString("%1").arg(cCMux) + ", "); }
@@ -113,6 +126,7 @@ QString MicroCode::getSourceCode()
     if (cZCk != -1) { str.append("ZCk, "); }
     if (cVCk != -1) { str.append("VCk, "); }
     if (cCCk != -1) { str.append("CCk, "); }
+    if (cSCk != -1) { str.append("SCk, "); }
     if (cMARCk != -1) { str.append("MARCk, "); }
     if (cLoadCk != -1) { str.append("LoadCk, "); }
     if (cMDRCk != -1) { str.append("MDRCk, "); }
@@ -161,6 +175,8 @@ void MicroCode::set(Enu::EMnemonic field, int value) {
     case Enu::MDRMux: cMDRMux = value; break;
     case Enu::CMux: cCMux = value; break;
     case Enu::ALU: cALU = value; break;
+    case Enu::CSMux: cCSMux = value; break;
+    case Enu::SCk: cSCk = value; break;
     case Enu::CCk: cCCk = value; break;
     case Enu::VCk: cVCk = value; break;
     case Enu::ANDZ: cANDZ = value; break;
@@ -181,6 +197,7 @@ bool MicroCode::inRange(Enu::EMnemonic field, int value) {
     case Enu::MDRMux: return 0 <= value && value <= 1;
     case Enu::CMux: return 0 <= value && value <= 1;
     case Enu::ALU: return 0 <= value && value <= 15;
+    case Enu::CSMux: return 0 <= value && value <= 1;
     case Enu::ANDZ: return 0 <= value && value <= 1;
     default: return true;
     }

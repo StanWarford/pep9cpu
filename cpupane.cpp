@@ -385,6 +385,10 @@ void CpuPane::setStatusBit(Enu::EMnemonic bit, bool value)
         Sim::cBit = value;
         cpuPaneItems->cBitLabel->setText(QString("%1").arg(value ? 1 : 0));
         break;
+    case Enu::S:
+        Sim::sBit = value;
+        cpuPaneItems->sBitLabel->setText(QString("%1").arg(value ? 1 : 0));
+        break;
     default:
         break;
     }
@@ -446,6 +450,8 @@ bool CpuPane::testStatusPostcondition(Enu::EMnemonic bit, bool value) {
         return Sim::vBit == value;
     case Enu::C:
         return Sim::cBit == value;
+    case Enu::S:
+        return Sim::sBit == value;
     default:
         break;
     }
@@ -722,6 +728,11 @@ bool CpuPane::step(QString &errorString)
         if (cpuPaneItems->CCkCheckBox->isChecked()) {
             setStatusBit(Enu::C, carry & 0x1);
         }
+
+        // SCk
+        if (cpuPaneItems->SCkCheckBox->isChecked()) {
+            setStatusBit(Enu::S, carry & 0x1);
+        }
     }
 
     return true;
@@ -990,6 +1001,10 @@ void CpuPane::on_copyToMicrocodePushButton_clicked()
     }
     if (cpuPaneItems->ALULineEdit->text() != "") {
         code.set(Enu::ALU, cpuPaneItems->ALULineEdit->text().toInt());
+    }
+    // todo: CSMux
+    if (cpuPaneItems->SCkCheckBox->isChecked()) {
+        code.set(Enu::SCk, 1);
     }
     if (cpuPaneItems->CCkCheckBox->isChecked()) {
         code.set(Enu::CCk, 1);

@@ -1289,7 +1289,6 @@ void CpuPaneBaseGraphicsItems::repaintSBitOut(QPainter *painter)
 {
     sBitLabel->text() = Sim::sBit ? "1" : "0";
 
-
     QColor color = Qt::black;
     QPolygon poly;
 

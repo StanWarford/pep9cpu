@@ -43,7 +43,7 @@ namespace Enu
     enum EMnemonic {
         LoadCk, C, B, A, MARCk, MDRCk, AMux, MDRMux, CMux,
         ALU, CSMux, SCk, CCk, VCk, ANDZ, ZCk, NCk, MemWrite, MemRead, Pre, Post,
-        Mem, X, SP, PC, IR, T1, T2, T3, T4, T5, T6, N, Z, V,
+        Mem, X, SP, PC, IR, T1, T2, T3, T4, T5, T6, N, Z, V, S,
         MARA, MARB, MDR,
     };
 
