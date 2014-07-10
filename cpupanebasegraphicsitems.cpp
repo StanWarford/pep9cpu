@@ -187,12 +187,16 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     // MDRBus (output from MDR)
     scene->addRect(244,258, 36,10, QPen(Qt::black), QBrush(Qt::yellow));
     poly.clear();
+    // right arrow:
     poly << QPoint(290,258) << QPoint(326,258) << QPoint(326,280) << QPoint(331,280)
          << QPoint(321,290) << QPoint(311,280) << QPoint(316,280) << QPoint(316,268) << QPoint(290,268);
     scene->addPolygon(poly, QPen(Qt::black), QBrush(Qt::yellow));
     poly.clear();
-    poly << QPoint(175,258) << QPoint(168-70,258) << QPoint(168-70,253) << QPoint(158-70,263)
-         << QPoint(168-70,273) << QPoint(168-70,268) << QPoint(175,268);
+    // left arrow
+    poly << QPoint(175,258)
+         << QPoint(78,258) << QPoint(78,253) << QPoint(68,263)
+         << QPoint(78,273) << QPoint(78,268)
+         << QPoint(175,268);
     scene->addPolygon(poly, QPen(Qt::black), QBrush(Qt::yellow));
 
 
