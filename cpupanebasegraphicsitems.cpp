@@ -42,6 +42,23 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     combCircuitYellow = QColor(Qt::yellow).lighter(170);
     combCircuitGreen = QColor(Qt::green).lighter(190);
 
+    // setup arrow heads:
+    arrowLeft = QImage(":/images/arrowhead.png");
+    arrowRight = arrowLeft.mirrored(true, false);
+    QTransform t;
+    t.rotate(90);
+    arrowUp = arrowLeft.transformed(t);
+    t.rotate(-180);
+    arrowDown = arrowLeft.transformed(t);
+
+    arrowLeftGray = QImage(":/images/arrowhead_gray.png");
+    arrowRightGray = arrowLeftGray.mirrored(true, false);
+    QTransform t_gray;
+    t_gray.rotate(90);
+    arrowUpGray = arrowLeftGray.transformed(t_gray);
+    t_gray.rotate(-180);
+    arrowDownGray = arrowLeftGray.transformed(t_gray);
+
     // LoadCk
     loadCk = new QCheckBox("LoadCk");
     loadCk->setPalette(QPalette(Qt::white));
@@ -796,10 +813,7 @@ void CpuPaneBaseGraphicsItems::repaintLoadCk(QPainter *painter)
 
     painter->drawLine(543, 27, 499, 27);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly << QPoint(499,27) << QPoint(507,24) << QPoint(507,30);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(499,24), color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintCSelect(QPainter *painter)
@@ -817,10 +831,7 @@ void CpuPaneBaseGraphicsItems::repaintCSelect(QPainter *painter)
     painter->drawLine(543, 50, 499, 50);
     painter->drawLine(523, 45, 533, 55);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly << QPoint(499, 50) << QPoint(507, 47) << QPoint(507, 53);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(499,47), color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintBSelect(QPainter *painter)
@@ -839,11 +850,8 @@ void CpuPaneBaseGraphicsItems::repaintBSelect(QPainter *painter)
     painter->drawLine(543, 72, 499, 72);
     painter->drawLine(523, 67, 533, 77);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.clear();
-    poly << QPoint(499, 72) << QPoint(507, 69) << QPoint(507, 75);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    // arrow
+    painter->drawImage(QPoint(499,69), color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     color = ok ? Qt::red : Qt::white;
     painter->setPen(QPen(QBrush(Qt::black), 1));
@@ -881,11 +889,7 @@ void CpuPaneBaseGraphicsItems::repaintASelect(QPainter *painter)
     painter->drawLine(543,94, 499,94);
     painter->drawLine(523,89, 533,99);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.clear();
-    poly << QPoint(499, 94) << QPoint(507, 91) << QPoint(507, 97);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(499,91), color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     color = ok ? Qt::red : Qt::white;
 
@@ -903,7 +907,6 @@ void CpuPaneBaseGraphicsItems::repaintASelect(QPainter *painter)
 
 void CpuPaneBaseGraphicsItems::repaintMARCk(QPainter *painter)
 {
-    QPolygon poly;
     QColor color;
 
     color = MARCk->isChecked() ? Qt::black : Qt::gray;
@@ -917,19 +920,12 @@ void CpuPaneBaseGraphicsItems::repaintMARCk(QPainter *painter)
     painter->drawLine(235,177, 279,177);
     painter->drawLine(235,163, 235,191);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly << QPoint(238,163) << QPoint(232,163) << QPoint(235,155);
-    painter->drawPolygon(poly);
-
-    poly.clear();
-    poly << QPoint(238,191) << QPoint(232,191) << QPoint(235,199);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(232,155), color == Qt::gray ? arrowUpGray : arrowUp);
+    painter->drawImage(QPoint(232,191), color == Qt::gray ? arrowDownGray : arrowDown);
 }
 
 void CpuPaneBaseGraphicsItems::repaintMDRCk(QPainter *painter)
 {
-    QPolygon poly;
     QColor color;
 
     color = MDRCk->isChecked() ? Qt::black : Qt::gray;
@@ -943,10 +939,7 @@ void CpuPaneBaseGraphicsItems::repaintMDRCk(QPainter *painter)
     painter->drawLine(428,233, 543,233);
     painter->drawLine(210,233, 210,241);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly << QPoint(213,241) << QPoint(207,241) << QPoint(210,249);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(207,241), color == Qt::gray ? arrowDownGray : arrowDown);
 }
 
 void CpuPaneBaseGraphicsItems::repaintAMuxSelect(QPainter *painter)
@@ -964,10 +957,7 @@ void CpuPaneBaseGraphicsItems::repaintAMuxSelect(QPainter *painter)
     painter->drawLine(388, 303, 416, 303);
     painter->drawLine(428, 303, 543, 303);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.setPoints(3, 388, 300, 388, 306, 380, 303);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(380,300), color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     if (ok) {
         switch (aMux) {
@@ -1011,12 +1001,8 @@ void CpuPaneBaseGraphicsItems::repaintCMuxSelect(QPainter *painter)
     painter->drawLine(315,355, 290,355);
     painter->drawLine(280,355, 260,355);
     painter->drawLine(260,355, 260,365);
-    //    painter->drawLine(428,350, 543,350);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly << QPoint(257,362) << QPoint(263,362) << QPoint(260,370);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(257,362), color == Qt::gray ? arrowDownGray : arrowDown);
 
     if (cMuxTristateLabel->text() == "0") {
         color = Qt::yellow;
@@ -1051,7 +1037,6 @@ void CpuPaneBaseGraphicsItems::repaintCMuxSelect(QPainter *painter)
 
 void CpuPaneBaseGraphicsItems::repaintSCk(QPainter *painter)
 {
-    QPolygon poly;
     QColor color;
 
     color = SCkCheckBox->isChecked() ? Qt::black : Qt::gray;
@@ -1062,10 +1047,7 @@ void CpuPaneBaseGraphicsItems::repaintSCk(QPainter *painter)
     painter->drawLine(510,SCkCheckBox->y()+8, 543,SCkCheckBox->y()+8);
 
     // arrow
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly << QPoint(510,SCkCheckBox->y()+8-3) << QPoint(510,SCkCheckBox->y()+8+3) << QPoint(502,SCkCheckBox->y()+8);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(502,SCkCheckBox->y()+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintCCk(QPainter *painter)
@@ -1081,11 +1063,7 @@ void CpuPaneBaseGraphicsItems::repaintCCk(QPainter *painter)
     painter->drawLine(510,CCkCheckBox->y()+8, 543,CCkCheckBox->y()+8);
 
     // arrow
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly << QPoint(510,469) << QPoint(510,475) << QPoint(502,472);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
-
+    painter->drawImage(QPoint(502,469), color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintVCk(QPainter *painter)
@@ -1099,10 +1077,7 @@ void CpuPaneBaseGraphicsItems::repaintVCk(QPainter *painter)
 
     painter->drawLine(510,VCkCheckBox->y()+8, 543,VCkCheckBox->y()+8);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.setPoints(3, 510,496, 510,502, 502,499);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(502,496), color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintZCk(QPainter *painter)
@@ -1116,11 +1091,7 @@ void CpuPaneBaseGraphicsItems::repaintZCk(QPainter *painter)
 
     painter->drawLine(510, 552, 543, 552);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.setPoints(3, 510,549, 510,555, 502,552);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
-
+    painter->drawImage(QPoint(502,549), color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintNCk(QPainter *painter)
@@ -1134,10 +1105,7 @@ void CpuPaneBaseGraphicsItems::repaintNCk(QPainter *painter)
 
     painter->drawLine(510, 586+8, 543, 586+8);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.setPoints(3, 510,586+8-3, 510,586+8+3, 502,586+8);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(502,586+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
@@ -1160,10 +1128,7 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
 
     painter->drawLine(166-70,611+8, 543,611+8); // memRead line from the label to the bus
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly << QPoint(166-70, 611+8-3) << QPoint(166-70, 611+8+3) << QPoint(158-70, 611+8);// memRead arrowhead
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(158-70,611+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     if (MemWriteTristateLabel->text() == "1") {
         // Do not paint main bus if MemWrite is isHigh
@@ -1235,10 +1200,7 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
 
     painter->drawLine(166-70, 631+8, 543, 631+8); // memWrite line from label to bus
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly << QPoint(166-70, 631+8-3) << QPoint(166-70, 631+8+3) << QPoint(158-70, 631+8); // memWrite arrowhead
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(158-70,631+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     if (MemReadTristateLabel->text() == "1") {
         // Do not paint main bus if MemRead is high
@@ -1290,19 +1252,14 @@ void CpuPaneBaseGraphicsItems::repaintSBitOut(QPainter *painter)
     sBitLabel->text() = Sim::sBit ? "1" : "0";
 
     QColor color = Qt::black;
-    QPolygon poly;
 
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
     // line from S bit to CSMux
     painter->drawLine(sBitLabel->x()+11,sBitLabel->y(), sBitLabel->x()+11,sBitLabel->y()-8);
-
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.setPoints(3, sBitLabel->x()+11-3,sBitLabel->y()-8, sBitLabel->x()+11,sBitLabel->y()-8-8, sBitLabel->x()+11+3,sBitLabel->y()-8);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
-
+    // arrow:
+    painter->drawImage(QPoint(sBitLabel->x()+11-3,sBitLabel->y()-8-8), arrowUp);
 }
 
 void CpuPaneBaseGraphicsItems::repaintCBitOut(QPainter *painter)
@@ -1310,7 +1267,6 @@ void CpuPaneBaseGraphicsItems::repaintCBitOut(QPainter *painter)
     cBitLabel->text() = Sim::cBit ? "1" : "0";
 
     QColor color = Qt::black;
-    QPolygon poly;
 
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
@@ -1329,27 +1285,18 @@ void CpuPaneBaseGraphicsItems::repaintCBitOut(QPainter *painter)
     painter->drawLine(CSMuxerDataLabel->x()+35,389, 443,389);
     painter->drawLine(CSMuxerDataLabel->x()+35,CSMuxerDataLabel->pos().y(), CSMuxerDataLabel->x()+35,389);
 
-    painter->setRenderHint(QPainter::Antialiasing);
     // arrow to the NZVC data bus
-    poly.setPoints(3, 322,483, 322,489, 314,486);
-    painter->drawPolygon(poly);
+    painter->drawImage(QPoint(314,483), arrowLeft);
     // CIN arrow to the ALU
-    poly.setPoints(3, 443,386, 443,392, 435,389);
-    painter->drawPolygon(poly);
+    painter->drawImage(QPoint(435,386), arrowLeft);
     // arrow to the CSMux
-    int x = CSMuxerDataLabel->x();
-    int y = CSMuxerDataLabel->y();
-    int h = CSMuxerDataLabel->height();
-    poly.setPoints(3, x+8-3,y+h+3+8, x+8,y+h+3, x+8+3,y+h+3+8);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(CSMuxerDataLabel->x()+8-3,CSMuxerDataLabel->y()+CSMuxerDataLabel->height()+3), arrowUp);
 }
 
 void CpuPaneBaseGraphicsItems::repaintVBitOut(QPainter *painter)
 {
     vBitLabel->text() = Sim::vBit ? "1" : "0";
 
-    QPolygon poly;
     QColor color = Qt::black;
 
     painter->setPen(QPen(QBrush(color), 1));
@@ -1361,17 +1308,13 @@ void CpuPaneBaseGraphicsItems::repaintVBitOut(QPainter *painter)
     painter->drawLine(352,513, 352,496);
     painter->drawLine(352,496, 322,496); // short line from the arrow
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.setPoints(3, 322,493, 322,499, 314,496);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(314,493), arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintZBitOut(QPainter *painter)
 {
     zBitLabel->text() = Sim::zBit ? "1" : "0";
 
-    QPolygon poly;
     QColor color = Qt::black;
 
     painter->setPen(QPen(QBrush(color), 1));
@@ -1385,12 +1328,8 @@ void CpuPaneBaseGraphicsItems::repaintZBitOut(QPainter *painter)
     // line up to ANDZ
     painter->drawLine(437,582, 437,574);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.setPoints(3, 322,503, 322,509, 314,506);
-    painter->drawPolygon(poly);
-    poly.setPoints(3, 434,574, 440,574, 437,566); // ANDZ arrow upwards
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(314,503), arrowLeft);
+    painter->drawImage(QPoint(434,566), arrowUp);  // ANDZ arrow upwards
 }
 
 void CpuPaneBaseGraphicsItems::repaintNBitOut(QPainter *painter)
@@ -1408,15 +1347,11 @@ void CpuPaneBaseGraphicsItems::repaintNBitOut(QPainter *painter)
     painter->drawLine(330,605+4, 330,517);
     painter->drawLine(330,517, 322,517);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.setPoints(3, 322,514, 322,520, 314,517);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(314,514), arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintCSMuxSelect(QPainter *painter)
 {
-    QPolygon poly;
     QColor color;
 
     color = CSMuxTristateLabel->text() != "" ? Qt::black : Qt::gray;
@@ -1427,10 +1362,7 @@ void CpuPaneBaseGraphicsItems::repaintCSMuxSelect(QPainter *painter)
     painter->drawLine(510,CSMuxerDataLabel->y()+10, 543,CSMuxerDataLabel->y()+10);
 
     // arrow
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly << QPoint(510,CSMuxerDataLabel->y()+10-3) << QPoint(510,CSMuxerDataLabel->y()+10+3) << QPoint(502,CSMuxerDataLabel->y()+10);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(502,CSMuxerDataLabel->y()+10-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintANDZSelect(QPainter *painter)
@@ -1449,10 +1381,7 @@ void CpuPaneBaseGraphicsItems::repaintANDZSelect(QPainter *painter)
     painter->drawLine(437,517+7+8, 437,517+7); // vertical line
     painter->drawLine(437,517+7, 543,517+7); // horiz line
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.setPoints(3, 434,517+7+8, 440,517+7+8, 437,517+7+8+9);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(434,517+7+8), color == Qt::gray ? arrowDownGray : arrowDown);
 
     color = Qt::gray;
     if (ALULineEdit->text() != "" && ANDZTristateLabel->text() != "") {
@@ -1464,10 +1393,7 @@ void CpuPaneBaseGraphicsItems::repaintANDZSelect(QPainter *painter)
     // ANDZ out
     painter->drawLine(458,552, 465,552);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.setPoints(3, 465,549, 465,555, 473,552);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(465,549), color == Qt::gray ? arrowRightGray : arrowRight);
 }
 
 void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
@@ -1479,14 +1405,11 @@ void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    // ALU Select Coordinates
+    // ALU Select
     painter->drawLine(449,376, 543,376);
     painter->drawLine(523,371, 533,381);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.setPoints(3, 449,373, 449,379, 441,376);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(441,373), color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     painter->setPen(Qt::black);
 
@@ -1531,28 +1454,19 @@ void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
     painter->drawLine(371,395, 371,586+8);
     painter->drawLine(371,586+8, 465,586+8);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.setPoints(3, 465,586+8-3, 465,586+8+3, 473,586+8);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(465,586+8-3), color == Qt::gray ? arrowRightGray : arrowRight);
 
     // Z
     painter->drawLine(386,395, 386,552);
     painter->drawLine(386,552, 404,552);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.setPoints(3, 404,549, 404,555, 412,552);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(404,549), color == Qt::gray ? arrowRightGray : arrowRight);
 
     // V
     painter->drawLine(401,395, 401,499);
     painter->drawLine(401,499, 466,499);
 
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.setPoints(3, 466,496, 466,502, 474,499);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(466,496), color == Qt::gray ? arrowRightGray : arrowRight);
 
     // C
     painter->drawLine(416,395, 416,472);
@@ -1561,16 +1475,12 @@ void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
     // S
     painter->drawLine(416,sBitLabel->y()+9, sBitLabel->x()-11,sBitLabel->y()+9);
 
-    painter->setRenderHint(QPainter::Antialiasing);
     // arrow to SCk
-    poly.setPoints(3, sBitLabel->x()-11,sBitLabel->y()+9+3, sBitLabel->x()-11,sBitLabel->y()+9-3, sBitLabel->x()-11+8,sBitLabel->y()+9);
-    painter->drawPolygon(poly);
-    // other arrows, idk.
-    poly.setPoints(3, 465,469, 465,475, 473,472);
-    painter->drawPolygon(poly);
-    poly.setPoints(3, 465,469, 465,475, 473,472);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->drawImage(QPoint(sBitLabel->x()-11,sBitLabel->y()+9-3), color == Qt::gray ? arrowRightGray : arrowRight);
+
+    // ANDZ
+    painter->drawImage(QPoint(465,469), color == Qt::gray ? arrowRightGray : arrowRight);
+
 }
 
 void CpuPaneBaseGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
@@ -1588,11 +1498,9 @@ void CpuPaneBaseGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
     painter->drawLine(257,303, 265,303); painter->drawLine(265,303, 265,324);
     painter->drawLine(265,324, 279,324); painter->drawLine(291,324, 335,324);
     painter->drawLine(347,324, 416,324); painter->drawLine(428,324, 543,324);
-    //painter->drawLine(523,319, 533,329);
-    painter->setRenderHint(QPainter::Antialiasing);
-    poly.setPoints(3, 257,300, 257,306, 249,303);
-    painter->drawPolygon(poly);
-    painter->setRenderHint(QPainter::Antialiasing, false);
+
+    painter->drawImage(QPoint(249,300), color == Qt::gray ? arrowLeftGray : arrowLeft);
+
     painter->setPen(Qt::black);
 
     if (MDRMuxTristateLabel->text() == "0") {

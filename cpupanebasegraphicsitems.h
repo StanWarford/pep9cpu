@@ -122,6 +122,16 @@ private:
     QColor combCircuitYellow;
     QColor combCircuitGreen;
 
+    QImage arrowLeft;
+    QImage arrowRight;
+    QImage arrowUp;
+    QImage arrowDown;
+
+    QImage arrowLeftGray;
+    QImage arrowRightGray;
+    QImage arrowUpGray;
+    QImage arrowDownGray;
+
     void repaintLoadCk(QPainter *painter);
     void repaintCSelect(QPainter *painter);
     void repaintBSelect(QPainter *painter);

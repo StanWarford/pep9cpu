@@ -828,14 +828,14 @@ void CpuPane::regTextFinishedEditing()
     QLineEdit *lineEdit = qobject_cast<QLineEdit *>(sender());
 
     QString str = lineEdit->text();
-    qDebug() << "str: " << str;
+    //qDebug() << "str: " << str;
 
     // Get the hex value of the string
     int regValue = 0;
     bool ok;
     regValue = str.toInt(&ok, 16);
 
-    qDebug() << "reg val: " << regValue;
+    //qDebug() << "reg val: " << regValue;
 
     if (lineEdit == cpuPaneItems->irRegLineEdit) {
         lineEdit->setText(QString("0x%1").arg(regValue, 6, 16, QLatin1Char('0')).toUpper());
