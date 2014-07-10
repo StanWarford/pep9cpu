@@ -1160,11 +1160,13 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
     // MainBus
     poly.clear();
     // oy.
-    poly << QPoint(145-70, 132) << QPoint(155-70, 132) << QPoint(155-70, 334) << QPoint(180, 334)
+    poly << QPoint(75, 132) << QPoint(85, 132) << QPoint(85, 334) << QPoint(180, 334)
          << QPoint(180, 326) << QPoint(175, 326) << QPoint(185, 316) << QPoint(195, 326) << QPoint(190, 326)
-         << QPoint(190, 344) << QPoint(155-70, 344) << QPoint(155-70, 631+19) << QPoint(145-70, 631+19)
-         << QPoint(145-70, 375) << QPoint(136-123, 375) << QPoint(136-123, 380) << QPoint(126-123, 370)
-         << QPoint(136-123, 360) << QPoint(136-123, 365) << QPoint(145-70, 365);
+         << QPoint(190, 344) << QPoint(85, 344) << QPoint(85, 650) << QPoint(75, 650)
+            // left arrow:
+         << QPoint(75, 375)
+         << QPoint(13, 375) << QPoint(13, 380) << QPoint(3, 370) << QPoint(13, 360) << QPoint(13, 365)
+         << QPoint(75, 365);
     painter->drawPolygon(poly);
 
     if (Sim::mainBusState != Enu::MemReadReady) {
@@ -1174,8 +1176,8 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
 
     // MemOutBus
     poly.clear();
-    poly << QPoint(0, 350) << QPoint(134-70, 350) << QPoint(134-70, 355) << QPoint(144-70, 345)
-         << QPoint(134-70, 335) << QPoint(134-70, 340) << QPoint(0, 340);
+    poly << QPoint(0, 350) << QPoint(64, 350) << QPoint(64, 355) << QPoint(74, 345)
+         << QPoint(64, 335) << QPoint(64, 340) << QPoint(0, 340);
     painter->drawPolygon(poly);
 }
 
