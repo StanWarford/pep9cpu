@@ -34,9 +34,11 @@ namespace Enu
 
     enum MainBusState {
         None,
-        MemReadWait,
+        MemReadFirstWait,
+        MemReadSecondWait,
         MemReadReady,
-        MemWriteWait,
+        MemWriteFirstWait,
+        MemWriteSecondWait,
         MemWriteReady,
     };
 

@@ -532,12 +532,12 @@ void CpuPane::changeEvent(QEvent *e)
 
 void CpuPane::updateMainBusState()
 {
-    bool marUnchanged = true;
+    bool marChanged = false;
     if (cpuPaneItems->MARCk->isChecked()) {
         quint8 a, b;
         QString errorString; // temporary, any errors here will be caught in the MARCk section of step()
         if (getABusOut(a, errorString) && getBBusOut(b, errorString)) {
-            marUnchanged = (a == Sim::MARA) && (b == Sim::MARB);
+            marChanged = (a != Sim::MARA) || (b != Sim::MARB);
         }
         else {
             // error: MARCk is checked but we have incorrect input.
@@ -547,66 +547,94 @@ void CpuPane::updateMainBusState()
 
     switch (Sim::mainBusState) {
     case Enu::None:
-        if (marUnchanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (1st)
-            Sim::mainBusState = Enu::MemReadWait;
+        if (!marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (1st)
+            Sim::mainBusState = Enu::MemReadFirstWait;
         }
-        else if (marUnchanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (1st)
-            Sim::mainBusState = Enu::MemWriteWait;
+        else if (!marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (1st)
+            Sim::mainBusState = Enu::MemWriteFirstWait;
         }
         //else: mainBusState = None, but it already is.
         break;
-    case Enu::MemReadWait:
-        if (marUnchanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (2nd with unchanged MAR)
-            Sim::mainBusState = Enu::MemReadReady;
+    case Enu::MemReadFirstWait:
+        if (!marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (2nd with unchanged MAR)
+            Sim::mainBusState = Enu::MemReadSecondWait;
         }
-        else if (!marUnchanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead
-            // do nothing, already MemReadWait - need another MemRead because the MAR changed
+        else if (marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead
+            // do nothing, already MemReadfirstWait - need another MemRead because the MAR changed
             qDebug() << "MAR changed - don't read yet";
         }
-        else if (cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (after a sinle MemRead)
-            Sim::mainBusState = Enu::MemWriteWait;
+        else if (cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (after a single MemRead)
+            Sim::mainBusState = Enu::MemWriteFirstWait;
+        }
+        else {
+            Sim::mainBusState = Enu::None;
+        }
+        break;
+    case Enu::MemReadSecondWait:
+        if (!marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (3rd with unchanged MAR)
+            Sim::mainBusState = Enu::MemReadReady;
+        }
+        else if (marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead
+            Sim::mainBusState = Enu::MemWriteFirstWait;
+        }
+        else if (cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (after 2 MemReads)
+            Sim::mainBusState = Enu::MemWriteFirstWait;
         }
         else {
             Sim::mainBusState = Enu::None;
         }
         break;
     case Enu::MemReadReady:
-        if (marUnchanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead again (more than 2 in a row)
+        if (!marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead again (more than 3 in a row)
             // do nothing, already MemReadReady
         }
-        else if (!marUnchanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead
-            Sim::mainBusState = Enu::MemReadWait; // go back to MemReadWait because the MAR changed
+        else if (marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead
+            Sim::mainBusState = Enu::MemReadFirstWait; // Go back to MemReadFirstWait because the MAR changed
         }
-        else if (cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (after 2+ MemReads)
-            Sim::mainBusState = Enu::MemWriteWait;
+        else if (cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (after 3+ MemReads)
+            Sim::mainBusState = Enu::MemWriteFirstWait;
         }
         else {
             Sim::mainBusState = Enu::None;
         }
         break;
-    case Enu::MemWriteWait:
+    case Enu::MemWriteFirstWait:
         if (cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (after a MemWrite)
-            Sim::mainBusState = Enu::MemReadWait;
+            Sim::mainBusState = Enu::MemReadFirstWait;
         }
-        else if (marUnchanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (2nd in a row)
+        else if (!marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (2nd in a row)
+            Sim::mainBusState = Enu::MemWriteSecondWait;
+        }
+        else if (marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (with changed MAR)
+            // Do nothing, MAR changed, still MemWriteSecondWait
+        }
+        else {
+            Sim::mainBusState = Enu::None;
+        }
+        break;
+    case Enu::MemWriteSecondWait:
+        if (cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (after 2 MemWrites)
+            Sim::mainBusState = Enu::MemReadFirstWait;
+        }
+        else if (!marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (2nd in a row)
             Sim::mainBusState = Enu::MemWriteReady;
         }
-        else if (!marUnchanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (with changed MAR)
-            // do nothing, MAR changed, still MemReadWait
+        else if (marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (with changed MAR)
+            Sim::mainBusState = Enu::MemWriteFirstWait;
         }
         else {
             Sim::mainBusState = Enu::None;
         }
         break;
     case Enu::MemWriteReady:
-        if (cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (after 2+ MemWrites)
-            Sim::mainBusState = Enu::MemReadWait;
+        if (cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (after 3+ MemWrites)
+            Sim::mainBusState = Enu::MemReadFirstWait;
         }
-        else if (marUnchanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (after 2+ in a row)
+        else if (!marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (after 3+ in a row)
             // do nothing, already MemWriteReady
         }
-        else if (!marUnchanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (with changed MAR)
-            Sim::mainBusState = Enu::MemWriteWait;
+        else if (marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (with changed MAR)
+            Sim::mainBusState = Enu::MemWriteFirstWait;
         }
         else {
             Sim::mainBusState = Enu::None;

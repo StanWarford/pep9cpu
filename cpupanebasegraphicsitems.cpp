@@ -1176,8 +1176,8 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
             // We haven't memRead yet, but are about to
             color = Qt::yellow;
         }
-        else if (Sim::mainBusState == Enu::MemReadReady || Sim::mainBusState == Enu::MemReadWait) {
-            // We have read once, and are about to again
+        else if (Sim::mainBusState == Enu::MemReadReady || Sim::mainBusState == Enu::MemReadFirstWait || Sim::mainBusState == Enu::MemReadSecondWait) {
+            // We have read twice, and are about to again
             color = QColor(16, 150, 24); // green
         }
         else {
@@ -1252,8 +1252,8 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
             // We have not yet memWrite'n, but are about to clock for the first time
             color = Qt::yellow;
         }
-        else if (Sim::mainBusState == Enu::MemWriteWait && MemWriteTristateLabel->text() == "1") {
-            // We have written once, and are about to again
+        else if (Sim::mainBusState == Enu::MemWriteSecondWait && MemWriteTristateLabel->text() == "1") {
+            // We have written twice, and are about to again
             color = QColor(16, 150, 24); // green
         }
         else {
@@ -1596,7 +1596,7 @@ void CpuPaneBaseGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
     painter->setPen(Qt::black);
 
     if (MDRMuxTristateLabel->text() == "0") {
-        if ((Sim::mainBusState == Enu::MemReadWait && MemReadTristateLabel->text() == "1") || Sim::mainBusState == Enu::MemReadReady) {
+        if ((Sim::mainBusState == Enu::MemReadSecondWait && MemReadTristateLabel->text() == "1") || Sim::mainBusState == Enu::MemReadReady) {
             MDRMuxerDataLabel->setPalette(QPalette(combCircuitGreen));
             painter->setBrush(QBrush(QColor(16, 150, 24))); // green
         }
