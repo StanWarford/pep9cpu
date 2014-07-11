@@ -197,7 +197,8 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
          << QPoint(78,258) << QPoint(78,253) << QPoint(68,263)
          << QPoint(78,273) << QPoint(78,268)
          << QPoint(175,268);
-    scene->addPolygon(poly, QPen(Qt::black), QBrush(Qt::yellow));
+    scene->addPolygon(poly, QPen(Qt::black), QBrush(QColor(16, 150, 24))); // green
+
 
 
     // CMux
@@ -1163,11 +1164,16 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
     painter->setBrush(color);
 
     // Main Bus
+    // ADDR bus:
     poly.clear();
-    poly << QPoint(35, 132) << QPoint(65, 132) << QPoint(65, 650) << QPoint(35, 650);
+    poly << QPoint(35, 132) << QPoint(55, 132) << QPoint(55, 650) << QPoint(35, 650);
+    painter->drawPolygon(poly);
+    // Data bus:
+    poly.clear();
+    poly << QPoint(55, 132) << QPoint(65, 132) << QPoint(65, 650) << QPoint(55, 650);
     painter->drawPolygon(poly);
 
-    // right arrow to MDRMux:
+    // right arrow from Bus to MDRMux:
     poly.clear();
     //         "foot":
     poly << QPoint(190, 344) << QPoint(65,  344) << QPoint(65,  334) << QPoint(180, 334)
@@ -1222,20 +1228,11 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
         return;
     }
 
-    // Draw main bus
+    // Draw ADDR bus stuff:
     if (isHigh) {
         // qDebug() << "mainBusState: " << Sim::mainBusState;
-        if (Sim::mainBusState == Enu::None || Sim::mainBusState == Enu::MemWriteFirstWait) {
-            // We have not yet memWrite'n, but are about to clock for the first time
-            color = Qt::yellow;
-        }
-        else if ((Sim::mainBusState == Enu::MemWriteSecondWait || Sim::mainBusState == Enu::MemWriteReady) && MemWriteTristateLabel->text() == "1") {
-            // We have written twice, and are about to again
-            color = QColor(16, 150, 24); // green
-        }
-        else {
-            color = Qt::white;
-        }
+        // ADDR bus is yellow if the bus is high
+        color = Qt::yellow;
     }
     else {
         color = Qt::white;
@@ -1245,19 +1242,12 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     painter->setBrush(color);
 
     // Main Bus
+    // Main ADDR bus:
     poly.clear();
-    poly << QPoint(35, 132) << QPoint(65, 132) << QPoint(65, 650) << QPoint(35, 650);
+    poly << QPoint(35, 132) << QPoint(55, 132) << QPoint(55, 650) << QPoint(35, 650);
     painter->drawPolygon(poly);
 
-    // right arrow to MDRMux:
-    poly.clear();
-    //         "foot":
-    poly << QPoint(190, 344) << QPoint(65,  344) << QPoint(65,  334) << QPoint(180, 334)
-            // arrowhead
-         << QPoint(180, 326) << QPoint(175, 326) << QPoint(185, 316) << QPoint(195, 326) << QPoint(190, 326);
-    painter->drawPolygon(poly);
-
-    // left arrow to addr:
+    // left arrow from addr to memAddr:
     poly.clear();
     //         arrowhead:
     poly << QPoint(18, 330) << QPoint(18, 325) << QPoint(3,  340) << QPoint(18, 355) << QPoint(18, 350)
@@ -1265,14 +1255,50 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
          << QPoint(35, 350) << QPoint(35, 330);
     painter->drawPolygon(poly);
 
+    // Draw DATA bus stuff:
+    // figure out the color:
+    if (isHigh && (Sim::mainBusState == Enu::MemWriteReady ||
+                Sim::mainBusState == Enu::MemWriteSecondWait)) {
+        color = QColor(16, 150, 24); // green
+    }
+    else {
+        color = Qt::white;
+    }
+    painter->setBrush(color);
+
+
+    // Main Data bus:
+    poly.clear();
+    poly << QPoint(55, 132) << QPoint(65, 132) << QPoint(65, 650) << QPoint(55, 650);
+    painter->drawPolygon(poly);
+
+    // Mem Data Bus (bidirectional arrow)
+    poly.clear();
+    // arrowhead:
+    poly << QPoint(13, 365) << QPoint(13, 360) << QPoint(3, 370) << QPoint(13, 380) << QPoint(13, 375);
+    // other end of the bus:
+    if (color == QColor(16, 150, 24)) {
+        // flat end
+        poly << QPoint(35, 375) << QPoint(35, 365);
+    }
+    else {
+        // arrowhead
+        poly << QPoint(24, 375) << QPoint(24, 380) << QPoint(34, 370) << QPoint(24, 360) << QPoint(24, 365);
+    }
+
+    painter->drawPolygon(poly);
+
+
     painter->setBrush(Qt::white);
 
-    // Mem Data Bus
+    // this is ALWAYS white on a memWrite:
+
+    // right arrow from Bus to MDRMux:
     poly.clear();
-    //         arrowhead:
-    poly << QPoint(13, 365) << QPoint(13, 360) << QPoint(3, 370) << QPoint(13, 380) << QPoint(13, 375)
-            // 2nd arrowhead:
-         << QPoint(24, 375) << QPoint(24, 380) << QPoint(34, 370) << QPoint(24, 360) << QPoint(24, 365);
+    //         "foot":
+    poly << QPoint(190, 344) << QPoint(65,  344) << QPoint(65,  334) << QPoint(180, 334)
+            // arrowhead
+         << QPoint(180, 326) << QPoint(175, 326) << QPoint(185, 316) << QPoint(195, 326) << QPoint(190, 326);
     painter->drawPolygon(poly);
 }
 
@@ -1564,5 +1590,7 @@ void CpuPaneBaseGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
     // MDRMuxBus (MDRMux to MDR arrow)
     poly.setPoints(7, 205,293, 205,286, 200,286, 210,276, 220,286, 215,286, 215,293); // arrow
     painter->drawPolygon(poly);
+
+
 }
 
