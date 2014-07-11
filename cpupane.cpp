@@ -1034,6 +1034,9 @@ void CpuPane::on_copyToMicrocodePushButton_clicked()
         code.set(Enu::ALU, cpuPaneItems->ALULineEdit->text().toInt());
     }
     // todo: CSMux
+    if (cpuPaneItems->CSMuxTristateLabel->text() != "") {
+        code.set(Enu::CMux, cpuPaneItems->CSMuxTristateLabel->text().toInt());
+    }
     if (cpuPaneItems->SCkCheckBox->isChecked()) {
         code.set(Enu::SCk, 1);
     }
@@ -1266,6 +1269,7 @@ bool CpuPane::getALUOut(quint8 &result, quint8& a, quint8& b, int& carry, int& o
 bool CpuPane::isCorrectALUInput(int ALUFn) {
     bool abus = false;
     bool bbus = false;
+    bool cin = false;
 
     if (cpuPaneItems->aMuxTristateLabel->text() == "") {
         abus = false;
@@ -1289,6 +1293,11 @@ bool CpuPane::isCorrectALUInput(int ALUFn) {
         bbus = true;
     }
 
+    if (cpuPaneItems->CSMuxTristateLabel->text() != "") {
+        cin = true;
+    }
+
+    // test A and B bus input:
     switch(ALUFn) {
     case 0:
         if (!abus) {
@@ -1321,6 +1330,21 @@ bool CpuPane::isCorrectALUInput(int ALUFn) {
     default:
         break;
     }
+
+    // test CIN:
+    switch(ALUFn) {
+    case 2:
+    case 4:
+    case 12:
+    case 14:
+        if (!cin) {
+            return false;
+        }
+        break;
+    default:
+        break;
+    }
+
     return true;
 }
 
@@ -1370,7 +1394,7 @@ bool CpuPane::getAMuxOut(quint8 &out, QString &errorString)
             return true;
         }
         else {
-            // Error string will be populated with the correct error
+            // Error string will [already] be populated with the correct error
         }
     }
     else {
