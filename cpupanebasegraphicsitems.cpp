@@ -192,13 +192,7 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
          << QPoint(321,290) << QPoint(311,280) << QPoint(316,280) << QPoint(316,268) << QPoint(290,268);
     scene->addPolygon(poly, QPen(Qt::black), QBrush(Qt::yellow));
     poly.clear();
-    // left arrow
-    poly << QPoint(175,258)
-         << QPoint(78,258) << QPoint(78,253) << QPoint(68,263)
-         << QPoint(78,273) << QPoint(78,268)
-         << QPoint(175,268);
-    scene->addPolygon(poly, QPen(Qt::black), QBrush(QColor(16, 150, 24))); // green
-
+    // note: left arrow gets drawn in repaintMemWrite
 
 
     // CMux
@@ -351,27 +345,28 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     scene->addRect(QRectF(nBitLabel->pos(), nBitLabel->size())); // N
     scene->addRect(QRectF(sBitLabel->pos(), sBitLabel->size())); // S
 
+    MemWriteLabel = new QLabel("MemWrite");
+    MemWriteLabel->setGeometry(579, 611, 80, 20);
+    MemWriteLabel->setPalette(QPalette(Qt::white));
+    scene->addWidget(MemWriteLabel);
+    MemWriteTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
+    MemWriteTristateLabel->setGeometry(550, 611, 25, 20);
+    MemWriteTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    MemWriteTristateLabel->setPalette(QPalette(Qt::white));
+    scene->addWidget(MemWriteTristateLabel);
+    scene->addRect(QRectF(MemWriteTristateLabel->pos(), MemWriteTristateLabel->size()), QPen(Qt::gray));
+
     MemReadLabel = new QLabel("MemRead");
-    MemReadLabel->setGeometry(579, 611, 80, 20);
+    MemReadLabel->setGeometry(579, 631, 80, 20);
     MemReadLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(MemReadLabel);
     MemReadTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
-    MemReadTristateLabel->setGeometry(550, 611, 25, 20);
+    MemReadTristateLabel->setGeometry(550, 631, 25, 20);
     MemReadTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MemReadTristateLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(MemReadTristateLabel);
     scene->addRect(QRectF(MemReadTristateLabel->pos(), MemReadTristateLabel->size()), QPen(Qt::gray));
 
-    MemWriteLabel = new QLabel("MemWrite");
-    MemWriteLabel->setGeometry(579, 631, 80, 20);
-    MemWriteLabel->setPalette(QPalette(Qt::white));
-    scene->addWidget(MemWriteLabel);
-    MemWriteTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
-    MemWriteTristateLabel->setGeometry(550, 631, 25, 20);
-    MemWriteTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    MemWriteTristateLabel->setPalette(QPalette(Qt::white));
-    scene->addWidget(MemWriteTristateLabel);
-    scene->addRect(QRectF(MemWriteTristateLabel->pos(), MemWriteTristateLabel->size()), QPen(Qt::gray));
 
     // Registers
     scene->addRect(5, 5, 491, 113, QPen(QBrush(QColor(Qt::red), Qt::SolidPattern), 2, Qt::DotLine, Qt::SquareCap, Qt::BevelJoin),
@@ -1132,9 +1127,9 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    painter->drawLine(76,611+8, 543,611+8); // memRead line from the label to the bus
+    painter->drawLine(76, 631+8, 543, 631+8); // memRead line from label to bus
 
-    painter->drawImage(QPoint(68,611+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(68,631+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     if (MemWriteTristateLabel->text() == "1") {
         // Do not paint main bus if MemWrite is isHigh
@@ -1222,9 +1217,30 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    painter->drawLine(76, 631+8, 543, 631+8); // memWrite line from label to bus
+    painter->drawLine(76,611+8, 543,611+8); // memWrite line from the label to the bus
+    painter->drawImage(QPoint(68,611+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
 
-    painter->drawImage(QPoint(68,631+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    // draw line from memWrite to MDR out:
+    painter->drawLine(91,611+8, 91,345);
+    painter->drawLine(91,333, 91,268+12); // memWrite line from the label to the bus
+    painter->drawImage(QPoint(91-3,268+12-9), color == Qt::gray ? arrowUpGray : arrowUp);
+
+    // repaint the MDR-to-main-bus line, based on if MemWrite is set or not
+    // note: it should be lighter (disabled) when MemWrite is not set.
+
+    color = QColor(16, 150, 24);
+    if (!isHigh) {
+        color = color.lighter(150);
+    }
+    painter->setBrush(color);
+    painter->setPen(QPen(QBrush(Qt::black), 1));
+
+    poly << QPoint(175,258)
+         << QPoint(78,258) << QPoint(78,253) << QPoint(68,263)
+         << QPoint(78,273) << QPoint(78,268)
+         << QPoint(175,268);
+    painter->drawPolygon(poly);
+
 
     if (MemReadTristateLabel->text() == "1") {
         // Do not paint main bus if MemRead is high
@@ -1269,7 +1285,6 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     }
     painter->setBrush(color);
 
-
     // Main Data bus:
     poly.clear();
     poly << QPoint(55, 132) << QPoint(65, 132) << QPoint(65, 650) << QPoint(55, 650);
@@ -1298,10 +1313,10 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
 
     // right arrow from Bus to MDRMux:
     poly.clear();
-    //         "foot":
-    poly << QPoint(190, 344) << QPoint(65,  344) << QPoint(65,  334) << QPoint(180, 334)
-            // arrowhead
-         << QPoint(180, 326) << QPoint(175, 326) << QPoint(185, 316) << QPoint(195, 326) << QPoint(190, 326);
+    // "foot":
+    poly << QPoint(190, 344) << QPoint(65,  344) << QPoint(65,  334) << QPoint(180, 334);
+    // arrowhead
+    poly << QPoint(180, 326) << QPoint(175, 326) << QPoint(185, 316) << QPoint(195, 326) << QPoint(190, 326);
     painter->drawPolygon(poly);
 }
 
