@@ -126,11 +126,11 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     QPolygonF poly;
     poly << QPoint(205,151) << QPoint(205,167)
          // arrow:
-         << QPoint(83,167) << QPoint(83,162) << QPoint(68,177) << QPoint(83,192) << QPoint(83,187)
+         << QPoint(88,167) << QPoint(88,162) << QPoint(73,177) << QPoint(88,192) << QPoint(88,187)
          << QPoint(205,187) << QPoint(205,202) << QPoint(215,202) << QPoint(215,151);
 
     scene->addPolygon(poly, QPen(QBrush(Qt::black), 1), QBrush(Qt::yellow));
-    QGraphicsLineItem *lineItem = scene->addLine(93,177, 215,177);
+    QGraphicsLineItem *lineItem = scene->addLine(88,177, 215,177);
     lineItem->setZValue(1); // make sure this line appears above the bus
 
 
@@ -772,6 +772,11 @@ void CpuPaneBaseGraphicsItems::paint(QPainter *painter, const QStyleOptionGraphi
     painter->drawText(138,215, "MARA");
     painter->drawText(138,145, "MARB");
 
+    painter->drawText(18,145, "System Bus");
+
+    painter->drawText(3, 320, "ADDR");
+    painter->drawText(3, 395, "DATA");
+
     repaintLoadCk(painter);
     repaintCSelect(painter);
     repaintBSelect(painter);
@@ -920,6 +925,8 @@ void CpuPaneBaseGraphicsItems::repaintMARCk(QPainter *painter)
     painter->drawLine(291,177, 355,177);
     painter->drawLine(235,177, 279,177);
     painter->drawLine(235,163, 235,191);
+
+    painter->drawEllipse(QPoint(235,177), 2, 2);
 
     painter->drawImage(QPoint(232,155), color == Qt::gray ? arrowUpGray : arrowUp);
     painter->drawImage(QPoint(232,191), color == Qt::gray ? arrowDownGray : arrowDown);
@@ -1084,7 +1091,6 @@ void CpuPaneBaseGraphicsItems::repaintVCk(QPainter *painter)
 void CpuPaneBaseGraphicsItems::repaintZCk(QPainter *painter)
 {
     QColor color;
-    QPolygon poly;
 
     color = ZCkCheckBox->isChecked() ? Qt::black : Qt::gray;
     painter->setPen(QPen(QBrush(color), 1));
@@ -1098,7 +1104,6 @@ void CpuPaneBaseGraphicsItems::repaintZCk(QPainter *painter)
 void CpuPaneBaseGraphicsItems::repaintNCk(QPainter *painter)
 {
     QColor color;
-    QPolygon poly;
 
     color = NCkCheckBox->isChecked() ? Qt::black : Qt::gray;
     painter->setPen(QPen(QBrush(color), 1));
@@ -1127,9 +1132,9 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    painter->drawLine(76, 631+8, 543, 631+8); // memRead line from label to bus
+    painter->drawLine(81, 631+8, 543, 631+8); // memRead line from label to bus
 
-    painter->drawImage(QPoint(68,631+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(73,631+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     if (MemWriteTristateLabel->text() == "1") {
         // Do not paint main bus if MemWrite is isHigh
@@ -1145,7 +1150,7 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
     // Main Bus
     // ADDR bus:
     poly.clear();
-    poly << QPoint(35, 132) << QPoint(55, 132) << QPoint(55, 650) << QPoint(35, 650);
+    poly << QPoint(40, 151) << QPoint(60, 151) << QPoint(60, 650) << QPoint(40, 650);
     painter->drawPolygon(poly);
 
     // left arrow to addr:
@@ -1153,7 +1158,7 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
     //         arrowhead:
     poly << QPoint(18, 330) << QPoint(18, 325) << QPoint(3,  340) << QPoint(18, 355) << QPoint(18, 350)
             // blunt end at the bus:
-         << QPoint(35, 350) << QPoint(35, 330);
+         << QPoint(40, 350) << QPoint(40, 330);
     painter->drawPolygon(poly);
 
     painter->setBrush(Qt::white);
@@ -1171,7 +1176,7 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
 
     // Data bus:
     poly.clear();
-    poly << QPoint(55, 132) << QPoint(65, 132) << QPoint(65, 650) << QPoint(55, 650);
+    poly << QPoint(60, 151) << QPoint(70, 151) << QPoint(70, 650) << QPoint(60, 650);
     painter->drawPolygon(poly);
 
     // Mem Data Bus
@@ -1185,13 +1190,13 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
         // arrowhead (normally):
         poly << QPoint(13, 365) << QPoint(13, 360) << QPoint(3, 370) << QPoint(13, 380) << QPoint(13, 375);
     }
-    poly << QPoint(24, 375) << QPoint(24, 380) << QPoint(34, 370) << QPoint(24, 360) << QPoint(24, 365);
+    poly << QPoint(29, 375) << QPoint(29, 380) << QPoint(39, 370) << QPoint(29, 360) << QPoint(29, 365);
     painter->drawPolygon(poly);
 
     // right arrow from Bus to MDRMux:
     poly.clear();
     //         "foot":
-    poly << QPoint(190, 344) << QPoint(65,  344) << QPoint(65,  334) << QPoint(180, 334)
+    poly << QPoint(190, 344) << QPoint(70,  344) << QPoint(70,  334) << QPoint(180, 334)
             // arrowhead
          << QPoint(180, 326) << QPoint(175, 326) << QPoint(185, 316) << QPoint(195, 326) << QPoint(190, 326);
     painter->drawPolygon(poly);
@@ -1217,17 +1222,17 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    painter->drawLine(76,611+8, 543,611+8); // memWrite line from the label to the bus
-    painter->drawImage(QPoint(68,611+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawLine(81,611+8, 543,611+8); // memWrite line from the label to the bus
+    painter->drawImage(QPoint(73,611+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     // draw line from memWrite to MDR out:
-    painter->drawLine(91,611+8, 91,345);
-    painter->drawLine(91,333, 91,268+12); // memWrite line from the label to the bus
-    painter->drawImage(QPoint(91-3,268+12-9), color == Qt::gray ? arrowUpGray : arrowUp);
+    painter->drawEllipse(QPoint(96,611+8), 2, 2);
+    painter->drawLine(96,611+8, 96,345);
+    painter->drawLine(96,333, 96,268+12); // memWrite line from the label to the bus
+    painter->drawImage(QPoint(96-3,268+12-9), color == Qt::gray ? arrowUpGray : arrowUp);
 
     // repaint the MDR-to-main-bus line, based on if MemWrite is set or not
     // note: it should be lighter (disabled) when MemWrite is not set.
-
     color = QColor(16, 150, 24); // green
     if (!isHigh) {
         color = color.lighter(150);
@@ -1235,9 +1240,10 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     painter->setBrush(color);
     painter->setPen(QPen(QBrush(Qt::black), 1));
 
+    // mdr to main-bus
     poly << QPoint(175,258)
-         << QPoint(78,258) << QPoint(78,253) << QPoint(68,263)
-         << QPoint(78,273) << QPoint(78,268)
+         << QPoint(83,258) << QPoint(83,253) << QPoint(73,263)
+         << QPoint(83,273) << QPoint(83,268)
          << QPoint(175,268);
     painter->drawPolygon(poly);
 
@@ -1263,15 +1269,15 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     // Main Bus
     // Main ADDR bus:
     poly.clear();
-    poly << QPoint(35, 132) << QPoint(55, 132) << QPoint(55, 650) << QPoint(35, 650);
+    poly << QPoint(40, 151) << QPoint(60, 151) << QPoint(60, 650) << QPoint(40, 650);
     painter->drawPolygon(poly);
 
-    // left arrow from addr to memAddr:
+    // left arrow from addr bus to memory:
     poly.clear();
     //         arrowhead:
     poly << QPoint(18, 330) << QPoint(18, 325) << QPoint(3,  340) << QPoint(18, 355) << QPoint(18, 350)
             // blunt end at the bus:
-         << QPoint(35, 350) << QPoint(35, 330);
+         << QPoint(40, 350) << QPoint(40, 330);
     painter->drawPolygon(poly);
 
     // Draw DATA bus stuff:
@@ -1287,7 +1293,7 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
 
     // Main Data bus:
     poly.clear();
-    poly << QPoint(55, 132) << QPoint(65, 132) << QPoint(65, 650) << QPoint(55, 650);
+    poly << QPoint(60, 151) << QPoint(70, 151) << QPoint(70, 650) << QPoint(60, 650);
     painter->drawPolygon(poly);
 
     // Mem Data Bus (bidirectional arrow)
@@ -1297,11 +1303,11 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     // other end of the bus:
     if (color == QColor(16, 150, 24)) {
         // flat end
-        poly << QPoint(35, 375) << QPoint(35, 365);
+        poly << QPoint(40, 375) << QPoint(40, 365);
     }
     else {
         // arrowhead
-        poly << QPoint(24, 375) << QPoint(24, 380) << QPoint(34, 370) << QPoint(24, 360) << QPoint(24, 365);
+        poly << QPoint(29, 375) << QPoint(29, 380) << QPoint(39, 370) << QPoint(29, 360) << QPoint(29, 365);
     }
     painter->drawPolygon(poly);
 
@@ -1311,7 +1317,7 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     // right arrow from Bus to MDRMux:
     poly.clear();
     // "foot":
-    poly << QPoint(190, 344) << QPoint(65,  344) << QPoint(65,  334) << QPoint(180, 334);
+    poly << QPoint(190, 344) << QPoint(70,  344) << QPoint(70,  334) << QPoint(180, 334);
     // arrowhead
     poly << QPoint(180, 326) << QPoint(175, 326) << QPoint(185, 316) << QPoint(195, 326) << QPoint(190, 326);
     painter->drawPolygon(poly);
@@ -1396,6 +1402,7 @@ void CpuPaneBaseGraphicsItems::repaintZBitOut(QPainter *painter)
     painter->drawLine(341,506, 322,506); // line from arrowhead on left
 
     // line up to ANDZ
+    painter->drawEllipse(QPoint(437,582), 2, 2);
     painter->drawLine(437,582, 437,574);
 
     painter->drawImage(QPoint(314,503), arrowLeft);
@@ -1538,19 +1545,15 @@ void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
 
     painter->drawImage(QPoint(466,496), color == Qt::gray ? arrowRightGray : arrowRight);
 
+    // Cout:
     // C
     painter->drawLine(416,395, 416,472);
     painter->drawLine(416,472, 465,472);
-
+    painter->drawImage(QPoint(465,469), color == Qt::gray ? arrowRightGray : arrowRight);
     // S
     painter->drawLine(416,sBitLabel->y()+9, sBitLabel->x()-11,sBitLabel->y()+9);
-
-    // arrow to SCk
+    painter->drawEllipse(QPoint(416,sBitLabel->y()+9), 2, 2);
     painter->drawImage(QPoint(sBitLabel->x()-11,sBitLabel->y()+9-3), color == Qt::gray ? arrowRightGray : arrowRight);
-
-    // ANDZ
-    painter->drawImage(QPoint(465,469), color == Qt::gray ? arrowRightGray : arrowRight);
-
 }
 
 void CpuPaneBaseGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
