@@ -772,10 +772,10 @@ void CpuPaneBaseGraphicsItems::paint(QPainter *painter, const QStyleOptionGraphi
     painter->drawText(138,215, "MARA");
     painter->drawText(138,145, "MARB");
 
-    painter->drawText(18,145, "System Bus");
+    painter->drawText(23,145, "System Bus");
 
-    painter->drawText(3, 320, "ADDR");
-    painter->drawText(3, 395, "DATA");
+    painter->drawText(7, 320, "Addr");
+    painter->drawText(7, 395, "Data");
 
     repaintLoadCk(painter);
     repaintCSelect(painter);
