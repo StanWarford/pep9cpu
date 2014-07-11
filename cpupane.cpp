@@ -1082,28 +1082,28 @@ void CpuPane::ALUTextEdited(QString str)
             cpuPaneItems->ALUFunctionLabel->setText("A plus B plus Cin");
             break;
         case 3:
-            cpuPaneItems->ALUFunctionLabel->setText("A plus \xAC B plus 1");
+            cpuPaneItems->ALUFunctionLabel->setText("A plus  \u00AC B plus 1");
             break;
         case 4:
-            cpuPaneItems->ALUFunctionLabel->setText("A plus \xAC B plus Cin");
+            cpuPaneItems->ALUFunctionLabel->setText("A plus \u00AC B plus Cin");
             break;
         case 5:
-            cpuPaneItems->ALUFunctionLabel->setText("A \xb7 B");
+            cpuPaneItems->ALUFunctionLabel->setText("A \u00b7 B");
             break;
         case 6:
-            cpuPaneItems->ALUFunctionLabel->setText("\xAC (A \xb7 B)");
+            cpuPaneItems->ALUFunctionLabel->setText("\u00AC (A \u00b7 B)");
             break;
         case 7:
             cpuPaneItems->ALUFunctionLabel->setText("A + B");
             break;
         case 8:
-            cpuPaneItems->ALUFunctionLabel->setText("\xAC (A + B)");
+            cpuPaneItems->ALUFunctionLabel->setText("\u00AC (A + B)");
             break;
         case 9:
             cpuPaneItems->ALUFunctionLabel->setText("A XOR B");
             break;
         case 10:
-            cpuPaneItems->ALUFunctionLabel->setText("\xAC A");
+            cpuPaneItems->ALUFunctionLabel->setText("\u00AC A");
             break;
         case 11:
             cpuPaneItems->ALUFunctionLabel->setText("ASL A");
