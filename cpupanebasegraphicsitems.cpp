@@ -926,6 +926,8 @@ void CpuPaneBaseGraphicsItems::repaintMARCk(QPainter *painter)
     painter->drawLine(235,177, 279,177);
     painter->drawLine(235,163, 235,191);
 
+    painter->drawEllipse(QPoint(235,177), 2, 2);
+
     painter->drawImage(QPoint(232,155), color == Qt::gray ? arrowUpGray : arrowUp);
     painter->drawImage(QPoint(232,191), color == Qt::gray ? arrowDownGray : arrowDown);
 }
@@ -1089,7 +1091,6 @@ void CpuPaneBaseGraphicsItems::repaintVCk(QPainter *painter)
 void CpuPaneBaseGraphicsItems::repaintZCk(QPainter *painter)
 {
     QColor color;
-    QPolygon poly;
 
     color = ZCkCheckBox->isChecked() ? Qt::black : Qt::gray;
     painter->setPen(QPen(QBrush(color), 1));
@@ -1103,7 +1104,6 @@ void CpuPaneBaseGraphicsItems::repaintZCk(QPainter *painter)
 void CpuPaneBaseGraphicsItems::repaintNCk(QPainter *painter)
 {
     QColor color;
-    QPolygon poly;
 
     color = NCkCheckBox->isChecked() ? Qt::black : Qt::gray;
     painter->setPen(QPen(QBrush(color), 1));
@@ -1226,6 +1226,7 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     painter->drawImage(QPoint(73,611+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     // draw line from memWrite to MDR out:
+    painter->drawEllipse(QPoint(96,611+8), 2, 2);
     painter->drawLine(96,611+8, 96,345);
     painter->drawLine(96,333, 96,268+12); // memWrite line from the label to the bus
     painter->drawImage(QPoint(96-3,268+12-9), color == Qt::gray ? arrowUpGray : arrowUp);
@@ -1401,6 +1402,7 @@ void CpuPaneBaseGraphicsItems::repaintZBitOut(QPainter *painter)
     painter->drawLine(341,506, 322,506); // line from arrowhead on left
 
     // line up to ANDZ
+    painter->drawEllipse(QPoint(437,582), 2, 2);
     painter->drawLine(437,582, 437,574);
 
     painter->drawImage(QPoint(314,503), arrowLeft);
@@ -1543,19 +1545,15 @@ void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
 
     painter->drawImage(QPoint(466,496), color == Qt::gray ? arrowRightGray : arrowRight);
 
+    // Cout:
     // C
     painter->drawLine(416,395, 416,472);
     painter->drawLine(416,472, 465,472);
-
+    painter->drawImage(QPoint(465,469), color == Qt::gray ? arrowRightGray : arrowRight);
     // S
     painter->drawLine(416,sBitLabel->y()+9, sBitLabel->x()-11,sBitLabel->y()+9);
-
-    // arrow to SCk
+    painter->drawEllipse(QPoint(416,sBitLabel->y()+9), 2, 2);
     painter->drawImage(QPoint(sBitLabel->x()-11,sBitLabel->y()+9-3), color == Qt::gray ? arrowRightGray : arrowRight);
-
-    // ANDZ
-    painter->drawImage(QPoint(465,469), color == Qt::gray ? arrowRightGray : arrowRight);
-
 }
 
 void CpuPaneBaseGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
