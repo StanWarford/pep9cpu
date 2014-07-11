@@ -1045,10 +1045,10 @@ void CpuPaneBaseGraphicsItems::repaintSCk(QPainter *painter)
     painter->setBrush(color);
 
     // line from checkbox to data
-    painter->drawLine(510,SCkCheckBox->y()+8, 543,SCkCheckBox->y()+8);
+    painter->drawLine(505,SCkCheckBox->y()+8, 543,SCkCheckBox->y()+8);
 
     // arrow
-    painter->drawImage(QPoint(502,SCkCheckBox->y()+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(497,SCkCheckBox->y()+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintCCk(QPainter *painter)
@@ -1061,10 +1061,10 @@ void CpuPaneBaseGraphicsItems::repaintCCk(QPainter *painter)
     painter->setBrush(color);
 
     // line from checkbox to data
-    painter->drawLine(510,CCkCheckBox->y()+8, 543,CCkCheckBox->y()+8);
+    painter->drawLine(505,CCkCheckBox->y()+8, 543,CCkCheckBox->y()+8);
 
     // arrow
-    painter->drawImage(QPoint(502,469), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(497,469), color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintVCk(QPainter *painter)
@@ -1076,9 +1076,9 @@ void CpuPaneBaseGraphicsItems::repaintVCk(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    painter->drawLine(510,VCkCheckBox->y()+8, 543,VCkCheckBox->y()+8);
+    painter->drawLine(505,VCkCheckBox->y()+8, 543,VCkCheckBox->y()+8);
 
-    painter->drawImage(QPoint(502,496), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(497,496), color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintZCk(QPainter *painter)
@@ -1090,9 +1090,9 @@ void CpuPaneBaseGraphicsItems::repaintZCk(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    painter->drawLine(510, 552, 543, 552);
+    painter->drawLine(505, 552, 543, 552);
 
-    painter->drawImage(QPoint(502,549), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(497,549), color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintNCk(QPainter *painter)
@@ -1104,9 +1104,9 @@ void CpuPaneBaseGraphicsItems::repaintNCk(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    painter->drawLine(510, 586+8, 543, 586+8);
+    painter->drawLine(505, 586+8, 543, 586+8);
 
-    painter->drawImage(QPoint(502,586+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(497,586+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
@@ -1228,7 +1228,7 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     // repaint the MDR-to-main-bus line, based on if MemWrite is set or not
     // note: it should be lighter (disabled) when MemWrite is not set.
 
-    color = QColor(16, 150, 24);
+    color = QColor(16, 150, 24); // green
     if (!isHigh) {
         color = color.lighter(150);
     }
@@ -1303,13 +1303,10 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
         // arrowhead
         poly << QPoint(24, 375) << QPoint(24, 380) << QPoint(34, 370) << QPoint(24, 360) << QPoint(24, 365);
     }
-
     painter->drawPolygon(poly);
 
-
+    // Main Bus to MDRMux is ALWAYS white on a memWrite:
     painter->setBrush(Qt::white);
-
-    // this is ALWAYS white on a memWrite:
 
     // right arrow from Bus to MDRMux:
     poly.clear();
@@ -1348,22 +1345,22 @@ void CpuPaneBaseGraphicsItems::repaintCBitOut(QPainter *painter)
     painter->drawLine(487,482, 487,486); // bitty bit under C bit
     painter->drawLine(330,486, 322,486);
     painter->drawLine(330,486, 487,486);
+    // arrow to the NZVC data bus
+    painter->drawImage(QPoint(314,483), arrowLeft);
 
     // line from C bit to CSMux
     painter->drawLine(487,cBitLabel->pos().y()-4, 487,cBitLabel->pos().y()); // bitty bit above C bit
     painter->drawLine(CSMuxerDataLabel->pos().x()+8,cBitLabel->pos().y()-4, 487,cBitLabel->pos().y()-4);
     painter->drawLine(CSMuxerDataLabel->pos().x()+8,CSMuxerDataLabel->pos().y() + CSMuxerDataLabel->height()+8, CSMuxerDataLabel->pos().x()+8,cBitLabel->pos().y()-4);
-
-    // CIN line back to the ALU
-    painter->drawLine(CSMuxerDataLabel->x()+35,389, 443,389);
-    painter->drawLine(CSMuxerDataLabel->x()+35,CSMuxerDataLabel->pos().y(), CSMuxerDataLabel->x()+35,389);
-
-    // arrow to the NZVC data bus
-    painter->drawImage(QPoint(314,483), arrowLeft);
-    // CIN arrow to the ALU
-    painter->drawImage(QPoint(435,386), arrowLeft);
     // arrow to the CSMux
     painter->drawImage(QPoint(CSMuxerDataLabel->x()+8-3,CSMuxerDataLabel->y()+CSMuxerDataLabel->height()+3), arrowUp);
+
+    // CIN line back to the ALU
+    painter->drawLine(CSMuxerDataLabel->x()+35,389, 433,389);
+    painter->drawLine(CSMuxerDataLabel->x()+35,CSMuxerDataLabel->pos().y(), CSMuxerDataLabel->x()+35,389);
+    // CIN arrow to the ALU
+    painter->drawImage(QPoint(428,386), arrowLeft);
+
 }
 
 void CpuPaneBaseGraphicsItems::repaintVBitOut(QPainter *painter)
@@ -1432,10 +1429,10 @@ void CpuPaneBaseGraphicsItems::repaintCSMuxSelect(QPainter *painter)
     painter->setBrush(color);
 
     // line from checkbox to data
-    painter->drawLine(510,CSMuxerDataLabel->y()+10, 543,CSMuxerDataLabel->y()+10);
+    painter->drawLine(505,CSMuxerDataLabel->y()+10, 543,CSMuxerDataLabel->y()+10);
 
     // arrow
-    painter->drawImage(QPoint(502,CSMuxerDataLabel->y()+10-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(497,CSMuxerDataLabel->y()+10-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintANDZSelect(QPainter *painter)
@@ -1479,10 +1476,10 @@ void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
     painter->setBrush(color);
 
     // ALU Select
-    painter->drawLine(449,376, 543,376);
-    painter->drawLine(523,371, 533,381);
+    painter->drawLine(439,376, 543,376);
+    painter->drawLine(523,371, 533,381); // diagonal line
 
-    painter->drawImage(QPoint(441,373), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(433,373), color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     painter->setPen(Qt::black);
 
