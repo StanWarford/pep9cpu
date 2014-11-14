@@ -88,7 +88,7 @@ QString Pep::addCycleNumbers(QString codeString) {
     return microcodeList.join("\n");
 }
 
-QMap<Enu::EMnemonic, QString> Pep::decControlToMnemonMap;
+QMap<Enu::EMnemonic, QString> Pep::decControlToMnemonMap; // unused as of this writing
 QMap<Enu::EMnemonic, QString> Pep::memControlToMnemonMap;
 QMap<Enu::EMnemonic, QString> Pep::clockControlToMnemonMap;
 QMap<Enu::EMnemonic, QString> Pep::specificationToMnemonMap;

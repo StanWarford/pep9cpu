@@ -44,7 +44,7 @@ public:
     static QString addCycleNumbers(QString codeString);
 
     // Maps between mnemonic enums and strings
-    static QMap<Enu::EMnemonic, QString> decControlToMnemonMap;
+    static QMap<Enu::EMnemonic, QString> decControlToMnemonMap;  // unused as of this writing
     static QMap<Enu::EMnemonic, QString> memControlToMnemonMap;
     static QMap<Enu::EMnemonic, QString> clockControlToMnemonMap;
     static QMap<Enu::EMnemonic, QString> specificationToMnemonMap;

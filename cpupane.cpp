@@ -1082,7 +1082,7 @@ void CpuPane::ALUTextEdited(QString str)
             cpuPaneItems->ALUFunctionLabel->setText("A plus B plus Cin");
             break;
         case 3:
-            cpuPaneItems->ALUFunctionLabel->setText("A plus  \u00AC B plus 1");
+            cpuPaneItems->ALUFunctionLabel->setText("A plus \u00AC B plus 1");
             break;
         case 4:
             cpuPaneItems->ALUFunctionLabel->setText("A plus \u00AC B plus Cin");

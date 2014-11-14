@@ -50,8 +50,8 @@ namespace Enu
     };
 
     enum CPUType {
-        Base,
-        Incrementer
+        OneByteDataBus,
+        TwoByteDataBus
     };
 
 }
