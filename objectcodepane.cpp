@@ -39,15 +39,28 @@ ObjectCodePane::ObjectCodePane(QWidget *parent) :
 
     ui->plainTextEdit->setFont(font);
 
-    cpuLabel = new ObjectCodeLabel(this);
-    ui->verticalLayout->insertWidget(1, cpuLabel);
-    cpuLabel->setFont(QFont(Pep::codeFont, Pep::codeFontSize));
-    cpuLabel->setMinimumHeight(QFontMetrics(cpuLabel->font()).averageCharWidth() * 8 + 3); // +3 for padding
+    cpuLabel = NULL;
+    initCPUModelState();
 }
 
 ObjectCodePane::~ObjectCodePane()
 {
     delete ui;
+}
+
+void ObjectCodePane::initCPUModelState()
+{
+    if (cpuLabel != NULL) {
+        delete cpuLabel;
+    }
+
+    cpuLabel = new ObjectCodeLabel(this);
+    ui->verticalLayout->insertWidget(1, cpuLabel);
+    cpuLabel->setFont(QFont(Pep::codeFont, Pep::codeFontSize));
+    cpuLabel->setMinimumHeight(QFontMetrics(cpuLabel->font()).averageCharWidth() * 8 + 3); // +3 for padding
+
+    setObjectCode("");
+    clearSimulationView();
 }
 
 void ObjectCodePane::setObjectCode(QString string)

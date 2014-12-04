@@ -106,6 +106,8 @@ bool MicrocodePane::microAssemble()
 QString MicrocodePane::codeToString() {
     QString str = "";
     Code *code;
+    // this should automagically generate the appropriate code for the cpu model
+    //  since it uses the mnemon maps that get initialized when we switch models
     for (int i = 0; i < Sim::codeList.size(); ++i) {
         code = Sim::codeList.at(i);
         str.append(code->getObjectCode());

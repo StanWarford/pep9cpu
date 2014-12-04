@@ -35,6 +35,8 @@ public:
     ObjectCodePane(QWidget *parent = 0);
     ~ObjectCodePane();
 
+    void initCPUModelState();
+
     void highlightOnFocus();
 
     void setObjectCode(QString string);
