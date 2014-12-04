@@ -39,7 +39,7 @@ public:
     MicrocodePane(QWidget *parent = 0);
     ~MicrocodePane();
 
-    void initDataBusState();
+    void initCPUModelState();
 
     bool microAssemble();
     // Pre: The source code pane contains a Pep/8 microcode program.
