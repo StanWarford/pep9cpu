@@ -26,7 +26,6 @@
 
 using namespace Enu;
 
-Enu::CPUType Sim::cpuFeatures = OneByteDataBus;
 
 QVector<quint8> Sim::Mem(65536);
 bool Sim::nBit, Sim::zBit, Sim::vBit, Sim::cBit, Sim::sBit;
