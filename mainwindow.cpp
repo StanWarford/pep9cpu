@@ -476,12 +476,12 @@ void MainWindow::on_actionSystem_Clear_Memory_triggered()
     mainMemory->clearMemory();
 }
 
-void MainWindow::on_actionBase_CPU_Model_triggered()
+void MainWindow::on_actionOne_Byte_Data_Bus_Model_triggered()
 {
 
 }
 
-void MainWindow::on_actionIncrementer_CPU_Model_triggered()
+void MainWindow::on_actionTwo_Byte_Data_Bus_Model_triggered()
 {
 
 }

@@ -126,8 +126,8 @@
     <addaction name="actionSystem_Clear_CPU"/>
     <addaction name="actionSystem_Clear_Memory"/>
     <addaction name="separator"/>
-    <addaction name="actionBase_CPU_Model"/>
-    <addaction name="actionIncrementer_CPU_Model"/>
+    <addaction name="actionOne_Byte_Data_Bus_Model"/>
+    <addaction name="actionTwo_Byte_Data_Bus_Model"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -511,17 +511,23 @@
     <string>Examples</string>
    </property>
   </action>
-  <action name="actionBase_CPU_Model">
+  <action name="actionOne_Byte_Data_Bus_Model">
    <property name="enabled">
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Base CPU Model</string>
+    <string>One Byte Data Bus Model</string>
+   </property>
+   <property name="toolTip">
+    <string>One Byte Data Bus Model</string>
    </property>
   </action>
-  <action name="actionIncrementer_CPU_Model">
+  <action name="actionTwo_Byte_Data_Bus_Model">
    <property name="text">
-    <string>Incrementer CPU Model</string>
+    <string>Two Byte Data Bus Model</string>
+   </property>
+   <property name="toolTip">
+    <string>One Byte Data Bus Model</string>
    </property>
   </action>
  </widget>
