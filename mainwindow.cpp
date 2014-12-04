@@ -87,7 +87,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(cpuPane, SIGNAL(stopSimulation()), this, SLOT(stopSimulation()));
     connect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
 
-    Pep::initEnumMnemonMaps();
+    //Pep::initEnumMnemonMaps();
+    on_actionOne_Byte_Data_Bus_Model_triggered();
 
     readSettings();
 

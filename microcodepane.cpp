@@ -48,7 +48,8 @@ MicrocodePane::MicrocodePane(QWidget *parent) :
     layout->setVerticalSpacing(0);
     this->setLayout(layout);
 
-    highlighter = new PepHighlighter(editor->document());
+    highlighter = NULL;
+    initCPUModelState();
 
     connect(editor->document(), SIGNAL(modificationChanged(bool)), this, SLOT(setLabelToModified(bool)));
 
@@ -61,6 +62,15 @@ MicrocodePane::MicrocodePane(QWidget *parent) :
 MicrocodePane::~MicrocodePane()
 {
     delete ui;
+}
+
+void MicrocodePane::initCPUModelState()
+{
+    if (highlighter != NULL) {
+        delete highlighter;
+    }
+    highlighter = new PepHighlighter(editor->document());
+
 }
 
 bool MicrocodePane::microAssemble()

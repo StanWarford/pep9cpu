@@ -39,6 +39,8 @@ public:
     MicrocodePane(QWidget *parent = 0);
     ~MicrocodePane();
 
+    void initDataBusState();
+
     bool microAssemble();
     // Pre: The source code pane contains a Pep/8 microcode program.
     // Post: If the program assembles correctly, true is returned, and codeList is populated
