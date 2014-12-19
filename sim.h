@@ -39,14 +39,13 @@ public:
     static quint8 MARA;
     static quint8 MARB;
     static quint8 MDR;
+    static quint8 MDROdd;
+    static quint8 MDREven;
 
     static Enu::MainBusState mainBusState;
 
     // Used for keeping track of which bytes have been modified since last memory update:
     static QSet<int> modifiedBytes;
-
-    static bool memReadPrevStep;
-    static bool memWritePrevStep;
 
     static QList<Code *> codeList;
     static int cycleCount; // used for storing the number of cycles in a simulation
@@ -70,6 +69,8 @@ public:
     static void clearMemory();
 
     static void initNZVCS();
+
+    static void initCPUState();
 
 };
 

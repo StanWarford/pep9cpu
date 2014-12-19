@@ -104,6 +104,11 @@ private slots:
     bool getABusOut(quint8& out, QString& errorString);
     bool getBBusOut(quint8& out, QString& errorString);
 
+    // new functions:
+//    bool getMARMuxOut();
+//    bool getMDROMuxOut();
+//    bool getMDREMuxOut();
+//    bool getEOMuxOut();
 public slots:
     void run();
 

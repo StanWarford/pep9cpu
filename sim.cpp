@@ -32,16 +32,15 @@ bool Sim::nBit, Sim::zBit, Sim::vBit, Sim::cBit, Sim::sBit;
 
 QVector<quint8> Sim::regBank(32);
 
-quint8 Sim::MARA = 0;
-quint8 Sim::MARB = 0;
-quint8 Sim::MDR = 0;
+quint8 Sim::MARA    = 0;
+quint8 Sim::MARB    = 0;
+quint8 Sim::MDR     = 0;
+quint8 Sim::MDROdd  = 0;
+quint8 Sim::MDREven = 0;
 
 Enu::MainBusState Sim::mainBusState;
 
 QSet<int> Sim::modifiedBytes;
-
-bool Sim::memReadPrevStep = false;
-bool Sim::memWritePrevStep = false;
 
 QList<Code *> Sim::codeList;
 int Sim::cycleCount; // used to store the number of cycles in a simulation
@@ -102,8 +101,6 @@ bool Sim::atEndOfSim()
     return microProgramCounter >= cycleCount;
     // we use this because of special cases with
     // some simulations being very short (2 lines in particular).
-
-//    return microCodeCurrentLine + 1 >= codeList.size() - 1; // old and tired
 }
 
 void Sim::initMRegs()
@@ -156,3 +153,21 @@ void Sim::initNZVCS()
     cBit = false;
     sBit = false;
 }
+
+void Sim::initCPUState()
+{
+    mainBusState = Enu::None;
+    modifiedBytes.clear();
+    MARA    = 0;
+    MARB    = 0;
+    MDR     = 0;
+    MDROdd  = 0;
+    MDREven = 0;
+
+}
+
+
+
+
+
+

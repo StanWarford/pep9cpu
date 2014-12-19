@@ -482,6 +482,18 @@ void MainWindow::on_actionOne_Byte_Data_Bus_Model_triggered()
 {
     Pep::cpuFeatures = Enu::OneByteDataBus;
     Pep::initEnumMnemonMaps();
+    Sim::initMRegs();
+    Sim::clearMemory();
+    Sim::initNZVCS();
+    Sim::initCPUState();
+
+    objectCodePane->clearSimulationView();
+    mainMemory->clearMemory();
+    cpuPane->clearCpu();
+    cpuPane->clearCpuControlSignals();
+
+    ui->actionTwo_Byte_Data_Bus_Model->setEnabled(true);
+    ui->actionOne_Byte_Data_Bus_Model->setEnabled(false);
 
 }
 
@@ -489,6 +501,18 @@ void MainWindow::on_actionTwo_Byte_Data_Bus_Model_triggered()
 {
     Pep::cpuFeatures = Enu::TwoByteDataBus;
     Pep::initEnumMnemonMaps();
+    Sim::initMRegs();
+    Sim::clearMemory();
+    Sim::initNZVCS();
+    Sim::initCPUState();
+
+    objectCodePane->clearSimulationView();
+    mainMemory->clearMemory();
+    cpuPane->clearCpu();
+    cpuPane->clearCpuControlSignals();
+
+    ui->actionTwo_Byte_Data_Bus_Model->setEnabled(false);
+    ui->actionOne_Byte_Data_Bus_Model->setEnabled(true);
 
 }
 
