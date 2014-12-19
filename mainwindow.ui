@@ -109,7 +109,7 @@
     <addaction name="actionEdit_Paste"/>
     <addaction name="separator"/>
     <addaction name="actionEdit_UnComment_Line"/>
-    <addaction name="actionEdit_Format_From_Object_Code"/>
+    <addaction name="actionEdit_Auto_Format_Microcode"/>
     <addaction name="actionEdit_Remove_Error_Messages"/>
     <addaction name="separator"/>
     <addaction name="actionEdit_Font"/>
@@ -462,9 +462,12 @@
     <string>Remove Error Messages</string>
    </property>
   </action>
-  <action name="actionEdit_Format_From_Object_Code">
+  <action name="actionEdit_Auto_Format_Microcode">
    <property name="text">
-    <string>Format From Object Code</string>
+    <string>Auto-format Microcode</string>
+   </property>
+   <property name="toolTip">
+    <string>Auto-format Microcode</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
