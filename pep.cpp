@@ -115,12 +115,20 @@ void Pep::initEnumMnemonMaps()
     decControlToMnemonMap.insert(B, "B");               mnemonToDecControlMap.insert("B", B);
     decControlToMnemonMap.insert(A, "A");               mnemonToDecControlMap.insert("A", A);
     decControlToMnemonMap.insert(ANDZ, "ANDZ");         mnemonToDecControlMap.insert("ANDZ", ANDZ);
-    decControlToMnemonMap.insert(MDRMux, "MDRMux");     mnemonToDecControlMap.insert("MDRMUX", MDRMux);
     decControlToMnemonMap.insert(AMux, "AMux");         mnemonToDecControlMap.insert("AMUX", AMux);
     decControlToMnemonMap.insert(CMux, "CMux");         mnemonToDecControlMap.insert("CMUX", CMux);
     decControlToMnemonMap.insert(ALU, "ALU");           mnemonToDecControlMap.insert("ALU", ALU);
     decControlToMnemonMap.insert(CSMux, "CSMux");       mnemonToDecControlMap.insert("CSMUX", CSMux);
     decControlToMnemonMap.insert(ANDZ, "ANDZ");         mnemonToDecControlMap.insert("ANDZ", ANDZ);
+    if (Pep::cpuFeatures == OneByteDataBus) {
+        decControlToMnemonMap.insert(MDRMux, "MDRMux");     mnemonToDecControlMap.insert("MDRMUX", MDRMux);
+    }
+    if (Pep::cpuFeatures == TwoByteDataBus){
+        decControlToMnemonMap.insert(MARMux, "MARMux");     mnemonToDecControlMap.insert("MARMUX", MARMux);
+        decControlToMnemonMap.insert(MDROMux, "MDROMux");   mnemonToDecControlMap.insert("MDROMUX", MDROMux);
+        decControlToMnemonMap.insert(MDREMux, "MDREMux");   mnemonToDecControlMap.insert("MDREMUX", MDREMux);
+        decControlToMnemonMap.insert(EOMux, "EOMux");       mnemonToDecControlMap.insert("EOMUX", EOMux);
+    }
 
     memControlToMnemonMap.clear();                      mnemonToMemControlMap.clear();
     memControlToMnemonMap.insert(MemWrite, "MemWrite"); mnemonToMemControlMap.insert("MEMWRITE", MemWrite);
@@ -129,12 +137,18 @@ void Pep::initEnumMnemonMaps()
     clockControlToMnemonMap.clear();                    mnemonToClockControlMap.clear();
     clockControlToMnemonMap.insert(LoadCk, "LoadCk");   mnemonToClockControlMap.insert("LOADCK", LoadCk);
     clockControlToMnemonMap.insert(MARCk, "MARCk");     mnemonToClockControlMap.insert("MARCK", MARCk);
-    clockControlToMnemonMap.insert(MDRCk, "MDRCk");     mnemonToClockControlMap.insert("MDRCK", MDRCk);
     clockControlToMnemonMap.insert(SCk, "SCk");         mnemonToClockControlMap.insert("SCK", SCk);
     clockControlToMnemonMap.insert(CCk, "CCk");         mnemonToClockControlMap.insert("CCK", CCk);
     clockControlToMnemonMap.insert(VCk, "VCk");         mnemonToClockControlMap.insert("VCK", VCk);
     clockControlToMnemonMap.insert(ZCk, "ZCk");         mnemonToClockControlMap.insert("ZCK", ZCk);
     clockControlToMnemonMap.insert(NCk, "NCk");         mnemonToClockControlMap.insert("NCK", NCk);
+    if (Pep::cpuFeatures == OneByteDataBus) {
+        clockControlToMnemonMap.insert(MDRCk, "MDRCk");     mnemonToClockControlMap.insert("MDRCK", MDRCk);
+    }
+    if (Pep::cpuFeatures == TwoByteDataBus){
+        decControlToMnemonMap.insert(MDROCk, "MDROCk");     mnemonToDecControlMap.insert("MDROCk", MDROCk);
+        decControlToMnemonMap.insert(MDRECk, "MDRECk");     mnemonToDecControlMap.insert("MDRECk", MDRECk);
+    }
 
     specificationToMnemonMap.clear();                   mnemonToSpecificationMap.clear();
     specificationToMnemonMap.insert(Pre, "UnitPre:");   mnemonToSpecificationMap.insert("UNITPRE:", Pre);
