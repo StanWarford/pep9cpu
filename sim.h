@@ -67,6 +67,10 @@ public:
 
     static void initMRegs();
 
+    static void clearMemory();
+
+    static void initNZVCS();
+
 };
 
 #endif // SIM_H

@@ -480,12 +480,14 @@ void MainWindow::on_actionSystem_Clear_Memory_triggered()
 
 void MainWindow::on_actionOne_Byte_Data_Bus_Model_triggered()
 {
+    Pep::cpuFeatures = Enu::OneByteDataBus;
     Pep::initEnumMnemonMaps();
 
 }
 
 void MainWindow::on_actionTwo_Byte_Data_Bus_Model_triggered()
 {
+    Pep::cpuFeatures = Enu::TwoByteDataBus;
     Pep::initEnumMnemonMaps();
 
 }

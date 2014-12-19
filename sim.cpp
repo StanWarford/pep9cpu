@@ -108,6 +108,27 @@ bool Sim::atEndOfSim()
 
 void Sim::initMRegs()
 {
+    regBank[0]  = 0x00;
+    regBank[1]  = 0x00;
+    regBank[2]  = 0x00;
+    regBank[3]  = 0x00;
+    regBank[4]  = 0x00;
+    regBank[5]  = 0x00;
+    regBank[6]  = 0x00;
+    regBank[7]  = 0x00;
+    regBank[8]  = 0x00;
+    regBank[9]  = 0x00;
+    regBank[11] = 0x00;
+    regBank[12] = 0x00;
+    regBank[13] = 0x00;
+    regBank[14] = 0x00;
+    regBank[15] = 0x00;
+    regBank[16] = 0x00;
+    regBank[17] = 0x00;
+    regBank[18] = 0x00;
+    regBank[19] = 0x00;
+    regBank[20] = 0x00;
+    regBank[21] = 0x00;
     regBank[22] = 0x00;
     regBank[23] = 0x01;
     regBank[24] = 0x02;
@@ -120,6 +141,18 @@ void Sim::initMRegs()
     regBank[31] = 0xFF;
 }
 
+void Sim::clearMemory()
+{
+    for (int i = 0; i < 65536; i++) {
+        Mem[i] = 0;
+    }
+}
 
-
-
+void Sim::initNZVCS()
+{
+    nBit = false;
+    zBit = false;
+    vBit = false;
+    cBit = false;
+    sBit = false;
+}

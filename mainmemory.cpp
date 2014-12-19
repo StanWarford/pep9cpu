@@ -157,9 +157,7 @@ void MainMemory::clearMemory()
     for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
         ui->tableWidget->item(i, 0)->setText("0x00");
     }
-    for (int i = 0; i < 65536; i++) {
-        Sim::Mem[i] = 0;
-    }
+    Sim::clearMemory();
 }
 
 void MainMemory::showMemEdited(int address)

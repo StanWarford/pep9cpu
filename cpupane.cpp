@@ -173,8 +173,6 @@ void CpuPane::startDebugging()
 
     // Clear memread/write state from previous simulations
     Sim::mainBusState = Enu::None;
-    Sim::memReadPrevStep = false;
-    Sim::memWritePrevStep = false;
 
     Code *code = Sim::codeList.at(Sim::microCodeCurrentLine);
     while (!Sim::atEndOfSim() && !code->isMicrocode()) {
@@ -644,9 +642,6 @@ void CpuPane::updateMainBusState()
         Sim::mainBusState = Enu::None; // Just in case the Sim::mBS is malformed somehow
         break;
     }
-
-    Sim::memReadPrevStep = cpuPaneItems->MemReadTristateLabel->text() == "1";
-    Sim::memWritePrevStep = cpuPaneItems->MemWriteTristateLabel->text() == "1";
 }
 
 bool CpuPane::step(QString &errorString)
