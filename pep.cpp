@@ -123,7 +123,7 @@ void Pep::initEnumMnemonMaps()
     if (Pep::cpuFeatures == OneByteDataBus) {
         decControlToMnemonMap.insert(MDRMux, "MDRMux");     mnemonToDecControlMap.insert("MDRMUX", MDRMux);
     }
-    if (Pep::cpuFeatures == TwoByteDataBus){
+    else if (Pep::cpuFeatures == TwoByteDataBus){
         decControlToMnemonMap.insert(MARMux, "MARMux");     mnemonToDecControlMap.insert("MARMUX", MARMux);
         decControlToMnemonMap.insert(MDROMux, "MDROMux");   mnemonToDecControlMap.insert("MDROMUX", MDROMux);
         decControlToMnemonMap.insert(MDREMux, "MDREMux");   mnemonToDecControlMap.insert("MDREMUX", MDREMux);

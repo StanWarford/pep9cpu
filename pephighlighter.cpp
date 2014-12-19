@@ -49,7 +49,7 @@ PepHighlighter::PepHighlighter(QTextDocument *parent)
                 << "\\bT1\\b" << "\\bT2\\b" << "\\bT3\\b" << "\\bT4\\b"
                 << "\\bT5\\b" << "\\bT6\\b" << "\\bMem\\b";
     }
-    if (Pep::cpuFeatures == Enu::TwoByteDataBus){
+    else if (Pep::cpuFeatures == Enu::TwoByteDataBus){
         oprndPatterns << "\\bLoadCk\\b" << "\\bC\\b" << "\\bB\\b"
                 << "\\bA\\b" << "\\bMARCk\\b" << "\\bMARMux\\b"
                 << "\\bMDROCk\\b" << "\\bMDRECk\\b" << "\\bMDROMux\\b" << "\\bMDREMux\\b" << "\\bEOMux\\b" << "\\bCMux\\b"

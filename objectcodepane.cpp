@@ -54,10 +54,10 @@ void ObjectCodePane::initCPUModelState()
         delete cpuLabel;
     }
 
-    cpuLabel = new ObjectCodeLabel(this);
-    ui->verticalLayout->insertWidget(1, cpuLabel);
-    cpuLabel->setFont(QFont(Pep::codeFont, Pep::codeFontSize));
-    cpuLabel->setMinimumHeight(QFontMetrics(cpuLabel->font()).averageCharWidth() * 8 + 3); // +3 for padding
+    //cpuLabel = new ObjectCodeLabel(this);
+    //ui->verticalLayout->insertWidget(1, cpuLabel);
+    //cpuLabel->setFont(QFont(Pep::codeFont, Pep::codeFontSize));
+    //cpuLabel->setMinimumHeight(QFontMetrics(cpuLabel->font()).averageCharWidth() * 8 + 3); // +3 for padding
 
     setObjectCode("");
     clearSimulationView();
