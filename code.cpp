@@ -25,6 +25,9 @@
 MicroCode::MicroCode()
 {
     // -1 is initialization value, didn't get set - tested elsewhere
+    // note that this is the union of one byte data bus models and two byte
+    //  data bus models, and when not using one model, its dedicated variables
+    //  are simply unused.
 
     cLoadCk = -1;
     cC = -1;
