@@ -64,7 +64,7 @@ If you want to clear all the registers in the CPU to all zeros select System->Cl
 <h3><a name="Control">3. Set the control signals</a></h3>
 Each control signal is activated by a GUI widget on the right side of the CPU pane.
 There are five kinds of control signals &mdash; register address signals, multiplexer signals,
-the ALU function signal, the ANDZ signal, and the memory read/write signals.
+the ALU function signal, the AndZ signal, and the memory read/write signals.
 <p>
 <h4>Register address signals</h4>
 There are three register address signals &mdash; A, B, and C.
@@ -93,12 +93,12 @@ significant of ROM register M1, which has a value of 1.
  The ALU function signal is a single four-bit value that you enter as a decimal number.
  The above figure shows a value of one entered for the ALU function, which selects the A plus B function.
   <p>
-  <h4>The ANDZ signal</h4>
-  The ANDZ signal determines the function of the ANDZ combinational circuit.
-  If the ANDZ signal is zero the circuit passes the Z output of the ALU through unchanged.
-  If the ANDZ signal is one the circuit performs the AND operation of the Z output of the ALU and current value of the Z bit.
-  You set the ANDZ control signal by clicking the control signal box as with the multiplexer signals.
-  The following figure shows the ANDZ signal set to one.
+  <h4>The AndZ signal</h4>
+  The AndZ signal determines the function of the AndZ combinational circuit.
+  If the AndZ signal is zero the circuit passes the Z output of the ALU through unchanged.
+  If the AndZ signal is one the circuit performs the AND operation of the Z output of the ALU and current value of the Z bit.
+  You set the AndZ control signal by clicking the control signal box as with the multiplexer signals.
+  The following figure shows the AndZ signal set to one.
   <p>
   <img src="qrc:/help/images/andzsignal.png" alt="andzsignal" hspace=10 vspace=10>
   <p>

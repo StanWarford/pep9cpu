@@ -71,7 +71,7 @@ private:
     int cSCk;
     int cCCk;
     int cVCk;
-    int cANDZ;
+    int cAndZ;
     int cZCk;
     int cNCk;
     int cMemWrite;

@@ -295,24 +295,24 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     vBitLabel->setPalette(QPalette(seqCircuitColor));
     scene->addWidget(vBitLabel);
 
-    // ANDZ
-    ANDZLabel = new QLabel("AndZ");
-    ANDZLabel->setGeometry(579, 517, 45, 20);
-    ANDZLabel->setPalette(QPalette(Qt::white));
-    scene->addWidget(ANDZLabel);
-    ANDZTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
-    ANDZTristateLabel->setGeometry(550, 517, 25, 21);
-    ANDZTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    ANDZTristateLabel->setPalette(QPalette(Qt::white));
-    scene->addWidget(ANDZTristateLabel);
-    scene->addRect(QRectF(ANDZTristateLabel->pos(), ANDZTristateLabel->size()), QPen(Qt::gray));
+    // AndZ
+    AndZLabel = new QLabel("AndZ");
+    AndZLabel->setGeometry(579, 517, 45, 20);
+    AndZLabel->setPalette(QPalette(Qt::white));
+    scene->addWidget(AndZLabel);
+    AndZTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
+    AndZTristateLabel->setGeometry(550, 517, 25, 21);
+    AndZTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    AndZTristateLabel->setPalette(QPalette(Qt::white));
+    scene->addWidget(AndZTristateLabel);
+    scene->addRect(QRectF(AndZTristateLabel->pos(), AndZTristateLabel->size()), QPen(Qt::gray));
 
-    ANDZMuxLabel = new QLabel("AndZ");
-    ANDZMuxLabel->setGeometry(415,542, 41,21);
-    ANDZMuxLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    ANDZMuxLabel->setPalette(QPalette(Qt::white));
-    scene->addWidget(ANDZMuxLabel);
-    scene->addRect(QRectF(ANDZMuxLabel->pos(), ANDZMuxLabel->size()));
+    AndZMuxLabel = new QLabel("AndZ");
+    AndZMuxLabel->setGeometry(415,542, 41,21);
+    AndZMuxLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    AndZMuxLabel->setPalette(QPalette(Qt::white));
+    scene->addWidget(AndZMuxLabel);
+    scene->addRect(QRectF(AndZMuxLabel->pos(), AndZMuxLabel->size()));
 
     // ZCk
     ZCkCheckBox = new QCheckBox("ZCk");
@@ -802,7 +802,7 @@ void CpuPaneBaseGraphicsItems::paint(QPainter *painter, const QStyleOptionGraphi
     repaintZBitOut(painter);
     repaintNBitOut(painter);
 
-    repaintANDZSelect(painter);
+    repaintAndZSelect(painter);
     repaintALUSelect(painter);
     repaintMDRMuxSelect(painter);
 
@@ -1401,12 +1401,12 @@ void CpuPaneBaseGraphicsItems::repaintZBitOut(QPainter *painter)
     painter->drawLine(341,582, 341,506); // vertical line closest to arrowhead
     painter->drawLine(341,506, 322,506); // line from arrowhead on left
 
-    // line up to ANDZ
+    // line up to AndZ
     painter->drawEllipse(QPoint(437,582), 2, 2);
     painter->drawLine(437,582, 437,574);
 
     painter->drawImage(QPoint(314,503), arrowLeft);
-    painter->drawImage(QPoint(434,566), arrowUp);  // ANDZ arrow upwards
+    painter->drawImage(QPoint(434,566), arrowUp);  // AndZ arrow upwards
 }
 
 void CpuPaneBaseGraphicsItems::repaintNBitOut(QPainter *painter)
@@ -1442,13 +1442,13 @@ void CpuPaneBaseGraphicsItems::repaintCSMuxSelect(QPainter *painter)
     painter->drawImage(QPoint(497,CSMuxerDataLabel->y()+10-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
-void CpuPaneBaseGraphicsItems::repaintANDZSelect(QPainter *painter)
+void CpuPaneBaseGraphicsItems::repaintAndZSelect(QPainter *painter)
 {
     QPolygon poly;
 
     QColor color = Qt::gray;
 
-    if (ANDZTristateLabel->text() != "") {
+    if (AndZTristateLabel->text() != "") {
         color = Qt::black;
     }
     painter->setPen(color);
@@ -1461,13 +1461,13 @@ void CpuPaneBaseGraphicsItems::repaintANDZSelect(QPainter *painter)
     painter->drawImage(QPoint(434,517+7+8), color == Qt::gray ? arrowDownGray : arrowDown);
 
     color = Qt::gray;
-    if (ALULineEdit->text() != "" && ANDZTristateLabel->text() != "") {
+    if (ALULineEdit->text() != "" && AndZTristateLabel->text() != "") {
         color = Qt::black;
     }
     painter->setPen(color);
     painter->setBrush(color);
 
-    // ANDZ out
+    // AndZ out
     painter->drawLine(458,552, 465,552);
 
     painter->drawImage(QPoint(465,549), color == Qt::gray ? arrowRightGray : arrowRight);

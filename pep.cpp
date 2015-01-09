@@ -114,12 +114,12 @@ void Pep::initEnumMnemonMaps()
     mnemonToDecControlMap.insert("C", C);
     mnemonToDecControlMap.insert("B", B);
     mnemonToDecControlMap.insert("A", A);
-    mnemonToDecControlMap.insert("ANDZ", ANDZ);
+    mnemonToDecControlMap.insert("AndZ", AndZ);
     mnemonToDecControlMap.insert("AMUX", AMux);
     mnemonToDecControlMap.insert("CMUX", CMux);
     mnemonToDecControlMap.insert("ALU", ALU);
     mnemonToDecControlMap.insert("CSMUX", CSMux);
-    mnemonToDecControlMap.insert("ANDZ", ANDZ);
+    mnemonToDecControlMap.insert("AndZ", AndZ);
     if (Pep::cpuFeatures == OneByteDataBus) {
         mnemonToDecControlMap.insert("MDRMUX", MDRMux);
     }

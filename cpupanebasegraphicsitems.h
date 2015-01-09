@@ -79,9 +79,9 @@ public:
     QCheckBox *CCkCheckBox;
 
     QCheckBox *VCkCheckBox;
-    QLabel *ANDZLabel;
-    TristateLabel *ANDZTristateLabel;
-    QLabel *ANDZMuxLabel; // data section
+    QLabel *AndZLabel;
+    TristateLabel *AndZTristateLabel;
+    QLabel *AndZMuxLabel; // data section
 
     QCheckBox *ZCkCheckBox;
 
@@ -156,7 +156,7 @@ private:
     void repaintNBitOut(QPainter *painter);
 
     void repaintCSMuxSelect(QPainter *painter);
-    void repaintANDZSelect(QPainter *painter);
+    void repaintAndZSelect(QPainter *painter);
     void repaintALUSelect(QPainter *painter);
     void repaintMDRMuxSelect(QPainter *painter);
 };

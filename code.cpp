@@ -40,7 +40,7 @@ MicroCode::MicroCode()
     cSCk = -1;
     cCCk = -1;
     cVCk = -1;
-    cANDZ = -1;
+    cAndZ = -1;
     cZCk = -1;
     cNCk = -1;
     cMemWrite = -1;
@@ -66,7 +66,7 @@ void MicroCode::setCpuLabels(CpuPaneBaseGraphicsItems *cpuPaneItems)
     cpuPaneItems->SCkCheckBox->setChecked(cSCk != -1);
     cpuPaneItems->CCkCheckBox->setChecked(cCCk != -1);
     cpuPaneItems->VCkCheckBox->setChecked(cVCk != -1);
-    cpuPaneItems->ANDZTristateLabel->setState(cANDZ);
+    cpuPaneItems->AndZTristateLabel->setState(cAndZ);
     cpuPaneItems->ZCkCheckBox->setChecked(cZCk != -1);
     cpuPaneItems->NCkCheckBox->setChecked(cNCk != -1);
     cpuPaneItems->MemReadTristateLabel->setState(cMemRead);
@@ -96,7 +96,7 @@ QString MicroCode::getObjectCode()
     str.append(cSCk == -1 ? "  " : QString("%1").arg(cSCk, -2));
     str.append(cCCk == -1 ? "  " : QString("%1").arg(cCCk, -2));
     str.append(cVCk == -1 ? "  " : QString("%1").arg(cVCk, -2));
-    str.append(cANDZ == -1 ? "  " : QString("%1").arg(cANDZ, -2));
+    str.append(cAndZ == -1 ? "  " : QString("%1").arg(cAndZ, -2));
     str.append(cZCk == -1 ? "  " : QString("%1").arg(cZCk, -2));
     str.append(cNCk == -1 ? "  " : QString("%1").arg(cNCk, -2));
     str.append(cMemWrite == -1 ? "  " : QString("%1").arg(cMemWrite, -2));
@@ -115,7 +115,7 @@ QString MicroCode::getSourceCode()
     if (cAMux != -1) { str.append("AMux=" + QString("%1").arg(cAMux) + ", "); }
     if (cCSMux  != -1) { str.append("CSMux=" + QString("%1").arg(cCSMux) + ", "); }
     if (cALU != -1) { str.append("ALU=" + QString("%1").arg(cALU) + ", "); }
-    if (cANDZ != -1) { str.append("ANDZ=" + QString("%1").arg(cANDZ) + ", "); }
+    if (cAndZ != -1) { str.append("AndZ=" + QString("%1").arg(cAndZ) + ", "); }
     if (cCMux != -1) { str.append("CMux=" + QString("%1").arg(cCMux) + ", "); }
     if (cMDRMux != -1) { str.append("MDRMux=" + QString("%1").arg(cMDRMux) + ", "); }
     if (cC != -1) { str.append("C=" + QString("%1").arg(cC) + ", "); }
@@ -154,7 +154,7 @@ bool MicroCode::has(Enu::EMnemonic field) {
     case Enu::SCk: return cSCk != -1;
     case Enu::CCk: return cCCk != -1;
     case Enu::VCk: return cVCk != -1;
-    case Enu::ANDZ: return cANDZ != -1;
+    case Enu::AndZ: return cAndZ != -1;
     case Enu::ZCk: return cZCk != -1;
     case Enu::NCk: return cNCk != -1;
     case Enu::MemWrite: return cMemWrite != -1;
@@ -179,7 +179,7 @@ void MicroCode::set(Enu::EMnemonic field, int value) {
     case Enu::SCk: cSCk = value; break;
     case Enu::CCk: cCCk = value; break;
     case Enu::VCk: cVCk = value; break;
-    case Enu::ANDZ: cANDZ = value; break;
+    case Enu::AndZ: cAndZ = value; break;
     case Enu::ZCk: cZCk = value; break;
     case Enu::NCk: cNCk = value; break;
     case Enu::MemWrite: cMemWrite = value; break;
@@ -198,7 +198,7 @@ bool MicroCode::inRange(Enu::EMnemonic field, int value) {
     case Enu::CMux: return 0 <= value && value <= 1;
     case Enu::ALU: return 0 <= value && value <= 15;
     case Enu::CSMux: return 0 <= value && value <= 1;
-    case Enu::ANDZ: return 0 <= value && value <= 1;
+    case Enu::AndZ: return 0 <= value && value <= 1;
     default: return true;
     }
 }

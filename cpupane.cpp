@@ -81,8 +81,8 @@ CpuPane::CpuPane(QWidget *parent) :
     connect(cpuPaneItems->CCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->VCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
 
-    connect(cpuPaneItems->ANDZTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    connect(cpuPaneItems->ANDZTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->AndZTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
+    connect(cpuPaneItems->AndZTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
 
     connect(cpuPaneItems->ZCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->NCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
@@ -499,7 +499,7 @@ void CpuPane::clearCpuControlSignals()
     cpuPaneItems->SCkCheckBox->setChecked(false);
     cpuPaneItems->CCkCheckBox->setChecked(false);
     cpuPaneItems->VCkCheckBox->setChecked(false);
-    cpuPaneItems->ANDZTristateLabel->setText("");
+    cpuPaneItems->AndZTristateLabel->setText("");
     cpuPaneItems->ZCkCheckBox->setChecked(false);
     cpuPaneItems->NCkCheckBox->setChecked(false);
     cpuPaneItems->MemReadTristateLabel->setText("");
@@ -733,14 +733,14 @@ bool CpuPane::step(QString &errorString)
 
         // ZCk
         if (cpuPaneItems->ZCkCheckBox->isChecked()) {
-            if (cpuPaneItems->ANDZTristateLabel->text() == ""){
-                errorString.append("ZCk without ANDZ.");
+            if (cpuPaneItems->AndZTristateLabel->text() == ""){
+                errorString.append("ZCk without AndZ.");
                 return false;
             }
-            if (cpuPaneItems->ANDZTristateLabel->text() == "0") { // zOut from ALU goes straight through
+            if (cpuPaneItems->AndZTristateLabel->text() == "0") { // zOut from ALU goes straight through
                 setStatusBit(Enu::Z, result == 0);
             }
-            else if (cpuPaneItems->ANDZTristateLabel->text() == "1") { // zOut && zCurr
+            else if (cpuPaneItems->AndZTristateLabel->text() == "1") { // zOut && zCurr
                 setStatusBit(Enu::Z, result == 0 && Sim::zBit);
             }
         }
@@ -1041,8 +1041,8 @@ void CpuPane::on_copyToMicrocodePushButton_clicked()
     if (cpuPaneItems->VCkCheckBox->isChecked()) {
         code.set(Enu::VCk, 1);
     }
-    if (cpuPaneItems->ANDZTristateLabel->text() != "") {
-        code.set(Enu::ANDZ, cpuPaneItems->ANDZTristateLabel->text().toInt());
+    if (cpuPaneItems->AndZTristateLabel->text() != "") {
+        code.set(Enu::AndZ, cpuPaneItems->AndZTristateLabel->text().toInt());
     }
     if (cpuPaneItems->ZCkCheckBox->isChecked()) {
         code.set(Enu::ZCk, 1);
