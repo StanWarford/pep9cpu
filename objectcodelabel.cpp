@@ -62,7 +62,7 @@ void ObjectCodeLabel::paintEvent(QPaintEvent *)
     drawRotatedText(&p, 270, height * 28 - 2, this->height() - 2, "SCk");
     drawRotatedText(&p, 270, height * 30 - 2, this->height() - 2, "CCk");
     drawRotatedText(&p, 270, height * 32 - 2, this->height() - 2, "VCk");
-    drawRotatedText(&p, 270, height * 34 - 2, this->height() - 2, "ANDZ");
+    drawRotatedText(&p, 270, height * 34 - 2, this->height() - 2, "AndZ");
     drawRotatedText(&p, 270, height * 36 - 2, this->height() - 2, "ZCk");
     drawRotatedText(&p, 270, height * 38 - 2, this->height() - 2, "NCk");
     drawRotatedText(&p, 270, height * 40 - 2, this->height() - 2, "MemWrite");

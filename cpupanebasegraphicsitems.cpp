@@ -296,7 +296,7 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     scene->addWidget(vBitLabel);
 
     // ANDZ
-    ANDZLabel = new QLabel("ANDZ");
+    ANDZLabel = new QLabel("AndZ");
     ANDZLabel->setGeometry(579, 517, 45, 20);
     ANDZLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(ANDZLabel);
@@ -307,7 +307,7 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     scene->addWidget(ANDZTristateLabel);
     scene->addRect(QRectF(ANDZTristateLabel->pos(), ANDZTristateLabel->size()), QPen(Qt::gray));
 
-    ANDZMuxLabel = new QLabel("ANDZ");
+    ANDZMuxLabel = new QLabel("AndZ");
     ANDZMuxLabel->setGeometry(415,542, 41,21);
     ANDZMuxLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     ANDZMuxLabel->setPalette(QPalette(Qt::white));
