@@ -24,19 +24,24 @@
 
 MicroCode::MicroCode()
 {
-    // -1 is initialization value, didn't get set - tested elsewhere
-    // note that this is the union of one byte data bus models and two byte
-    //  data bus models, and when not using one model, its dedicated variables
-    //  are simply unused.
+    // -1 is initialization value, - tested elsewhere
+    // The union of one-byte data bus model and two-byte data bus model.
+    // Elements not in the current model are simply not used.
 
     cLoadCk = -1;
     cC = -1;
     cB = -1;
     cA = -1;
+    cMARMux = -1; // Two-byte model only
     cMARCk = -1;
-    cMDRCk = -1;
+    cMDRCk = -1; // One-byte model only
+    cMDROCk = -1; // Two-byte model only
+    cMDRECk = -1; // Two-byte model only
     cAMux = -1;
-    cMDRMux = -1;
+    cMDRMux = -1; // One-byte model only
+    cMDROMux = -1; // Two-byte model only
+    cMDREMux = -1; // Two-byte model only
+    cEOMux = -1; // Two-byte model only
     cCMux = -1;
     cALU = -1;
     cCSMux = -1;
@@ -53,6 +58,7 @@ MicroCode::MicroCode()
 
 bool MicroCode::isMicrocode() { return true; }
 
+#warning In code.cpp, to do when CpuPaneBaseGraphicsItems is completed
 void MicroCode::setCpuLabels(CpuPaneBaseGraphicsItems *cpuPaneItems)
 {
     cpuPaneItems->loadCk->setChecked(cLoadCk != -1);

@@ -44,6 +44,7 @@ public:
 };
 
 // Concrete code classes
+// Code is the union of the elements of the one-byte bus model and two-byte bus model
 class MicroCode: public Code
 {
     friend class Asm;
@@ -61,10 +62,16 @@ private:
     int cC;
     int cB;
     int cA;
+    int cMARMux; // Two-byte model only
     int cMARCk;
-    int cMDRCk;
+    int cMDRCk; // One-byte model only
+    int cMDROCk; // Two-byte model only
+    int cMDRECk; // Two-byte model only
     int cAMux;
-    int cMDRMux;
+    int cMDRMux; // One-byte model only
+    int cMDROMux; // Two-byte model only
+    int cMDREMux; // Two-byte model only
+    int cEOMux; // Two-byte model only
     int cCMux;
     int cALU;
     int cCSMux;
