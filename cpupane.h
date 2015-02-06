@@ -45,6 +45,8 @@ public:
     bool hasFocus();
     void giveFocus();
 
+    void initModel();
+
     void startDebugging();
     void stopDebugging();
 

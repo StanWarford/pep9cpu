@@ -46,10 +46,50 @@ CpuPane::CpuPane(QWidget *parent) :
 
     connect(ui->spinBox, SIGNAL(valueChanged(int)), this, SLOT(zoomFactorChanged(int)));
 
+    cpuPaneItems = NULL;
     scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
 
     ui->graphicsView->setFont(QFont(Pep::cpuFont, Pep::cpuFontSize));
+
+    initModel();
+
+    ui->spinBox->hide();
+    ui->singleStepPushButton->setEnabled(false);
+}
+
+CpuPane::~CpuPane()
+{
+    delete ui;
+}
+
+void CpuPane::highlightOnFocus()
+{
+    if (ui->graphicsView->hasFocus() || ui->spinBox->hasFocus()) {
+        ui->label->setAutoFillBackground(true);
+    }
+    else {
+        ui->label->setAutoFillBackground(false);
+    }
+}
+
+bool CpuPane::hasFocus()
+{
+    return ui->graphicsView->hasFocus() || ui->spinBox->hasFocus();
+}
+
+void CpuPane::giveFocus()
+{
+    ui->graphicsView->setFocus();
+}
+
+void CpuPane::initModel()
+{
+    if (cpuPaneItems != NULL) {
+        // disconnect all signals from this object before deleting it:
+#warning: todo: delete all signals from object before deletion
+        delete cpuPaneItems;
+    }
 
     cpuPaneItems = new CpuPaneBaseGraphicsItems(ui->graphicsView, 0, scene);
     ui->graphicsView->scene()->addItem(cpuPaneItems);
@@ -61,13 +101,13 @@ CpuPane::CpuPane(QWidget *parent) :
     connect(cpuPaneItems->bLineEdit, SIGNAL(textChanged(QString)), scene, SLOT(invalidate()));
     connect(cpuPaneItems->aLineEdit, SIGNAL(textChanged(QString)), scene, SLOT(invalidate()));
     connect(cpuPaneItems->MARCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
-    connect(cpuPaneItems->MDRCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    //connect(cpuPaneItems->MDRCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
 
     connect(cpuPaneItems->aMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
     connect(cpuPaneItems->aMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
 
-    connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    //connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
+    //connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
 
     connect(cpuPaneItems->cMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
     connect(cpuPaneItems->cMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
@@ -130,33 +170,24 @@ CpuPane::CpuPane(QWidget *parent) :
 
     connect(cpuPaneItems->ALULineEdit, SIGNAL(textChanged(QString)), this, SLOT(ALUTextEdited(QString)));
 
-    ui->spinBox->hide();
-    ui->singleStepPushButton->setEnabled(false);
-}
 
-CpuPane::~CpuPane()
-{
-    delete ui;
-}
+    // disconnect all cpuPaneItems that differ between models:
+    disconnect(cpuPaneItems->MDRCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
 
-void CpuPane::highlightOnFocus()
-{
-    if (ui->graphicsView->hasFocus() || ui->spinBox->hasFocus()) {
-        ui->label->setAutoFillBackground(true);
+    disconnect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
+    disconnect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+
+    if (Pep::cpuFeatures == Enu::OneByteDataBus) {
+        // connect items for this model
+        connect(cpuPaneItems->MDRCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
+
+        connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
+        connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
     }
-    else {
-        ui->label->setAutoFillBackground(false);
+    else if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
+        // connect items for *this* model
+#warning: todo, once the cpuPaneItems has been updated to include the new items.
     }
-}
-
-bool CpuPane::hasFocus()
-{
-    return ui->graphicsView->hasFocus() || ui->spinBox->hasFocus();
-}
-
-void CpuPane::giveFocus()
-{
-    ui->graphicsView->setFocus();
 }
 
 void CpuPane::startDebugging()
@@ -1016,6 +1047,7 @@ void CpuPane::on_copyToMicrocodePushButton_clicked()
     if (cpuPaneItems->MDRCk->isChecked()) {
         code.set(Enu::MDRCk, 1);
     }
+#warning todo: MDROMux etc
     if (cpuPaneItems->aMuxTristateLabel->text() != "") {
         code.set(Enu::AMux, cpuPaneItems->aMuxTristateLabel->text().toInt());
     }
@@ -1028,7 +1060,6 @@ void CpuPane::on_copyToMicrocodePushButton_clicked()
     if (cpuPaneItems->ALULineEdit->text() != "") {
         code.set(Enu::ALU, cpuPaneItems->ALULineEdit->text().toInt());
     }
-    // todo: CSMux
     if (cpuPaneItems->CSMuxTristateLabel->text() != "") {
         code.set(Enu::CMux, cpuPaneItems->CSMuxTristateLabel->text().toInt());
     }
