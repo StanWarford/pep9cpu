@@ -25,6 +25,8 @@
 #include "code.h"
 #include "sim.h"
 
+#include <QDebug>
+
 CpuPaneTwoByteDataBus::CpuPaneTwoByteDataBus(QWidget *parent) :
     CpuPane(parent),
     ui(new Ui::CpuPane)
