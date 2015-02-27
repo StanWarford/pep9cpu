@@ -40,7 +40,8 @@ SOURCES += main.cpp \
     specification.cpp \
     byteconverterinstr.cpp \
     aboutpep.cpp \
-    cpupanebasegraphicsitems.cpp
+    cpupanebasegraphicsitems.cpp \
+    cpupanetwobytedatabus.cpp
 HEADERS += mainwindow.h \
     byteconverterhex.h \
     byteconverterdec.h \
@@ -64,7 +65,8 @@ HEADERS += mainwindow.h \
     specification.h \
     byteconverterinstr.h \
     aboutpep.h \
-    cpupanebasegraphicsitems.h
+    cpupanebasegraphicsitems.h \
+    cpupanetwobytedatabus.h
 FORMS += mainwindow.ui \
     byteconverterhex.ui \
     byteconverterdec.ui \

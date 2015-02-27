@@ -112,6 +112,14 @@ public:
     QLineEdit *t5RegLineEdit;
     QLineEdit *t6RegLineEdit;
 
+    // Two byte data bus model features (temporary):
+#warning todo: remove
+    QCheckBox *MDROCk;
+    QCheckBox *MDRECk;
+    TristateLabel *MDROMuxTristateLabel;
+    TristateLabel *MDREMuxTristateLabel;
+    TristateLabel *EOMuxTristateLabel;
+    TristateLabel *MARMuxTristateLabel;
 private:
     QGraphicsScene *parentScene;
     QWidget *parent;

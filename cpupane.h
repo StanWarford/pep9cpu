@@ -45,7 +45,7 @@ public:
     bool hasFocus();
     void giveFocus();
 
-    void initModel();
+    virtual void initModel();
 
     void startDebugging();
     void stopDebugging();
@@ -59,8 +59,8 @@ public:
     bool testRegPostcondition(Enu::EMnemonic reg, int value);
     bool testStatusPostcondition(Enu::EMnemonic bit, bool value);
 
-    void clearCpu();
-    void clearCpuControlSignals();
+    virtual void clearCpu();
+    virtual void clearCpuControlSignals();
 
     // These are used by the main window in order to allow it to use the <enter> key to step.
     void singleStep();
@@ -69,19 +69,19 @@ public:
 protected:
     void changeEvent(QEvent *e);
 
-private:
-    Ui::CpuPane *ui;
-
     QGraphicsScene *scene;
 
     CpuPaneBaseGraphicsItems *cpuPaneItems;
 
     //simulation helper
-    void updateMainBusState();
+    virtual void updateMainBusState();
     // called by the push buttons to simulate a single step; returns true if there were no issues
-    bool step(QString& errorString);
+    virtual bool step(QString& errorString);
 
-private slots:
+private:
+    Ui::CpuPane *ui;
+
+protected slots:
     void regTextEdited(QString str);
     void regTextFinishedEditing();
 
@@ -93,7 +93,7 @@ private slots:
     void singleStepButtonPushed();
     void resumeButtonPushed();
 
-    void on_copyToMicrocodePushButton_clicked();
+    virtual void on_copyToMicrocodePushButton_clicked();
 
     void ALUTextEdited(QString str);
 
@@ -101,8 +101,8 @@ private slots:
     bool isCorrectALUInput(int ALUFn);
     bool getCSMuxOut(bool &out, QString& errorString);
     bool getCMuxOut(quint8& out, QString& errorString);
-    bool getAMuxOut(quint8& out, QString& errorString);
-    bool getMDRMuxOut(quint8& out, QString& errorString);
+    virtual bool getAMuxOut(quint8& out, QString& errorString);
+    bool getMDRMuxOut(quint8& out, QString& errorString); // doesn't get used in the other model
     bool getABusOut(quint8& out, QString& errorString);
     bool getBBusOut(quint8& out, QString& errorString);
 
