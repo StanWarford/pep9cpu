@@ -692,7 +692,8 @@ bool CpuPane::step(QString &errorString)
     QString errtemp;
     getALUOut(result, a, b, carry, overflow, errtemp); // ignore boolean returned - error would have been handled earlier
 
-    if (Sim::mainBusState == Enu::MemReadReady) { // we are performing a 2nd consecutive MemRead
+    if (Sim::mainBusState == Enu::MemReadReady) {
+        // we are performing a 2nd consecutive MemRead
         // do nothing - the memread is performed in the getMDRMuxOut fn
     }
     else if (Sim::mainBusState == Enu::MemWriteReady) {

@@ -46,7 +46,7 @@ namespace Enu
         LoadCk, C, B, A, MARCk, MDRCk, AMux, MARMux, MDRMux, MDROMux, MDREMux, EOMux, CMux,
         MDROCk, MDRECk, ALU, CSMux, SCk, CCk, VCk, AndZ, ZCk, NCk, MemWrite, MemRead, Pre, Post,
         Mem, X, SP, PC, IR, T1, T2, T3, T4, T5, T6, N, Z, V, S,
-        MARA, MARB, MDR,
+        MARA, MARB, MDR, MDRE, MDRO,
     };
 
     enum CPUType {
