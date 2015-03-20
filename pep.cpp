@@ -144,8 +144,8 @@ void Pep::initEnumMnemonMaps()
         clockControlToMnemonMap.insert(MDRCk, "MDRCk");     mnemonToClockControlMap.insert("MDRCK", MDRCk);
     }
     else if (Pep::cpuFeatures == TwoByteDataBus){
-        clockControlToMnemonMap.insert(MDROCk, "MDROCk");     mnemonToClockControlMap.insert("MDROCk", MDROCk);
-        clockControlToMnemonMap.insert(MDRECk, "MDRECk");     mnemonToClockControlMap.insert("MDRECk", MDRECk);
+        clockControlToMnemonMap.insert(MDROCk, "MDROCk");     mnemonToClockControlMap.insert("MDROCK", MDROCk);
+        clockControlToMnemonMap.insert(MDRECk, "MDRECk");     mnemonToClockControlMap.insert("MDRECK", MDRECk);
     }
 
     specificationToMnemonMap.clear();                   mnemonToSpecificationMap.clear();
