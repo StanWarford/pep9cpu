@@ -62,7 +62,8 @@ public:
     virtual void clearCpu();
     virtual void clearCpuControlSignals();
 
-    // These are used by the main window in order to allow it to use the <enter> key to step.
+    // These are used by the main window in order to allow it to use the
+    //  <enter> key to step.
     void singleStep();
     void clock();
 
@@ -75,7 +76,8 @@ protected:
 
     //simulation helper
     virtual void updateMainBusState();
-    // called by the push buttons to simulate a single step; returns true if there were no issues
+    // called by the push buttons to simulate a single step; returns true if
+    //  there were no issues
     virtual bool step(QString& errorString);
 
 private:
@@ -97,12 +99,14 @@ protected slots:
 
     void ALUTextEdited(QString str);
 
-    bool getALUOut(quint8& result, quint8& a, quint8& b, int& carry, int& overflow, QString& errorString);
+    bool getALUOut(quint8& result, quint8& a, quint8& b, int& carry,
+                   int& overflow, QString& errorString);
     bool isCorrectALUInput(int ALUFn);
     bool getCSMuxOut(bool &out, QString& errorString);
     bool getCMuxOut(quint8& out, QString& errorString);
     virtual bool getAMuxOut(quint8& out, QString& errorString);
-    bool getMDRMuxOut(quint8& out, QString& errorString); // doesn't get used in the other model
+    // doesn't get used in the other model:
+    bool getMDRMuxOut(quint8& out, QString& errorString);
     bool getABusOut(quint8& out, QString& errorString);
     bool getBBusOut(quint8& out, QString& errorString);
 

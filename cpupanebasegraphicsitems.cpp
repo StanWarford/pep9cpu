@@ -31,12 +31,14 @@
 #include <QDebug>
 #include "sim.h"
 
-CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraphicsItem *itemParent, QGraphicsScene *scene)
+CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
+                                                   QGraphicsItem *itemParent,
+                                                   QGraphicsScene *scene)
     : QGraphicsItem(itemParent),
       parent(widgetParent)
 {
 
-    seqCircuitColor = QColor(0xffdd77);// 0xffee99); //QColor(Qt::gray).lighter(140);
+    seqCircuitColor = QColor(0xffdd77);
     combCircuitRed = QColor(Qt::red).lighter(190);
     combCircuitBlue = QColor(Qt::blue).lighter(190);
     combCircuitYellow = QColor(Qt::yellow).lighter(170);
@@ -66,7 +68,8 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     scene->addWidget(loadCk);
 
     // C
-    // Note: the line edits must be added first, otherwise they cover the labels that go with them.
+    // Note: the line edits must be added first, otherwise they cover the
+    //  labels that go with them.
     QRegExp cbaRegExp("^((3[0-1])|([0-2][0-9])|([0-9]))$");
     cLineEdit = new QLineEdit();
     cLineEdit->setAlignment(Qt::AlignCenter);
@@ -126,8 +129,9 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     QPolygonF poly;
     poly << QPoint(205,151) << QPoint(205,167)
          // arrow:
-         << QPoint(88,167) << QPoint(88,162) << QPoint(73,177) << QPoint(88,192) << QPoint(88,187)
-         << QPoint(205,187) << QPoint(205,202) << QPoint(215,202) << QPoint(215,151);
+         << QPoint(88,167)  << QPoint(88,162)  << QPoint(73,177)
+         << QPoint(88,192)  << QPoint(88,187)  << QPoint(205,187)
+         << QPoint(205,202) << QPoint(215,202) << QPoint(215,151);
 
     scene->addPolygon(poly, QPen(QBrush(Qt::black), 1), QBrush(Qt::yellow));
     QGraphicsLineItem *lineItem = scene->addLine(88,177, 215,177);
@@ -188,8 +192,9 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     scene->addRect(244,258, 36,10, QPen(Qt::black), QBrush(Qt::yellow));
     poly.clear();
     // right arrow:
-    poly << QPoint(290,258) << QPoint(326,258) << QPoint(326,280) << QPoint(331,280)
-         << QPoint(321,290) << QPoint(311,280) << QPoint(316,280) << QPoint(316,268) << QPoint(290,268);
+    poly << QPoint(290,258) << QPoint(326,258) << QPoint(326,280)
+         << QPoint(331,280) << QPoint(321,290) << QPoint(311,280)
+         << QPoint(316,280) << QPoint(316,268) << QPoint(290,268);
     scene->addPolygon(poly, QPen(Qt::black), QBrush(Qt::yellow));
     poly.clear();
     // note: left arrow gets drawn in repaintMemWrite
@@ -214,11 +219,14 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     scene->addRect(250,374, 69,19);
 
     // ALU
-    // keep this before the label that goes with it, or the line edit appears on top of the label
+    // keep this before the label that goes with it, or the line edit
+    //  appears on top of the label
     ALULineEdit = new QLineEdit();
     ALULineEdit->setAlignment(Qt::AlignCenter);
     ALULineEdit->setGeometry(550, 368, 26, 20);
-    ALULineEdit->setValidator(new QRegExpValidator(QRegExp("^((1[0-5])|(0[0-9])|[0-9])$"), ALULineEdit));
+    ALULineEdit->setValidator(new QRegExpValidator(
+                                  QRegExp("^((1[0-5])|(0[0-9])|[0-9])$"),
+                                  ALULineEdit));
     ALULineEdit->setPalette(QPalette(Qt::white));
     scene->addWidget(ALULineEdit);
     ALULabel = new QLabel("ALU");
@@ -230,15 +238,20 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     ALUFunctionLabel->setGeometry(332, 355, 98, 20);
     ALUFunctionLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     ALUFunctionLabel->setPalette(QPalette(QColor(Qt::blue).lighter(190)));
-    ALUFunctionLabel->setFont(QFont(ALUFunctionLabel->font().family(), ALUFunctionLabel->font().pointSize() - 2));
+    ALUFunctionLabel->setFont(QFont(ALUFunctionLabel->font().family(),
+                                    ALUFunctionLabel->font().pointSize() - 2));
     scene->addWidget(ALUFunctionLabel);
 
     // ALU shape
     poly.clear();
-    poly << QPoint(314,342) << QPoint(366,342) << QPoint(370,353) << QPoint(390,353) << QPoint(394,342)
+    poly << QPoint(314,342) << QPoint(366,342) << QPoint(370,353)
+         << QPoint(390,353) << QPoint(394,342)
          << QPoint(447,342) << QPoint(421,394) << QPoint(340,394);
-    ALUPoly = scene->addPolygon(poly, QPen(QBrush(QColor(Qt::blue)), 2, Qt::SolidLine, Qt::SquareCap,
-                                           Qt::BevelJoin), QBrush(QColor(Qt::blue).lighter(190)));
+    ALUPoly = scene->addPolygon(poly, QPen(QBrush(QColor(Qt::blue)),
+                                           2, Qt::SolidLine,
+                                           Qt::SquareCap,
+                                           Qt::BevelJoin),
+                                QBrush(QColor(Qt::blue).lighter(190)));
     ALUPoly->setZValue(-1);
 
     // CSMux
@@ -256,8 +269,10 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     CSMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     CSMuxTristateLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(CSMuxTristateLabel);
-    scene->addRect(QRectF(CSMuxTristateLabel->pos(), CSMuxTristateLabel->size()), QPen(Qt::gray));
-    scene->addRect(QRectF(CSMuxerDataLabel->pos(), CSMuxerDataLabel->size()));
+    scene->addRect(QRectF(CSMuxTristateLabel->pos(),
+                          CSMuxTristateLabel->size()),QPen(Qt::gray));
+    scene->addRect(QRectF(CSMuxerDataLabel->pos(),
+                          CSMuxerDataLabel->size()));
 
     // SCk
     SCkCheckBox = new QCheckBox ("SCk");
@@ -305,7 +320,8 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     AndZTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     AndZTristateLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(AndZTristateLabel);
-    scene->addRect(QRectF(AndZTristateLabel->pos(), AndZTristateLabel->size()), QPen(Qt::gray));
+    scene->addRect(QRectF(AndZTristateLabel->pos(), AndZTristateLabel->size()),
+                   QPen(Qt::gray));
 
     AndZMuxLabel = new QLabel("AndZ");
     AndZMuxLabel->setGeometry(415,542, 41,21);
@@ -354,7 +370,8 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     MemWriteTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MemWriteTristateLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(MemWriteTristateLabel);
-    scene->addRect(QRectF(MemWriteTristateLabel->pos(), MemWriteTristateLabel->size()), QPen(Qt::gray));
+    scene->addRect(QRectF(MemWriteTristateLabel->pos(),
+                          MemWriteTristateLabel->size()), QPen(Qt::gray));
 
     MemReadLabel = new QLabel("MemRead");
     MemReadLabel->setGeometry(579, 631, 80, 20);
@@ -365,12 +382,15 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     MemReadTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MemReadTristateLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(MemReadTristateLabel);
-    scene->addRect(QRectF(MemReadTristateLabel->pos(), MemReadTristateLabel->size()), QPen(Qt::gray));
+    scene->addRect(QRectF(MemReadTristateLabel->pos(),
+                          MemReadTristateLabel->size()), QPen(Qt::gray));
 
 
     // Registers
-    scene->addRect(5, 5, 491, 113, QPen(QBrush(QColor(Qt::red), Qt::SolidPattern), 2, Qt::DotLine, Qt::SquareCap, Qt::BevelJoin),
-                   QBrush(seqCircuitColor));
+    scene->addRect(5, 5, 491, 113, QPen(QBrush(QColor(Qt::red), Qt::SolidPattern),
+                                        2, Qt::DotLine,
+                                        Qt::SquareCap,
+                                        Qt::BevelJoin), QBrush(seqCircuitColor));
 
     QLabel *ph;
     ph = new QLabel("0,1");
@@ -389,11 +409,14 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     aRegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     aRegLineEdit->setGeometry(52,10, 60,19);
     aRegLineEdit->setText("0x0000");
-    aRegLineEdit->setValidator(new QRegExpValidator(QRegExp("(0x){0,1}([0-9a-fA-F]){0,4}"), aRegLineEdit));
+    aRegLineEdit->setValidator(new QRegExpValidator(
+                                   QRegExp("(0x){0,1}([0-9a-fA-F]){0,4}"),
+                                   aRegLineEdit));
     aRegLineEdit->setPalette(QPalette(seqCircuitColor));
     aRegLineEdit->setFrame(false);
     scene->addWidget(aRegLineEdit);
-    //    QObject::connect(A, SIGNAL(valueChanged()), this, SLOT(slotRegisterChanged()));
+    //    QObject::connect(A, SIGNAL(valueChanged()),
+                           //this, SLOT(slotRegisterChanged()));
 
     ph = new QLabel("2,3");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -411,7 +434,9 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     xRegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     xRegLineEdit->setGeometry(53,38, 60,19);
     xRegLineEdit->setText("0x0000");
-    xRegLineEdit->setValidator(new QRegExpValidator(QRegExp("(0x){0,1}([0-9a-fA-F]){0,4}"), xRegLineEdit));
+    xRegLineEdit->setValidator(new QRegExpValidator(
+                                   QRegExp("(0x){0,1}([0-9a-fA-F]){0,4}"),
+                                   xRegLineEdit));
     xRegLineEdit->setPalette(QPalette(seqCircuitColor));
     xRegLineEdit->setFrame(false);
     scene->addWidget(xRegLineEdit);
@@ -432,7 +457,9 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     spRegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     spRegLineEdit->setGeometry(52,66, 60,19);
     spRegLineEdit->setText("0x0000");
-    spRegLineEdit->setValidator(new QRegExpValidator(QRegExp("(0x){0,1}[0-9a-fA-F]{0,4}"), spRegLineEdit));
+    spRegLineEdit->setValidator(new QRegExpValidator(
+                                    QRegExp("(0x){0,1}[0-9a-fA-F]{0,4}"),
+                                    spRegLineEdit));
     spRegLineEdit->setPalette(QPalette(seqCircuitColor));
     spRegLineEdit->setFrame(false);
     scene->addWidget(spRegLineEdit);
@@ -453,11 +480,14 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     pcRegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     pcRegLineEdit->setGeometry(52,94, 60,19);
     pcRegLineEdit->setText("0x0000");
-    pcRegLineEdit->setValidator(new QRegExpValidator(QRegExp("(0x){0,1}([0-9a-fA-F]){0,4}"), pcRegLineEdit));
+    pcRegLineEdit->setValidator(new QRegExpValidator(
+                                    QRegExp("(0x){0,1}([0-9a-fA-F]){0,4}"),
+                                    pcRegLineEdit));
     pcRegLineEdit->setPalette(QPalette(seqCircuitColor));
     pcRegLineEdit->setFrame(false);
     scene->addWidget(pcRegLineEdit);
-    //    QObject::connect(X, SIGNAL(valueChanged()), this, SLOT(slotRegisterChanged()));
+    //    QObject::connect(X, SIGNAL(valueChanged()),
+                           //this, SLOT(slotRegisterChanged()));
 
     ph = new QLabel("8-10");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -475,7 +505,9 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     irRegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     irRegLineEdit->setGeometry(182,10, 76,19);
     irRegLineEdit->setText("0x000000");
-    irRegLineEdit->setValidator(new QRegExpValidator(QRegExp("(0x){0,1}([0-9a-fA-F]){0,6}"), irRegLineEdit));
+    irRegLineEdit->setValidator(new QRegExpValidator(
+                                    QRegExp("(0x){0,1}([0-9a-fA-F]){0,6}"),
+                                    irRegLineEdit));
     irRegLineEdit->setPalette(QPalette(seqCircuitColor));
     irRegLineEdit->setFrame(false);
     scene->addWidget(irRegLineEdit);
@@ -496,7 +528,9 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     t1RegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     t1RegLineEdit->setGeometry(182,38, 45,19);
     t1RegLineEdit->setText("0x00");
-    t1RegLineEdit->setValidator(new QRegExpValidator(QRegExp("(0x){0,1}([0-9a-fA-F]){0,2}"), t1RegLineEdit));
+    t1RegLineEdit->setValidator(new QRegExpValidator(
+                                    QRegExp("(0x){0,1}([0-9a-fA-F]){0,2}"),
+                                    t1RegLineEdit));
     t1RegLineEdit->setPalette(QPalette(seqCircuitColor));
     t1RegLineEdit->setFrame(false);
     scene->addWidget(t1RegLineEdit);
@@ -517,7 +551,9 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     t2RegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     t2RegLineEdit->setGeometry(182,66, 60,19);
     t2RegLineEdit->setText("0x0000");
-    t2RegLineEdit->setValidator(new QRegExpValidator(QRegExp("(0x){0,1}([0-9a-fA-F]){0,4}"), t2RegLineEdit));
+    t2RegLineEdit->setValidator(new QRegExpValidator(
+                                    QRegExp("(0x){0,1}([0-9a-fA-F]){0,4}"),
+                                    t2RegLineEdit));
     t2RegLineEdit->setPalette(QPalette(seqCircuitColor));
     t2RegLineEdit->setFrame(false);
     scene->addWidget(t2RegLineEdit);
@@ -538,7 +574,9 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     t3RegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     t3RegLineEdit->setGeometry(182,94, 60,19);
     t3RegLineEdit->setText("0x0000");
-    t3RegLineEdit->setValidator(new QRegExpValidator(QRegExp("(0x){0,1}([0-9a-fA-F]){0,4}"), t3RegLineEdit));
+    t3RegLineEdit->setValidator(new QRegExpValidator(
+                                    QRegExp("(0x){0,1}([0-9a-fA-F]){0,4}"),
+                                    t3RegLineEdit));
     t3RegLineEdit->setPalette(QPalette(seqCircuitColor));
     t3RegLineEdit->setFrame(false);
     scene->addWidget(t3RegLineEdit);
@@ -559,7 +597,9 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     t4RegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     t4RegLineEdit->setGeometry(311,10, 60,19);
     t4RegLineEdit->setText("0x0000");
-    t4RegLineEdit->setValidator(new QRegExpValidator(QRegExp("(0x){0,1}([0-9a-fA-F]){0,4}"), t4RegLineEdit));
+    t4RegLineEdit->setValidator(new QRegExpValidator(
+                                    QRegExp("(0x){0,1}([0-9a-fA-F]){0,4}"),
+                                    t4RegLineEdit));
     t4RegLineEdit->setPalette(QPalette(seqCircuitColor));
     t4RegLineEdit->setFrame(false);
     scene->addWidget(t4RegLineEdit);
@@ -580,7 +620,9 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     t5RegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     t5RegLineEdit->setGeometry(311,38, 60,19);
     t5RegLineEdit->setText("0x0000");
-    t5RegLineEdit->setValidator(new QRegExpValidator(QRegExp("(0x){0,1}([0-9a-fA-F]){0,4}"), t5RegLineEdit));
+    t5RegLineEdit->setValidator(new QRegExpValidator(
+                                    QRegExp("(0x){0,1}([0-9a-fA-F]){0,4}"),
+                                    t5RegLineEdit));
     t5RegLineEdit->setPalette(QPalette(seqCircuitColor));
     t5RegLineEdit->setFrame(false);
     scene->addWidget(t5RegLineEdit);
@@ -601,7 +643,9 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     t6RegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     t6RegLineEdit->setGeometry(311,66, 60,19);
     t6RegLineEdit->setText("0x0000");
-    t6RegLineEdit->setValidator(new QRegExpValidator(QRegExp("(0x){0,1}([0-9a-fA-F]){0,4}"), t6RegLineEdit));
+    t6RegLineEdit->setValidator(new QRegExpValidator(
+                                    QRegExp("(0x){0,1}([0-9a-fA-F]){0,4}"),
+                                    t6RegLineEdit));
     t6RegLineEdit->setPalette(QPalette(seqCircuitColor));
     t6RegLineEdit->setFrame(false);
     scene->addWidget(t6RegLineEdit);
@@ -696,12 +740,15 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraph
     ph->setPalette(QPalette(seqCircuitColor));
     scene->addWidget(ph);
 
-    scene->addRect(5, 5, 491, 113, QPen(QBrush(QColor(Qt::red), Qt::SolidPattern),
-                                        2, Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin));
+    scene->addRect(5, 5, 491, 113, QPen(QBrush(QColor(Qt::red),
+                                               Qt::SolidPattern),
+                                        2, Qt::SolidLine, Qt::SquareCap,
+                                        Qt::BevelJoin));
     // NZVC data path
     poly.clear();
-    poly << QPoint(310,513) << QPoint(269,513) << QPoint(269,407) << QPoint(274,407) << QPoint(264,397)
-         << QPoint(254,407) << QPoint(259,407) << QPoint(259,523) << QPoint(310,523);
+    poly << QPoint(310,513) << QPoint(269,513) << QPoint(269,407)
+         << QPoint(274,407) << QPoint(264,397) << QPoint(254,407)
+         << QPoint(259,407) << QPoint(259,523) << QPoint(310,523);
     scene->addPolygon(poly, QPen(QBrush(Qt::black), 1), QBrush(Qt::yellow));
     scene->addLine(310, 477, 310, 559);
 }
@@ -719,7 +766,7 @@ bool CpuPaneBaseGraphicsItems::aluHasCorrectOutput()
     bool ok;
     int alu = ALULineEdit->text().toInt(&ok);
     if (!ok) {
-        qDebug() << "ALU text to int conversion failed - non-number in the ALU line edit";
+        qDebug() << "ALU text to int conversion failed - non-number in the ALU";
         return false;
     }
 
@@ -738,7 +785,8 @@ bool CpuPaneBaseGraphicsItems::aluHasCorrectOutput()
         if (aMuxTristateLabel->text() == "0" && bLineEdit->text() != "") {
             return true;
         }
-        else if (aMuxTristateLabel->text() == "1" && aLineEdit->text() != "" && bLineEdit->text() != "") {
+        else if (aMuxTristateLabel->text() == "1" && aLineEdit->text() != ""
+                 && bLineEdit->text() != "") {
             return true;
         }
         else {
@@ -748,7 +796,8 @@ bool CpuPaneBaseGraphicsItems::aluHasCorrectOutput()
     return false;
 }
 
-void CpuPaneBaseGraphicsItems::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+void CpuPaneBaseGraphicsItems::paint(QPainter *painter,
+                                     const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setRenderHint(QPainter::Antialiasing, false);
     painter->setPen(Qt::black);
@@ -819,7 +868,8 @@ void CpuPaneBaseGraphicsItems::repaintLoadCk(QPainter *painter)
 
     painter->drawLine(543, 27, 499, 27);
 
-    painter->drawImage(QPoint(499,24), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(499,24),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintCSelect(QPainter *painter)
@@ -837,7 +887,8 @@ void CpuPaneBaseGraphicsItems::repaintCSelect(QPainter *painter)
     painter->drawLine(543, 50, 499, 50);
     painter->drawLine(523, 45, 533, 55);
 
-    painter->drawImage(QPoint(499,47), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(499,47),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintBSelect(QPainter *painter)
@@ -857,7 +908,8 @@ void CpuPaneBaseGraphicsItems::repaintBSelect(QPainter *painter)
     painter->drawLine(523, 67, 533, 77);
 
     // arrow
-    painter->drawImage(QPoint(499,69), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(499,69),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     color = ok ? Qt::red : Qt::white;
     painter->setPen(QPen(QBrush(Qt::black), 1));
@@ -867,14 +919,16 @@ void CpuPaneBaseGraphicsItems::repaintBSelect(QPainter *painter)
 
     // BBus
     poly.clear();
-    poly << QPoint(417, 118) << QPoint(417, 136) << QPoint(366, 136) << QPoint(366, 146)
-         << QPoint(417, 146) << QPoint(417, 331) << QPoint(412, 331) << QPoint(422, 341)
-         << QPoint(432, 331) << QPoint(427, 331) << QPoint(427, 118);
+    poly << QPoint(417, 118) << QPoint(417, 136) << QPoint(366, 136)
+         << QPoint(366, 146) << QPoint(417, 146) << QPoint(417, 331)
+         << QPoint(412, 331) << QPoint(422, 341) << QPoint(432, 331)
+         << QPoint(427, 331) << QPoint(427, 118);
     painter->drawPolygon(poly);
 
     poly.clear();
-    poly << QPoint(280, 136) << QPoint(258, 136) << QPoint(258, 131) << QPoint(248, 141)
-         << QPoint(258, 151)<< QPoint(258, 146) << QPoint(280, 146) << QPoint(280, 136);
+    poly << QPoint(280, 136) << QPoint(258, 136) << QPoint(258, 131)
+         << QPoint(248, 141) << QPoint(258, 151) << QPoint(258, 146)
+         << QPoint(280, 146) << QPoint(280, 136);
     painter->drawPolygon(poly);
 }
 
@@ -895,7 +949,8 @@ void CpuPaneBaseGraphicsItems::repaintASelect(QPainter *painter)
     painter->drawLine(543,94, 499,94);
     painter->drawLine(523,89, 533,99);
 
-    painter->drawImage(QPoint(499,91), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(499,91),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     color = ok ? Qt::red : Qt::white;
 
@@ -903,10 +958,13 @@ void CpuPaneBaseGraphicsItems::repaintASelect(QPainter *painter)
     painter->setBrush(color);
     // ABus
     poly.clear();
-    poly << QPoint(356,118) << QPoint(356,207) << QPoint(290,207) << QPoint(290,217) << QPoint(356,217) << QPoint(356,280)
-         << QPoint(351,280) << QPoint(361,290) << QPoint(371,280) << QPoint(366,280) << QPoint(366,118);
+    poly << QPoint(356,118) << QPoint(356,207) << QPoint(290,207)
+         << QPoint(290,217) << QPoint(356,217) << QPoint(356,280)
+         << QPoint(351,280) << QPoint(361,290) << QPoint(371,280)
+         << QPoint(366,280) << QPoint(366,118);
     painter->drawPolygon(poly);
-    poly.setPoints(8, 280,207, 258,207, 258,202, 248,212, 258,222, 258,217, 280,217, 280,207);
+    poly.setPoints(8, 280,207, 258,207, 258,202, 248,212, 258,222,
+                   258,217, 280,217, 280,207);
     painter->drawPolygon(poly);
 
 }
@@ -928,8 +986,10 @@ void CpuPaneBaseGraphicsItems::repaintMARCk(QPainter *painter)
 
     painter->drawEllipse(QPoint(235,177), 2, 2);
 
-    painter->drawImage(QPoint(232,155), color == Qt::gray ? arrowUpGray : arrowUp);
-    painter->drawImage(QPoint(232,191), color == Qt::gray ? arrowDownGray : arrowDown);
+    painter->drawImage(QPoint(232,155),
+                       color == Qt::gray ? arrowUpGray : arrowUp);
+    painter->drawImage(QPoint(232,191),
+                       color == Qt::gray ? arrowDownGray : arrowDown);
 }
 
 void CpuPaneBaseGraphicsItems::repaintMDRCk(QPainter *painter)
@@ -947,7 +1007,8 @@ void CpuPaneBaseGraphicsItems::repaintMDRCk(QPainter *painter)
     painter->drawLine(428,233, 543,233);
     painter->drawLine(210,233, 210,241);
 
-    painter->drawImage(QPoint(207,241), color == Qt::gray ? arrowDownGray : arrowDown);
+    painter->drawImage(QPoint(207,241),
+                       color == Qt::gray ? arrowDownGray : arrowDown);
 }
 
 void CpuPaneBaseGraphicsItems::repaintAMuxSelect(QPainter *painter)
@@ -965,7 +1026,8 @@ void CpuPaneBaseGraphicsItems::repaintAMuxSelect(QPainter *painter)
     painter->drawLine(388, 303, 416, 303);
     painter->drawLine(428, 303, 543, 303);
 
-    painter->drawImage(QPoint(380,300), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(380,300),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     if (ok) {
         switch (aMux) {
@@ -991,7 +1053,8 @@ void CpuPaneBaseGraphicsItems::repaintAMuxSelect(QPainter *painter)
     painter->setBrush(color);
 
     // AMux bus
-    poly.setPoints(7, 336,312, 336,331, 331,331, 341,341, 351,331, 346,331, 346,312);
+    poly.setPoints(7, 336,312, 336,331, 331,331, 341,341, 351,331,
+                   346,331, 346,312);
     painter->drawPolygon(poly);
 }
 
@@ -1010,14 +1073,16 @@ void CpuPaneBaseGraphicsItems::repaintCMuxSelect(QPainter *painter)
     painter->drawLine(280,355, 260,355);
     painter->drawLine(260,355, 260,365);
 
-    painter->drawImage(QPoint(257,362), color == Qt::gray ? arrowDownGray : arrowDown);
+    painter->drawImage(QPoint(257,362),
+                       color == Qt::gray ? arrowDownGray : arrowDown);
 
     if (cMuxTristateLabel->text() == "0") {
         color = Qt::yellow;
         cMuxerLabel->setPalette(QPalette(combCircuitYellow));
     }
     else if (cMuxTristateLabel->text() == "1") {
-        if (!aluHasCorrectOutput() || ALULineEdit->text() == "15") { // CBus.state == UNDEFINED or NZVC A
+        if (!aluHasCorrectOutput() || ALULineEdit->text() == "15") {
+            // CBus.state == UNDEFINED or NZVC A
             qDebug() << "WARNING: CMux select: There is no ALU output";
             cMuxerLabel->setPalette(QPalette(Qt::white));
             color = Qt::white;
@@ -1036,10 +1101,12 @@ void CpuPaneBaseGraphicsItems::repaintCMuxSelect(QPainter *painter)
 
     // CMuxBus (output)
     poly.clear();
-    poly << QPoint(290,374) << QPoint(290,130) << QPoint(295,130) << QPoint(285,120)
-         << QPoint(275,130) << QPoint(280,130) << QPoint(280,334) << QPoint(240,334)
-         << QPoint(240,326) << QPoint(245,326) << QPoint(235,316) << QPoint(225,326)
-         << QPoint(230,326) << QPoint(230,344) << QPoint(280,344) << QPoint(280,374);
+    poly << QPoint(290,374) << QPoint(290,130) << QPoint(295,130)
+         << QPoint(285,120) << QPoint(275,130) << QPoint(280,130)
+         << QPoint(280,334) << QPoint(240,334) << QPoint(240,326)
+         << QPoint(245,326) << QPoint(235,316) << QPoint(225,326)
+         << QPoint(230,326) << QPoint(230,344) << QPoint(280,344)
+         << QPoint(280,374);
     painter->drawPolygon(poly);
 }
 
@@ -1055,7 +1122,8 @@ void CpuPaneBaseGraphicsItems::repaintSCk(QPainter *painter)
     painter->drawLine(505,SCkCheckBox->y()+8, 543,SCkCheckBox->y()+8);
 
     // arrow
-    painter->drawImage(QPoint(497,SCkCheckBox->y()+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(497,SCkCheckBox->y()+8-3),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintCCk(QPainter *painter)
@@ -1071,7 +1139,8 @@ void CpuPaneBaseGraphicsItems::repaintCCk(QPainter *painter)
     painter->drawLine(505,CCkCheckBox->y()+8, 543,CCkCheckBox->y()+8);
 
     // arrow
-    painter->drawImage(QPoint(497,469), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(497,469),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintVCk(QPainter *painter)
@@ -1085,7 +1154,8 @@ void CpuPaneBaseGraphicsItems::repaintVCk(QPainter *painter)
 
     painter->drawLine(505,VCkCheckBox->y()+8, 543,VCkCheckBox->y()+8);
 
-    painter->drawImage(QPoint(497,496), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(497,496),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintZCk(QPainter *painter)
@@ -1098,7 +1168,8 @@ void CpuPaneBaseGraphicsItems::repaintZCk(QPainter *painter)
 
     painter->drawLine(505, 552, 543, 552);
 
-    painter->drawImage(QPoint(497,549), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(497,549),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintNCk(QPainter *painter)
@@ -1111,7 +1182,8 @@ void CpuPaneBaseGraphicsItems::repaintNCk(QPainter *painter)
 
     painter->drawLine(505, 586+8, 543, 586+8);
 
-    painter->drawImage(QPoint(497,586+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(497,586+8-3),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
@@ -1134,7 +1206,8 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
 
     painter->drawLine(81, 631+8, 543, 631+8); // memRead line from label to bus
 
-    painter->drawImage(QPoint(73,631+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(73,631+8-3),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     if (MemWriteTristateLabel->text() == "1") {
         // Do not paint main bus if MemWrite is isHigh
@@ -1150,13 +1223,15 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
     // Main Bus
     // ADDR bus:
     poly.clear();
-    poly << QPoint(40, 151) << QPoint(60, 151) << QPoint(60, 650) << QPoint(40, 650);
+    poly << QPoint(40, 151) << QPoint(60, 151) << QPoint(60, 650)
+         << QPoint(40, 650);
     painter->drawPolygon(poly);
 
     // left arrow to addr:
     poly.clear();
     //         arrowhead:
-    poly << QPoint(18, 330) << QPoint(18, 325) << QPoint(3,  340) << QPoint(18, 355) << QPoint(18, 350)
+    poly << QPoint(18, 330) << QPoint(18, 325) << QPoint(3,  340)
+         << QPoint(18, 355) << QPoint(18, 350)
             // blunt end at the bus:
          << QPoint(40, 350) << QPoint(40, 330);
     painter->drawPolygon(poly);
@@ -1176,7 +1251,8 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
 
     // Data bus:
     poly.clear();
-    poly << QPoint(60, 151) << QPoint(70, 151) << QPoint(70, 650) << QPoint(60, 650);
+    poly << QPoint(60, 151) << QPoint(70, 151) << QPoint(70, 650)
+         << QPoint(60, 650);
     painter->drawPolygon(poly);
 
     // Mem Data Bus
@@ -1188,17 +1264,21 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
     }
     else {
         // arrowhead (normally):
-        poly << QPoint(13, 365) << QPoint(13, 360) << QPoint(3, 370) << QPoint(13, 380) << QPoint(13, 375);
+        poly << QPoint(13, 365) << QPoint(13, 360) << QPoint(3, 370)
+             << QPoint(13, 380) << QPoint(13, 375);
     }
-    poly << QPoint(29, 375) << QPoint(29, 380) << QPoint(39, 370) << QPoint(29, 360) << QPoint(29, 365);
+    poly << QPoint(29, 375) << QPoint(29, 380) << QPoint(39, 370)
+         << QPoint(29, 360) << QPoint(29, 365);
     painter->drawPolygon(poly);
 
     // right arrow from Bus to MDRMux:
     poly.clear();
     //         "foot":
-    poly << QPoint(190, 344) << QPoint(70,  344) << QPoint(70,  334) << QPoint(180, 334)
+    poly << QPoint(190, 344) << QPoint(70,  344) << QPoint(70,  334)
+         << QPoint(180, 334)
             // arrowhead
-         << QPoint(180, 326) << QPoint(175, 326) << QPoint(185, 316) << QPoint(195, 326) << QPoint(190, 326);
+         << QPoint(180, 326) << QPoint(175, 326) << QPoint(185, 316)
+         << QPoint(195, 326) << QPoint(190, 326);
     painter->drawPolygon(poly);
 
 }
@@ -1222,14 +1302,18 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    painter->drawLine(81,611+8, 543,611+8); // memWrite line from the label to the bus
-    painter->drawImage(QPoint(73,611+8-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    // memWrite line from the label to the bus:
+    painter->drawLine(81,611+8, 543,611+8);
+    painter->drawImage(QPoint(73,611+8-3),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     // draw line from memWrite to MDR out:
     painter->drawEllipse(QPoint(96,611+8), 2, 2);
     painter->drawLine(96,611+8, 96,345);
-    painter->drawLine(96,333, 96,268+12); // memWrite line from the label to the bus
-    painter->drawImage(QPoint(96-3,268+12-9), color == Qt::gray ? arrowUpGray : arrowUp);
+    // memWrite line from the label to the bus:
+    painter->drawLine(96,333, 96,268+12);
+    painter->drawImage(QPoint(96-3,268+12-9),
+                       color == Qt::gray ? arrowUpGray : arrowUp);
 
     // repaint the MDR-to-main-bus line, based on if MemWrite is set or not
     // note: it should be lighter (disabled) when MemWrite is not set.
@@ -1269,13 +1353,15 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     // Main Bus
     // Main ADDR bus:
     poly.clear();
-    poly << QPoint(40, 151) << QPoint(60, 151) << QPoint(60, 650) << QPoint(40, 650);
+    poly << QPoint(40, 151) << QPoint(60, 151) << QPoint(60, 650)
+         << QPoint(40, 650);
     painter->drawPolygon(poly);
 
     // left arrow from addr bus to memory:
     poly.clear();
     //         arrowhead:
-    poly << QPoint(18, 330) << QPoint(18, 325) << QPoint(3,  340) << QPoint(18, 355) << QPoint(18, 350)
+    poly << QPoint(18, 330) << QPoint(18, 325) << QPoint(3,  340)
+         << QPoint(18, 355) << QPoint(18, 350)
             // blunt end at the bus:
          << QPoint(40, 350) << QPoint(40, 330);
     painter->drawPolygon(poly);
@@ -1293,13 +1379,15 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
 
     // Main Data bus:
     poly.clear();
-    poly << QPoint(60, 151) << QPoint(70, 151) << QPoint(70, 650) << QPoint(60, 650);
+    poly << QPoint(60, 151) << QPoint(70, 151) << QPoint(70, 650)
+         << QPoint(60, 650);
     painter->drawPolygon(poly);
 
     // Mem Data Bus (bidirectional arrow)
     poly.clear();
     // arrowhead:
-    poly << QPoint(13, 365) << QPoint(13, 360) << QPoint(3, 370) << QPoint(13, 380) << QPoint(13, 375);
+    poly << QPoint(13, 365) << QPoint(13, 360) << QPoint(3, 370)
+         << QPoint(13, 380) << QPoint(13, 375);
     // other end of the bus:
     if (color == QColor(16, 150, 24)) {
         // flat end
@@ -1307,7 +1395,8 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     }
     else {
         // arrowhead
-        poly << QPoint(29, 375) << QPoint(29, 380) << QPoint(39, 370) << QPoint(29, 360) << QPoint(29, 365);
+        poly << QPoint(29, 375) << QPoint(29, 380) << QPoint(39, 370)
+             << QPoint(29, 360) << QPoint(29, 365);
     }
     painter->drawPolygon(poly);
 
@@ -1317,9 +1406,11 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     // right arrow from Bus to MDRMux:
     poly.clear();
     // "foot":
-    poly << QPoint(190, 344) << QPoint(70,  344) << QPoint(70,  334) << QPoint(180, 334);
+    poly << QPoint(190, 344) << QPoint(70,  344) << QPoint(70,  334)
+         << QPoint(180, 334);
     // arrowhead
-    poly << QPoint(180, 326) << QPoint(175, 326) << QPoint(185, 316) << QPoint(195, 326) << QPoint(190, 326);
+    poly << QPoint(180, 326) << QPoint(175, 326) << QPoint(185, 316)
+         << QPoint(195, 326) << QPoint(190, 326);
     painter->drawPolygon(poly);
 }
 
@@ -1333,7 +1424,8 @@ void CpuPaneBaseGraphicsItems::repaintSBitOut(QPainter *painter)
     painter->setBrush(color);
 
     // line from S bit to CSMux
-    painter->drawLine(sBitLabel->x()+11,sBitLabel->y(), sBitLabel->x()+11,sBitLabel->y()-8);
+    painter->drawLine(sBitLabel->x()+11,sBitLabel->y(),
+                      sBitLabel->x()+11,sBitLabel->y()-8);
     // arrow:
     painter->drawImage(QPoint(sBitLabel->x()+11-3,sBitLabel->y()-8-8), arrowUp);
 }
@@ -1355,15 +1447,25 @@ void CpuPaneBaseGraphicsItems::repaintCBitOut(QPainter *painter)
     painter->drawImage(QPoint(314,483), arrowLeft);
 
     // line from C bit to CSMux
-    painter->drawLine(487,cBitLabel->pos().y()-4, 487,cBitLabel->pos().y()); // bitty bit above C bit
-    painter->drawLine(CSMuxerDataLabel->pos().x()+8,cBitLabel->pos().y()-4, 487,cBitLabel->pos().y()-4);
-    painter->drawLine(CSMuxerDataLabel->pos().x()+8,CSMuxerDataLabel->pos().y() + CSMuxerDataLabel->height()+8, CSMuxerDataLabel->pos().x()+8,cBitLabel->pos().y()-4);
+    // bitty bit above C bit:
+    painter->drawLine(487,cBitLabel->pos().y()-4, 487,
+                      cBitLabel->pos().y());
+    painter->drawLine(CSMuxerDataLabel->pos().x()+8,cBitLabel->pos().y()-4,
+                      487,cBitLabel->pos().y()-4);
+    painter->drawLine(CSMuxerDataLabel->pos().x()+8,
+                      CSMuxerDataLabel->pos().y()+CSMuxerDataLabel->height()+8,
+                      CSMuxerDataLabel->pos().x()+8,cBitLabel->pos().y()-4);
     // arrow to the CSMux
-    painter->drawImage(QPoint(CSMuxerDataLabel->x()+8-3,CSMuxerDataLabel->y()+CSMuxerDataLabel->height()+3), arrowUp);
+    painter->drawImage(
+                QPoint(CSMuxerDataLabel->x()+8-3,
+                       CSMuxerDataLabel->y()+CSMuxerDataLabel->height()+3),
+                       arrowUp);
 
     // CIN line back to the ALU
     painter->drawLine(CSMuxerDataLabel->x()+35,389, 433,389);
-    painter->drawLine(CSMuxerDataLabel->x()+35,CSMuxerDataLabel->pos().y(), CSMuxerDataLabel->x()+35,389);
+    painter->drawLine(CSMuxerDataLabel->x()+35,
+                      CSMuxerDataLabel->pos().y(),
+                      CSMuxerDataLabel->x()+35,389);
     // CIN arrow to the ALU
     painter->drawImage(QPoint(428,386), arrowLeft);
 
@@ -1379,8 +1481,10 @@ void CpuPaneBaseGraphicsItems::repaintVBitOut(QPainter *painter)
     painter->setBrush(color);
 
     /* V out */
-    painter->drawLine(487,vBitLabel->y()+vBitLabel->height(), 487,vBitLabel->y()+vBitLabel->height()+4); // bitty bit
-    painter->drawLine(487,vBitLabel->y()+vBitLabel->height()+4, 352,vBitLabel->y()+vBitLabel->height()+4);
+    painter->drawLine(487,vBitLabel->y()+vBitLabel->height(),
+                      487,vBitLabel->y()+vBitLabel->height()+4); // bitty bit
+    painter->drawLine(487,vBitLabel->y()+vBitLabel->height()+4,
+                      352,vBitLabel->y()+vBitLabel->height()+4);
     painter->drawLine(352,513, 352,496);
     painter->drawLine(352,496, 322,496); // short line from the arrow
 
@@ -1439,7 +1543,8 @@ void CpuPaneBaseGraphicsItems::repaintCSMuxSelect(QPainter *painter)
     painter->drawLine(505,CSMuxerDataLabel->y()+10, 543,CSMuxerDataLabel->y()+10);
 
     // arrow
-    painter->drawImage(QPoint(497,CSMuxerDataLabel->y()+10-3), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(497,CSMuxerDataLabel->y()+10-3),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuPaneBaseGraphicsItems::repaintAndZSelect(QPainter *painter)
@@ -1458,7 +1563,8 @@ void CpuPaneBaseGraphicsItems::repaintAndZSelect(QPainter *painter)
     painter->drawLine(437,517+7+8, 437,517+7); // vertical line
     painter->drawLine(437,517+7, 543,517+7); // horiz line
 
-    painter->drawImage(QPoint(434,517+7+8), color == Qt::gray ? arrowDownGray : arrowDown);
+    painter->drawImage(QPoint(434,517+7+8),
+                       color == Qt::gray ? arrowDownGray : arrowDown);
 
     color = Qt::gray;
     if (ALULineEdit->text() != "" && AndZTristateLabel->text() != "") {
@@ -1470,7 +1576,8 @@ void CpuPaneBaseGraphicsItems::repaintAndZSelect(QPainter *painter)
     // AndZ out
     painter->drawLine(458,552, 465,552);
 
-    painter->drawImage(QPoint(465,549), color == Qt::gray ? arrowRightGray : arrowRight);
+    painter->drawImage(QPoint(465,549),
+                       color == Qt::gray ? arrowRightGray : arrowRight);
 }
 
 void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
@@ -1486,7 +1593,8 @@ void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
     painter->drawLine(439,376, 543,376);
     painter->drawLine(523,371, 533,381); // diagonal line
 
-    painter->drawImage(QPoint(433,373), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(433,373),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     painter->setPen(Qt::black);
 
@@ -1531,29 +1639,34 @@ void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
     painter->drawLine(371,395, 371,586+8);
     painter->drawLine(371,586+8, 465,586+8);
 
-    painter->drawImage(QPoint(465,586+8-3), color == Qt::gray ? arrowRightGray : arrowRight);
+    painter->drawImage(QPoint(465,586+8-3),
+                       color == Qt::gray ? arrowRightGray : arrowRight);
 
     // Z
     painter->drawLine(386,395, 386,552);
     painter->drawLine(386,552, 404,552);
 
-    painter->drawImage(QPoint(404,549), color == Qt::gray ? arrowRightGray : arrowRight);
+    painter->drawImage(QPoint(404,549),
+                       color == Qt::gray ? arrowRightGray : arrowRight);
 
     // V
     painter->drawLine(401,395, 401,499);
     painter->drawLine(401,499, 466,499);
 
-    painter->drawImage(QPoint(466,496), color == Qt::gray ? arrowRightGray : arrowRight);
+    painter->drawImage(QPoint(466,496),
+                       color == Qt::gray ? arrowRightGray : arrowRight);
 
     // Cout:
     // C
     painter->drawLine(416,395, 416,472);
     painter->drawLine(416,472, 465,472);
-    painter->drawImage(QPoint(465,469), color == Qt::gray ? arrowRightGray : arrowRight);
+    painter->drawImage(QPoint(465,469),
+                       color == Qt::gray ? arrowRightGray : arrowRight);
     // S
     painter->drawLine(416,sBitLabel->y()+9, sBitLabel->x()-11,sBitLabel->y()+9);
     painter->drawEllipse(QPoint(416,sBitLabel->y()+9), 2, 2);
-    painter->drawImage(QPoint(sBitLabel->x()-11,sBitLabel->y()+9-3), color == Qt::gray ? arrowRightGray : arrowRight);
+    painter->drawImage(QPoint(sBitLabel->x()-11,sBitLabel->y()+9-3),
+                       color == Qt::gray ? arrowRightGray : arrowRight);
 }
 
 void CpuPaneBaseGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
@@ -1572,12 +1685,15 @@ void CpuPaneBaseGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
     painter->drawLine(265,324, 279,324); painter->drawLine(291,324, 335,324);
     painter->drawLine(347,324, 416,324); painter->drawLine(428,324, 543,324);
 
-    painter->drawImage(QPoint(249,300), color == Qt::gray ? arrowLeftGray : arrowLeft);
+    painter->drawImage(QPoint(249,300),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     painter->setPen(Qt::black);
 
     if (MDRMuxTristateLabel->text() == "0") {
-        if ((Sim::mainBusState == Enu::MemReadSecondWait && MemReadTristateLabel->text() == "1") || Sim::mainBusState == Enu::MemReadReady) {
+        if ((Sim::mainBusState == Enu::MemReadSecondWait &&
+             MemReadTristateLabel->text() == "1") ||
+                Sim::mainBusState == Enu::MemReadReady) {
             MDRMuxerDataLabel->setPalette(QPalette(combCircuitGreen));
             painter->setBrush(QBrush(QColor(16, 150, 24))); // green
         }
@@ -1606,7 +1722,8 @@ void CpuPaneBaseGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
     }
 
     // MDRMuxBus (MDRMux to MDR arrow)
-    poly.setPoints(7, 205,293, 205,286, 200,286, 210,276, 220,286, 215,286, 215,293); // arrow
+    poly.setPoints(7, 205,293, 205,286, 200,286, 210,276, 220,286,
+                   215,286, 215,293); // arrow
     painter->drawPolygon(poly);
 
 
