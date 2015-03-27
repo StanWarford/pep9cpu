@@ -72,6 +72,8 @@ private:
         eFIG1210 = 4,
         eFIG1212 = 5,
         eFIG1220 = 6,
+        eFIG1221 = 7,
+        eFIG1222 = 8,
 
         eEX1204 = 0,
         eEX1205 = 1,

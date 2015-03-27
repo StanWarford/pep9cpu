@@ -95,5 +95,6 @@
         <file>help/pep9reference.html</file>
         <file>help/usingpep9cpu.html</file>
         <file>help/figures/fig1220.pepcpu</file>
+        <file>help/figures/fig1221.pepcpu</file>
     </qresource>
 </RCC>

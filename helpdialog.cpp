@@ -158,7 +158,11 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
             }
             else if (row == eFIG1220) {
                 microcodeEditor->setPlainText(Pep::resToString(":/help/figures/fig1220.pepcpu"));
-                ui->helpFigureLabel->setText("<b>Figure 12.20</b> The control signals to fetch the instruction specifier and increment PC by 1. Two-byte data bus.");
+                ui->helpFigureLabel->setText("<b>Figure 12.20</b> The control signals to fetch the instruction specifier and increment PC by 1.");
+            }
+            else if (row == eFIG1221) {
+                microcodeEditor->setPlainText(Pep::resToString(":/help/figures/fig1221.pepcpu"));
+                ui->helpFigureLabel->setText("<b>Figure 12.21</b> The control signals to retrieve the pre-fetched instruction specifier.");
             }
         }
     }
