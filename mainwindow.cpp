@@ -492,7 +492,9 @@ void MainWindow::on_actionOne_Byte_Data_Bus_Model_triggered()
     cpuPane->clearCpu();
     cpuPane->clearCpuControlSignals();
 
+    ui->actionTwo_Byte_Data_Bus_Model->setText("Switch to Two-byte Data Bus");
     ui->actionTwo_Byte_Data_Bus_Model->setEnabled(true);
+    ui->actionOne_Byte_Data_Bus_Model->setText("One-byte Data Bus");
     ui->actionOne_Byte_Data_Bus_Model->setEnabled(false);
 
 }
@@ -511,7 +513,9 @@ void MainWindow::on_actionTwo_Byte_Data_Bus_Model_triggered()
     cpuPane->clearCpu();
     cpuPane->clearCpuControlSignals();
 
+    ui->actionTwo_Byte_Data_Bus_Model->setText("Two-byte Data Bus");
     ui->actionTwo_Byte_Data_Bus_Model->setEnabled(false);
+    ui->actionOne_Byte_Data_Bus_Model->setText("Switch to One-byte Data Bus");
     ui->actionOne_Byte_Data_Bus_Model->setEnabled(true);
 
 }

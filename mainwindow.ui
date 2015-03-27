@@ -519,18 +519,18 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>One Byte Data Bus Model</string>
+    <string>One-byte Data Bus</string>
    </property>
    <property name="toolTip">
-    <string>One Byte Data Bus Model</string>
+    <string>One-byte Data Bus</string>
    </property>
   </action>
   <action name="actionTwo_Byte_Data_Bus_Model">
    <property name="text">
-    <string>Two Byte Data Bus Model</string>
+    <string>Two-byte Data Bus</string>
    </property>
    <property name="toolTip">
-    <string>One Byte Data Bus Model</string>
+    <string>Two-byte Data Bus</string>
    </property>
   </action>
  </widget>
