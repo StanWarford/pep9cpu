@@ -156,6 +156,10 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
                 microcodeEditor->setPlainText(Pep::resToString(":/help/figures/fig1212.pepcpu"));
                 ui->helpFigureLabel->setText("<b>Figure 12.12</b> The control signals to implement the unary ASRA instruction.");
             }
+            else if (row == eFIG1220) {
+                microcodeEditor->setPlainText(Pep::resToString(":/help/figures/fig1220.pepcpu"));
+                ui->helpFigureLabel->setText("<b>Figure 12.20</b> The control signals to fetch the instruction specifier and increment PC by 1. Two-byte data bus.");
+            }
         }
     }
     else if ((!isHelpSubCat && row == eEXCERCISES) || parentRow == eEXCERCISES) {
