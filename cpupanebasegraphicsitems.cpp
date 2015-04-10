@@ -1449,11 +1449,10 @@ void CpuPaneBaseGraphicsItems::repaintCBitOut(QPainter *painter)
 
     // line from C bit to CSMux
     // bitty bit above C bit:
-    painter->drawLine(487,463-4, 487,
-                      463);
+    painter->drawLine(487,459, 487,463); //463-4
     painter->drawLine(434,459, //426+8 //463-4
                       487,459); //463-4
-    painter->drawLine(424, //426+8
+    painter->drawLine(434, //426+8
                       426, //399+19+8
                       434,459); //426+8 //463-4
     // arrow to the CSMux
