@@ -1,11 +1,11 @@
 <RCC>
     <qresource prefix="/">
         <file>help/figures/fig1205.pepcpu</file>
-        <file>help/figures/fig1205b.pepcpu</file>
-        <file>help/figures/fig1208.pepcpu</file>
+        <file>help/figures/fig1207.pepcpu</file>
         <file>help/figures/fig1209.pepcpu</file>
         <file>help/figures/fig1210.pepcpu</file>
-        <file>help/figures/fig1212.pepcpu</file>
+        <file>help/figures/fig1211.pepcpu</file>
+        <file>help/figures/fig1213.pepcpu</file>
         <file>help/cpu.html</file>
         <file>help/microcode.html</file>
         <file>help/examples.html</file>
