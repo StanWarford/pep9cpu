@@ -260,12 +260,12 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     CSMuxLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(CSMuxLabel);
     CSMuxerDataLabel = new QLabel("CSMux");
-    CSMuxerDataLabel->setGeometry(476+19-69,CSMuxLabel->y(), 69,19);
+    CSMuxerDataLabel->setGeometry(426,399, 69,19); //476+19-69
     CSMuxerDataLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     CSMuxerDataLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(CSMuxerDataLabel);
     CSMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
-    CSMuxTristateLabel->setGeometry(550,CSMuxLabel->y(), 25,21);
+    CSMuxTristateLabel->setGeometry(550,399, 25,21);
     CSMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     CSMuxTristateLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(CSMuxTristateLabel);
@@ -344,12 +344,12 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
 
     // NCk
     NCkCheckBox = new QCheckBox ("NCk");
-    NCkCheckBox->setGeometry(550, 582+4, 60, 20);
+    NCkCheckBox->setGeometry(550, 586, 60, 20); //582+4
     NCkCheckBox->setPalette(QPalette(Qt::white));
     scene->addWidget(NCkCheckBox);
     nBitLabel = new TristateLabel(0, TristateLabel::ZeroOne);
     nBitLabel->setText("0");
-    nBitLabel->setGeometry(476,582+4, 19, 19);
+    nBitLabel->setGeometry(476,586, 19, 19); //582+4
     nBitLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     nBitLabel->setPalette(QPalette(seqCircuitColor));
     scene->addWidget(nBitLabel);
@@ -1119,10 +1119,10 @@ void CpuPaneBaseGraphicsItems::repaintSCk(QPainter *painter)
     painter->setBrush(color);
 
     // line from checkbox to data
-    painter->drawLine(505,SCkCheckBox->y()+8, 543,SCkCheckBox->y()+8);
+    painter->drawLine(505,445, 543,445); //437+8
 
     // arrow
-    painter->drawImage(QPoint(497,SCkCheckBox->y()+8-3),
+    painter->drawImage(QPoint(497,442), //437+8-3
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
@@ -1136,7 +1136,7 @@ void CpuPaneBaseGraphicsItems::repaintCCk(QPainter *painter)
     painter->setBrush(color);
 
     // line from checkbox to data
-    painter->drawLine(505,CCkCheckBox->y()+8, 543,CCkCheckBox->y()+8);
+    painter->drawLine(505,472, 543,472); //464+8
 
     // arrow
     painter->drawImage(QPoint(497,469),
@@ -1152,7 +1152,7 @@ void CpuPaneBaseGraphicsItems::repaintVCk(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    painter->drawLine(505,VCkCheckBox->y()+8, 543,VCkCheckBox->y()+8);
+    painter->drawLine(505,499, 543,499); //491+8
 
     painter->drawImage(QPoint(497,496),
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
@@ -1180,9 +1180,9 @@ void CpuPaneBaseGraphicsItems::repaintNCk(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    painter->drawLine(505, 586+8, 543, 586+8);
+    painter->drawLine(505,594, 543,594); //586+8
 
-    painter->drawImage(QPoint(497,586+8-3),
+    painter->drawImage(QPoint(497,591), //586+8-3
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
@@ -1204,9 +1204,10 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    painter->drawLine(81, 631+8, 543, 631+8); // memRead line from label to bus
+    // memRead line from label to bus:
+    painter->drawLine(81,639, 543,639); //631+8
 
-    painter->drawImage(QPoint(73,631+8-3),
+    painter->drawImage(QPoint(73,636), //631+8-3
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     if (MemWriteTristateLabel->text() == "1") {
@@ -1303,16 +1304,16 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     painter->setBrush(color);
 
     // memWrite line from the label to the bus:
-    painter->drawLine(81,611+8, 543,611+8);
-    painter->drawImage(QPoint(73,611+8-3),
+    painter->drawLine(81,619, 543,619); //611+8
+    painter->drawImage(QPoint(73,616), //611+8-3
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     // draw line from memWrite to MDR out:
-    painter->drawEllipse(QPoint(96,611+8), 2, 2);
-    painter->drawLine(96,611+8, 96,345);
+    painter->drawEllipse(QPoint(96,619), 2, 2); //611+8
+    painter->drawLine(96,619, 96,345); //611+8
     // memWrite line from the label to the bus:
-    painter->drawLine(96,333, 96,268+12);
-    painter->drawImage(QPoint(96-3,268+12-9),
+    painter->drawLine(96,333, 96,280); //268+12
+    painter->drawImage(QPoint(93,271), //96-3 //268+12-9
                        color == Qt::gray ? arrowUpGray : arrowUp);
 
     // repaint the MDR-to-main-bus line, based on if MemWrite is set or not
@@ -1424,10 +1425,10 @@ void CpuPaneBaseGraphicsItems::repaintSBitOut(QPainter *painter)
     painter->setBrush(color);
 
     // line from S bit to CSMux
-    painter->drawLine(sBitLabel->x()+11,sBitLabel->y(),
-                      sBitLabel->x()+11,sBitLabel->y()-8);
+    painter->drawLine(487,437, //476+11
+                      487,437-8); //476+11
     // arrow:
-    painter->drawImage(QPoint(sBitLabel->x()+11-3,sBitLabel->y()-8-8), arrowUp);
+    painter->drawImage(QPoint(484,421), arrowUp); //476+11-3 //437-8-8
 }
 
 void CpuPaneBaseGraphicsItems::repaintCBitOut(QPainter *painter)
@@ -1448,24 +1449,23 @@ void CpuPaneBaseGraphicsItems::repaintCBitOut(QPainter *painter)
 
     // line from C bit to CSMux
     // bitty bit above C bit:
-    painter->drawLine(487,cBitLabel->pos().y()-4, 487,
-                      cBitLabel->pos().y());
-    painter->drawLine(CSMuxerDataLabel->pos().x()+8,cBitLabel->pos().y()-4,
-                      487,cBitLabel->pos().y()-4);
-    painter->drawLine(CSMuxerDataLabel->pos().x()+8,
-                      CSMuxerDataLabel->pos().y()+CSMuxerDataLabel->height()+8,
-                      CSMuxerDataLabel->pos().x()+8,cBitLabel->pos().y()-4);
+    painter->drawLine(487,463-4, 487,
+                      463);
+    painter->drawLine(434,459, //426+8 //463-4
+                      487,459); //463-4
+    painter->drawLine(424, //426+8
+                      426, //399+19+8
+                      434,459); //426+8 //463-4
     // arrow to the CSMux
     painter->drawImage(
-                QPoint(CSMuxerDataLabel->x()+8-3,
-                       CSMuxerDataLabel->y()+CSMuxerDataLabel->height()+3),
+                QPoint(431,  //426+8-3
+                       421), //399+19+3
                        arrowUp);
 
     // CIN line back to the ALU
-    painter->drawLine(CSMuxerDataLabel->x()+35,389, 433,389);
-    painter->drawLine(CSMuxerDataLabel->x()+35,
-                      CSMuxerDataLabel->pos().y(),
-                      CSMuxerDataLabel->x()+35,389);
+    painter->drawLine(461,389, 433,389); //426+35
+    painter->drawLine(461,399,  //426+35
+                      461,389); //426+35
     // CIN arrow to the ALU
     painter->drawImage(QPoint(428,386), arrowLeft);
 
@@ -1481,10 +1481,10 @@ void CpuPaneBaseGraphicsItems::repaintVBitOut(QPainter *painter)
     painter->setBrush(color);
 
     /* V out */
-    painter->drawLine(487,vBitLabel->y()+vBitLabel->height(),
-                      487,vBitLabel->y()+vBitLabel->height()+4); // bitty bit
-    painter->drawLine(487,vBitLabel->y()+vBitLabel->height()+4,
-                      352,vBitLabel->y()+vBitLabel->height()+4);
+    painter->drawLine(487,510,  //491+19
+                      487,514); // bitty bit //491+19+4
+    painter->drawLine(487,514,  //491+19+4
+                      352,514); //491+19+4
     painter->drawLine(352,513, 352,496);
     painter->drawLine(352,496, 322,496); // short line from the arrow
 
@@ -1523,9 +1523,9 @@ void CpuPaneBaseGraphicsItems::repaintNBitOut(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    painter->drawLine(487,605, 487,605+4);
-    painter->drawLine(487,605+4, 330,605+4);
-    painter->drawLine(330,605+4, 330,517);
+    painter->drawLine(487,605, 487,609); //605+4
+    painter->drawLine(487,609, 330,609); //605+4
+    painter->drawLine(330,609, 330,517); //605+4
     painter->drawLine(330,517, 322,517);
 
     painter->drawImage(QPoint(314,514), arrowLeft);
@@ -1540,10 +1540,10 @@ void CpuPaneBaseGraphicsItems::repaintCSMuxSelect(QPainter *painter)
     painter->setBrush(color);
 
     // line from checkbox to data
-    painter->drawLine(505,CSMuxerDataLabel->y()+10, 543,CSMuxerDataLabel->y()+10);
+    painter->drawLine(505,409, 543,409); //399+10
 
     // arrow
-    painter->drawImage(QPoint(497,CSMuxerDataLabel->y()+10-3),
+    painter->drawImage(QPoint(497,406), //399+10-3
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
@@ -1560,10 +1560,10 @@ void CpuPaneBaseGraphicsItems::repaintAndZSelect(QPainter *painter)
     painter->setBrush(color);
 
     // lines coming out of tristate label
-    painter->drawLine(437,517+7+8, 437,517+7); // vertical line
-    painter->drawLine(437,517+7, 543,517+7); // horiz line
+    painter->drawLine(437,532, 437,524); // vertical line //517+7+8 //517+7
+    painter->drawLine(437,524, 543,524); // horiz line //517+7
 
-    painter->drawImage(QPoint(434,517+7+8),
+    painter->drawImage(QPoint(434,532), //517+7+8
                        color == Qt::gray ? arrowDownGray : arrowDown);
 
     color = Qt::gray;
@@ -1636,10 +1636,10 @@ void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
     painter->setBrush(aluHasCorrectOutput() ? Qt::black : Qt::gray);
 
     // N
-    painter->drawLine(371,395, 371,586+8);
-    painter->drawLine(371,586+8, 465,586+8);
+    painter->drawLine(371,395, 371,594); //586+8
+    painter->drawLine(371,594, 465,594); //586+8
 
-    painter->drawImage(QPoint(465,586+8-3),
+    painter->drawImage(QPoint(465,591), //586+8-3
                        color == Qt::gray ? arrowRightGray : arrowRight);
 
     // Z
@@ -1663,9 +1663,9 @@ void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
     painter->drawImage(QPoint(465,469),
                        color == Qt::gray ? arrowRightGray : arrowRight);
     // S
-    painter->drawLine(416,sBitLabel->y()+9, sBitLabel->x()-11,sBitLabel->y()+9);
-    painter->drawEllipse(QPoint(416,sBitLabel->y()+9), 2, 2);
-    painter->drawImage(QPoint(sBitLabel->x()-11,sBitLabel->y()+9-3),
+    painter->drawLine(416,446, 465,446); //476-11 //437+9
+    painter->drawEllipse(QPoint(416,446), 2, 2); //437+9
+    painter->drawImage(QPoint(465,443), //476-11 //437+9-3
                        color == Qt::gray ? arrowRightGray : arrowRight);
 }
 
