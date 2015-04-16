@@ -138,7 +138,7 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
             }
             else if (row == eFIG1207) {
                 microcodeEditor->setPlainText(Pep::resToString(":/help/figures/fig1207.pepcpu"));
-                ui->helpFigureLabel->setText("<b>Figure 12.5b</b> Combining cycles 1 and 3 of Figure 12.5.");
+                ui->helpFigureLabel->setText("<b>Figure 12.7</b> Combining cycles of Figure 12.5.");
             }
             else if (row == eFIG1209) {
                 microcodeEditor->setPlainText(Pep::resToString(":/help/figures/fig1209.pepcpu"));
