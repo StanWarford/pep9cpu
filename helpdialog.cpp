@@ -175,11 +175,7 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
         else {
             ui->helpSplitter->widget(0)->hide();
             ui->helpSplitter->widget(1)->show();
-            if (row == eEX1204) {
-                microcodeEditor->setPlainText(Pep::resToString(":/help/figures/exer1204.pepcpu"));
-                ui->helpFigureLabel->setText("<b>Exercise 12.4</b> The control signals to fetch the instruction specifier and increment PC by 1.");
-            }
-            else if (row == eEX1205) {
+            if (row == eEX1205) {
                 microcodeEditor->setPlainText(Pep::resToString(":/help/figures/exer1205.pepcpu"));
                 ui->helpFigureLabel->setText("<b>Exercise 12.5</b> Specification to fetch the operand specifier and increment PC.");
             }

@@ -187,11 +187,6 @@
        </property>
        <item>
         <property name="text">
-         <string>Exercise 12.4</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
          <string>Exercise 12.5</string>
         </property>
        </item>
