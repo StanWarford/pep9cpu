@@ -142,19 +142,19 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
             }
             else if (row == eFIG1209) {
                 microcodeEditor->setPlainText(Pep::resToString(":/help/figures/fig1209.pepcpu"));
-                ui->helpFigureLabel->setText("<b>Figure 12.8</b> The control signals to implement the store byte instruction with direct addressing.");
+                ui->helpFigureLabel->setText("<b>Figure 12.9</b> The control signals to implement the store byte instruction with direct addressing.");
             }
             else if (row == eFIG1210) {
                 microcodeEditor->setPlainText(Pep::resToString(":/help/figures/fig1210.pepcpu"));
-                ui->helpFigureLabel->setText("<b>Figure 12.9</b> The control signals to implement the add instruction with immediate addressing.");
+                ui->helpFigureLabel->setText("<b>Figure 12.10</b> The control signals to implement the add instruction with immediate addressing.");
             }
             else if (row == eFIG1211) {
                 microcodeEditor->setPlainText(Pep::resToString(":/help/figures/fig1211.pepcpu"));
-                ui->helpFigureLabel->setText("<b>Figure 12.10</b> The control signals to implement the load instruction with indirect addressing.");
+                ui->helpFigureLabel->setText("<b>Figure 12.11</b> The control signals to implement the load instruction with indirect addressing.");
             }
             else if (row == eFIG1213) {
                 microcodeEditor->setPlainText(Pep::resToString(":/help/figures/fig1213.pepcpu"));
-                ui->helpFigureLabel->setText("<b>Figure 12.12</b> The control signals to implement the unary ASRA instruction.");
+                ui->helpFigureLabel->setText("<b>Figure 12.13</b> The control signals to implement the unary ASRA instruction.");
             }
             else if (row == eFIG1220) {
                 microcodeEditor->setPlainText(Pep::resToString(":/help/figures/fig1220.pepcpu"));
