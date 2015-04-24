@@ -58,15 +58,15 @@ public:
     QList<QLine > _lines;
 };
 
-namespace OneByteDataBusShapes
+namespace OneByteShapes
 {
 
 // generic shapes:
 enum Shapes {
     checkW    = 60,
     checkH    = 20,
-    check2W   = checkW,
-    check2H   = 80,
+    check2W   = 80,
+    check2H   = checkH,
     labelW    = 42,
     labelH    = 20,
     dataLabelW = 69,
@@ -93,62 +93,51 @@ enum CommonPositions {
 //    const QPolygon lineEdit  = QPolygon(QRect(0,0, 25, 21));
 
     // input/label/control section:
-    const QPolygon loadCkCheckbox =     QPolygon(QRect(550, 18, check2W, check2H));
-    const QPolygon cLineEdit =          QPolygon(QRect(550, 39, lineEditW, lineEditH));
+    const QRect loadCkCheckbox =     QRect(550, 18, check2W, check2H);
+    const QRect cLineEdit =          QRect(550, 39, lineEditW, lineEditH);
     // todo: check on '21':
-    const QPolygon cLabel =             QPolygon(QRect(579, 41, labelW, 21));
-    const QPolygon bLineEdit =          QPolygon(QRect(550, 61, lineEditW, lineEditH));
-    const QPolygon bLabel =             QPolygon(QRect(579, 63, labelW, 21));
-    const QPolygon aLineEdit =          QPolygon(QRect(550, 83, lineEditW, lineEditH));
-    const QPolygon aLabel =             QPolygon(QRect(579, 85, labelW, 21));
-    const QPolygon MARCkCheckbox =      QPolygon(QRect(550, 169, check2W, check2H));
-    const QPolygon MARALabel =          QPolygon(QRect(175, 202,
-                                                       dataLabelW, dataLabelH));
-    const QPolygon MARBLabel =          QPolygon(QRect(175, 132,
-                                                       dataLabelW, dataLabelH));
-    const QPolygon MDRCkCheckbox =      QPolygon(QRect(550, 225, check2W, check2H));
-    const QPolygon aMuxLabel =          QPolygon(QRect(550, 225, labelW, labelH));
-    const QPolygon aMuxerDataLabel =    QPolygon(QRect(306, 293,
-                                                       dataLabelW, dataLabelH));
-    const QPolygon aMuxTristateLabel =  QPolygon(QRect(550, 295, labelTriW, 21));
-    const QPolygon MDRMuxLabel =        QPolygon(QRect(579, 318, 61, 20));
-    const QPolygon MDRMuxerDataLabel =  QPolygon(QRect(175,293,
-                                                       dataLabelW, dataLabelH));
-    const QPolygon MDRMuxTristateLabel = QPolygon(QRect(550, 316,
-                                                        labelTriW, labelTriH));
-    const QPolygon MDRLabel =           QPolygon(QRect(175, 254,
-                                                       dataLabelW, dataLabelH));
-    const QPolygon cMuxLabel =          QPolygon(QRect(579, 349, 61,20));
-    const QPolygon cMuxerLabel =        QPolygon(QRect(250, 374,
-                                                       dataLabelW, dataLabelH));
-    const QPolygon cMuxTristateLabel =  QPolygon(QRect(550, 348,
-                                                       labelTriW, labelTriH));
-    const QPolygon ALULineEdit  =       QPolygon(QRect(550, 368, 26, 20));
-    const QPolygon ALULabel =           QPolygon(QRect(579, 370, 31, 20));
-    const QPolygon ALUFunctionLabel =   QPolygon(QRect(332, 355, 98, 20));
+    const QRect cLabel =             QRect(579, 41, labelW, 21);
+    const QRect bLineEdit =          QRect(550, 61, lineEditW, lineEditH);
+    const QRect bLabel =             QRect(579, 63, labelW, 21);
+    const QRect aLineEdit =          QRect(550, 83, lineEditW, lineEditH);
+    const QRect aLabel =             QRect(579, 85, labelW, 21);
+    const QRect MARCkCheckbox =      QRect(550, 169, check2W, check2H);
+    const QRect MARALabel =          QRect(175, 202, dataLabelW, dataLabelH);
+    const QRect MARBLabel =          QRect(175, 132, dataLabelW, dataLabelH);
+    const QRect MDRCkCheckbox =      QRect(550, 225, check2W, check2H);
+    const QRect aMuxLabel =          QRect(550, 225, labelW, labelH);
+    const QRect aMuxerDataLabel =    QRect(306, 293, dataLabelW, dataLabelH);
+    const QRect aMuxTristateLabel =  QRect(550, 295, labelTriW, 21);
+    const QRect MDRMuxLabel =        QRect(579, 318, 61, 20);
+    const QRect MDRMuxerDataLabel =  QRect(175,293, dataLabelW, dataLabelH);
+    const QRect MDRMuxTristateLabel = QRect(550, 316, labelTriW, labelTriH);
+    const QRect MDRLabel =           QRect(175, 254, dataLabelW, dataLabelH);
+    const QRect cMuxLabel =          QRect(579, 349, 61,20);
+    const QRect cMuxerLabel =        QRect(250, 374, dataLabelW, dataLabelH);
+    const QRect cMuxTristateLabel =  QRect(550, 348, labelTriW, labelTriH);
+    const QRect ALULineEdit  =       QRect(550, 368, 26, 20);
+    const QRect ALULabel =           QRect(579, 370, 31, 20);
+    const QRect ALUFunctionLabel =   QRect(332, 355, 98, 20);
     //const QPolygon ALUPoly = QPolygon(QRect);
-    const QPolygon CSMuxLabel =         QPolygon(QRect(579, 399, labelW, labelH));
-    const QPolygon CSMuxerDataLabel =   QPolygon(QRect(476+19-69, 399,
-                                                       dataLabelW, dataLabelH));
-    const QPolygon CSMuxTristateLabel = QPolygon(QRect(550, 399, 25,21));
-    const QPolygon SCkCheckBox =        QPolygon(QRect(550, 437, checkW, checkH));
-    const QPolygon sBitLabel =          QPolygon(QRect(476, 437, 19, 19));
-    const QPolygon CCkCheckBox =        QPolygon(QRect(550, 464, checkW, checkH));
-    const QPolygon cBitLabel =          QPolygon(QRect(476, 463, 19, 19));
-    const QPolygon VCkCheckBox =        QPolygon(QRect(550, 491, checkW, checkH));
-    const QPolygon vBitLabel =          QPolygon(QRect(476, 491, 19, 19));
-    const QPolygon AndZLabel =          QPolygon(QRect(579, 517, 45, 20));
-    const QPolygon AndZTristateLabel =  QPolygon(QRect(415,542, 41,21));
-    const QPolygon AndZMuxLabel =       QPolygon(QRect(550, 544, checkW, checkH));
-    const QPolygon ZCkCheckBox =        QPolygon(QRect(476, 544, 19, 19));
-    const QPolygon NCkCheckBox =        QPolygon(QRect(550, 582+4, checkW, checkH));
-    const QPolygon nBitLabel =          QPolygon(QRect(476, 582+4, 19, 19));
-    const QPolygon MemWriteLabel =      QPolygon(QRect(579, 611, check2W, check2H));
-    const QPolygon MemWriteTristateLabel =  QPolygon(QRect(550, 611,
-                                                           labelTriW, labelTriH));
-    const QPolygon MemReadLabel =       QPolygon(QRect(579, 631, check2W, check2H));
-    const QPolygon MemReadTristateLabel =   QPolygon(QRect(550, 631,
-                                                           labelTriW, labelTriH));
+    const QRect CSMuxLabel =         QRect(579, 399, labelW, labelH);
+    const QRect CSMuxerDataLabel =   QRect(476+19-69, 399, dataLabelW, dataLabelH);
+    const QRect CSMuxTristateLabel = QRect(550, 399, 25,21);
+    const QRect SCkCheckBox =        QRect(550, 437, checkW, checkH);
+    const QRect sBitLabel =          QRect(476, 437, 19, 19);
+    const QRect CCkCheckBox =        QRect(550, 464, checkW, checkH);
+    const QRect cBitLabel =          QRect(476, 463, 19, 19);
+    const QRect VCkCheckBox =        QRect(550, 491, checkW, checkH);
+    const QRect vBitLabel =          QRect(476, 491, 19, 19);
+    const QRect AndZLabel =          QRect(579, 517, 45, 20);
+    const QRect AndZTristateLabel =  QRect(415,542, 41,21);
+    const QRect AndZMuxLabel =       QRect(550, 544, checkW, checkH);
+    const QRect ZCkCheckBox =        QRect(476, 544, 19, 19);
+    const QRect NCkCheckBox =        QRect(550, 582+4, checkW, checkH);
+    const QRect nBitLabel =          QRect(476, 582+4, 19, 19);
+    const QRect MemWriteLabel =      QRect(579, 611, check2W, check2H);
+    const QRect MemWriteTristateLabel =  QRect(550, 611, labelTriW, labelTriH);
+    const QRect MemReadLabel =       QRect(579, 631, check2W, check2H);
+    const QRect MemReadTristateLabel =   QRect(550, 631, labelTriW, labelTriH);
 
     // registers
 

@@ -31,6 +31,8 @@
 #include <QDebug>
 #include "sim.h"
 
+#include "shapes_one_byte_data_bus.h"
+
 CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
                                                    QGraphicsItem *itemParent,
                                                    QGraphicsScene *scene)
@@ -64,7 +66,7 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     // LoadCk
     loadCk = new QCheckBox("LoadCk");
     loadCk->setPalette(QPalette(Qt::white));
-    loadCk->setGeometry(550, 18, 80, 20);
+    loadCk->setGeometry(OneByteShapes::loadCkCheckbox);
     scene->addWidget(loadCk);
 
     // C
@@ -73,55 +75,56 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     QRegExp cbaRegExp("^((3[0-1])|([0-2][0-9])|([0-9]))$");
     cLineEdit = new QLineEdit();
     cLineEdit->setAlignment(Qt::AlignCenter);
-    cLineEdit->setGeometry(550, 39, 25, 21);
+    cLineEdit->setGeometry(OneByteShapes::cLineEdit);
     cLineEdit->setValidator(new QRegExpValidator(cbaRegExp, cLineEdit));
     cLineEdit->setPalette(QPalette(Qt::white));
     scene->addWidget(cLineEdit);
     cLabel = new QLabel("C");
     cLabel->setPalette(QPalette(Qt::white));
-    cLabel->setGeometry(579, 41, 20, 21);
+    cLabel->setGeometry(OneByteShapes::cLabel);
     scene->addWidget(cLabel);
 
     // B
     bLineEdit = new QLineEdit();
     bLineEdit->setAlignment(Qt::AlignCenter);
-    bLineEdit->setGeometry(550, 61, 25, 21);
+    bLineEdit->setGeometry(OneByteShapes::bLineEdit);
     bLineEdit->setValidator(new QRegExpValidator(cbaRegExp, bLineEdit));
     bLineEdit->setPalette(QPalette(Qt::white));
     scene->addWidget(bLineEdit);
     bLabel = new QLabel("B");
-    bLabel->setGeometry(579, 63, 20, 21);
+    bLabel->setGeometry(OneByteShapes::bLabel);
     bLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(bLabel);
 
     // A
     aLineEdit = new QLineEdit();
     aLineEdit->setAlignment(Qt::AlignCenter);
-    aLineEdit->setGeometry(550,83, 25, 21);
+    aLineEdit->setGeometry(OneByteShapes::aLineEdit);
     aLineEdit->setValidator(new QRegExpValidator(cbaRegExp, aLineEdit));
     aLineEdit->setPalette(QPalette(Qt::white));
     scene->addWidget(aLineEdit);
     aLabel = new QLabel("A");
-    aLabel->setGeometry(579, 85, 20, 21);
+    aLabel->setGeometry(OneByteShapes::aLabel);
     aLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(aLabel);
 
     // MARCk
     MARCk = new QCheckBox("MARCk");
-    MARCk->setGeometry(550, 169, 80, 20);
+    MARCk->setGeometry(OneByteShapes::MARCkCheckbox);
     MARCk->setPalette(QPalette(Qt::white));
     scene->addWidget(MARCk);
     MARALabel = new QLabel("0x00");
-    MARALabel->setGeometry(175,202, 69,19);
+    MARALabel->setGeometry(OneByteShapes::MARALabel);
     MARALabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MARALabel->setAutoFillBackground(false);
     MARALabel->setPalette(QPalette(seqCircuitColor));
     scene->addWidget(MARALabel);
     MARBLabel = new QLabel("0x00");
-    MARBLabel->setGeometry(175,132, 69, 19);
+    MARBLabel->setGeometry(OneByteShapes::MARBLabel);
     MARBLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MARBLabel->setPalette(QPalette(seqCircuitColor));
     scene->addWidget(MARBLabel);
+#warning Emily, pick up here.
     // MARA & MARB
     scene->addRect(175, 132, 69, 19);
     scene->addRect(175, 202, 69, 19);
