@@ -26,29 +26,36 @@
 #include <QLine>
 #include <QVector>
 #include <QPolygon>
+#include <QImage>
 
 #include <QList>
 
-class Arrow {
-    Arrow(QPoint headPos, QLine line, QLine aux = NULL) {
-        this->headPos = headPos;
-        this->line = line;
-        this->aux = aux;
-    }
+enum Direction {
+    Up,
+    Down,
+    Left,
+    Right,
+};
+
+class ArrowHead {
 public:
-    QPoint headPos;
-    QLine line;
-    QLine aux;
+    ArrowHead();
+    ArrowHead(QPoint pos, Direction dir) {
+        _pos = pos;
+        _dir = dir;
+    }
+    QPoint _pos;
+    Direction _dir;
 };
 
 class Arrow {
-    Arrow(QList<QPoint > points, QList<QLine > lines) {
-        this->points = points;
-        this->lines = lines;
-    }
 public:
-    QList<QPoint > points;
-    QList<QLine > lines;
+    Arrow (QList<ArrowHead > arrowheads, QList<QLine > lines) {
+        _arrowheads = arrowheads;
+        _lines = lines;
+    }
+    QList<ArrowHead > _arrowheads;
+    QList<QLine > _lines;
 };
 
 namespace OneByteDataBusShapes
@@ -86,7 +93,7 @@ enum CommonPositions {
 //    const QPolygon lineEdit  = QPolygon(QRect(0,0, 25, 21));
 
     // input/label/control section:
-    const QPolygon loadCk =             QPolygon(QRect(550, 18, check2W, check2H));
+    const QPolygon loadCkCheckbox =     QPolygon(QRect(550, 18, check2W, check2H));
     const QPolygon cLineEdit =          QPolygon(QRect(550, 39, lineEditW, lineEditH));
     // todo: check on '21':
     const QPolygon cLabel =             QPolygon(QRect(579, 41, labelW, 21));
@@ -94,12 +101,12 @@ enum CommonPositions {
     const QPolygon bLabel =             QPolygon(QRect(579, 63, labelW, 21));
     const QPolygon aLineEdit =          QPolygon(QRect(550, 83, lineEditW, lineEditH));
     const QPolygon aLabel =             QPolygon(QRect(579, 85, labelW, 21));
-    const QPolygon MARCk =              QPolygon(QRect(550, 169, check2W, check2H));
+    const QPolygon MARCkCheckbox =      QPolygon(QRect(550, 169, check2W, check2H));
     const QPolygon MARALabel =          QPolygon(QRect(175, 202,
                                                        dataLabelW, dataLabelH));
     const QPolygon MARBLabel =          QPolygon(QRect(175, 132,
                                                        dataLabelW, dataLabelH));
-    const QPolygon MDRCk =              QPolygon(QRect(550, 225, check2W, check2H));
+    const QPolygon MDRCkCheckbox =      QPolygon(QRect(550, 225, check2W, check2H));
     const QPolygon aMuxLabel =          QPolygon(QRect(550, 225, labelW, labelH));
     const QPolygon aMuxerDataLabel =    QPolygon(QRect(306, 293,
                                                        dataLabelW, dataLabelH));
@@ -146,27 +153,35 @@ enum CommonPositions {
     // registers
 
     // lines and shapes:
-    const Arrow loadCk = Arrow(QPoint(499,24), QLine(543, 27, 499, 27));
-    const Arrow CSelect = Arrow(QPoint(499,47), QLine(543, 50, 499, 50),
-                                QLine(543, 50, 499, 50));
-    const Arrow BSelect = Arrow(QPoint(499,69), QLine(543, 72, 499, 72),
-                                QLine(523, 67, 533, 77));
-    const Arrow ASelect = Arrow(QPoint(499,91), QLine(543,94, 499,94),
-                                QLine(523,89, 533,99));
-    const Arrow MARCk = Arrow(QList<QPoint>() << QPoint(232,155)
-                              << QPoint(232,191),
-                              QList<Qline>() << QLine(428,177, 543,177)
-                              << QLine(367,177, 416,177)
-                              << QLine(291,177, 355,177)
-                              << QLine(235,177, 279,177)
-                              << QLine(235,163, 235,191));
-    const Arrow MDRCk = Arrow(QList<QPoint>({QPoint(207,241)}),
+    const Arrow loadCkSelect = Arrow(QList<ArrowHead>()
+                                     << ArrowHead(QPoint(499, 24), Left),
+                                     QList<QLine>() << QLine(543, 27, 499, 27));
+    const Arrow CSelect = Arrow(QList<ArrowHead>() << ArrowHead(QPoint(499, 47), Left),
+                                QList<QLine>() << QLine(543, 50, 499, 50)
+                                               << QLine(543, 50, 499, 50));
+    const Arrow BSelect = Arrow(QList<ArrowHead>() << ArrowHead(QPoint(499, 69), Left),
+                                QList<QLine>() << QLine(543, 72, 499, 72)
+                                               << QLine(523, 67, 533, 77));
+    const Arrow ASelect = Arrow(QList<ArrowHead>() << ArrowHead(QPoint(499, 91), Left),
+                                QList<QLine>() << QLine(543, 94, 499, 94)
+                                               << QLine(523, 89, 533, 99));
+    const Arrow MARCk = Arrow(QList<ArrowHead>()
+                                            << ArrowHead(QPoint(232,155), Up)
+                                            << ArrowHead(QPoint(232,191), Down),
+                              QList<QLine > () << QLine(428,177, 543,177)
+                                            << QLine(367,177, 416,177)
+                                            << QLine(291,177, 355,177)
+                                            << QLine(235,177, 279,177)
+                                            << QLine(235,163, 235,191));
+    const Arrow MDRCk = Arrow(QList<ArrowHead>()
+                                            << ArrowHead(QPoint(207,241), Down),
                               QList<QLine>() << QLine(210,233, 279,233)
                               << QLine(291,233, 355,233)
                               << QLine(367,233, 416,233)
                               << QLine(428,233, 543,233)
                               << QLine(210,233, 210,241));
-    const Arrow AMuxSelect = Arrow(QList<QPoint>() << QPoint(380,300),
+    const Arrow AMuxSelect = Arrow(QList<ArrowHead>()
+                                                 << ArrowHead(QPoint(380,300), Left),
                                    QList<QLine>() << QLine(388, 303, 416, 303)
                                    << QLine(428, 303, 543, 303));
     const QPolygon AMuxBus = QPolygon(QVector<QPoint>() << QPoint(336,312)
@@ -176,7 +191,8 @@ enum CommonPositions {
                                       << QPoint(351,331)
                                       << QPoint(346,331)
                                       << QPoint(346,312));
-    const Arrow CMuxSelect = Arrow(QList<QPoint() << QPoint(257,362),
+    const Arrow CMuxSelect = Arrow(QList<ArrowHead>()
+                                                 << ArrowHead(QPoint(257,362), Down),
                                    QList<QLine>() << QLine(449,355, 543,355)
                                    << QLine(315,355, 290,355)
                                    << QLine(280,355, 260,355)
