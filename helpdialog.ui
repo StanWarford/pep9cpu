@@ -167,7 +167,12 @@
        </item>
        <item>
         <property name="text">
-         <string>Figure 12.13</string>
+         <string>Figure 12.12</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Figure 12.14</string>
         </property>
        </item>
        <item>
