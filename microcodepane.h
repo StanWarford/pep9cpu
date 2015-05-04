@@ -1,7 +1,7 @@
 // File: microcodepane.h
 /*
     Pep9CPU is a CPU simulator for executing microcode sequences to
-    implement instructions in the instruction set of the Pep/8 computer.
+    implement instructions in the instruction set of the Pep/9 computer.
 
     Copyright (C) 2010  J. Stanley Warford, Pepperdine University
 
@@ -42,7 +42,7 @@ public:
     void initCPUModelState();
 
     bool microAssemble();
-    // Pre: The source code pane contains a Pep/8 microcode program.
+    // Pre: The source code pane contains a Pep/9 microcode program.
     // Post: If the program assembles correctly, true is returned, and codeList is populated
     // with the code structs. Otherwise false is returned and codeList is partially populated.
 

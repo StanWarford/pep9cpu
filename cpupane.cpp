@@ -1,7 +1,7 @@
 // File: cpupane.cpp
 /*
     Pep9CPU is a CPU simulator for executing microcode sequences to
-    implement instructions in the instruction set of the Pep/8 computer.
+    implement instructions in the instruction set of the Pep/9 computer.
 
     Copyright (C) 2010  J. Stanley Warford, Pepperdine University
 
@@ -930,7 +930,7 @@ void CpuPane::clockButtonPushed()
     QString errorString;
     if (!step(errorString)) {
         // simulation had issues.
-        QMessageBox::warning(0, "Pep/8", errorString);
+        QMessageBox::warning(0, "Pep/9", errorString);
         emit stopSimulation();
     }
     scene->invalidate();
@@ -943,7 +943,7 @@ void CpuPane::singleStepButtonPushed()
 
     if (!step(errorString)) {
         // simulation had issues.
-        QMessageBox::warning(0, "Pep/8", errorString);
+        QMessageBox::warning(0, "Pep/9", errorString);
         emit stopSimulation();
 
     }
@@ -987,7 +987,7 @@ void CpuPane::resumeButtonPushed()
     while (!finished) { // we set the flag to false when we're done with simulation, or have errors
         if (!step(errorString)) {
             // simulation had issues.
-            QMessageBox::warning(0, "Pep/8", errorString);
+            QMessageBox::warning(0, "Pep/9", errorString);
             finished = true;
             emit stopSimulation();
 //            emit simulationFinished();
