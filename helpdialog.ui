@@ -138,7 +138,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Examples</string>
+        <string>One-byte Bus Examples</string>
        </property>
        <item>
         <property name="text">
@@ -188,136 +188,156 @@
       </item>
       <item>
        <property name="text">
-        <string>Exercises</string>
+        <string>Two-byte Bus Examples</string>
        </property>
        <item>
         <property name="text">
-         <string>Exercise 12.5</string>
+         <string>Figure 12.20</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (a)</string>
+         <string>Figure 12.21</string>
+        </property>
+       </item>
+      </item>
+      <item>
+       <property name="text">
+        <string>One-byte Bus Problems</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Problem 12.5</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (b)</string>
+         <string>Problem 12.6 (a)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (c)</string>
+         <string>Problem 12.6 (b)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (d)</string>
+         <string>Problem 12.6 (c)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (e)</string>
+         <string>Problem 12.6 (d)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (f)</string>
+         <string>Problem 12.6 (e)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (g)</string>
+         <string>Problem 12.6 (f)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (h)</string>
+         <string>Problem 12.6 (g)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (i)</string>
+         <string>Problem 12.6 (h)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (j)</string>
+         <string>Problem 12.6 (i)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (k)</string>
+         <string>Problem 12.6 (j)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (l)</string>
+         <string>Problem 12.6 (k)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (m)</string>
+         <string>Problem 12.6 (l)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (n)</string>
+         <string>Problem 12.6 (m)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (o)</string>
+         <string>Problem 12.6 (n)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (p)</string>
+         <string>Problem 12.6 (o)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (q)</string>
+         <string>Problem 12.6 (p)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (r)</string>
+         <string>Problem 12.6 (q)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (s)</string>
+         <string>Problem 12.6 (r)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (t)</string>
+         <string>Problem 12.6 (s)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (u)</string>
+         <string>Problem 12.6 (t)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (v)</string>
+         <string>Problem 12.6 (u)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (w)</string>
+         <string>Problem 12.6 (v)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.6 (x)</string>
+         <string>Problem 12.6 (w)</string>
+        </property>
+       </item>
+      </item>
+      <item>
+       <property name="text">
+        <string>Two-byte Bus Problems</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Problem 12.6(x)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Exercise 12.7</string>
+         <string>Problem 12.7</string>
         </property>
        </item>
       </item>

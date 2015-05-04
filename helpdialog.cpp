@@ -1,7 +1,7 @@
 // File: helpdialog.cpp
 /*
     Pep9CPU is a CPU simulator for executing microcode sequences to
-    implement instructions in the instruction set of the Pep/8 computer.
+    implement instructions in the instruction set of the Pep/9 computer.
 
     Copyright (C) 2010  J. Stanley Warford, Pepperdine University
 
@@ -96,7 +96,7 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
     // Row (if it has a parent, this is the child row)
     int row = ui->helpTreeWidget->currentIndex().row();
 
-//    qDebug() << "Selected: " << ui->helpTreeWidget->currentIndex();
+    //    qDebug() << "Selected: " << ui->helpTreeWidget->currentIndex();
 
     if (!isHelpSubCat && row == eUSINGPEP9CPU) { // Using Pep/9 CPU
         ui->helpSplitter->widget(1)->hide();
@@ -118,12 +118,12 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
         ui->helpTopWebView->show();
         ui->helpTopWebView->load(QUrl("qrc:/help/debugging.html"));
     }
-    else if (!isHelpSubCat && row == ePEP9REFERENCE) { // Pep/8 Reference
+    else if (!isHelpSubCat && row == ePEP9REFERENCE) { // Pep/9 Reference
         ui->helpSplitter->widget(1)->hide();
         ui->helpTopWebView->show();
         ui->helpTopWebView->load(QUrl("qrc:/help/pep9reference.html"));
     }
-    else if ((!isHelpSubCat && row == eEXAMPLES) || parentRow == eEXAMPLES) {
+    else if ((!isHelpSubCat && row == eONEBYTEBUSEXAMPLES) || parentRow == eONEBYTEBUSEXAMPLES) {
         if (!isHelpSubCat) {
             ui->helpSplitter->widget(1)->hide();
             ui->helpTopWebView->show();
@@ -160,7 +160,18 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
                 microcodeEditor->setPlainText(Pep::resToString(":/help/figures/fig1214.pepcpu"));
                 ui->helpFigureLabel->setText("<b>Figure 12.14</b> The control signals to implement the unary ASRA instruction.");
             }
-            else if (row == eFIG1220) {
+        }
+    }
+    else if ((!isHelpSubCat && row == eONEBYTEBUSEXAMPLES) || parentRow == eONEBYTEBUSEXAMPLES) {
+        if (!isHelpSubCat) {
+            ui->helpSplitter->widget(1)->hide();
+            ui->helpTopWebView->show();
+            ui->helpTopWebView->load(QUrl("qrc:/help/examples.html"));
+        }
+        else {
+            ui->helpSplitter->widget(0)->hide();
+            ui->helpSplitter->widget(1)->show();
+            if (row == eFIG1220) {
                 microcodeEditor->setPlainText(Pep::resToString(":/help/figures/fig1220.pepcpu"));
                 ui->helpFigureLabel->setText("<b>Figure 12.20</b> The control signals to fetch the instruction specifier and increment PC by 1.");
             }
@@ -170,7 +181,7 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
             }
         }
     }
-    else if ((!isHelpSubCat && row == eEXCERCISES) || parentRow == eEXCERCISES) {
+    else if ((!isHelpSubCat && row == eONEBYTEBUSEXCERCISES) || parentRow == eONEBYTEBUSEXCERCISES) {
         if (!isHelpSubCat) {
             ui->helpSplitter->widget(1)->hide();
             ui->helpTopWebView->show();
@@ -275,7 +286,18 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
                 microcodeEditor->setPlainText(Pep::resToString(":/help/figures/exer1206w.pepcpu"));
                 ui->helpFigureLabel->setText("<b>Exercise 12.6 (w)</b> Specification for <code>MOVFLGA</code>.");
             }
-            else if (row == eEX1206X) {
+        }
+    }
+    else if ((!isHelpSubCat && row == eTWOBYTEBUSEXCERCISES) || parentRow == eTWOBYTEBUSEXCERCISES) {
+        if (!isHelpSubCat) {
+            ui->helpSplitter->widget(1)->hide();
+            ui->helpTopWebView->show();
+            ui->helpTopWebView->load(QUrl("qrc:/help/exercises.html"));
+        }
+        else {
+            ui->helpSplitter->widget(0)->hide();
+            ui->helpSplitter->widget(1)->show();
+            if (row == eEX1206X) {
                 microcodeEditor->setPlainText(Pep::resToString(":/help/figures/exer1206x.pepcpu"));
                 ui->helpFigureLabel->setText("<b>Exercise 12.6 (x)</b> Specification for <code>RETTR</code>.");
             }

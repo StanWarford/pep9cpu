@@ -58,8 +58,10 @@ private:
     enum Row {
         eUSINGPEP9CPU = 0,
         ePEP9REFERENCE = 1,
-        eEXAMPLES = 2,
-        eEXCERCISES = 3,
+        eONEBYTEBUSEXAMPLES = 2,
+        eTWOBYTEBUSEXAMPLES = 3,
+        eONEBYTEBUSEXCERCISES = 4,
+        eTWOBYTEBUSEXCERCISES = 5,
 
         eCPU = 0,
         eMICROCODE = 1,
@@ -72,8 +74,9 @@ private:
         eFIG1211 = 4,
         eFIG1212 = 5,
         eFIG1214 = 6,
-        eFIG1220 = 7,
-        eFIG1221 = 8,
+
+        eFIG1220 = 0,
+        eFIG1221 = 1,
 
         eEX1205 = 0,
         eEX1206A = 1,
@@ -99,8 +102,9 @@ private:
         eEX1206U = 21,
         eEX1206V = 22,
         eEX1206W = 23,
-        eEX1206X = 24,
-        eEX1207 = 25,
+
+        eEX1206X = 0,
+        eEX1207 = 1,
     };
 
 private slots:
