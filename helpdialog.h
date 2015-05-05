@@ -60,8 +60,8 @@ private:
         ePEP9REFERENCE = 1,
         eONEBYTEBUSEXAMPLES = 2,
         eTWOBYTEBUSEXAMPLES = 3,
-        eONEBYTEBUSEXCERCISES = 4,
-        eTWOBYTEBUSEXCERCISES = 5,
+        eONEBYTEBUSPROBLEMS = 4,
+        eTWOBYTEBUSPROBLEMS = 5,
 
         eCPU = 0,
         eMICROCODE = 1,

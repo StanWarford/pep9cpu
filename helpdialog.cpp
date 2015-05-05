@@ -127,7 +127,7 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
         if (!isHelpSubCat) {
             ui->helpSplitter->widget(1)->hide();
             ui->helpTopWebView->show();
-            ui->helpTopWebView->load(QUrl("qrc:/help/examples.html"));
+            ui->helpTopWebView->load(QUrl("qrc:/help/onebytebusexamples.html"));
         }
         else {
             ui->helpSplitter->widget(0)->hide();
@@ -162,11 +162,11 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
             }
         }
     }
-    else if ((!isHelpSubCat && row == eONEBYTEBUSEXAMPLES) || parentRow == eONEBYTEBUSEXAMPLES) {
+    else if ((!isHelpSubCat && row == eTWOBYTEBUSEXAMPLES) || parentRow == eTWOBYTEBUSEXAMPLES) {
         if (!isHelpSubCat) {
             ui->helpSplitter->widget(1)->hide();
             ui->helpTopWebView->show();
-            ui->helpTopWebView->load(QUrl("qrc:/help/examples.html"));
+            ui->helpTopWebView->load(QUrl("qrc:/help/twobytebusexamples.html"));
         }
         else {
             ui->helpSplitter->widget(0)->hide();
@@ -181,11 +181,11 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
             }
         }
     }
-    else if ((!isHelpSubCat && row == eONEBYTEBUSEXCERCISES) || parentRow == eONEBYTEBUSEXCERCISES) {
+    else if ((!isHelpSubCat && row == eONEBYTEBUSPROBLEMS) || parentRow == eONEBYTEBUSPROBLEMS) {
         if (!isHelpSubCat) {
             ui->helpSplitter->widget(1)->hide();
             ui->helpTopWebView->show();
-            ui->helpTopWebView->load(QUrl("qrc:/help/exercises.html"));
+            ui->helpTopWebView->load(QUrl("qrc:/help/onebytebusproblems.html"));
         }
         else {
             ui->helpSplitter->widget(0)->hide();
@@ -288,11 +288,11 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
             }
         }
     }
-    else if ((!isHelpSubCat && row == eTWOBYTEBUSEXCERCISES) || parentRow == eTWOBYTEBUSEXCERCISES) {
+    else if ((!isHelpSubCat && row == eTWOBYTEBUSPROBLEMS) || parentRow == eTWOBYTEBUSPROBLEMS) {
         if (!isHelpSubCat) {
             ui->helpSplitter->widget(1)->hide();
             ui->helpTopWebView->show();
-            ui->helpTopWebView->load(QUrl("qrc:/help/exercises.html"));
+            ui->helpTopWebView->load(QUrl("qrc:/help/twobytebusproblems.html"));
         }
         else {
             ui->helpSplitter->widget(0)->hide();
