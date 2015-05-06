@@ -1262,7 +1262,7 @@ bool CpuPane::getALUOut(quint8 &result, quint8& a, quint8& b, int& carry, int& o
         break;
     case 12: // ROL A
         if (getAMuxOut(a, errorString) && getCSMuxOut(cin, errorString)) {
-            output = ((a << 1) & 0xfe) + !!cin;
+            output = ((a << 1) & 0xfe) | (cin & 0x01);
             carry = (a & 0x80) >> 7;
             result = output;
         }
