@@ -1377,11 +1377,11 @@ bool CpuPane::isCorrectALUInput(int ALUFn) {
 
 bool CpuPane::getCSMuxOut(bool &out, QString &errorString)
 {
-    if (cpuPaneItems->cMuxTristateLabel->text() == "0") {
+    if (cpuPaneItems->CSMuxTristateLabel->text() == "0") {
         out = Sim::cBit;
         return true;
     }
-    else if (cpuPaneItems->cMuxTristateLabel->text() == "1") {
+    else if (cpuPaneItems->CSMuxTristateLabel->text() == "1") {
         out = Sim::sBit;
         return true;
     }
@@ -1389,7 +1389,6 @@ bool CpuPane::getCSMuxOut(bool &out, QString &errorString)
         errorString.append("CSMux control signal not specified.\n");
     }
     return false;
-
 }
 
 bool CpuPane::getCMuxOut(quint8 &out, QString &errorString)
