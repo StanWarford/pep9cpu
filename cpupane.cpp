@@ -1194,9 +1194,9 @@ bool CpuPane::getALUOut(quint8 &result, quint8& a, quint8& b, int& carry, int& o
         break;
     case 2: // A plus B plus Cin
         if (getAMuxOut(a, errorString) && getBBusOut(b, errorString) && getCSMuxOut(cin, errorString)) {
-            output = a + b + !!cin;
+            output = a + b + (cin ? 1 : 0);
             carry = ((output & 0x1ff) >> 8) & 0x1;
-            overflow = ((((a & 0x7f) + (b & 0x7f) + !!cin) >> 7) & 0x1) ^ carry;
+            overflow = ((((a & 0x7f) + (b & 0x7f) + (cin ? 1 : 0)) >> 7) & 0x1) ^ carry;
             result = output;
         }
         break;
@@ -1210,9 +1210,9 @@ bool CpuPane::getALUOut(quint8 &result, quint8& a, quint8& b, int& carry, int& o
         break;
     case 4: // A plus ~B plus Cin
         if (getAMuxOut(a, errorString) && getBBusOut(b, errorString) && getCSMuxOut(cin, errorString)) {
-            output = a + ((~b) & 0xff) + !!cin;
+            output = a + ((~b) & 0xff) + (cin ? 1 : 0);
             carry = ((output & 0x1ff) >> 8) & 0x1;
-            overflow = ((((a & 0x7f) + ((~b) & 0x7f) + !!cin) >> 7) & 0x1) ^ carry;
+            overflow = ((((a & 0x7f) + ((~b) & 0x7f) + (cin ? 1 : 0)) >> 7) & 0x1) ^ carry;
             result = output;
         }
         break;
@@ -1262,8 +1262,9 @@ bool CpuPane::getALUOut(quint8 &result, quint8& a, quint8& b, int& carry, int& o
         break;
     case 12: // ROL A
         if (getAMuxOut(a, errorString) && getCSMuxOut(cin, errorString)) {
-            output = ((a << 1) & 0xfe) | (cin & 0x01);
+            output = ((a << 1) & 0xfe) | (cin ? 1 : 0);
             carry = (a & 0x80) >> 7;
+            overflow = ((a & 0x40) >> 6) ^ carry;
             result = output;
         }
         break;
@@ -1276,7 +1277,7 @@ bool CpuPane::getALUOut(quint8 &result, quint8& a, quint8& b, int& carry, int& o
         break;
     case 14: // ROR A
         if (getAMuxOut(a, errorString) && getCSMuxOut(cin, errorString)) {
-            output = ((a >> 1) & 0x7f) | (!!cin << 7);
+            output = ((a >> 1) & 0x7f) | ((cin ? 1 : 0) << 7);
             carry = a & 1;
             result = output;
         }
@@ -1394,7 +1395,7 @@ bool CpuPane::getCSMuxOut(bool &out, QString &errorString)
 bool CpuPane::getCMuxOut(quint8 &out, QString &errorString)
 {
     if (cpuPaneItems->cMuxTristateLabel->text() == "0") {
-        out = (Sim::nBit ? 8 : 0) + (Sim::zBit ? 4 : 0) + (Sim::vBit ? 2 : 0) + (!!Sim::cBit);
+        out = (Sim::nBit ? 8 : 0) + (Sim::zBit ? 4 : 0) + (Sim::vBit ? 2 : 0) + (Sim::cBit ? 1 : 0);
         // qDebug() << QString("0x%1").arg(out, 4, 16, QLatin1Char('0'));
         return true;
     }
