@@ -232,6 +232,11 @@
        </item>
        <item>
         <property name="text">
+         <string>Problem 12.51 (g)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>Problem 12.52</string>
         </property>
        </item>
