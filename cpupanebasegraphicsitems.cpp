@@ -719,7 +719,7 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     ph->setGeometry(418,66, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
-    ph = new QLabel("0xFAFC");
+    ph = new QLabel("0xF0F6");
     ph->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     ph->setGeometry(440,67, 55,19);
     ph->setPalette(QPalette(seqCircuitColor));

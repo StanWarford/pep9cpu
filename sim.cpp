@@ -132,8 +132,8 @@ void Sim::initMRegs()
     regBank[25] = 0x03;
     regBank[26] = 0x04;
     regBank[27] = 0x08;
-    regBank[28] = 0xFA;
-    regBank[29] = 0xFC;
+    regBank[28] = 0xF0;
+    regBank[29] = 0xF6;
     regBank[30] = 0xFE;
     regBank[31] = 0xFF;
 }
