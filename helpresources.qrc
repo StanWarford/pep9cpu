@@ -110,5 +110,6 @@
         <file>help/figures/prob1255e.pepcpu</file>
         <file>help/figures/prob1255f.pepcpu</file>
         <file>help/figures/prob1251g.pepcpu</file>
+        <file>help/figures/fig1223.pepcpu</file>
     </qresource>
 </RCC>

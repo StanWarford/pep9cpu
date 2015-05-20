@@ -77,6 +77,7 @@ private:
 
         eFIG1220 = 0,
         eFIG1221 = 1,
+        eFIG1223 = 2,
 
         ePR1250 = 0,
         ePR1251A = 1,

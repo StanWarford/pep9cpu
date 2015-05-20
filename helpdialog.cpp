@@ -173,11 +173,15 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
             ui->helpSplitter->widget(1)->show();
             if (row == eFIG1220) {
                 microcodeEditor->setPlainText(Pep::resToString(":/help/figures/fig1220.pepcpu"));
-                ui->helpFigureLabel->setText("<b>Figure 12.20</b> The control signals to fetch the instruction specifier and increment PC by 1.");
+                ui->helpFigureLabel->setText("<b>Figure 12.20</b> The fetch and increment part of the von Neumann cycle with the two-byte data bus.");
             }
             else if (row == eFIG1221) {
                 microcodeEditor->setPlainText(Pep::resToString(":/help/figures/fig1221.pepcpu"));
-                ui->helpFigureLabel->setText("<b>Figure 12.21</b> The control signals to retrieve the pre-fetched instruction specifier.");
+                ui->helpFigureLabel->setText("<b>Figure 12.21</b> The fetch and increment part of the von Neumann cycle with pre-fetched instruction specifier.");
+            }
+            else if (row == eFIG1223) {
+                microcodeEditor->setPlainText(Pep::resToString(":/help/figures/fig1223.pepcpu"));
+                ui->helpFigureLabel->setText("<b>Figure 12.23</b> The two-byte bus implementation of the load word instruction with indirect addressing.");
             }
         }
     }
