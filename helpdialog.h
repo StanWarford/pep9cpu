@@ -116,6 +116,24 @@ private:
 
         ePR1256A = 0,
         ePR1256B = 1,
+        ePR1257A = 2,
+        ePR1257B = 3,
+        ePR1257C = 4,
+        ePR1257D = 5,
+        ePR1257E = 6,
+        ePR1257F = 7,
+        ePR1257G = 8,
+        ePR1257H = 9,
+        ePR1257I = 10,
+        ePR1257J = 11,
+        ePR1257K = 12,
+        ePR1257L = 13,
+        ePR1258A = 14,
+        ePR1258B = 15,
+        ePR1258C = 16,
+        ePR1258D = 17,
+        ePR1258E = 18,
+        ePR1258F = 19,
     };
 
 private slots:

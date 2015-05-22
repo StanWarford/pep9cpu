@@ -377,12 +377,102 @@
        </property>
        <item>
         <property name="text">
-         <string>Problem 12.56(a)</string>
+         <string>Problem 12.56 (a)</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Problem 12.56(b)</string>
+         <string>Problem 12.56 (b)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.57 (a)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.57 (b)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.57 (c)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.57 (d)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.57 (e)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.57 (f)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.57 (g)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.57 (h)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.57 (i)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.57 (j)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.57 (k)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.57 (l)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.58 (a)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.58 (b)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.58 (c)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.58 (d)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.58 (e)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Problem 12.58 (f)</string>
         </property>
        </item>
       </item>

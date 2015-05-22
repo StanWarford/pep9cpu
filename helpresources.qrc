@@ -108,5 +108,23 @@
         <file>help/figures/fig1223.pepcpu</file>
         <file>help/figures/prob1256a.pepcpu</file>
         <file>help/figures/prob1256b.pepcpu</file>
+        <file>help/figures/prob1257a.pepcpu</file>
+        <file>help/figures/prob1257b.pepcpu</file>
+        <file>help/figures/prob1257c.pepcpu</file>
+        <file>help/figures/prob1257d.pepcpu</file>
+        <file>help/figures/prob1257e.pepcpu</file>
+        <file>help/figures/prob1257f.pepcpu</file>
+        <file>help/figures/prob1257g.pepcpu</file>
+        <file>help/figures/prob1257h.pepcpu</file>
+        <file>help/figures/prob1257i.pepcpu</file>
+        <file>help/figures/prob1257j.pepcpu</file>
+        <file>help/figures/prob1257k.pepcpu</file>
+        <file>help/figures/prob1257l.pepcpu</file>
+        <file>help/figures/prob1258a.pepcpu</file>
+        <file>help/figures/prob1258b.pepcpu</file>
+        <file>help/figures/prob1258c.pepcpu</file>
+        <file>help/figures/prob1258d.pepcpu</file>
+        <file>help/figures/prob1258e.pepcpu</file>
+        <file>help/figures/prob1258f.pepcpu</file>
     </qresource>
 </RCC>
