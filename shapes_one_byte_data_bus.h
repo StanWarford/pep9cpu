@@ -105,7 +105,7 @@ enum CommonPositions {
     const QRect MARALabel =          QRect(175, 202, dataLabelW, dataLabelH);
     const QRect MARBLabel =          QRect(175, 132, dataLabelW, dataLabelH);
     const QRect MDRCkCheckbox =      QRect(550, 225, check2W, check2H);
-    const QRect aMuxLabel =          QRect(550, 225, labelW, labelH);
+    const QRect aMuxLabel =          QRect(579, 297, labelW, labelH);
     const QRect aMuxerDataLabel =    QRect(306, 293, dataLabelW, dataLabelH);
     const QRect aMuxTristateLabel =  QRect(550, 295, labelTriW, 21);
     const QRect MDRMuxLabel =        QRect(579, 318, 61, 20);
@@ -129,9 +129,12 @@ enum CommonPositions {
     const QRect VCkCheckBox =        QRect(550, 491, checkW, checkH);
     const QRect vBitLabel =          QRect(476, 491, 19, 19);
     const QRect AndZLabel =          QRect(579, 517, 45, 20);
-    const QRect AndZTristateLabel =  QRect(415,542, 41,21);
-    const QRect AndZMuxLabel =       QRect(550, 544, checkW, checkH);
-    const QRect ZCkCheckBox =        QRect(476, 544, 19, 19);
+    //const QRect AndZTristateLabel =  QRect(415, 542, 41,21);
+    const QRect AndZTristateLabel =  QRect(550, 517, labelTriW,labelTriH);
+    //const QRect AndZMuxLabel =       QRect(550, 544, checkW, checkH);
+    const QRect AndZMuxLabel =       QRect(416, 544, 41,21);
+    const QRect ZCkCheckBox =        QRect(550, 544, 60, 20);
+    const QRect zBitLabel =          QRect(476, 544, 19, 19);
     const QRect NCkCheckBox =        QRect(550, 582+4, checkW, checkH);
     const QRect nBitLabel =          QRect(476, 582+4, 19, 19);
     const QRect MemWriteLabel =      QRect(579, 611, check2W, check2H);
@@ -195,6 +198,33 @@ enum CommonPositions {
                                       << QPoint(225,326) << QPoint(230,326)
                                       << QPoint(230,344) << QPoint(280,344)
                                       << QPoint(280,374));
+
+    const QPolygon ALUPoly = QPolygon(QVector<QPoint>() << QPoint(314,342)
+                                      << QPoint(366,342) << QPoint(370,353)
+                                      << QPoint(390,353) << QPoint(394,342)
+                                      << QPoint(447,342) << QPoint(421,394)
+                                      << QPoint(340,394));
+
+    const QRect MDRBusOutRect = QRect(244, 258, 36, 10);
+    const QPolygon MDRBusOutArrow = QPolygon(QVector<QPoint>() << QPoint(290,258)
+                                             << QPoint(326,258) << QPoint(326,280)
+                                             << QPoint(331,280) << QPoint(321,290)
+                                             << QPoint(311,280) << QPoint(316,280)
+                                             << QPoint(316,268) << QPoint(290,268));
+
+    const QPolygon MARBus = QPolygon(QVector<QPoint>() << QPoint(205,151)
+                                     << QPoint(205,167)
+                                     // arrow:
+                                     << QPoint(88,167)  << QPoint(88,162)
+                                     << QPoint(73,177)  << QPoint(88,192)
+                                     << QPoint(88,187)  << QPoint(205,187)
+                                     << QPoint(205,202) << QPoint(215,202)
+                                     << QPoint(215,151) );
+    const QPolygon poly = QPolygon(QVector<QPoint>() << QPoint(310,513)
+                                       << QPoint(269,513) << QPoint(269,407)
+                                       << QPoint(274,407) << QPoint(264,397)
+                                       << QPoint(254,407) << QPoint(259,407)
+                                       << QPoint(259,523) << QPoint(310,523));
 
 
 
