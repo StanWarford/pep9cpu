@@ -341,13 +341,13 @@ void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
         else {
             ui->helpSplitter->widget(0)->hide();
             ui->helpSplitter->widget(1)->show();
-            if (row == eEX1206X) {
-                microcodeEditor->setPlainText(Pep::resToString(":/help/figures/exer1206x.pepcpu"));
-                ui->helpFigureLabel->setText("<b>Exercise 12.6 (x)</b> Specification for <code>RETTR</code>.");
+            if (row == ePR1256A) {
+                microcodeEditor->setPlainText(Pep::resToString(":/help/figures/prob1256a.pepcpu"));
+                ui->helpFigureLabel->setText("<b>Exercise 12.56 (a)</b> Specification to fetch OprndSpec assuming no previous pre-fetch.");
             }
-            else if (row == eEX1207) {
-                microcodeEditor->setPlainText(Pep::resToString(":/help/figures/exer1207.pepcpu"));
-                ui->helpFigureLabel->setText("<b>Exercise 12.7</b> Specification for <code>DECO num,i</code>, which is a trap instruction.");
+            else if (row == ePR1256B) {
+                microcodeEditor->setPlainText(Pep::resToString(":/help/figures/prob1256b.pepcpu"));
+                ui->helpFigureLabel->setText("<b>Exercise 12.56 (b)</b> Specification to fetch OprndSpec assuming previous pre-fetch.");
             }
         }
     }

@@ -114,8 +114,8 @@ private:
         ePR1255E = 32,
         ePR1255F = 33,
 
-        eEX1206X = 0,
-        eEX1207 = 1,
+        ePR1256A = 0,
+        ePR1256B = 1,
     };
 
 private slots:

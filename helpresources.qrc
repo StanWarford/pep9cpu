@@ -9,11 +9,6 @@
         <file>help/cpu.html</file>
         <file>help/microcode.html</file>
         <file>help/onebytebusexamples.html</file>
-        <file>help/figures/exer1206u.pepcpu</file>
-        <file>help/figures/exer1206v.pepcpu</file>
-        <file>help/figures/exer1206w.pepcpu</file>
-        <file>help/figures/exer1206x.pepcpu</file>
-        <file>help/figures/exer1207.pepcpu</file>
         <file>help/onebytebusproblems.html</file>
         <file>help/images/fourbuttonsinteractivemode.png</file>
         <file>help/images/fourbuttonsmicrocodemode.png</file>
@@ -111,5 +106,7 @@
         <file>help/figures/prob1255f.pepcpu</file>
         <file>help/figures/prob1251g.pepcpu</file>
         <file>help/figures/fig1223.pepcpu</file>
+        <file>help/figures/prob1256a.pepcpu</file>
+        <file>help/figures/prob1256b.pepcpu</file>
     </qresource>
 </RCC>
