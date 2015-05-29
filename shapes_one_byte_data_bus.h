@@ -220,14 +220,96 @@ enum CommonPositions {
                                      << QPoint(88,187)  << QPoint(205,187)
                                      << QPoint(205,202) << QPoint(215,202)
                                      << QPoint(215,151) );
-    const QPolygon poly = QPolygon(QVector<QPoint>() << QPoint(310,513)
+    const QPolygon NZVCDataPath = QPolygon(QVector<QPoint>() << QPoint(310,513)
                                        << QPoint(269,513) << QPoint(269,407)
                                        << QPoint(274,407) << QPoint(264,397)
                                        << QPoint(254,407) << QPoint(259,407)
                                        << QPoint(259,523) << QPoint(310,523));
+    const QRect RegBank = QRect(5, 5, 491, 113);
 
+    const QRect aRegLineEdit = QRect(52, 10, regLineEditW, regLineEditH);
+    const QRect xRegLineEdit = QRect(52, 38, regLineEditW, regLineEditH);
+    const QRect spRegLineEdit = QRect(52, 66, regLineEditW, regLineEditH);
+    const QRect pcRegLineEdit = QRect(52, 94, regLineEditW, regLineEditH);
+    const QRect irRegLineEdit = QRect(184, 10, regLineEditW + 15, regLineEditH);
+    const QRect t1RegLineEdit = QRect(184, 38, regLineEditW - 15, regLineEditH);
+    const QRect t2RegLineEdit = QRect(184, 66, regLineEditW, regLineEditH);
+    const QRect t3RegLineEdit = QRect(184, 94, regLineEditW, regLineEditH);
+    const QRect t4RegLineEdit = QRect(311, 10, regLineEditW, regLineEditH);
+    const QRect t5RegLineEdit = QRect(311, 38, regLineEditW, regLineEditH);
+    const QRect t6RegLineEdit = QRect(311, 66, regLineEditW, regLineEditH);
+    const QRect m1RegLabel = QRect(311, 94, regLineEditW - 10, regLineEditH);
+    const QRect m2RegLabel = QRect(440, 10, regLineEditW - 10, regLineEditH);
+    const QRect m3RegLabel = QRect(440, 38, regLineEditW - 10, regLineEditH);
+    const QRect m4RegLabel = QRect(440, 64, regLineEditW - 10, regLineEditH);
+    const QRect m5RegLabel = QRect(440, 94, regLineEditW - 10, regLineEditH);
 
+    const QPolygon BBus1 = QPolygon(QVector<QPoint>()   << QPoint(417, 118)
+                                    << QPoint(417, 136) << QPoint(366, 136)
+                                    << QPoint(366, 146) << QPoint(417, 146)
+                                    << QPoint(417, 331) << QPoint(412, 331)
+                                    << QPoint(422, 341) << QPoint(432, 331)
+                                    << QPoint(427, 331) << QPoint(427, 118));
+    const QRect BBusRect = QRect(290, 136, 67, 11);
+    const QPolygon BBus2 = QPolygon(QVector<QPoint>()   << QPoint(280, 136)
+                                    << QPoint(258, 136) << QPoint(258, 131)
+                                    << QPoint(248, 141) << QPoint(258, 151)
+                                    << QPoint(258, 146) << QPoint(280, 146)
+                                    << QPoint(280, 136));
 
+    const QPolygon ABus1 = QPolygon(QVector<QPoint>()  << QPoint(356,118)
+                                    << QPoint(356,207) << QPoint(290,207)
+                                    << QPoint(290,217) << QPoint(356,217)
+                                    << QPoint(356,280) << QPoint(351,280)
+                                    << QPoint(361,290) << QPoint(371,280)
+                                    << QPoint(366,280) << QPoint(366,118));
+    const QPolygon ABus2 = QPolygon(QVector<QPoint>()   << QPoint(280, 207)
+                                    << QPoint(258, 207) << QPoint(258, 202)
+                                    << QPoint(248, 212) << QPoint(258, 222)
+                                    << QPoint(258, 217) << QPoint(280, 217)
+                                    << QPoint(280, 207));
+
+//    const QPolygon AMuxBus = QPolygon(QVector<QPoint>()  << QPoint(336, 312)
+//                                      << QPoint(336, 331) << QPoint(331, 331)
+//                                      << QPoint(341, 341) << QPoint(351, 331)
+//                                      << QPoint(346, 331) << QPoint(346, 312));
+
+    const QPolygon CBus = QPolygon(QVector<QPoint>()  << QPoint(290,374)
+                                   << QPoint(290,130) << QPoint(295,130)
+                                   << QPoint(285,120) << QPoint(275,130)
+                                   << QPoint(280,130) << QPoint(280,334)
+                                   << QPoint(240,334) << QPoint(240,326)
+                                   << QPoint(245,326) << QPoint(235,316)
+                                   << QPoint(225,326) << QPoint(230,326)
+                                   << QPoint(230,344) << QPoint(280,344)
+                                   << QPoint(280,374));
+
+    const QPolygon AddrBus = QPolygon(QVector<QPoint>()  << QPoint(40, 151)
+                                      << QPoint(60, 151) << QPoint(60, 650)
+                                      << QPoint(40, 650));
+
+    const QPolygon AddrArrow = QPolygon(QVector<QPoint>()
+                                        // arrowhead
+                                        << QPoint(18, 330) << QPoint(18, 325)
+                                        << QPoint(3,  340) << QPoint(18, 355)
+                                        << QPoint(18, 350)
+                                        // blunt end at the bus:
+                                        << QPoint(40, 350) << QPoint(40, 330));
+
+    const QPolygon DataToMDRMuxBus = QPolygon(QVector<QPoint>()
+                                              // foot:
+                                              << QPoint(190, 344)
+                                              << QPoint(70,  344) << QPoint(70,  334)
+                                              << QPoint(180, 334)
+                                              // arrowhead:
+                                              << QPoint(180, 326) << QPoint(175, 326)
+                                              << QPoint(185, 316) << QPoint(195, 326)
+                                              << QPoint(190, 326));
+
+    const QPolygon MDRToDataBus = QPolygon(QVector<QPoint>()  << QPoint(175, 258)
+                                           << QPoint(83, 258) << QPoint(83, 253)
+                                           << QPoint(73, 263) << QPoint(83, 273)
+                                           << QPoint(83, 268) << QPoint(175, 268));
 }
 
 #endif // SHAPES_ONE_BYTE_DATA_BUS_H
