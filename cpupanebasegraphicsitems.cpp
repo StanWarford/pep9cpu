@@ -854,10 +854,12 @@ void CpuPaneBaseGraphicsItems::repaintLoadCk(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    painter->drawLine(543, 27, 499, 27);
+    painter->drawLines(OneByteShapes::loadCkSelect._lines);
 
-    painter->drawImage(QPoint(499,24),
-                       color == Qt::gray ? arrowLeftGray : arrowLeft);
+    for (int i = 0; i < OneByteShapes::loadCkSelect._arrowheads.length(); i++) {
+        painter->drawImage(OneByteShapes::loadCkSelect._arrowheads.at(i),
+                           color == Qt::gray ? arrowLeftGray : arrowLeft);
+    }
 }
 
 void CpuPaneBaseGraphicsItems::repaintCSelect(QPainter *painter)
@@ -871,8 +873,7 @@ void CpuPaneBaseGraphicsItems::repaintCSelect(QPainter *painter)
     painter->setBrush(color);
 
     // Draw select lines
-    painter->drawLine(543, 50, 499, 50);
-    painter->drawLine(523, 45, 533, 55);
+    painter->drawLines(OneByteShapes::CSelect._lines);
 
     painter->drawImage(QPoint(499,47),
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
@@ -890,8 +891,7 @@ void CpuPaneBaseGraphicsItems::repaintBSelect(QPainter *painter)
     painter->setBrush(color);
 
     // Draw select lines
-    painter->drawLine(543, 72, 499, 72);
-    painter->drawLine(523, 67, 533, 77);
+    painter->drawLines(OneByteShapes::BSelect._lines);
 
     // arrow
     painter->drawImage(QPoint(499,69),
@@ -920,8 +920,7 @@ void CpuPaneBaseGraphicsItems::repaintASelect(QPainter *painter)
     painter->setBrush(color);
 
     // Draw select lines
-    painter->drawLine(543,94, 499,94);
-    painter->drawLine(523,89, 533,99);
+    painter->drawLines(OneByteShapes::ASelect._lines);
 
     painter->drawImage(QPoint(499,91),
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
@@ -945,11 +944,7 @@ void CpuPaneBaseGraphicsItems::repaintMARCk(QPainter *painter)
     painter->setBrush(color);
 
     // MARCk
-    painter->drawLine(428,177, 543,177);
-    painter->drawLine(367,177, 416,177);
-    painter->drawLine(291,177, 355,177);
-    painter->drawLine(235,177, 279,177);
-    painter->drawLine(235,163, 235,191);
+    painter->drawLines(OneByteShapes::MARCk._lines);
 
     painter->drawEllipse(QPoint(235,177), 2, 2);
 
@@ -968,11 +963,7 @@ void CpuPaneBaseGraphicsItems::repaintMDRCk(QPainter *painter)
     painter->setBrush(color);
 
     // MDRCk
-    painter->drawLine(210,233, 279,233);
-    painter->drawLine(291,233, 355,233);
-    painter->drawLine(367,233, 416,233);
-    painter->drawLine(428,233, 543,233);
-    painter->drawLine(210,233, 210,241);
+    painter->drawLines(OneByteShapes::MDRCk._lines);
 
     painter->drawImage(QPoint(207,241),
                        color == Qt::gray ? arrowDownGray : arrowDown);
@@ -989,8 +980,7 @@ void CpuPaneBaseGraphicsItems::repaintAMuxSelect(QPainter *painter)
     painter->setBrush(color);
 
     // AMux Select
-    painter->drawLine(388, 303, 416, 303);
-    painter->drawLine(428, 303, 543, 303);
+    painter->drawLines(OneByteShapes::AMuxSelect._lines);
 
     painter->drawImage(QPoint(380,300),
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
@@ -1031,10 +1021,7 @@ void CpuPaneBaseGraphicsItems::repaintCMuxSelect(QPainter *painter)
     painter->setBrush(color);
 
     // CMux Select
-    painter->drawLine(449,355, 543,355);
-    painter->drawLine(315,355, 290,355);
-    painter->drawLine(280,355, 260,355);
-    painter->drawLine(260,355, 260,365);
+    painter->drawLines(OneByteShapes::CMuxSelect._lines);
 
     painter->drawImage(QPoint(257,362),
                        color == Qt::gray ? arrowDownGray : arrowDown);
@@ -1084,7 +1071,6 @@ void CpuPaneBaseGraphicsItems::repaintSCk(QPainter *painter)
 
 void CpuPaneBaseGraphicsItems::repaintCCk(QPainter *painter)
 {
-    QPolygon poly;
     QColor color;
 
     color = CCkCheckBox->isChecked() ? Qt::black : Qt::gray;
@@ -1102,7 +1088,6 @@ void CpuPaneBaseGraphicsItems::repaintCCk(QPainter *painter)
 void CpuPaneBaseGraphicsItems::repaintVCk(QPainter *painter)
 {
     QColor color;
-    QPolygon poly;
 
     color = VCkCheckBox->isChecked() ? Qt::black : Qt::gray;
     painter->setPen(QPen(QBrush(color), 1));
@@ -1179,7 +1164,7 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
 
     // Main Bus
     // ADDR bus:
-    painter->drawPolygon(OneByteShapes::AddrBus);
+    painter->drawRect(OneByteShapes::AddrBus);
     // left arrow to addr:
     painter->drawPolygon(OneByteShapes::AddrArrow);
 
@@ -1195,12 +1180,9 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
     }
     painter->setBrush(color);
 
-
+    painter->setBrush(Qt::red);
     // Data bus:
-    poly.clear();
-    poly << QPoint(60, 151) << QPoint(70, 151) << QPoint(70, 650)
-         << QPoint(60, 650);
-    painter->drawPolygon(poly);
+    painter->drawRect(OneByteShapes::DataBus);
 
     // Mem Data Bus
     poly.clear();
@@ -1288,7 +1270,7 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
 
     // Main Bus
     // Main ADDR bus:
-    painter->drawPolygon(OneByteShapes::AddrBus);
+    painter->drawRect(OneByteShapes::AddrBus);
     // left arrow from addr bus to memory:
     painter->drawPolygon(OneByteShapes::AddrArrow);
 
@@ -1304,10 +1286,7 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     painter->setBrush(color);
 
     // Main Data bus:
-    poly.clear();
-    poly << QPoint(60, 151) << QPoint(70, 151) << QPoint(70, 650)
-         << QPoint(60, 650);
-    painter->drawPolygon(poly);
+    painter->drawRect(OneByteShapes::DataBus);
 
     // Mem Data Bus (bidirectional arrow)
     poly.clear();
@@ -1543,10 +1522,7 @@ void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
     }
 
     // CBus
-    poly.setPoints(11, 346,394, 346,414, 314,414, 314,407,
-                   319,407, 309,397, 299,407, 304,407, 304,424,
-                   356,424, 356,394);
-    painter->drawPolygon(poly);
+    painter->drawPolygon(OneByteShapes::ALUOutBus);
 
     // Draw status bit lines
     painter->setPen(aluHasCorrectOutput() ? Qt::black : Qt::gray);
@@ -1588,7 +1564,6 @@ void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
 
 void CpuPaneBaseGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
 {
-    QPolygon poly;
     QColor color = Qt::gray;
 
     if (MDRMuxTristateLabel->text() != "") {
@@ -1638,10 +1613,8 @@ void CpuPaneBaseGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
         painter->setBrush(Qt::white);
     }
 
-    // MDRMuxBus (MDRMux to MDR arrow)
-    poly.setPoints(7, 205,293, 205,286, 200,286, 210,276, 220,286,
-                   215,286, 215,293); // arrow
-    painter->drawPolygon(poly);
+    // MDRMuxOutBus (MDRMux to MDR arrow)
+    painter->drawPolygon(OneByteShapes::MDRMuxOutBus);
 
 
 }
