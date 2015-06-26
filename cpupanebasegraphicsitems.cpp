@@ -130,9 +130,6 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     // MARBus (MARA/MARB output bus)
     scene->addPolygon(OneByteShapes::MARBus,
                       QPen(QBrush(Qt::black), 1), QBrush(Qt::yellow));
-    QGraphicsLineItem *lineItem = scene->addLine(88,177, 215,177);
-    lineItem->setZValue(1); // make sure this line appears above the bus
-
 
     // MDRCk
     MDRCk = new QCheckBox("MDRCk");
@@ -245,16 +242,15 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
 
     // CSMux
     CSMuxLabel = new QLabel("CSMux");
-    CSMuxLabel->setGeometry(OneByteShapes::CSMuxLabel); // y: 397?
+    CSMuxLabel->setGeometry(OneByteShapes::CSMuxLabel);
     CSMuxLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(CSMuxLabel);
-    CSMuxerDataLabel = new QLabel("CSMux"); //476+19-69
+    CSMuxerDataLabel = new QLabel("CSMux");
     CSMuxerDataLabel->setGeometry(OneByteShapes::CSMuxerDataLabel);
     CSMuxerDataLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     CSMuxerDataLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(CSMuxerDataLabel);
     CSMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
-    //CSMuxTristateLabel->setGeometry(550,399, 25,21);
     CSMuxTristateLabel->setGeometry(OneByteShapes::CSMuxTristateLabel);
     CSMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     CSMuxTristateLabel->setPalette(QPalette(Qt::white));

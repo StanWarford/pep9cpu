@@ -69,6 +69,17 @@ enum Shapes {
 
 };
 
+enum RegPos {
+    Row1Y     = 10,
+    Row2Y     = 38,
+    Row3Y     = 66,
+    Row4Y     = 93,
+    Col1X     = 52,
+    Col2X     = 184,
+    Col3X     = 311,
+    Col4X     = 440,
+};
+
 enum CommonPositions {
     controlV = 579,
 
@@ -200,10 +211,14 @@ enum CommonPositions {
                                      << QPoint(205,167)
                                      // arrow:
                                      << QPoint(88,167)  << QPoint(88,162)
-                                     << QPoint(73,177)  << QPoint(88,192)
-                                     << QPoint(88,187)  << QPoint(205,187)
+                                     << QPoint(73,177)
+                                     << QPoint(88,192)  << QPoint(88,187)
+                                     << QPoint(205,187)
                                      << QPoint(205,202) << QPoint(215,202)
-                                     << QPoint(215,151) );
+                                     // black line in the middle:
+                                     << QPoint(215,151)
+                                     << QPoint(215,177) << QPoint(88,177)
+                                     << QPoint(215,177) << QPoint(215,151));
     const QPolygon NZVCDataPath = QPolygon(QVector<QPoint>() << QPoint(310,513)
                                        << QPoint(269,513) << QPoint(269,407)
                                        << QPoint(274,407) << QPoint(264,397)
@@ -211,10 +226,10 @@ enum CommonPositions {
                                        << QPoint(259,523) << QPoint(310,523));
     const QRect RegBank = QRect(5, 5, 491, 113);
 
-    const QRect aRegLineEdit = QRect(52, 10, regLineEditW, regLineEditH);
-    const QRect xRegLineEdit = QRect(52, 38, regLineEditW, regLineEditH);
-    const QRect spRegLineEdit = QRect(52, 66, regLineEditW, regLineEditH);
-    const QRect pcRegLineEdit = QRect(52, 94, regLineEditW, regLineEditH);
+    const QRect aRegLineEdit  = QRect(52,  10, regLineEditW, regLineEditH);
+    const QRect xRegLineEdit  = QRect(52,  38, regLineEditW, regLineEditH);
+    const QRect spRegLineEdit = QRect(52,  66, regLineEditW, regLineEditH);
+    const QRect pcRegLineEdit = QRect(52,  94, regLineEditW, regLineEditH);
     const QRect irRegLineEdit = QRect(184, 10, regLineEditW + 15, regLineEditH);
     const QRect t1RegLineEdit = QRect(184, 38, regLineEditW - 15, regLineEditH);
     const QRect t2RegLineEdit = QRect(184, 66, regLineEditW, regLineEditH);
@@ -222,11 +237,11 @@ enum CommonPositions {
     const QRect t4RegLineEdit = QRect(311, 10, regLineEditW, regLineEditH);
     const QRect t5RegLineEdit = QRect(311, 38, regLineEditW, regLineEditH);
     const QRect t6RegLineEdit = QRect(311, 66, regLineEditW, regLineEditH);
-    const QRect m1RegLabel = QRect(311, 94, regLineEditW - 10, regLineEditH);
-    const QRect m2RegLabel = QRect(440, 10, regLineEditW - 10, regLineEditH);
-    const QRect m3RegLabel = QRect(440, 38, regLineEditW - 10, regLineEditH);
-    const QRect m4RegLabel = QRect(440, 64, regLineEditW - 10, regLineEditH);
-    const QRect m5RegLabel = QRect(440, 94, regLineEditW - 10, regLineEditH);
+    const QRect m1RegLabel    = QRect(311, 94, regLineEditW - 10, regLineEditH);
+    const QRect m2RegLabel    = QRect(440, 10, regLineEditW - 10, regLineEditH);
+    const QRect m3RegLabel    = QRect(440, 38, regLineEditW - 10, regLineEditH);
+    const QRect m4RegLabel    = QRect(440, 64, regLineEditW - 10, regLineEditH);
+    const QRect m5RegLabel    = QRect(440, 94, regLineEditW - 10, regLineEditH);
 
     const QPolygon BBus1 = QPolygon(QVector<QPoint>()   << QPoint(417, 118)
                                     << QPoint(417, 136) << QPoint(366, 136)
