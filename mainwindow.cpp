@@ -560,7 +560,14 @@ void MainWindow::on_actionHelp_Examples_triggered()
 
 void MainWindow::on_actionHelp_triggered()
 {
-    helpDialog->show();
+    if (!helpDialog->isHidden()) {
+        // give it focus again:
+        helpDialog->hide();
+        helpDialog->show();
+    }
+    else {
+        helpDialog->show();
+    }
 }
 
 void MainWindow::on_actionHelp_About_Pep9CPU_triggered()
