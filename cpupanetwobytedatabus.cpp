@@ -33,7 +33,8 @@ CpuPaneTwoByteDataBus::CpuPaneTwoByteDataBus(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->spinBox, SIGNAL(valueChanged(int)), this, SLOT(zoomFactorChanged(int)));
+    connect(ui->spinBox, SIGNAL(valueChanged(int)), this,
+            SLOT(zoomFactorChanged(int)));
 
     cpuPaneItems = NULL;
     scene = new QGraphicsScene(this);
@@ -45,6 +46,7 @@ CpuPaneTwoByteDataBus::CpuPaneTwoByteDataBus(QWidget *parent) :
 
     ui->spinBox->hide();
     ui->singleStepPushButton->setEnabled(false);
+    ui->resumePushButton->setEnabled(true);
 
 }
 
@@ -63,52 +65,79 @@ void CpuPaneTwoByteDataBus::initModel()
     ui->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     connect(cpuPaneItems->loadCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
-    connect(cpuPaneItems->cLineEdit, SIGNAL(textChanged(QString)), scene, SLOT(invalidate()));
-    connect(cpuPaneItems->bLineEdit, SIGNAL(textChanged(QString)), scene, SLOT(invalidate()));
-    connect(cpuPaneItems->aLineEdit, SIGNAL(textChanged(QString)), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->cLineEdit, SIGNAL(textChanged(QString)),
+            scene, SLOT(invalidate()));
+    connect(cpuPaneItems->bLineEdit, SIGNAL(textChanged(QString)),
+            scene, SLOT(invalidate()));
+    connect(cpuPaneItems->aLineEdit, SIGNAL(textChanged(QString)),
+            scene, SLOT(invalidate()));
     connect(cpuPaneItems->MARCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
     //connect(cpuPaneItems->MDRCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->MDROCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->MDRECk, SIGNAL(clicked()), scene, SLOT(invalidate()));
 
-    connect(cpuPaneItems->aMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    connect(cpuPaneItems->aMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->aMuxTristateLabel, SIGNAL(clicked()), this,
+            SLOT(labelClicked()));
+    connect(cpuPaneItems->aMuxTristateLabel, SIGNAL(clicked()), scene,
+            SLOT(invalidate()));
 
-    //connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    //connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
-    connect(cpuPaneItems->MDROMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    connect(cpuPaneItems->MDROMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
-    connect(cpuPaneItems->MDREMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    connect(cpuPaneItems->MDREMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->MDROMuxTristateLabel, SIGNAL(clicked()), this,
+            SLOT(labelClicked()));
+    connect(cpuPaneItems->MDROMuxTristateLabel, SIGNAL(clicked()), scene,
+            SLOT(invalidate()));
+    connect(cpuPaneItems->MDREMuxTristateLabel, SIGNAL(clicked()), this,
+            SLOT(labelClicked()));
+    connect(cpuPaneItems->MDREMuxTristateLabel, SIGNAL(clicked()), scene,
+            SLOT(invalidate()));
 
-    connect(cpuPaneItems->EOMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    connect(cpuPaneItems->EOMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->EOMuxTristateLabel, SIGNAL(clicked()), this,
+            SLOT(labelClicked()));
+    connect(cpuPaneItems->EOMuxTristateLabel, SIGNAL(clicked()), scene,
+            SLOT(invalidate()));
 
-    connect(cpuPaneItems->MARMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    connect(cpuPaneItems->MARMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->MARMuxTristateLabel, SIGNAL(clicked()), this,
+            SLOT(labelClicked()));
+    connect(cpuPaneItems->MARMuxTristateLabel, SIGNAL(clicked()), scene,
+            SLOT(invalidate()));
 
-    connect(cpuPaneItems->cMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    connect(cpuPaneItems->cMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->cMuxTristateLabel, SIGNAL(clicked()), this,
+            SLOT(labelClicked()));
+    connect(cpuPaneItems->cMuxTristateLabel, SIGNAL(clicked()), scene,
+            SLOT(invalidate()));
 
-    connect(cpuPaneItems->ALULineEdit, SIGNAL(textChanged(QString)), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->ALULineEdit, SIGNAL(textChanged(QString)), scene,
+            SLOT(invalidate()));
 
-    connect(cpuPaneItems->CSMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    connect(cpuPaneItems->CSMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->CSMuxTristateLabel, SIGNAL(clicked()), this,
+            SLOT(labelClicked()));
+    connect(cpuPaneItems->CSMuxTristateLabel, SIGNAL(clicked()), scene,
+            SLOT(invalidate()));
 
-    connect(cpuPaneItems->SCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
-    connect(cpuPaneItems->CCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
-    connect(cpuPaneItems->VCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->SCkCheckBox, SIGNAL(clicked()), scene,
+            SLOT(invalidate()));
+    connect(cpuPaneItems->CCkCheckBox, SIGNAL(clicked()), scene,
+            SLOT(invalidate()));
+    connect(cpuPaneItems->VCkCheckBox, SIGNAL(clicked()), scene,
+            SLOT(invalidate()));
 
-    connect(cpuPaneItems->AndZTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    connect(cpuPaneItems->AndZTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->AndZTristateLabel, SIGNAL(clicked()), this,
+            SLOT(labelClicked()));
+    connect(cpuPaneItems->AndZTristateLabel, SIGNAL(clicked()), scene,
+            SLOT(invalidate()));
 
-    connect(cpuPaneItems->ZCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
-    connect(cpuPaneItems->NCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->ZCkCheckBox, SIGNAL(clicked()), scene,
+            SLOT(invalidate()));
+    connect(cpuPaneItems->NCkCheckBox, SIGNAL(clicked()), scene,
+            SLOT(invalidate()));
 
-    connect(cpuPaneItems->MemReadTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    connect(cpuPaneItems->MemReadTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
-    connect(cpuPaneItems->MemWriteTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    connect(cpuPaneItems->MemWriteTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->MemReadTristateLabel, SIGNAL(clicked()), this,
+            SLOT(labelClicked()));
+    connect(cpuPaneItems->MemReadTristateLabel, SIGNAL(clicked()), scene,
+            SLOT(invalidate()));
+    connect(cpuPaneItems->MemWriteTristateLabel, SIGNAL(clicked()), this,
+            SLOT(labelClicked()));
+    connect(cpuPaneItems->MemWriteTristateLabel, SIGNAL(clicked()), scene,
+            SLOT(invalidate()));
 
     connect(cpuPaneItems->nBitLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
     connect(cpuPaneItems->zBitLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
@@ -117,50 +146,80 @@ void CpuPaneTwoByteDataBus::initModel()
     connect(cpuPaneItems->sBitLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
 
     // Simulation control connections
-    connect(ui->clockPushButton, SIGNAL(clicked()), this, SLOT(clockButtonPushed()));
-    connect(ui->singleStepPushButton, SIGNAL(clicked()), this, SLOT(singleStepButtonPushed()));
-    connect(ui->resumePushButton, SIGNAL(clicked()), this, SLOT(resumeButtonPushed()));
+    connect(ui->clockPushButton, SIGNAL(clicked()), this,
+            SLOT(clockButtonPushed()));
+    connect(ui->singleStepPushButton, SIGNAL(clicked()), this,
+            SLOT(singleStepButtonPushed()));
+    connect(ui->resumePushButton, SIGNAL(clicked()), this,
+            SLOT(resumeButtonPushed()));
 
     // Register editing connnections
-    connect(cpuPaneItems->aRegLineEdit, SIGNAL(textEdited(QString)), this, SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->xRegLineEdit, SIGNAL(textEdited(QString)), this, SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->spRegLineEdit, SIGNAL(textEdited(QString)), this, SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->pcRegLineEdit, SIGNAL(textEdited(QString)), this, SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->irRegLineEdit, SIGNAL(textEdited(QString)), this, SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->t1RegLineEdit, SIGNAL(textEdited(QString)), this, SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->t2RegLineEdit, SIGNAL(textEdited(QString)), this, SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->t3RegLineEdit, SIGNAL(textEdited(QString)), this, SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->t4RegLineEdit, SIGNAL(textEdited(QString)), this, SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->t5RegLineEdit, SIGNAL(textEdited(QString)), this, SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->t6RegLineEdit, SIGNAL(textEdited(QString)), this, SLOT(regTextEdited(QString)));
+    connect(cpuPaneItems->aRegLineEdit, SIGNAL(textEdited(QString)), this,
+            SLOT(regTextEdited(QString)));
+    connect(cpuPaneItems->xRegLineEdit, SIGNAL(textEdited(QString)), this,
+            SLOT(regTextEdited(QString)));
+    connect(cpuPaneItems->spRegLineEdit, SIGNAL(textEdited(QString)), this,
+            SLOT(regTextEdited(QString)));
+    connect(cpuPaneItems->pcRegLineEdit, SIGNAL(textEdited(QString)), this,
+            SLOT(regTextEdited(QString)));
+    connect(cpuPaneItems->irRegLineEdit, SIGNAL(textEdited(QString)), this,
+            SLOT(regTextEdited(QString)));
+    connect(cpuPaneItems->t1RegLineEdit, SIGNAL(textEdited(QString)), this,
+            SLOT(regTextEdited(QString)));
+    connect(cpuPaneItems->t2RegLineEdit, SIGNAL(textEdited(QString)), this,
+            SLOT(regTextEdited(QString)));
+    connect(cpuPaneItems->t3RegLineEdit, SIGNAL(textEdited(QString)), this,
+            SLOT(regTextEdited(QString)));
+    connect(cpuPaneItems->t4RegLineEdit, SIGNAL(textEdited(QString)), this,
+            SLOT(regTextEdited(QString)));
+    connect(cpuPaneItems->t5RegLineEdit, SIGNAL(textEdited(QString)), this,
+            SLOT(regTextEdited(QString)));
+    connect(cpuPaneItems->t6RegLineEdit, SIGNAL(textEdited(QString)), this,
+            SLOT(regTextEdited(QString)));
 
-    connect(cpuPaneItems->aRegLineEdit, SIGNAL(editingFinished()), this, SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->xRegLineEdit, SIGNAL(editingFinished()), this, SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->spRegLineEdit, SIGNAL(editingFinished()), this, SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->pcRegLineEdit, SIGNAL(editingFinished()), this, SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->irRegLineEdit, SIGNAL(editingFinished()), this, SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->t1RegLineEdit, SIGNAL(editingFinished()), this, SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->t2RegLineEdit, SIGNAL(editingFinished()), this, SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->t3RegLineEdit, SIGNAL(editingFinished()), this, SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->t4RegLineEdit, SIGNAL(editingFinished()), this, SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->t5RegLineEdit, SIGNAL(editingFinished()), this, SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->t6RegLineEdit, SIGNAL(editingFinished()), this, SLOT(regTextFinishedEditing()));
+    connect(cpuPaneItems->aRegLineEdit, SIGNAL(editingFinished()), this,
+            SLOT(regTextFinishedEditing()));
+    connect(cpuPaneItems->xRegLineEdit, SIGNAL(editingFinished()), this,
+            SLOT(regTextFinishedEditing()));
+    connect(cpuPaneItems->spRegLineEdit, SIGNAL(editingFinished()), this,
+            SLOT(regTextFinishedEditing()));
+    connect(cpuPaneItems->pcRegLineEdit, SIGNAL(editingFinished()), this,
+            SLOT(regTextFinishedEditing()));
+    connect(cpuPaneItems->irRegLineEdit, SIGNAL(editingFinished()), this,
+            SLOT(regTextFinishedEditing()));
+    connect(cpuPaneItems->t1RegLineEdit, SIGNAL(editingFinished()), this,
+            SLOT(regTextFinishedEditing()));
+    connect(cpuPaneItems->t2RegLineEdit, SIGNAL(editingFinished()), this,
+            SLOT(regTextFinishedEditing()));
+    connect(cpuPaneItems->t3RegLineEdit, SIGNAL(editingFinished()), this,
+            SLOT(regTextFinishedEditing()));
+    connect(cpuPaneItems->t4RegLineEdit, SIGNAL(editingFinished()), this,
+            SLOT(regTextFinishedEditing()));
+    connect(cpuPaneItems->t5RegLineEdit, SIGNAL(editingFinished()), this,
+            SLOT(regTextFinishedEditing()));
+    connect(cpuPaneItems->t6RegLineEdit, SIGNAL(editingFinished()), this,
+            SLOT(regTextFinishedEditing()));
 
-    connect(cpuPaneItems->ALULineEdit, SIGNAL(textChanged(QString)), this, SLOT(ALUTextEdited(QString)));
+    connect(cpuPaneItems->ALULineEdit, SIGNAL(textChanged(QString)), this,
+            SLOT(ALUTextEdited(QString)));
 
 
     // disconnect all cpuPaneItems that differ between models:
     disconnect(cpuPaneItems->MDRCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
 
-    disconnect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    disconnect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    disconnect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), this,
+               SLOT(labelClicked()));
+    disconnect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), scene,
+               SLOT(invalidate()));
 
     if (Pep::cpuFeatures == Enu::OneByteDataBus) {
         // connect items for this model
         connect(cpuPaneItems->MDRCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
 
-        connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-        connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+        connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), this,
+                SLOT(labelClicked()));
+        connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), scene,
+                SLOT(invalidate()));
     }
     else if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
         // connect items for *this* model
@@ -230,7 +289,8 @@ void CpuPaneTwoByteDataBus::updateMainBusState()
     bool marChanged = false;
     if (cpuPaneItems->MARCk->isChecked()) {
         quint8 mara, marb;
-        QString errorString; // temporary, any errors here will be caught in the MARCk section of step()
+        // temporary, any errors here will be caught in the MARCk section of step():
+        QString errorString;
         if (getMARMuxOut(mara, marb, errorString)) {
             marChanged = (mara != Sim::MARA) || (marb != Sim::MARB);
         }
@@ -243,23 +303,29 @@ void CpuPaneTwoByteDataBus::updateMainBusState()
 
     switch (Sim::mainBusState) {
     case Enu::None:
-        if (!marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (1st)
+        if (!marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") {
+            // MemRead (1st)
             Sim::mainBusState = Enu::MemReadFirstWait;
         }
-        else if (!marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (1st)
+        else if (!marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") {
+            // MemWrite (1st)
             Sim::mainBusState = Enu::MemWriteFirstWait;
         }
         //else: mainBusState = None, but it already is.
         break;
     case Enu::MemReadFirstWait:
-        if (!marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (2nd with unchanged MAR)
+        if (!marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") {
+            // MemRead (2nd with unchanged MAR)
             Sim::mainBusState = Enu::MemReadSecondWait;
         }
-        else if (marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead
-            // do nothing, already MemReadfirstWait - need another MemRead because the MAR changed
+        else if (marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") {
+            // MemRead
+            // do nothing, already MemReadfirstWait - need another MemRead
+            //  because the MAR changed
             qDebug() << "MAR changed - don't read yet";
         }
-        else if (cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (after a single MemRead)
+        else if (cpuPaneItems->MemWriteTristateLabel->text() == "1") {
+            // MemWrite (after a single MemRead)
             Sim::mainBusState = Enu::MemWriteFirstWait;
         }
         else {
@@ -267,13 +333,16 @@ void CpuPaneTwoByteDataBus::updateMainBusState()
         }
         break;
     case Enu::MemReadSecondWait:
-        if (!marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (3rd with unchanged MAR)
+        if (!marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") {
+            // MemRead (3rd with unchanged MAR)
             Sim::mainBusState = Enu::MemReadReady;
         }
-        else if (marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead
+        else if (marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") {
+            // MemRead
             Sim::mainBusState = Enu::MemWriteFirstWait;
         }
-        else if (cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (after 2 MemReads)
+        else if (cpuPaneItems->MemWriteTristateLabel->text() == "1") {
+            // MemWrite (after 2 MemReads)
             Sim::mainBusState = Enu::MemWriteFirstWait;
         }
         else {
@@ -281,13 +350,17 @@ void CpuPaneTwoByteDataBus::updateMainBusState()
         }
         break;
     case Enu::MemReadReady:
-        if (!marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead again (more than 3 in a row)
+        if (!marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") {
+            // MemRead again (more than 3 in a row)
             // do nothing, already MemReadReady
         }
-        else if (marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead
-            Sim::mainBusState = Enu::MemReadFirstWait; // Go back to MemReadFirstWait because the MAR changed
+        else if (marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") {
+            // MemRead
+            Sim::mainBusState = Enu::MemReadFirstWait;
+            // Go back to MemReadFirstWait because the MAR changed
         }
-        else if (cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (after 3+ MemReads)
+        else if (cpuPaneItems->MemWriteTristateLabel->text() == "1") {
+            // MemWrite (after 3+ MemReads)
             Sim::mainBusState = Enu::MemWriteFirstWait;
         }
         else {
@@ -295,13 +368,16 @@ void CpuPaneTwoByteDataBus::updateMainBusState()
         }
         break;
     case Enu::MemWriteFirstWait:
-        if (cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (after a MemWrite)
+        if (cpuPaneItems->MemReadTristateLabel->text() == "1") {
+            // MemRead (after a MemWrite)
             Sim::mainBusState = Enu::MemReadFirstWait;
         }
-        else if (!marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (2nd in a row)
+        else if (!marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") {
+            // MemWrite (2nd in a row)
             Sim::mainBusState = Enu::MemWriteSecondWait;
         }
-        else if (marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (with changed MAR)
+        else if (marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") {
+            // MemWrite (with changed MAR)
             // Do nothing, MAR changed, still MemWriteSecondWait
         }
         else {
@@ -309,13 +385,16 @@ void CpuPaneTwoByteDataBus::updateMainBusState()
         }
         break;
     case Enu::MemWriteSecondWait:
-        if (cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (after 2 MemWrites)
+        if (cpuPaneItems->MemReadTristateLabel->text() == "1") {
+            // MemRead (after 2 MemWrites)
             Sim::mainBusState = Enu::MemReadFirstWait;
         }
-        else if (!marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (2nd in a row)
+        else if (!marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") {
+            // MemWrite (2nd in a row)
             Sim::mainBusState = Enu::MemWriteReady;
         }
-        else if (marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (with changed MAR)
+        else if (marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") {
+            // MemWrite (with changed MAR)
             Sim::mainBusState = Enu::MemWriteFirstWait;
         }
         else {
@@ -323,13 +402,16 @@ void CpuPaneTwoByteDataBus::updateMainBusState()
         }
         break;
     case Enu::MemWriteReady:
-        if (cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (after 3+ MemWrites)
+        if (cpuPaneItems->MemReadTristateLabel->text() == "1") {
+            // MemRead (after 3+ MemWrites)
             Sim::mainBusState = Enu::MemReadFirstWait;
         }
-        else if (!marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (after 3+ in a row)
+        else if (!marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") {
+            // MemWrite (after 3+ in a row)
             // do nothing, already MemWriteReady
         }
-        else if (marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (with changed MAR)
+        else if (marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") {
+            // MemWrite (with changed MAR)
             Sim::mainBusState = Enu::MemWriteFirstWait;
         }
         else {
@@ -337,14 +419,142 @@ void CpuPaneTwoByteDataBus::updateMainBusState()
         }
         break;
     default:
-        Sim::mainBusState = Enu::None; // Just in case the Sim::mBS is malformed somehow
+        Sim::mainBusState = Enu::None;
+        // Just in case the Sim::mBS is malformed somehow
         break;
     }
 }
 
-#warning todo: edit for two byte bus version
 bool CpuPaneTwoByteDataBus::step(QString &errorString)
 {
+    // Clear modified bytes for simulation view:
+    Sim::modifiedBytes.clear();
+
+    // Update Bus State
+    // FSM that sets Sim::mainBusState to Enu::BusState - 5 possible states
+    updateMainBusState();
+
+    // Status bit calculations
+    int aluFn = cpuPaneItems->ALULineEdit->text().toInt();
+    int carry;
+    int overflow;
+    quint8 result, a, b;
+
+    QString errtemp;
+    getALUOut(result, a, b, carry, overflow, errtemp); // ignore boolean returned - error would have been handled earlier
+
+    if (Sim::mainBusState == Enu::MemReadReady) {
+        // we are performing a 2nd consecutive MemRead
+        // do nothing - the memread is performed in the getMDRMuxOut fn
+    }
+    else if (Sim::mainBusState == Enu::MemWriteReady) {
+        // we are performing a 2nd consecutive MemWrite
+        int address = Sim::MARA * 256 + Sim::MARB;
+        Sim::writeByte(address, Sim::MDR);
+        emit writeByte(address);
+    }
+
+    // MARCk
+    if (cpuPaneItems->MARCk->isChecked()) {
+        quint8 a, b;
+        if (getMARMuxOut(a, b, errorString)) {
+            setRegister(Enu::MARA, a);
+            setRegister(Enu::MARB, b);
+        }
+        else {
+            // error: MARCk is checked but we have incorrect input
+            return false;
+        }
+    }
+
+    // LoadCk
+    if (cpuPaneItems->loadCk->isChecked()) {
+        int cDest = cpuPaneItems->cLineEdit->text().toInt();
+        quint8 out;
+        if (cpuPaneItems->cLineEdit->text() == "") {
+            errorString.append("No destination register specified for LoadCk.");
+            return false;
+        }
+        if (getCMuxOut(out, errorString)) {
+            setRegisterByte(cDest, out);
+        }
+        else {
+            return false;
+        }
+    }
+
+    // MDROCk
+    if (cpuPaneItems->MDROCk->isChecked()) {
+        quint8 out = 0;
+        if (getMDROMuxOut(out, errorString)) {
+            setRegister(Enu::MDRO, out);
+        }
+        else {
+            return false;
+        }
+    }
+
+    // MDRECk
+    if (cpuPaneItems->MDRECk->isChecked()) {
+        quint8 out = 0;
+        if (getMDREMuxOut(out, errorString)) {
+            setRegister(Enu::MDRE, out);
+        }
+        else {
+            return false;
+        }
+    }
+
+    if (aluFn == 15) {
+        if (cpuPaneItems->NCkCheckBox->isChecked()) { // NCk
+            setStatusBit(Enu::N, Enu::NMask & a);
+        }
+        if (cpuPaneItems->ZCkCheckBox->isChecked()) { // ZCk
+            setStatusBit(Enu::Z, Enu::ZMask & a);
+        }
+        if (cpuPaneItems->VCkCheckBox->isChecked()) { // VCk
+            setStatusBit(Enu::V, Enu::VMask & a);
+        }
+        if (cpuPaneItems->CCkCheckBox->isChecked()) { // CCk
+            setStatusBit(Enu::C, Enu::CMask & a);
+        }
+    }
+    else {
+        // NCk
+        if (cpuPaneItems->NCkCheckBox->isChecked()) {
+            setStatusBit(Enu::N, result > 127);
+        }
+
+        // ZCk
+        if (cpuPaneItems->ZCkCheckBox->isChecked()) {
+            if (cpuPaneItems->AndZTristateLabel->text() == ""){
+                errorString.append("ZCk without AndZ.");
+                return false;
+            }
+            if (cpuPaneItems->AndZTristateLabel->text() == "0") { // zOut from ALU goes straight through
+                setStatusBit(Enu::Z, result == 0);
+            }
+            else if (cpuPaneItems->AndZTristateLabel->text() == "1") { // zOut && zCurr
+                setStatusBit(Enu::Z, result == 0 && Sim::zBit);
+            }
+        }
+
+        // VCk
+        if (cpuPaneItems->VCkCheckBox->isChecked()) {
+            setStatusBit(Enu::V, overflow & 0x1);
+        }
+
+        // CCk
+        if (cpuPaneItems->CCkCheckBox->isChecked()) {
+            setStatusBit(Enu::C, carry & 0x1);
+        }
+
+        // SCk
+        if (cpuPaneItems->SCkCheckBox->isChecked()) {
+            setStatusBit(Enu::S, carry & 0x1);
+        }
+    }
+
     return true;
 }
 
@@ -367,25 +577,25 @@ void CpuPaneTwoByteDataBus::on_copyToMicrocodePushButton_clicked()
         code.set(Enu::MARCk, 1);
     }
     if (cpuPaneItems->MDRECk->isChecked()) {
-        code.set(Enu::MDRCk, 1);
+        code.set(Enu::MDRECk, 1);
     }
     if (cpuPaneItems->MDROCk->isChecked()) {
-        code.set(Enu::MDRCk, 1);
+        code.set(Enu::MDROCk, 1);
     }
     if (cpuPaneItems->aMuxTristateLabel->text() != "") {
         code.set(Enu::AMux, cpuPaneItems->aMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->MDROMuxTristateLabel->text() != "") {
-        code.set(Enu::MDRMux, cpuPaneItems->MDROMuxTristateLabel->text().toInt());
+        code.set(Enu::MDROMux, cpuPaneItems->MDROMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->MDREMuxTristateLabel->text() != "") {
-        code.set(Enu::MDRMux, cpuPaneItems->MDREMuxTristateLabel->text().toInt());
+        code.set(Enu::MDREMux, cpuPaneItems->MDREMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->EOMuxTristateLabel->text() != "") {
-        code.set(Enu::MDRMux, cpuPaneItems->EOMuxTristateLabel->text().toInt());
+        code.set(Enu::EOMux, cpuPaneItems->EOMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->MARMuxTristateLabel->text() != "") {
-        code.set(Enu::MDRMux, cpuPaneItems->MARMuxTristateLabel->text().toInt());
+        code.set(Enu::MARMux, cpuPaneItems->MARMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->cMuxTristateLabel->text() != "") {
         code.set(Enu::CMux, cpuPaneItems->cMuxTristateLabel->text().toInt());
@@ -394,7 +604,7 @@ void CpuPaneTwoByteDataBus::on_copyToMicrocodePushButton_clicked()
         code.set(Enu::ALU, cpuPaneItems->ALULineEdit->text().toInt());
     }
     if (cpuPaneItems->CSMuxTristateLabel->text() != "") {
-        code.set(Enu::CMux, cpuPaneItems->CSMuxTristateLabel->text().toInt());
+        code.set(Enu::CSMux, cpuPaneItems->CSMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->SCkCheckBox->isChecked()) {
         code.set(Enu::SCk, 1);
@@ -450,10 +660,12 @@ bool CpuPaneTwoByteDataBus::getAMuxOut(quint8& out, QString& errorString)
 }
 
 #warning todo: do.
-bool CpuPaneTwoByteDataBus::getMARMuxOut(quint8& mara, quint8 &marb, QString& errorString)
+bool CpuPaneTwoByteDataBus::getMARMuxOut(quint8& mara, quint8 &marb,
+                                         QString& errorString)
 {
     if (cpuPaneItems->MARMuxTristateLabel->text() == "0") {
-        if (getMDREMuxOut(mara, errorString) && getMDROMuxOut(marb, errorString)) {
+        if (getMDREMuxOut(mara, errorString)
+                && getMDROMuxOut(marb, errorString)) {
             return true;
         }
         else {
@@ -461,7 +673,8 @@ bool CpuPaneTwoByteDataBus::getMARMuxOut(quint8& mara, quint8 &marb, QString& er
         }
     }
     else if (cpuPaneItems->MARMuxTristateLabel->text() == "1") {
-        if (getABusOut(mara, errorString) && getBBusOut(marb, errorString)) {
+        if (getABusOut(mara, errorString)
+                && getBBusOut(marb, errorString)) {
             return true;
         }
         else {
@@ -538,7 +751,7 @@ bool CpuPaneTwoByteDataBus::getEOMuxOut(quint8& out, QString& errorString)
             // Error string will [already] be populated with the correct error
         }
     }
-    else if (cpuPaneItems->aMuxTristateLabel->text() == "1") {
+    if (cpuPaneItems->EOMuxTristateLabel->text() == "1") {
         if (getMDROMuxOut(out, errorString)) {
             return true;
         }

@@ -49,6 +49,7 @@ CpuPane::CpuPane(QWidget *parent) :
     cpuPaneItems = NULL;
     scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
+    scene->setParent(this);
 
     ui->graphicsView->setFont(QFont(Pep::cpuFont, Pep::cpuFontSize));
 
@@ -60,6 +61,8 @@ CpuPane::CpuPane(QWidget *parent) :
 
 CpuPane::~CpuPane()
 {
+    delete cpuPaneItems;
+    delete scene;
     delete ui;
 }
 
@@ -92,6 +95,7 @@ void CpuPane::initModel()
     }
 
     cpuPaneItems = new CpuPaneBaseGraphicsItems(ui->graphicsView, 0, scene);
+
     ui->graphicsView->scene()->addItem(cpuPaneItems);
 
     ui->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -681,7 +685,8 @@ bool CpuPane::step(QString &errorString)
     Sim::modifiedBytes.clear();
 
     // Update Bus State
-    updateMainBusState(); // FSM that sets Sim::mainBusState to Enu::BusState - 5 possible states
+    // FSM that sets Sim::mainBusState to Enu::BusState - 5 possible states
+    updateMainBusState();
 
     // Status bit calculations
     int aluFn = cpuPaneItems->ALULineEdit->text().toInt();
@@ -939,6 +944,7 @@ void CpuPane::clockButtonPushed()
 
 void CpuPane::singleStepButtonPushed()
 {
+    qDebug() << "single step two byte pushed...";
     QString errorString = "";
 
     if (!step(errorString)) {
@@ -971,6 +977,7 @@ void CpuPane::singleStepButtonPushed()
             return;
         }
         code->setCpuLabels(cpuPaneItems);
+        qDebug() << "emit updateSim...";
         emit updateSimulation();
     }
 
