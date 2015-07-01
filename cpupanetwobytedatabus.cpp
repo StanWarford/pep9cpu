@@ -18,270 +18,30 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "cpupanetwobytedatabus.h"
 #include "ui_cpupane.h"
 
+#include <QCheckBox>
+#include <QLineEdit>
+#include <QGraphicsItem>
+#include <QErrorMessage>
+#include <QMessageBox>
+
+#include "tristatelabel.h"
 #include "pep.h"
 #include "code.h"
 #include "sim.h"
 
+#include "cpupanebasegraphicsitems.h"
+
 #include <QDebug>
 
 CpuPaneTwoByteDataBus::CpuPaneTwoByteDataBus(QWidget *parent) :
-    CpuPane(parent),
+    //CpuPane(parent),
     ui(new Ui::CpuPane)
 {
-    ui->setupUi(this);
 
-    connect(ui->spinBox, SIGNAL(valueChanged(int)), this,
-            SLOT(zoomFactorChanged(int)));
-
-    cpuPaneItems = NULL;
-    scene = new QGraphicsScene(this);
-    ui->graphicsView->setScene(scene);
-
-    ui->graphicsView->setFont(QFont(Pep::cpuFont, Pep::cpuFontSize));
-
-    initModel();
-
-    ui->spinBox->hide();
-    ui->singleStepPushButton->setEnabled(false);
-    ui->resumePushButton->setEnabled(true);
-
-}
-
-void CpuPaneTwoByteDataBus::initModel()
-{
-    if (cpuPaneItems != NULL) {
-        // disconnect all signals from this object before deleting it:
-#warning todo: delete all signals from object before deletion
-        delete cpuPaneItems;
-    }
-
-#warning todo: fix for the two byte model
-    cpuPaneItems = new CpuPaneBaseGraphicsItems(ui->graphicsView, 0, scene);
-    ui->graphicsView->scene()->addItem(cpuPaneItems);
-
-    ui->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-
-    connect(cpuPaneItems->loadCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
-    connect(cpuPaneItems->cLineEdit, SIGNAL(textChanged(QString)),
-            scene, SLOT(invalidate()));
-    connect(cpuPaneItems->bLineEdit, SIGNAL(textChanged(QString)),
-            scene, SLOT(invalidate()));
-    connect(cpuPaneItems->aLineEdit, SIGNAL(textChanged(QString)),
-            scene, SLOT(invalidate()));
-    connect(cpuPaneItems->MARCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
-    //connect(cpuPaneItems->MDRCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
-    connect(cpuPaneItems->MDROCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
-    connect(cpuPaneItems->MDRECk, SIGNAL(clicked()), scene, SLOT(invalidate()));
-
-    connect(cpuPaneItems->aMuxTristateLabel, SIGNAL(clicked()), this,
-            SLOT(labelClicked()));
-    connect(cpuPaneItems->aMuxTristateLabel, SIGNAL(clicked()), scene,
-            SLOT(invalidate()));
-
-    connect(cpuPaneItems->MDROMuxTristateLabel, SIGNAL(clicked()), this,
-            SLOT(labelClicked()));
-    connect(cpuPaneItems->MDROMuxTristateLabel, SIGNAL(clicked()), scene,
-            SLOT(invalidate()));
-    connect(cpuPaneItems->MDREMuxTristateLabel, SIGNAL(clicked()), this,
-            SLOT(labelClicked()));
-    connect(cpuPaneItems->MDREMuxTristateLabel, SIGNAL(clicked()), scene,
-            SLOT(invalidate()));
-
-    connect(cpuPaneItems->EOMuxTristateLabel, SIGNAL(clicked()), this,
-            SLOT(labelClicked()));
-    connect(cpuPaneItems->EOMuxTristateLabel, SIGNAL(clicked()), scene,
-            SLOT(invalidate()));
-
-    connect(cpuPaneItems->MARMuxTristateLabel, SIGNAL(clicked()), this,
-            SLOT(labelClicked()));
-    connect(cpuPaneItems->MARMuxTristateLabel, SIGNAL(clicked()), scene,
-            SLOT(invalidate()));
-
-    connect(cpuPaneItems->cMuxTristateLabel, SIGNAL(clicked()), this,
-            SLOT(labelClicked()));
-    connect(cpuPaneItems->cMuxTristateLabel, SIGNAL(clicked()), scene,
-            SLOT(invalidate()));
-
-    connect(cpuPaneItems->ALULineEdit, SIGNAL(textChanged(QString)), scene,
-            SLOT(invalidate()));
-
-    connect(cpuPaneItems->CSMuxTristateLabel, SIGNAL(clicked()), this,
-            SLOT(labelClicked()));
-    connect(cpuPaneItems->CSMuxTristateLabel, SIGNAL(clicked()), scene,
-            SLOT(invalidate()));
-
-    connect(cpuPaneItems->SCkCheckBox, SIGNAL(clicked()), scene,
-            SLOT(invalidate()));
-    connect(cpuPaneItems->CCkCheckBox, SIGNAL(clicked()), scene,
-            SLOT(invalidate()));
-    connect(cpuPaneItems->VCkCheckBox, SIGNAL(clicked()), scene,
-            SLOT(invalidate()));
-
-    connect(cpuPaneItems->AndZTristateLabel, SIGNAL(clicked()), this,
-            SLOT(labelClicked()));
-    connect(cpuPaneItems->AndZTristateLabel, SIGNAL(clicked()), scene,
-            SLOT(invalidate()));
-
-    connect(cpuPaneItems->ZCkCheckBox, SIGNAL(clicked()), scene,
-            SLOT(invalidate()));
-    connect(cpuPaneItems->NCkCheckBox, SIGNAL(clicked()), scene,
-            SLOT(invalidate()));
-
-    connect(cpuPaneItems->MemReadTristateLabel, SIGNAL(clicked()), this,
-            SLOT(labelClicked()));
-    connect(cpuPaneItems->MemReadTristateLabel, SIGNAL(clicked()), scene,
-            SLOT(invalidate()));
-    connect(cpuPaneItems->MemWriteTristateLabel, SIGNAL(clicked()), this,
-            SLOT(labelClicked()));
-    connect(cpuPaneItems->MemWriteTristateLabel, SIGNAL(clicked()), scene,
-            SLOT(invalidate()));
-
-    connect(cpuPaneItems->nBitLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    connect(cpuPaneItems->zBitLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    connect(cpuPaneItems->vBitLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    connect(cpuPaneItems->cBitLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    connect(cpuPaneItems->sBitLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-
-    // Simulation control connections
-    connect(ui->clockPushButton, SIGNAL(clicked()), this,
-            SLOT(clockButtonPushed()));
-    connect(ui->singleStepPushButton, SIGNAL(clicked()), this,
-            SLOT(singleStepButtonPushed()));
-    connect(ui->resumePushButton, SIGNAL(clicked()), this,
-            SLOT(resumeButtonPushed()));
-
-    // Register editing connnections
-    connect(cpuPaneItems->aRegLineEdit, SIGNAL(textEdited(QString)), this,
-            SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->xRegLineEdit, SIGNAL(textEdited(QString)), this,
-            SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->spRegLineEdit, SIGNAL(textEdited(QString)), this,
-            SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->pcRegLineEdit, SIGNAL(textEdited(QString)), this,
-            SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->irRegLineEdit, SIGNAL(textEdited(QString)), this,
-            SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->t1RegLineEdit, SIGNAL(textEdited(QString)), this,
-            SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->t2RegLineEdit, SIGNAL(textEdited(QString)), this,
-            SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->t3RegLineEdit, SIGNAL(textEdited(QString)), this,
-            SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->t4RegLineEdit, SIGNAL(textEdited(QString)), this,
-            SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->t5RegLineEdit, SIGNAL(textEdited(QString)), this,
-            SLOT(regTextEdited(QString)));
-    connect(cpuPaneItems->t6RegLineEdit, SIGNAL(textEdited(QString)), this,
-            SLOT(regTextEdited(QString)));
-
-    connect(cpuPaneItems->aRegLineEdit, SIGNAL(editingFinished()), this,
-            SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->xRegLineEdit, SIGNAL(editingFinished()), this,
-            SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->spRegLineEdit, SIGNAL(editingFinished()), this,
-            SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->pcRegLineEdit, SIGNAL(editingFinished()), this,
-            SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->irRegLineEdit, SIGNAL(editingFinished()), this,
-            SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->t1RegLineEdit, SIGNAL(editingFinished()), this,
-            SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->t2RegLineEdit, SIGNAL(editingFinished()), this,
-            SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->t3RegLineEdit, SIGNAL(editingFinished()), this,
-            SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->t4RegLineEdit, SIGNAL(editingFinished()), this,
-            SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->t5RegLineEdit, SIGNAL(editingFinished()), this,
-            SLOT(regTextFinishedEditing()));
-    connect(cpuPaneItems->t6RegLineEdit, SIGNAL(editingFinished()), this,
-            SLOT(regTextFinishedEditing()));
-
-    connect(cpuPaneItems->ALULineEdit, SIGNAL(textChanged(QString)), this,
-            SLOT(ALUTextEdited(QString)));
-
-
-    // disconnect all cpuPaneItems that differ between models:
-    disconnect(cpuPaneItems->MDRCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
-
-    disconnect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), this,
-               SLOT(labelClicked()));
-    disconnect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), scene,
-               SLOT(invalidate()));
-
-    if (Pep::cpuFeatures == Enu::OneByteDataBus) {
-        // connect items for this model
-        connect(cpuPaneItems->MDRCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
-
-        connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), this,
-                SLOT(labelClicked()));
-        connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), scene,
-                SLOT(invalidate()));
-    }
-    else if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
-        // connect items for *this* model
-#warning: todo, once the cpuPaneItems has been updated to include the new items.
-    }
-
-}
-
-void CpuPaneTwoByteDataBus::clearCpu()
-{
-    clearCpuControlSignals();
-
-    setRegister(Enu::A, 0);
-    setRegister(Enu::X, 0);
-    setRegister(Enu::SP, 0);
-    setRegister(Enu::PC, 0);
-    setRegister(Enu::IR, 0);
-    setRegister(Enu::T1, 0);
-    setRegister(Enu::T2, 0);
-    setRegister(Enu::T3, 0);
-    setRegister(Enu::T4, 0);
-    setRegister(Enu::T5, 0);
-    setRegister(Enu::T6, 0);
-
-    setRegister(Enu::MARA, 0);
-    setRegister(Enu::MARB, 0);
-    setRegister(Enu::MDRE, 0);
-    setRegister(Enu::MDRO, 0);
-
-    setStatusBit(Enu::S, false);
-    setStatusBit(Enu::C, false);
-    setStatusBit(Enu::V, false);
-    setStatusBit(Enu::Z, false);
-    setStatusBit(Enu::N, false);
-
-}
-
-void CpuPaneTwoByteDataBus::clearCpuControlSignals()
-{
-    cpuPaneItems->loadCk->setChecked(false);
-    cpuPaneItems->cLineEdit->setText("");
-    cpuPaneItems->bLineEdit->setText("");
-    cpuPaneItems->aLineEdit->setText("");
-    cpuPaneItems->MARCk->setChecked(false);
-    cpuPaneItems->MDRECk->setChecked(false);
-    cpuPaneItems->MDROCk->setChecked(false);
-    cpuPaneItems->aMuxTristateLabel->setText("");
-    cpuPaneItems->MDROMuxTristateLabel->setText("");
-    cpuPaneItems->MDREMuxTristateLabel->setText("");
-    cpuPaneItems->EOMuxTristateLabel->setText("");
-    cpuPaneItems->MARMuxTristateLabel->setText("");
-    cpuPaneItems->cMuxTristateLabel->setText("");
-    cpuPaneItems->ALULineEdit->setText("");
-    cpuPaneItems->CSMuxTristateLabel->setText("");
-    cpuPaneItems->SCkCheckBox->setChecked(false);
-    cpuPaneItems->CCkCheckBox->setChecked(false);
-    cpuPaneItems->VCkCheckBox->setChecked(false);
-    cpuPaneItems->AndZTristateLabel->setText("");
-    cpuPaneItems->ZCkCheckBox->setChecked(false);
-    cpuPaneItems->NCkCheckBox->setChecked(false);
-    cpuPaneItems->MemReadTristateLabel->setText("");
-    cpuPaneItems->MemWriteTristateLabel->setText("");
 }
 
 void CpuPaneTwoByteDataBus::updateMainBusState()
@@ -558,82 +318,6 @@ bool CpuPaneTwoByteDataBus::step(QString &errorString)
     return true;
 }
 
-void CpuPaneTwoByteDataBus::on_copyToMicrocodePushButton_clicked()
-{
-    MicroCode code;
-    if (cpuPaneItems->loadCk->isChecked()) {
-        code.set(Enu::LoadCk, 1);
-    }
-    if (cpuPaneItems->cLineEdit->text() != "") {
-        code.set(Enu::C, cpuPaneItems->cLineEdit->text().toInt());
-    }
-    if (cpuPaneItems->bLineEdit->text() != "") {
-        code.set(Enu::B, cpuPaneItems->bLineEdit->text().toInt());
-    }
-    if (cpuPaneItems->aLineEdit->text() != "") {
-        code.set(Enu::A, cpuPaneItems->aLineEdit->text().toInt());
-    }
-    if (cpuPaneItems->MARCk->isChecked()) {
-        code.set(Enu::MARCk, 1);
-    }
-    if (cpuPaneItems->MDRECk->isChecked()) {
-        code.set(Enu::MDRECk, 1);
-    }
-    if (cpuPaneItems->MDROCk->isChecked()) {
-        code.set(Enu::MDROCk, 1);
-    }
-    if (cpuPaneItems->aMuxTristateLabel->text() != "") {
-        code.set(Enu::AMux, cpuPaneItems->aMuxTristateLabel->text().toInt());
-    }
-    if (cpuPaneItems->MDROMuxTristateLabel->text() != "") {
-        code.set(Enu::MDROMux, cpuPaneItems->MDROMuxTristateLabel->text().toInt());
-    }
-    if (cpuPaneItems->MDREMuxTristateLabel->text() != "") {
-        code.set(Enu::MDREMux, cpuPaneItems->MDREMuxTristateLabel->text().toInt());
-    }
-    if (cpuPaneItems->EOMuxTristateLabel->text() != "") {
-        code.set(Enu::EOMux, cpuPaneItems->EOMuxTristateLabel->text().toInt());
-    }
-    if (cpuPaneItems->MARMuxTristateLabel->text() != "") {
-        code.set(Enu::MARMux, cpuPaneItems->MARMuxTristateLabel->text().toInt());
-    }
-    if (cpuPaneItems->cMuxTristateLabel->text() != "") {
-        code.set(Enu::CMux, cpuPaneItems->cMuxTristateLabel->text().toInt());
-    }
-    if (cpuPaneItems->ALULineEdit->text() != "") {
-        code.set(Enu::ALU, cpuPaneItems->ALULineEdit->text().toInt());
-    }
-    if (cpuPaneItems->CSMuxTristateLabel->text() != "") {
-        code.set(Enu::CSMux, cpuPaneItems->CSMuxTristateLabel->text().toInt());
-    }
-    if (cpuPaneItems->SCkCheckBox->isChecked()) {
-        code.set(Enu::SCk, 1);
-    }
-    if (cpuPaneItems->CCkCheckBox->isChecked()) {
-        code.set(Enu::CCk, 1);
-    }
-    if (cpuPaneItems->VCkCheckBox->isChecked()) {
-        code.set(Enu::VCk, 1);
-    }
-    if (cpuPaneItems->AndZTristateLabel->text() != "") {
-        code.set(Enu::AndZ, cpuPaneItems->AndZTristateLabel->text().toInt());
-    }
-    if (cpuPaneItems->ZCkCheckBox->isChecked()) {
-        code.set(Enu::ZCk, 1);
-    }
-    if (cpuPaneItems->NCkCheckBox->isChecked()) {
-        code.set(Enu::NCk, 1);
-    }
-    if (cpuPaneItems->MemReadTristateLabel->text() != "") {
-        code.set(Enu::MemRead, cpuPaneItems->MemReadTristateLabel->text().toInt());
-    }
-    if (cpuPaneItems->MemWriteTristateLabel->text() != "") {
-        code.set(Enu::MemWrite, cpuPaneItems->MemWriteTristateLabel->text().toInt());
-    }
-    emit appendMicrocodeLine(code.getSourceCode());
-
-}
-
 bool CpuPaneTwoByteDataBus::getAMuxOut(quint8& out, QString& errorString)
 {
     if (cpuPaneItems->aMuxTristateLabel->text() == "0") {
@@ -659,7 +343,6 @@ bool CpuPaneTwoByteDataBus::getAMuxOut(quint8& out, QString& errorString)
     return false;
 }
 
-#warning todo: do.
 bool CpuPaneTwoByteDataBus::getMARMuxOut(quint8& mara, quint8 &marb,
                                          QString& errorString)
 {

@@ -35,8 +35,8 @@
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
-        QMainWindow(parent),
-        ui(new Ui::MainWindow)
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
@@ -49,9 +49,13 @@ MainWindow::MainWindow(QWidget *parent) :
     delete ui->microcodeFrame;
     objectCodePane = new ObjectCodePane(ui->codeSplitter);
     delete ui->objectCodeFrame;
-    //cpuPane = new CpuPane(ui->mainSplitter);
-    cpuPane = NULL;
-    on_actionOne_Byte_Data_Bus_Model_triggered();
+    cpuPaneOneByteDataBus = new CpuPane(ui->mainSplitter);
+    ui->mainSplitter->insertWidget(1, cpuPaneOneByteDataBus);
+    cpuPane = cpuPaneOneByteDataBus;
+
+    //cpuPaneTwoByteDataBus = new CpuPaneTwoByteDataBus(ui->mainSplitter);
+    //ui->mainSplitter->insertWidget(1, cpuPaneTwoByteDataBus);
+
     delete ui->cpuFrame;
 
     QList<int> list;
@@ -98,6 +102,8 @@ MainWindow::MainWindow(QWidget *parent) :
     qApp->installEventFilter(this);
 
     //connect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
+
+    on_actionOne_Byte_Data_Bus_Model_triggered();
 }
 
 MainWindow::~MainWindow()
@@ -293,10 +299,10 @@ void MainWindow::on_actionFile_Open_triggered()
 {
     if (maybeSave()) {
         QString fileName = QFileDialog::getOpenFileName(
-                this,
-                "Open text file",
-                curPath,
-                "Text files (*.pepcpu *.txt)");
+                    this,
+                    "Open text file",
+                    curPath,
+                    "Text files (*.pepcpu *.txt)");
         if (!fileName.isEmpty()) {
             loadFile(fileName);
             curPath = QFileInfo(fileName).path();
@@ -317,10 +323,10 @@ bool MainWindow::on_actionFile_Save_triggered()
 bool MainWindow::on_actionFile_Save_As_triggered()
 {
     QString fileName = QFileDialog::getSaveFileName(
-            this,
-            "Save Microcode",
-            curFile.isEmpty() ? curPath + "/untitled.pepcpu" : curPath + "/" + strippedName(curFile),
-            "Pep9 Source (*.pepcpu *.txt)");
+                this,
+                "Save Microcode",
+                curFile.isEmpty() ? curPath + "/untitled.pepcpu" : curPath + "/" + strippedName(curFile),
+                "Pep9 Source (*.pepcpu *.txt)");
     if (fileName.isEmpty()) {
         return false;
     }
@@ -493,17 +499,14 @@ void MainWindow::on_actionOne_Byte_Data_Bus_Model_triggered()
     objectCodePane->clearSimulationView();
     mainMemory->clearMemory();
 
-    if (cpuPane != NULL) {
-        disconnect(cpuPane, SIGNAL(updateSimulation()), this, SLOT(updateSimulation()));
-        disconnect(cpuPane, SIGNAL(simulationFinished()), this, SLOT(simulationFinished()));
-        disconnect(cpuPane, SIGNAL(stopSimulation()), this, SLOT(stopSimulation()));
-        disconnect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
-        disconnect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
-        delete cpuPane;
-        cpuPane = NULL;
-    }
-    cpuPane = new CpuPane(ui->mainSplitter);
-    ui->mainSplitter->insertWidget(1, cpuPane);
+    disconnect(cpuPane, SIGNAL(updateSimulation()), this, SLOT(updateSimulation()));
+    disconnect(cpuPane, SIGNAL(simulationFinished()), this, SLOT(simulationFinished()));
+    disconnect(cpuPane, SIGNAL(stopSimulation()), this, SLOT(stopSimulation()));
+    disconnect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
+    disconnect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
+
+    cpuPane = cpuPaneOneByteDataBus;
+
     connect(cpuPane, SIGNAL(updateSimulation()), this, SLOT(updateSimulation()));
     connect(cpuPane, SIGNAL(simulationFinished()), this, SLOT(simulationFinished()));
     connect(cpuPane, SIGNAL(stopSimulation()), this, SLOT(stopSimulation()));
@@ -532,24 +535,19 @@ void MainWindow::on_actionTwo_Byte_Data_Bus_Model_triggered()
     objectCodePane->clearSimulationView();
     mainMemory->clearMemory();
 
-    if (cpuPane != NULL) {
-        disconnect(cpuPane, SIGNAL(updateSimulation()), this, SLOT(updateSimulation()));
-        disconnect(cpuPane, SIGNAL(simulationFinished()), this, SLOT(simulationFinished()));
-        disconnect(cpuPane, SIGNAL(stopSimulation()), this, SLOT(stopSimulation()));
-        disconnect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
-        disconnect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
+    disconnect(cpuPane, SIGNAL(updateSimulation()), this, SLOT(updateSimulation()));
+    disconnect(cpuPane, SIGNAL(simulationFinished()), this, SLOT(simulationFinished()));
+    disconnect(cpuPane, SIGNAL(stopSimulation()), this, SLOT(stopSimulation()));
+    disconnect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
+    disconnect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
 
-        delete cpuPane;
-        cpuPane = NULL;
-    }
-    cpuPane = new CpuPaneTwoByteDataBus(ui->mainSplitter);
-    ui->mainSplitter->insertWidget(1, cpuPane);
+    cpuPane = cpuPaneTwoByteDataBus;
+
     connect(cpuPane, SIGNAL(updateSimulation()), this, SLOT(updateSimulation()));
     connect(cpuPane, SIGNAL(simulationFinished()), this, SLOT(simulationFinished()));
     connect(cpuPane, SIGNAL(stopSimulation()), this, SLOT(stopSimulation()));
     connect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
     connect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
-
 
     cpuPane->clearCpu();
     cpuPane->clearCpuControlSignals();

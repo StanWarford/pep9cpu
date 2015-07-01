@@ -40,17 +40,17 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
       parent(widgetParent)
 {
 
-    MDROCk = new QCheckBox("MDROCk", parent);
+    MDROCk = new QCheckBox("MDROCk");
     MDROCk->hide();
-    MDRECk = new QCheckBox("MDRECk", parent);
+    MDRECk = new QCheckBox("MDRECk");
     MDRECk->hide();
-    MDROMuxTristateLabel = new TristateLabel(parent, TristateLabel::Tristate);
+    MDROMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
     MDROMuxTristateLabel->hide();
-    MDREMuxTristateLabel = new TristateLabel(parent, TristateLabel::Tristate);
+    MDREMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
     MDREMuxTristateLabel->hide();
-    EOMuxTristateLabel = new TristateLabel(parent, TristateLabel::Tristate);
+    EOMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
     EOMuxTristateLabel->hide();
-    MARMuxTristateLabel = new TristateLabel(parent, TristateLabel::Tristate);
+    MARMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
     MARMuxTristateLabel->hide();
 
 
@@ -78,7 +78,7 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     arrowDownGray = arrowLeftGray.transformed(t_gray);
 
     // LoadCk
-    loadCk = new QCheckBox("LoadCk", parent);
+    loadCk = new QCheckBox("LoadCk");
     loadCk->setPalette(QPalette(Qt::white));
     loadCk->setGeometry(OneByteShapes::loadCkCheckbox);
     scene->addWidget(loadCk);
@@ -87,53 +87,53 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     // Note: the line edits must be added first, otherwise they cover the
     //  labels that go with them.
     QRegExp cbaRegExp("^((3[0-1])|([0-2][0-9])|([0-9]))$");
-    cLineEdit = new QLineEdit(parent);
+    cLineEdit = new QLineEdit();
     cLineEdit->setAlignment(Qt::AlignCenter);
     cLineEdit->setGeometry(OneByteShapes::cLineEdit);
     cLineEdit->setValidator(new QRegExpValidator(cbaRegExp, cLineEdit));
     cLineEdit->setPalette(QPalette(Qt::white));
     scene->addWidget(cLineEdit);
-    cLabel = new QLabel("C", parent);
+    cLabel = new QLabel("C");
     cLabel->setPalette(QPalette(Qt::white));
     cLabel->setGeometry(OneByteShapes::cLabel);
     scene->addWidget(cLabel);
 
     // B
-    bLineEdit = new QLineEdit(parent);
+    bLineEdit = new QLineEdit();
     bLineEdit->setAlignment(Qt::AlignCenter);
     bLineEdit->setGeometry(OneByteShapes::bLineEdit);
     bLineEdit->setValidator(new QRegExpValidator(cbaRegExp, bLineEdit));
     bLineEdit->setPalette(QPalette(Qt::white));
     scene->addWidget(bLineEdit);
-    bLabel = new QLabel("B", parent);
+    bLabel = new QLabel("B");
     bLabel->setGeometry(OneByteShapes::bLabel);
     bLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(bLabel);
 
     // A
-    aLineEdit = new QLineEdit(parent);
+    aLineEdit = new QLineEdit();
     aLineEdit->setAlignment(Qt::AlignCenter);
     aLineEdit->setGeometry(OneByteShapes::aLineEdit);
     aLineEdit->setValidator(new QRegExpValidator(cbaRegExp, aLineEdit));
     aLineEdit->setPalette(QPalette(Qt::white));
     scene->addWidget(aLineEdit);
-    aLabel = new QLabel("A", parent);
+    aLabel = new QLabel("A");
     aLabel->setGeometry(OneByteShapes::aLabel);
     aLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(aLabel);
 
     // MARCk
-    MARCk = new QCheckBox("MARCk", parent);
+    MARCk = new QCheckBox("MARCk");
     MARCk->setGeometry(OneByteShapes::MARCkCheckbox);
     MARCk->setPalette(QPalette(Qt::white));
     scene->addWidget(MARCk);
-    MARALabel = new QLabel("0x00", parent);
+    MARALabel = new QLabel("0x00");
     MARALabel->setGeometry(OneByteShapes::MARALabel);
     MARALabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MARALabel->setAutoFillBackground(false);
     MARALabel->setPalette(QPalette(seqCircuitColor));
     scene->addWidget(MARALabel);
-    MARBLabel = new QLabel("0x00", parent);
+    MARBLabel = new QLabel("0x00");
     MARBLabel->setGeometry(OneByteShapes::MARBLabel);
     MARBLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MARBLabel->setPalette(QPalette(seqCircuitColor));
@@ -146,23 +146,23 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
                       QPen(QBrush(Qt::black), 1), QBrush(Qt::yellow));
 
     // MDRCk
-    MDRCk = new QCheckBox("MDRCk", parent);
+    MDRCk = new QCheckBox("MDRCk");
     MDRCk->setGeometry(OneByteShapes::MDRCkCheckbox);
     MDRCk->setPalette(QPalette(Qt::white));
     scene->addWidget(MDRCk);
     // MDR
     scene->addRect(OneByteShapes::MDRLabel);
 
-    aMuxLabel = new QLabel("AMux", parent);
+    aMuxLabel = new QLabel("AMux");
     aMuxLabel->setGeometry(OneByteShapes::aMuxLabel);
     aMuxLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(aMuxLabel);
-    aMuxerDataLabel = new QLabel("AMux", parent);
+    aMuxerDataLabel = new QLabel("AMux");
     aMuxerDataLabel->setGeometry(OneByteShapes::aMuxerDataLabel);
     aMuxerDataLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     aMuxerDataLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(aMuxerDataLabel);
-    aMuxTristateLabel = new TristateLabel(parent, TristateLabel::Tristate);
+    aMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
     aMuxTristateLabel->setGeometry(OneByteShapes::aMuxTristateLabel);
     aMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     aMuxTristateLabel->setPalette(QPalette(Qt::white));
@@ -172,22 +172,22 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     aMuxerBorder = scene->addRect(OneByteShapes::aMuxerDataLabel);
 
     // MDRMux
-    MDRMuxLabel = new QLabel("MDRMux", parent);
+    MDRMuxLabel = new QLabel("MDRMux");
     MDRMuxLabel->setGeometry(OneByteShapes::MDRMuxLabel);
     MDRMuxLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(MDRMuxLabel);
-    MDRMuxerDataLabel = new QLabel("MDRMux", parent);
+    MDRMuxerDataLabel = new QLabel("MDRMux");
     MDRMuxerDataLabel->setGeometry(OneByteShapes::MDRMuxerDataLabel);
     MDRMuxerDataLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MDRMuxerDataLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(MDRMuxerDataLabel);
-    MDRMuxTristateLabel = new TristateLabel(parent, TristateLabel::Tristate);
+    MDRMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
     MDRMuxTristateLabel->setGeometry(OneByteShapes::MDRMuxTristateLabel);
     MDRMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MDRMuxTristateLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(MDRMuxTristateLabel);
     scene->addRect(OneByteShapes::MDRMuxTristateLabel, QPen(Qt::gray));
-    MDRLabel = new QLabel("0x00", parent);
+    MDRLabel = new QLabel("0x00");
     MDRLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MDRLabel->setGeometry(OneByteShapes::MDRLabel);
     MDRLabel->setPalette(QPalette(seqCircuitColor));
@@ -204,16 +204,16 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
 
 
     // CMux
-    cMuxLabel = new QLabel("CMux", parent);
+    cMuxLabel = new QLabel("CMux");
     cMuxLabel->setGeometry(OneByteShapes::cMuxLabel);
     cMuxLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(cMuxLabel);
-    cMuxerLabel = new QLabel("CMux", parent);
+    cMuxerLabel = new QLabel("CMux");
     cMuxerLabel->setGeometry(OneByteShapes::cMuxerLabel);
     cMuxerLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     cMuxerLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(cMuxerLabel);
-    cMuxTristateLabel = new TristateLabel(parent, TristateLabel::Tristate);
+    cMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
     cMuxTristateLabel->setGeometry(OneByteShapes::cMuxTristateLabel);
     cMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     cMuxTristateLabel->setPalette(QPalette(Qt::white));
@@ -224,7 +224,7 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     // ALU
     // keep this before the label that goes with it, or the line edit
     //  appears on top of the label
-    ALULineEdit = new QLineEdit(parent);
+    ALULineEdit = new QLineEdit();
     ALULineEdit->setAlignment(Qt::AlignCenter);
     ALULineEdit->setGeometry(OneByteShapes::ALULineEdit);
     ALULineEdit->setValidator(new QRegExpValidator(
@@ -232,12 +232,12 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
                                   ALULineEdit));
     ALULineEdit->setPalette(QPalette(Qt::white));
     scene->addWidget(ALULineEdit);
-    ALULabel = new QLabel("ALU", parent);
+    ALULabel = new QLabel("ALU");
     ALULabel->setGeometry(OneByteShapes::ALULabel);
     ALULabel->setPalette(QPalette(Qt::white));
     scene->addWidget(ALULabel);
 
-    ALUFunctionLabel = new QLabel("", parent);
+    ALUFunctionLabel = new QLabel("");
     ALUFunctionLabel->setGeometry(OneByteShapes::ALUFunctionLabel);
     ALUFunctionLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     ALUFunctionLabel->setPalette(QPalette(QColor(Qt::blue).lighter(190)));
@@ -255,16 +255,16 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     ALUPoly->setZValue(-1);
 
     // CSMux
-    CSMuxLabel = new QLabel("CSMux", parent);
+    CSMuxLabel = new QLabel("CSMux");
     CSMuxLabel->setGeometry(OneByteShapes::CSMuxLabel);
     CSMuxLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(CSMuxLabel);
-    CSMuxerDataLabel = new QLabel("CSMux", parent);
+    CSMuxerDataLabel = new QLabel("CSMux");
     CSMuxerDataLabel->setGeometry(OneByteShapes::CSMuxerDataLabel);
     CSMuxerDataLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     CSMuxerDataLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(CSMuxerDataLabel);
-    CSMuxTristateLabel = new TristateLabel(parent, TristateLabel::Tristate);
+    CSMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
     CSMuxTristateLabel->setGeometry(OneByteShapes::CSMuxTristateLabel);
     CSMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     CSMuxTristateLabel->setPalette(QPalette(Qt::white));
@@ -275,11 +275,11 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
                           CSMuxerDataLabel->size()));
 
     // SCk
-    SCkCheckBox = new QCheckBox ("SCk", parent);
+    SCkCheckBox = new QCheckBox ("SCk");
     SCkCheckBox->setGeometry(OneByteShapes::SCkCheckBox);
     SCkCheckBox->setPalette(QPalette(Qt::white));
     scene->addWidget(SCkCheckBox);
-    sBitLabel = new TristateLabel(parent, TristateLabel::ZeroOne);
+    sBitLabel = new TristateLabel(0, TristateLabel::ZeroOne);
     sBitLabel->setText("0");
     sBitLabel->setGeometry(OneByteShapes::sBitLabel);
     sBitLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -287,11 +287,11 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     scene->addWidget(sBitLabel);
 
     // CCk
-    CCkCheckBox = new QCheckBox ("CCk", parent);
+    CCkCheckBox = new QCheckBox ("CCk");
     CCkCheckBox->setGeometry(OneByteShapes::CCkCheckBox);
     CCkCheckBox->setPalette(QPalette(Qt::white));
     scene->addWidget(CCkCheckBox);
-    cBitLabel = new TristateLabel(parent, TristateLabel::ZeroOne);
+    cBitLabel = new TristateLabel(0, TristateLabel::ZeroOne);
     cBitLabel->setText("0");
     cBitLabel->setGeometry(OneByteShapes::cBitLabel);
     cBitLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -299,11 +299,11 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     scene->addWidget(cBitLabel);
 
     // VCk
-    VCkCheckBox = new QCheckBox("VCk", parent);
+    VCkCheckBox = new QCheckBox("VCk");
     VCkCheckBox->setGeometry(OneByteShapes::VCkCheckBox);
     VCkCheckBox->setPalette(QPalette(Qt::white));
     scene->addWidget(VCkCheckBox);
-    vBitLabel = new TristateLabel(parent, TristateLabel::ZeroOne);
+    vBitLabel = new TristateLabel(0, TristateLabel::ZeroOne);
     vBitLabel->setText("0");
     vBitLabel->setGeometry(OneByteShapes::vBitLabel);
     vBitLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -311,11 +311,11 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     scene->addWidget(vBitLabel);
 
     // AndZ
-    AndZLabel = new QLabel("AndZ", parent);
+    AndZLabel = new QLabel("AndZ");
     AndZLabel->setGeometry(OneByteShapes::AndZLabel);
     AndZLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(AndZLabel);
-    AndZTristateLabel = new TristateLabel(parent, TristateLabel::Tristate);
+    AndZTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
     AndZTristateLabel->setGeometry(OneByteShapes::AndZTristateLabel);
     AndZTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     AndZTristateLabel->setPalette(QPalette(Qt::white));
@@ -323,7 +323,7 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     scene->addRect(QRectF(AndZTristateLabel->pos(), AndZTristateLabel->size()),
                    QPen(Qt::gray));
 
-    AndZMuxLabel = new QLabel("AndZ", parent);
+    AndZMuxLabel = new QLabel("AndZ");
     AndZMuxLabel->setGeometry(OneByteShapes::AndZMuxLabel);
     AndZMuxLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     AndZMuxLabel->setPalette(QPalette(Qt::white));
@@ -331,11 +331,11 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     scene->addRect(OneByteShapes::AndZMuxLabel);
 
     // ZCk
-    ZCkCheckBox = new QCheckBox("ZCk", parent);
+    ZCkCheckBox = new QCheckBox("ZCk");
     ZCkCheckBox->setGeometry(OneByteShapes::ZCkCheckBox);
     ZCkCheckBox->setPalette(QPalette(Qt::white));
     scene->addWidget(ZCkCheckBox);
-    zBitLabel = new TristateLabel(parent, TristateLabel::ZeroOne);
+    zBitLabel = new TristateLabel(0, TristateLabel::ZeroOne);
     zBitLabel->setText("0");
     zBitLabel->setGeometry(OneByteShapes::zBitLabel);
     zBitLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -343,11 +343,11 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     scene->addWidget(zBitLabel);
 
     // NCk
-    NCkCheckBox = new QCheckBox ("NCk", parent);
+    NCkCheckBox = new QCheckBox ("NCk");
     NCkCheckBox->setGeometry(OneByteShapes::NCkCheckBox); //582+4
     NCkCheckBox->setPalette(QPalette(Qt::white));
     scene->addWidget(NCkCheckBox);
-    nBitLabel = new TristateLabel(parent, TristateLabel::ZeroOne);
+    nBitLabel = new TristateLabel(0, TristateLabel::ZeroOne);
     nBitLabel->setText("0");
     nBitLabel->setGeometry(OneByteShapes::nBitLabel); //582+4
     nBitLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -361,11 +361,11 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     scene->addRect(QRectF(nBitLabel->pos(), nBitLabel->size())); // N
     scene->addRect(QRectF(sBitLabel->pos(), sBitLabel->size())); // S
 
-    MemWriteLabel = new QLabel("MemWrite", parent);
+    MemWriteLabel = new QLabel("MemWrite");
     MemWriteLabel->setGeometry(OneByteShapes::MemWriteLabel);
     MemWriteLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(MemWriteLabel);
-    MemWriteTristateLabel = new TristateLabel(parent, TristateLabel::OneUndefined);
+    MemWriteTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
     MemWriteTristateLabel->setGeometry(OneByteShapes::MemWriteTristateLabel);
     MemWriteTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MemWriteTristateLabel->setPalette(QPalette(Qt::white));
@@ -373,11 +373,11 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     scene->addRect(QRectF(MemWriteTristateLabel->pos(),
                           MemWriteTristateLabel->size()), QPen(Qt::gray));
 
-    MemReadLabel = new QLabel("MemRead", parent);
+    MemReadLabel = new QLabel("MemRead");
     MemReadLabel->setGeometry(OneByteShapes::MemReadLabel);
     MemReadLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(MemReadLabel);
-    MemReadTristateLabel = new TristateLabel(parent, TristateLabel::OneUndefined);
+    MemReadTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
     MemReadTristateLabel->setGeometry(OneByteShapes::MemReadTristateLabel);
     MemReadTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MemReadTristateLabel->setPalette(QPalette(Qt::white));
@@ -393,19 +393,19 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
                                         Qt::BevelJoin), QBrush(seqCircuitColor));
 
     QLabel *ph;
-    ph = new QLabel("0,1", parent);
+    ph = new QLabel("0,1");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(8,10, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
     scene->addWidget(ph);
-    ph = new QLabel("A", parent);
+    ph = new QLabel("A");
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(30,10, 20,22);
     scene->addWidget(ph);
-    aRegLineEdit = new QLineEdit("0x0000", parent);
+    aRegLineEdit = new QLineEdit("0x0000");
     aRegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     aRegLineEdit->setGeometry(OneByteShapes::aRegLineEdit);
     aRegLineEdit->setValidator(new QRegExpValidator(
@@ -417,19 +417,19 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     //    QObject::connect(A, SIGNAL(valueChanged()),
                            //this, SLOT(slotRegisterChanged()));
 
-    ph = new QLabel("2,3", parent);
+    ph = new QLabel("2,3");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(8,38, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
     scene->addWidget(ph);
-    ph = new QLabel("X", parent);
+    ph = new QLabel("X");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(30,38, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
-    xRegLineEdit = new QLineEdit("0x0000", parent);
+    xRegLineEdit = new QLineEdit("0x0000");
     xRegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     xRegLineEdit->setGeometry(OneByteShapes::xRegLineEdit);
     xRegLineEdit->setValidator(new QRegExpValidator(
@@ -439,19 +439,19 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     xRegLineEdit->setFrame(false);
     scene->addWidget(xRegLineEdit);
 
-    ph = new QLabel("4,5", parent);
+    ph = new QLabel("4,5");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(8,66, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
     scene->addWidget(ph);
-    ph = new QLabel("SP", parent);
+    ph = new QLabel("SP");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(30,66, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
-    spRegLineEdit = new QLineEdit("0x0000", parent);
+    spRegLineEdit = new QLineEdit("0x0000");
     spRegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     spRegLineEdit->setGeometry(OneByteShapes::spRegLineEdit);
     spRegLineEdit->setValidator(new QRegExpValidator(
@@ -461,19 +461,19 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     spRegLineEdit->setFrame(false);
     scene->addWidget(spRegLineEdit);
 
-    ph = new QLabel("6,7", parent);
+    ph = new QLabel("6,7");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(8,93, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
     scene->addWidget(ph);
-    ph = new QLabel("PC", parent);
+    ph = new QLabel("PC");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(30,93, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
-    pcRegLineEdit = new QLineEdit("0x0000", parent);
+    pcRegLineEdit = new QLineEdit("0x0000");
     pcRegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     pcRegLineEdit->setGeometry(OneByteShapes::pcRegLineEdit);
     pcRegLineEdit->setValidator(new QRegExpValidator(
@@ -485,19 +485,19 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     //    QObject::connect(X, SIGNAL(valueChanged()),
                            //this, SLOT(slotRegisterChanged()));
 
-    ph = new QLabel("8-10", parent);
+    ph = new QLabel("8-10");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(128,10, 30,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
     scene->addWidget(ph);
-    ph = new QLabel("IR", parent);
+    ph = new QLabel("IR");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(160,10, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
-    irRegLineEdit = new QLineEdit("0x000000", parent);
+    irRegLineEdit = new QLineEdit("0x000000");
     irRegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     irRegLineEdit->setGeometry(OneByteShapes::irRegLineEdit);
     irRegLineEdit->setValidator(new QRegExpValidator(
@@ -507,19 +507,19 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     irRegLineEdit->setFrame(false);
     scene->addWidget(irRegLineEdit);
 
-    ph = new QLabel("11", parent);
+    ph = new QLabel("11");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(128,38, 30,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
     scene->addWidget(ph);
-    ph = new QLabel("T1", parent);
+    ph = new QLabel("T1");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(160,38, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
-    t1RegLineEdit = new QLineEdit("0x00", parent);
+    t1RegLineEdit = new QLineEdit("0x00");
     t1RegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     t1RegLineEdit->setGeometry(OneByteShapes::t1RegLineEdit);
     t1RegLineEdit->setValidator(new QRegExpValidator(
@@ -529,19 +529,19 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     t1RegLineEdit->setFrame(false);
     scene->addWidget(t1RegLineEdit);
 
-    ph = new QLabel("12,13", parent);
+    ph = new QLabel("12,13");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(128,66, 30,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
     scene->addWidget(ph);
-    ph = new QLabel("T2", parent);
+    ph = new QLabel("T2");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(160,66, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
-    t2RegLineEdit = new QLineEdit("0x0000", parent);
+    t2RegLineEdit = new QLineEdit("0x0000");
     t2RegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     t2RegLineEdit->setGeometry(OneByteShapes::t2RegLineEdit);
     t2RegLineEdit->setValidator(new QRegExpValidator(
@@ -551,19 +551,19 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     t2RegLineEdit->setFrame(false);
     scene->addWidget(t2RegLineEdit);
 
-    ph = new QLabel("14,15", parent);
+    ph = new QLabel("14,15");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(128,93, 30,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
     scene->addWidget(ph);
-    ph = new QLabel("T3", parent);
+    ph = new QLabel("T3");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(160,93, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
-    t3RegLineEdit = new QLineEdit("0x0000", parent);
+    t3RegLineEdit = new QLineEdit("0x0000");
     t3RegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     t3RegLineEdit->setGeometry(OneByteShapes::t3RegLineEdit);
     t3RegLineEdit->setValidator(new QRegExpValidator(
@@ -573,19 +573,19 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     t3RegLineEdit->setFrame(false);
     scene->addWidget(t3RegLineEdit);
 
-    ph = new QLabel("16,17", parent);
+    ph = new QLabel("16,17");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(257,10, 30,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
     scene->addWidget(ph);
-    ph = new QLabel("T4", parent);
+    ph = new QLabel("T4");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(289,10, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
-    t4RegLineEdit = new QLineEdit("0x0000", parent);
+    t4RegLineEdit = new QLineEdit("0x0000");
     t4RegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     t4RegLineEdit->setGeometry(OneByteShapes::t4RegLineEdit);
     t4RegLineEdit->setValidator(new QRegExpValidator(
@@ -595,19 +595,19 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     t4RegLineEdit->setFrame(false);
     scene->addWidget(t4RegLineEdit);
 
-    ph = new QLabel("18,19", parent);
+    ph = new QLabel("18,19");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(257,38, 30,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
     scene->addWidget(ph);
-    ph = new QLabel("T5", parent);
+    ph = new QLabel("T5");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(289,38, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
-    t5RegLineEdit = new QLineEdit("0x0000", parent);
+    t5RegLineEdit = new QLineEdit("0x0000");
     t5RegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     t5RegLineEdit->setGeometry(OneByteShapes::t5RegLineEdit);
     t5RegLineEdit->setValidator(new QRegExpValidator(
@@ -617,19 +617,19 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     t5RegLineEdit->setFrame(false);
     scene->addWidget(t5RegLineEdit);
 
-    ph = new QLabel("20,21", parent);
+    ph = new QLabel("20,21");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(257,66, 30,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
     scene->addWidget(ph);
-    ph = new QLabel("T6", parent);
+    ph = new QLabel("T6");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(289,66, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
-    t6RegLineEdit = new QLineEdit("0x0000", parent);
+    t6RegLineEdit = new QLineEdit("0x0000");
     t6RegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     t6RegLineEdit->setGeometry(OneByteShapes::t6RegLineEdit);
     t6RegLineEdit->setValidator(new QRegExpValidator(
@@ -639,91 +639,91 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     t6RegLineEdit->setFrame(false);
     scene->addWidget(t6RegLineEdit);
 
-    ph = new QLabel("22,23", parent);
+    ph = new QLabel("22,23");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(257,93, 30,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
     scene->addWidget(ph);
-    ph = new QLabel("M1", parent);
+    ph = new QLabel("M1");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(289,93, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
-    ph = new QLabel("0x0001", parent);
+    ph = new QLabel("0x0001");
     ph->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     ph->setGeometry(OneByteShapes::m1RegLabel);
     ph->setPalette(QPalette(seqCircuitColor));
     scene->addWidget(ph);
 
-    ph = new QLabel("24,25", parent);
+    ph = new QLabel("24,25");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(386,10, 30,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
     scene->addWidget(ph);
-    ph = new QLabel("M2", parent);
+    ph = new QLabel("M2");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(418,10, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
-    ph = new QLabel("0x0203", parent);
+    ph = new QLabel("0x0203");
     ph->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     ph->setGeometry(OneByteShapes::m2RegLabel);
     ph->setPalette(QPalette(seqCircuitColor));
     scene->addWidget(ph);
 
-    ph = new QLabel("26,27", parent);
+    ph = new QLabel("26,27");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(386,38, 30,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
     scene->addWidget(ph);
-    ph = new QLabel("M3", parent);
+    ph = new QLabel("M3");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(418,38, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
-    ph = new QLabel("0x0408", parent);
+    ph = new QLabel("0x0408");
     ph->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     ph->setGeometry(OneByteShapes::m3RegLabel);
     ph->setPalette(QPalette(seqCircuitColor));
     scene->addWidget(ph);
 
-    ph = new QLabel("28,29", parent);
+    ph = new QLabel("28,29");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(386,66, 30,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
     scene->addWidget(ph);
-    ph = new QLabel("M4", parent);
+    ph = new QLabel("M4");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(418,66, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
-    ph = new QLabel("0xF0F6", parent);
+    ph = new QLabel("0xF0F6");
     ph->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     ph->setGeometry(OneByteShapes::m4RegLabel);
     ph->setPalette(QPalette(seqCircuitColor));
     scene->addWidget(ph);
 
-    ph = new QLabel("30,31", parent);
+    ph = new QLabel("30,31");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(386,93, 30,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
     scene->addWidget(ph);
-    ph = new QLabel("M5", parent);
+    ph = new QLabel("M5");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
     ph->setGeometry(418,93, 20,22);
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
-    ph = new QLabel("0xFEFF", parent);
+    ph = new QLabel("0xFEFF");
     ph->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     ph->setGeometry(OneByteShapes::m5RegLabel);
     ph->setPalette(QPalette(seqCircuitColor));
@@ -738,6 +738,76 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
                       QPen(QBrush(Qt::black), 1), QBrush(Qt::yellow));
     scene->addLine(310, 477, 310, 559);
 }
+
+CpuPaneBaseGraphicsItems::~CpuPaneBaseGraphicsItems()
+{
+    delete loadCk;
+    delete cLabel;
+    delete cLineEdit;
+    delete bLabel;
+    delete bLineEdit;
+    delete aLabel;
+    delete aLineEdit;
+    delete MARCk;
+    delete MARALabel;
+    delete MARBLabel;
+    delete MDRCk;
+    delete aMuxLabel;
+    delete aMuxerDataLabel;
+    delete aMuxerBorder;
+    delete aMuxTristateLabel;
+    delete MDRMuxLabel;
+    delete MDRMuxerDataLabel;
+    delete MDRMuxTristateLabel;
+    delete MDRLabel;
+    delete cMuxLabel;
+    delete cMuxTristateLabel;
+    delete cMuxerLabel;
+    delete ALULabel;
+    delete ALULineEdit;
+    delete ALUFunctionLabel;
+    delete ALUPoly;
+    delete CSMuxLabel;
+    delete CSMuxerDataLabel;
+    delete CSMuxTristateLabel;
+    delete SCkCheckBox;
+    delete CCkCheckBox;
+    delete VCkCheckBox;
+    delete AndZLabel;
+    delete AndZTristateLabel;
+    delete AndZMuxLabel;
+    delete ZCkCheckBox;
+    delete NCkCheckBox;
+    delete nBitLabel;
+    delete zBitLabel;
+    delete vBitLabel;
+    delete cBitLabel;
+    delete sBitLabel;
+    delete MemReadLabel;
+    delete MemReadTristateLabel;
+    delete MemWriteLabel;
+    delete MemWriteTristateLabel;
+
+    delete aRegLineEdit;
+    delete xRegLineEdit;
+    delete spRegLineEdit;
+    delete pcRegLineEdit;
+    delete irRegLineEdit;
+    delete t1RegLineEdit;
+    delete t2RegLineEdit;
+    delete t3RegLineEdit;
+    delete t4RegLineEdit;
+    delete t5RegLineEdit;
+    delete t6RegLineEdit;
+
+    delete MDROCk;
+    delete MDRECk;
+    delete MDROMuxTristateLabel;
+    delete MDREMuxTristateLabel;
+    delete EOMuxTristateLabel;
+    delete MARMuxTristateLabel;
+}
+
 
 QRectF CpuPaneBaseGraphicsItems::boundingRect() const
 {

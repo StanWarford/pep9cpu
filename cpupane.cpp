@@ -28,13 +28,12 @@
 #include <QErrorMessage>
 #include <QMessageBox>
 
-#include <QDebug>
-
-#include "cpupanebasegraphicsitems.h"
 #include "tristatelabel.h"
 #include "pep.h"
 #include "code.h"
 #include "sim.h"
+
+#include <QDebug>
 
 using namespace Enu;
 
@@ -62,7 +61,6 @@ CpuPane::CpuPane(QWidget *parent) :
 CpuPane::~CpuPane()
 {
     delete cpuPaneItems;
-    delete scene;
     delete ui;
 }
 
@@ -88,12 +86,6 @@ void CpuPane::giveFocus()
 
 void CpuPane::initModel()
 {
-    if (cpuPaneItems != NULL) {
-        // disconnect all signals from this object before deleting it:
-#warning: todo: delete all signals from object before deletion
-        delete cpuPaneItems;
-    }
-
     cpuPaneItems = new CpuPaneBaseGraphicsItems(ui->graphicsView, 0, scene);
 
     ui->graphicsView->scene()->addItem(cpuPaneItems);
@@ -105,13 +97,13 @@ void CpuPane::initModel()
     connect(cpuPaneItems->bLineEdit, SIGNAL(textChanged(QString)), scene, SLOT(invalidate()));
     connect(cpuPaneItems->aLineEdit, SIGNAL(textChanged(QString)), scene, SLOT(invalidate()));
     connect(cpuPaneItems->MARCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
-    //connect(cpuPaneItems->MDRCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->MDRCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
 
     connect(cpuPaneItems->aMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
     connect(cpuPaneItems->aMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
 
-    //connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    //connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
+    connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
 
     connect(cpuPaneItems->cMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
     connect(cpuPaneItems->cMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
@@ -174,24 +166,13 @@ void CpuPane::initModel()
 
     connect(cpuPaneItems->ALULineEdit, SIGNAL(textChanged(QString)), this, SLOT(ALUTextEdited(QString)));
 
-
-    // disconnect all cpuPaneItems that differ between models:
-    disconnect(cpuPaneItems->MDRCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
-
-    disconnect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    disconnect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
-
-    if (Pep::cpuFeatures == Enu::OneByteDataBus) {
-        // connect items for this model
-        connect(cpuPaneItems->MDRCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
-
-        connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-        connect(cpuPaneItems->MDRMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
-    }
-    else if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
-        // connect items for *this* model
-#warning: todo, once the cpuPaneItems has been updated to include the new items.
-    }
+    // 2 byte bus signals
+    connect(cpuPaneItems->MDROMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
+    connect(cpuPaneItems->MDROMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->MDREMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
+    connect(cpuPaneItems->MDREMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->EOMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
+    connect(cpuPaneItems->EOMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
 }
 
 void CpuPane::startDebugging()
@@ -438,58 +419,13 @@ void CpuPane::setStatusPrecondition(Enu::EMnemonic bit, bool value)
 }
 
 bool CpuPane::testRegPostcondition(Enu::EMnemonic reg, int value) {
-    switch (reg) {
-    case Enu::A:
-        return Sim::regBank[0] * 256 + Sim::regBank[1] == value;
-    case Enu::X:
-        return Sim::regBank[2] * 256 + Sim::regBank[3] == value;
-    case Enu::SP:
-        return Sim::regBank[4] * 256 + Sim::regBank[5] == value;
-    case Enu::PC:
-        return Sim::regBank[6] * 256 + Sim::regBank[7] == value;
-    case Enu::IR:
-        return Sim::regBank[8] * 65536 + Sim::regBank[9] * 256 + Sim::regBank[10] == value;
-    case Enu::T1:
-        return Sim::regBank[11] == value;
-    case Enu::T2:
-        return Sim::regBank[12] * 256 + Sim::regBank[13] == value;
-    case Enu::T3:
-        return Sim::regBank[14] * 256 + Sim::regBank[15] == value;
-    case Enu::T4:
-        return Sim::regBank[16] * 256 + Sim::regBank[17] == value;
-    case Enu::T5:
-        return Sim::regBank[18] * 256 + Sim::regBank[19] == value;
-    case Enu::T6:
-        return Sim::regBank[20] * 256 + Sim::regBank[21] == value;
-    case Enu::MARA:
-        return Sim::MARA == value;
-    case Enu::MARB:
-        return Sim::MARB == value;
-    case Enu::MDR:
-        return Sim::MDR == value;
-    default:
-        break;
-    }
-    return true;
+    return Sim::testRegPostcondition(reg, value);
 }
 
 bool CpuPane::testStatusPostcondition(Enu::EMnemonic bit, bool value) {
-    switch (bit) {
-    case Enu::N:
-        return Sim::nBit == value;
-    case Enu::Z:
-        return Sim::zBit == value;
-    case Enu::V:
-        return Sim::vBit == value;
-    case Enu::C:
-        return Sim::cBit == value;
-    case Enu::S:
-        return Sim::sBit == value;
-    default:
-        break;
-    }
-    return true;
+    return Sim::testStatusPostcondition(bit, value);
 }
+
 
 void CpuPane::clearCpu()
 {
@@ -510,6 +446,10 @@ void CpuPane::clearCpu()
     setRegister(Enu::MARA, 0);
     setRegister(Enu::MARB, 0);
     setRegister(Enu::MDR, 0);
+
+    setRegister(Enu::MDRE, 0);
+    setRegister(Enu::MDRO, 0);
+
 
     setStatusBit(Enu::S, false);
     setStatusBit(Enu::C, false);
@@ -539,6 +479,13 @@ void CpuPane::clearCpuControlSignals()
     cpuPaneItems->NCkCheckBox->setChecked(false);
     cpuPaneItems->MemReadTristateLabel->setText("");
     cpuPaneItems->MemWriteTristateLabel->setText("");
+
+    cpuPaneItems->MDRECk->setChecked(false);
+    cpuPaneItems->MDROCk->setChecked(false);
+    cpuPaneItems->MDROMuxTristateLabel->setText("");
+    cpuPaneItems->MDREMuxTristateLabel->setText("");
+    cpuPaneItems->EOMuxTristateLabel->setText("");
+
 }
 
 void CpuPane::singleStep()
@@ -569,7 +516,7 @@ void CpuPane::updateMainBusState()
     if (cpuPaneItems->MARCk->isChecked()) {
         quint8 a, b;
         QString errorString; // temporary, any errors here will be caught in the MARCk section of step()
-        if (getABusOut(a, errorString) && getBBusOut(b, errorString)) {
+        if (Sim::getABusOut(a, errorString, cpuPaneItems) && Sim::getBBusOut(b, errorString, cpuPaneItems)) {
             marChanged = (a != Sim::MARA) || (b != Sim::MARB);
         }
         else {
@@ -681,6 +628,22 @@ void CpuPane::updateMainBusState()
 
 bool CpuPane::step(QString &errorString)
 {
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
+        return stepOneByteDataBus(errorString);
+        break;
+    case Enu::TwoByteDataBus:
+        return stepTwoByteDataBus(errorString);
+        break;
+    default:
+        break;
+    }
+    errorString.append("CPU model not specified.");
+    return false;
+}
+
+bool CpuPane::stepOneByteDataBus(QString &errorString)
+{
     // Clear modified bytes for simulation view:
     Sim::modifiedBytes.clear();
 
@@ -695,7 +658,7 @@ bool CpuPane::step(QString &errorString)
     quint8 result, a, b;
 
     QString errtemp;
-    getALUOut(result, a, b, carry, overflow, errtemp); // ignore boolean returned - error would have been handled earlier
+    Sim::getALUOut(result, a, b, carry, overflow, errtemp, cpuPaneItems); // ignore boolean returned - error would have been handled earlier
 
     if (Sim::mainBusState == Enu::MemReadReady) {
         // we are performing a 2nd consecutive MemRead
@@ -711,7 +674,7 @@ bool CpuPane::step(QString &errorString)
     // MARCk
     if (cpuPaneItems->MARCk->isChecked()) {
         quint8 a, b;
-        if (getABusOut(a, errorString) && getBBusOut(b, errorString)) {
+        if (Sim::getABusOut(a, errorString, cpuPaneItems) && Sim::getBBusOut(b, errorString, cpuPaneItems)) {
             setRegister(Enu::MARA, a);
             setRegister(Enu::MARB, b);
         }
@@ -729,7 +692,7 @@ bool CpuPane::step(QString &errorString)
             errorString.append("No destination register specified for LoadCk.");
             return false;
         }
-        if (getCMuxOut(out, errorString)) {
+        if (Sim::getCMuxOut(out, errorString, cpuPaneItems)) {
             setRegisterByte(cDest, out);
         }
         else {
@@ -740,8 +703,148 @@ bool CpuPane::step(QString &errorString)
     // MDRCk
     if (cpuPaneItems->MDRCk->isChecked()) {
         quint8 out = 0;
-        if (getMDRMuxOut(out, errorString)) {
+        if (Sim::getMDRMuxOut(out, errorString, cpuPaneItems)) {
             setRegister(Enu::MDR, out);
+            int address = Sim::MARA * 256 + Sim::MARB;
+            emit readByte(address);
+        }
+        else {
+            return false;
+        }
+    }
+
+    if (aluFn == 15) {
+        if (cpuPaneItems->NCkCheckBox->isChecked()) { // NCk
+            setStatusBit(Enu::N, Enu::NMask & a);
+        }
+        if (cpuPaneItems->ZCkCheckBox->isChecked()) { // ZCk
+            setStatusBit(Enu::Z, Enu::ZMask & a);
+        }
+        if (cpuPaneItems->VCkCheckBox->isChecked()) { // VCk
+            setStatusBit(Enu::V, Enu::VMask & a);
+        }
+        if (cpuPaneItems->CCkCheckBox->isChecked()) { // CCk
+            setStatusBit(Enu::C, Enu::CMask & a);
+        }
+    }
+    else {
+        // NCk
+        if (cpuPaneItems->NCkCheckBox->isChecked()) {
+            setStatusBit(Enu::N, result > 127);
+        }
+
+        // ZCk
+        if (cpuPaneItems->ZCkCheckBox->isChecked()) {
+            if (cpuPaneItems->AndZTristateLabel->text() == ""){
+                errorString.append("ZCk without AndZ.");
+                return false;
+            }
+            if (cpuPaneItems->AndZTristateLabel->text() == "0") { // zOut from ALU goes straight through
+                setStatusBit(Enu::Z, result == 0);
+            }
+            else if (cpuPaneItems->AndZTristateLabel->text() == "1") { // zOut && zCurr
+                setStatusBit(Enu::Z, result == 0 && Sim::zBit);
+            }
+        }
+
+        // VCk
+        if (cpuPaneItems->VCkCheckBox->isChecked()) {
+            setStatusBit(Enu::V, overflow & 0x1);
+        }
+
+        // CCk
+        if (cpuPaneItems->CCkCheckBox->isChecked()) {
+            setStatusBit(Enu::C, carry & 0x1);
+        }
+
+        // SCk
+        if (cpuPaneItems->SCkCheckBox->isChecked()) {
+            setStatusBit(Enu::S, carry & 0x1);
+        }
+    }
+
+    return true;
+}
+
+bool CpuPane::stepTwoByteDataBus(QString &errorString)
+{
+    // Clear modified bytes for simulation view:
+    Sim::modifiedBytes.clear();
+
+    // Update Bus State
+    // FSM that sets Sim::mainBusState to Enu::BusState - 5 possible states
+    updateMainBusState();
+
+    // Status bit calculations
+    int aluFn = cpuPaneItems->ALULineEdit->text().toInt();
+    int carry;
+    int overflow;
+    quint8 result, a, b;
+
+    QString errtemp;
+    // ignore boolean returned - error would have been handled earlier
+    Sim::getALUOut(result, a, b, carry, overflow, errtemp, cpuPaneItems);
+
+    if (Sim::mainBusState == Enu::MemReadReady) {
+        // we are performing a 2nd consecutive MemRead
+        // do nothing - the memread is performed in the getMDRMuxOut fn
+    }
+    else if (Sim::mainBusState == Enu::MemWriteReady) {
+        // we are performing a 2nd consecutive MemWrite
+        int address = Sim::MARA * 256 + Sim::MARB;
+        Sim::writeByte(address, Sim::MDR);
+        emit writeByte(address);
+    }
+
+    // MARCk
+    if (cpuPaneItems->MARCk->isChecked()) {
+        quint8 a, b;
+        if (Sim::getMARMuxOut(a, b, errorString, cpuPaneItems)) {
+            setRegister(Enu::MARA, a);
+            setRegister(Enu::MARB, b);
+        }
+        else {
+            // error: MARCk is checked but we have incorrect input
+            return false;
+        }
+    }
+
+    // LoadCk
+    if (cpuPaneItems->loadCk->isChecked()) {
+        int cDest = cpuPaneItems->cLineEdit->text().toInt();
+        quint8 out;
+        if (cpuPaneItems->cLineEdit->text() == "") {
+            errorString.append("No destination register specified for LoadCk.");
+            return false;
+        }
+        if (Sim::getCMuxOut(out, errorString, cpuPaneItems)) {
+            setRegisterByte(cDest, out);
+        }
+        else {
+            return false;
+        }
+    }
+
+    // MDROCk
+    if (cpuPaneItems->MDROCk->isChecked()) {
+        quint8 out = 0;
+        if (Sim::getMDROMuxOut(out, errorString, cpuPaneItems)) {
+            int address = (Sim::MARA * 256 + Sim::MARB) & 0xFFFE;
+            emit readByte(address);
+            setRegister(Enu::MDRO, out);
+        }
+        else {
+            return false;
+        }
+    }
+
+    // MDRECk
+    if (cpuPaneItems->MDRECk->isChecked()) {
+        quint8 out = 0;
+        if (Sim::getMDREMuxOut(out, errorString, cpuPaneItems)) {
+            int address = (Sim::MARA * 256 + Sim::MARB) & 0xFFFE;
+            emit readByte(address);
+            setRegister(Enu::MDRE, out);
         }
         else {
             return false;
@@ -1034,7 +1137,7 @@ void CpuPane::resumeButtonPushed()
 
 }
 
-void CpuPane::on_copyToMicrocodePushButton_clicked()
+void CpuPane::on_copyToMicrocodePushButton_clicked() // union of all models
 {
     MicroCode code;
     if (cpuPaneItems->loadCk->isChecked()) {
@@ -1052,15 +1155,32 @@ void CpuPane::on_copyToMicrocodePushButton_clicked()
     if (cpuPaneItems->MARCk->isChecked()) {
         code.set(Enu::MARCk, 1);
     }
+    if (cpuPaneItems->MARMuxTristateLabel->text() != "") { // 2 byte bus
+        code.set(Enu::MARMux, cpuPaneItems->MARMuxTristateLabel->text().toInt());
+    }
     if (cpuPaneItems->MDRCk->isChecked()) {
         code.set(Enu::MDRCk, 1);
     }
-#warning todo: MDROMux etc
     if (cpuPaneItems->aMuxTristateLabel->text() != "") {
         code.set(Enu::AMux, cpuPaneItems->aMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->MDRMuxTristateLabel->text() != "") {
         code.set(Enu::MDRMux, cpuPaneItems->MDRMuxTristateLabel->text().toInt());
+    }
+    if (cpuPaneItems->MDROCk->isChecked()) { // 2 byte bus
+        code.set(Enu::MDROCk, 1);
+    }
+    if (cpuPaneItems->MDROMuxTristateLabel->text() != "") { // 2 byte bus
+        code.set(Enu::MDROMux, cpuPaneItems->MDROMuxTristateLabel->text().toInt());
+    }
+    if (cpuPaneItems->MDRECk->isChecked()) { // 2 byte bus
+        code.set(Enu::MDRECk, 1);
+    }
+    if (cpuPaneItems->MDREMuxTristateLabel->text() != "") { // 2 byte bus
+        code.set(Enu::MDREMux, cpuPaneItems->MDREMuxTristateLabel->text().toInt());
+    }
+    if (cpuPaneItems->EOMuxTristateLabel->text() != "") { // 2 byte bus
+        code.set(Enu::EOMux, cpuPaneItems->EOMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->cMuxTristateLabel->text() != "") {
         code.set(Enu::CMux, cpuPaneItems->cMuxTristateLabel->text().toInt());
@@ -1160,334 +1280,13 @@ void CpuPane::ALUTextEdited(QString str)
     }
 }
 
-bool CpuPane::getALUOut(quint8 &result, quint8& a, quint8& b, int& carry, int& overflow, QString &errorString)
-{
-    a = 0;
-    b = 0;
-    bool cin = false;
-    int output = 0;
-    carry = 0;
-    overflow = 0;
-
-    if (cpuPaneItems->ALULineEdit->text() == "") {
-        errorString.append("ALU function not specified.\n");
-        return false;
-    }
-
-    int ALUFn;
-    ALUFn = cpuPaneItems->ALULineEdit->text().toInt();
-
-    if (!isCorrectALUInput(ALUFn)) {
-//        qDebug() << "Incorrect or no ALU input";
-        errorString.append("Incorrect or no ALU input.\n");
-        return false;
-    }
-
-    switch(ALUFn) {
-    case 0: // A
-        if (getAMuxOut(a, errorString)) {
-            output = a;
-            b = 0;
-            result = output;
-        }
-        break;
-    case 1: // A plus B
-        if (getAMuxOut(a, errorString) && getBBusOut(b, errorString)) {
-            output = a + b;
-            carry = ((output & 0x1ff) >> 8) & 0x1;
-            overflow = ((((a & 0x7f) + (b & 0x7f)) >> 7) & 0x1) ^ carry;
-            result = output;
-        }
-        break;
-    case 2: // A plus B plus Cin
-        if (getAMuxOut(a, errorString) && getBBusOut(b, errorString) && getCSMuxOut(cin, errorString)) {
-            output = a + b + (cin ? 1 : 0);
-            carry = ((output & 0x1ff) >> 8) & 0x1;
-            overflow = ((((a & 0x7f) + (b & 0x7f) + (cin ? 1 : 0)) >> 7) & 0x1) ^ carry;
-            result = output;
-        }
-        break;
-    case 3: // A plus ~B plus 1
-        if (getAMuxOut(a, errorString) && getBBusOut(b, errorString)) {
-            output = a + ((~b) & 0xff) + 1;
-            carry = ((output & 0x1ff) >> 8) & 0x1;
-            overflow = ((((a & 0x7f) + ((~b) & 0x7f) + 1) >> 7) & 0x1) ^ carry;
-            result = output;
-        }
-        break;
-    case 4: // A plus ~B plus Cin
-        if (getAMuxOut(a, errorString) && getBBusOut(b, errorString) && getCSMuxOut(cin, errorString)) {
-            output = a + ((~b) & 0xff) + (cin ? 1 : 0);
-            carry = ((output & 0x1ff) >> 8) & 0x1;
-            overflow = ((((a & 0x7f) + ((~b) & 0x7f) + (cin ? 1 : 0)) >> 7) & 0x1) ^ carry;
-            result = output;
-        }
-        break;
-    case 5: // A and B
-        if (getAMuxOut(a, errorString) && getBBusOut(b, errorString)) {
-            output = a & b;
-            result = output;
-        }
-        break;
-    case 6: // ~(A and B)
-        if (getAMuxOut(a, errorString) && getBBusOut(b, errorString)) {
-            output = ~(a & b) & 0xff;
-            result = output;
-        }
-        break;
-    case 7: // A + B
-        if (getAMuxOut(a, errorString) && getBBusOut(b, errorString)) {
-            output = a | b;
-            result = output;
-        }
-        break;
-    case 8: // ~(A + B)
-        if (getAMuxOut(a, errorString) && getBBusOut(b, errorString)) {
-            output = ~(a | b);
-            result = output;
-        }
-        break;
-    case 9: // A xor B
-        if (getAMuxOut(a, errorString) && getBBusOut(b, errorString)) {
-            output = (a ^ b) & 0xff;
-            result = output;
-        }
-        break;
-    case 10: // ~A
-        if (getAMuxOut(a, errorString)) {
-            output = ~a;
-            result = output;
-        }
-        break;
-    case 11: // ASL A
-        if (getAMuxOut(a, errorString)) {
-            output = (a << 1) & 0xfe; // 0xfe because 0 gets shifted in
-            carry = (a & 0x80) >> 7;
-            overflow = ((a & 0x40) >> 6) ^ carry;
-            result = output;
-        }
-        break;
-    case 12: // ROL A
-        if (getAMuxOut(a, errorString) && getCSMuxOut(cin, errorString)) {
-            output = ((a << 1) & 0xfe) | (cin ? 1 : 0);
-            carry = (a & 0x80) >> 7;
-            overflow = ((a & 0x40) >> 6) ^ carry;
-            result = output;
-        }
-        break;
-    case 13: // ASR A
-        if (getAMuxOut(a, errorString)) {
-            output = ((a >> 1) & 0x7f) | (a & 0x80);
-            carry = a & 1;
-            result = output;
-        }
-        break;
-    case 14: // ROR A
-        if (getAMuxOut(a, errorString) && getCSMuxOut(cin, errorString)) {
-            output = ((a >> 1) & 0x7f) | ((cin ? 1 : 0) << 7);
-            carry = a & 1;
-            result = output;
-        }
-        break;
-    case 15: // NZVC A
-        if (getAMuxOut(a, errorString)) {
-            result = 0;
-        }
-        break;
-    default:
-        return false;
-    }
-
-    return true;
-}
-
-bool CpuPane::isCorrectALUInput(int ALUFn) {
-    bool abus = false;
-    bool bbus = false;
-    bool cin = false;
-
-    if (cpuPaneItems->aMuxTristateLabel->text() == "") {
-        abus = false;
-    }
-    else if (cpuPaneItems->aMuxTristateLabel->text() == "0") {
-        abus = true;
-    }
-    else if (cpuPaneItems->aMuxTristateLabel->text() == "1") {
-        if (cpuPaneItems->aLineEdit->text() == "") {
-            abus = false;
-        }
-        else {
-            abus = true;
-        }
-    }
-
-    if (cpuPaneItems->bLineEdit->text() == "") {
-        bbus = false;
-    }
-    else {
-        bbus = true;
-    }
-
-    if (cpuPaneItems->CSMuxTristateLabel->text() != "") {
-        cin = true;
-    }
-
-    // test A and B bus input:
-    switch(ALUFn) {
-    case 0:
-        if (!abus) {
-            return false;
-        }
-        break;
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-        if (!abus || !bbus) {
-            return false;
-        }
-        break;
-    case 10:
-    case 11:
-    case 12:
-    case 13:
-    case 14:
-    case 15:
-        if (!abus) {
-            return false;
-        }
-        break;
-    default:
-        break;
-    }
-
-    // test CIN:
-    switch(ALUFn) {
-    case 2:
-    case 4:
-    case 12:
-    case 14:
-        if (!cin) {
-            return false;
-        }
-        break;
-    default:
-        break;
-    }
-
-    return true;
-}
-
-bool CpuPane::getCSMuxOut(bool &out, QString &errorString)
-{
-    if (cpuPaneItems->CSMuxTristateLabel->text() == "0") {
-        out = Sim::cBit;
-        return true;
-    }
-    else if (cpuPaneItems->CSMuxTristateLabel->text() == "1") {
-        out = Sim::sBit;
-        return true;
-    }
-    else {
-        errorString.append("CSMux control signal not specified.\n");
-    }
-    return false;
-}
-
-bool CpuPane::getCMuxOut(quint8 &out, QString &errorString)
-{
-    if (cpuPaneItems->cMuxTristateLabel->text() == "0") {
-        out = (Sim::nBit ? 8 : 0) + (Sim::zBit ? 4 : 0) + (Sim::vBit ? 2 : 0) + (Sim::cBit ? 1 : 0);
-        // qDebug() << QString("0x%1").arg(out, 4, 16, QLatin1Char('0'));
-        return true;
-    }
-    else if (cpuPaneItems->cMuxTristateLabel->text() == "1") {
-        quint8 a, b;
-        int carry, overflow;
-        return getALUOut(out, a, b, carry, overflow, errorString);
-    }
-    else {
-        errorString.append("CMux control signal not specified.\n");
-    }
-    return false;
-}
-
-bool CpuPane::getAMuxOut(quint8 &out, QString &errorString)
-{
-    if (cpuPaneItems->aMuxTristateLabel->text() == "0") {
-        out = Sim::MDR;
-        return true;
-    }
-    else if (cpuPaneItems->aMuxTristateLabel->text() == "1") {
-        if (getABusOut(out, errorString)) {
-            return true;
-        }
-        else {
-            // Error string will [already] be populated with the correct error
-        }
-    }
-    else {
-        errorString.append("Nothing on A bus.\n");
-    }
-    return false;
-}
-
-bool CpuPane::getMDRMuxOut(quint8 &out, QString &errorString)
-{
-    if (cpuPaneItems->MDRMuxTristateLabel->text() == "0") {
-        if (Sim::mainBusState == Enu::MemReadReady) {
-            // perform a memRead
-            int address = Sim::MARA * 256 + Sim::MARB;
-            out = Sim::readByte(address);
-            emit readByte(address);
-            return true;
-        }
-        else {
-            errorString.append("Not ready for memread.\n");
-        }
-    }
-    else if (cpuPaneItems->MDRMuxTristateLabel->text() == "1") {
-        if (getCMuxOut(out, errorString)) {
-            return true;
-        }
-    }
-    else {
-        errorString.append("MDRCk is checked, but MDRMux isn't set.\n");
-    }
-    return false;
-}
-
-bool CpuPane::getABusOut(quint8 &out, QString &errorString)
-{
-    if (cpuPaneItems->aLineEdit->text() != "") {
-        out = Sim::regBank[cpuPaneItems->aLineEdit->text().toInt()];
-        return true;
-    }
-    else {
-        errorString.append("Nothing on A bus.\n");
-    }
-    return false;
-}
-
-bool CpuPane::getBBusOut(quint8 &out, QString &errorString)
-{
-    if (cpuPaneItems->bLineEdit->text() != "") {
-        out = Sim::regBank[cpuPaneItems->bLineEdit->text().toInt()];
-        return true;
-    }
-    else {
-        errorString.append("Nothing on B bus.\n");
-    }
-    return false;
-}
 
 void CpuPane::run()
 {
     // Run; these are really equivalent:
     resumeButtonPushed();
 }
+
+
+
+

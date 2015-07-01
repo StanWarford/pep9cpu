@@ -33,6 +33,8 @@ class CpuPaneBaseGraphicsItems : public QGraphicsItem
 public:
     CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraphicsItem *itemParent = 0,
                              QGraphicsScene *scene = 0);
+    ~CpuPaneBaseGraphicsItems();
+
     QRectF boundingRect() const;
 
     bool aluHasCorrectOutput();
@@ -114,8 +116,7 @@ public:
     QLineEdit *t5RegLineEdit;
     QLineEdit *t6RegLineEdit;
 
-#warning todo: remove
-    // Two byte data bus model features (temporary):
+    // Two byte data bus model features:
     QCheckBox *MDROCk;
     QCheckBox *MDRECk;
     TristateLabel *MDROMuxTristateLabel;
