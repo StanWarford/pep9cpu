@@ -533,7 +533,7 @@ bool Sim::getMDRMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsIte
 {
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
-        return OneByteModel::getAMuxOut(out, errorString, cpuPaneItems);
+        return OneByteModel::getMDRMuxOut(out, errorString, cpuPaneItems);
         break;
     case Enu::TwoByteDataBus:
         errorString.append("CPU model does not have an MDR.");
