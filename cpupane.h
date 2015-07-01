@@ -27,9 +27,9 @@
 #include <QLabel>
 #include <QLineEdit>
 
-#include "enu.h"
-
 #include "cpupanebasegraphicsitems.h"
+
+#include "enu.h"
 
 namespace Ui {
     class CpuPane;
@@ -45,7 +45,7 @@ public:
     bool hasFocus();
     void giveFocus();
 
-    virtual void initModel();
+    void initModel();
 
     void startDebugging();
     void stopDebugging();
@@ -59,8 +59,8 @@ public:
     bool testRegPostcondition(Enu::EMnemonic reg, int value);
     bool testStatusPostcondition(Enu::EMnemonic bit, bool value);
 
-    virtual void clearCpu();
-    virtual void clearCpuControlSignals();
+    void clearCpu();
+    void clearCpuControlSignals();
 
     // These are used by the main window in order to allow it to use the
     //  <enter> key to step.
@@ -75,15 +75,18 @@ protected:
     CpuPaneBaseGraphicsItems *cpuPaneItems;
 
     //simulation helper
-    virtual void updateMainBusState();
+    void updateMainBusState();
     // called by the push buttons to simulate a single step; returns true if
     //  there were no issues
-    virtual bool step(QString& errorString);
+    bool step(QString& errorString);
 
 private:
     Ui::CpuPane *ui;
 
 protected slots:
+    bool stepOneByteDataBus(QString& errorString);
+    bool stepTwoByteDataBus(QString& errorString);
+
     void regTextEdited(QString str);
     void regTextFinishedEditing();
 
@@ -95,26 +98,10 @@ protected slots:
     void singleStepButtonPushed();
     void resumeButtonPushed();
 
-    virtual void on_copyToMicrocodePushButton_clicked();
+    void on_copyToMicrocodePushButton_clicked();
 
     void ALUTextEdited(QString str);
 
-    bool getALUOut(quint8& result, quint8& a, quint8& b, int& carry,
-                   int& overflow, QString& errorString);
-    bool isCorrectALUInput(int ALUFn);
-    bool getCSMuxOut(bool &out, QString& errorString);
-    bool getCMuxOut(quint8& out, QString& errorString);
-    virtual bool getAMuxOut(quint8& out, QString& errorString);
-    // doesn't get used in the other model:
-    bool getMDRMuxOut(quint8& out, QString& errorString);
-    bool getABusOut(quint8& out, QString& errorString);
-    bool getBBusOut(quint8& out, QString& errorString);
-
-    // new functions:
-//    bool getMARMuxOut();
-//    bool getMDROMuxOut();
-//    bool getMDREMuxOut();
-//    bool getEOMuxOut();
 public slots:
     void run();
 

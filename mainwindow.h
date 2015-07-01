@@ -29,7 +29,6 @@
 #include "byteconverterchar.h"
 
 #include "cpupane.h"
-#include "cpupanetwobytedatabus.h"
 #include "mainmemory.h"
 #include "microcodepane.h"
 #include "objectcodepane.h"
@@ -67,6 +66,8 @@ private:
     // Main Memory
     MainMemory *mainMemory;
     CpuPane *cpuPane;
+    CpuPane *cpuPaneOneByteDataBus;
+    CpuPane *cpuPaneTwoByteDataBus;
     MicrocodePane *microcodePane;
     ObjectCodePane *objectCodePane;
 

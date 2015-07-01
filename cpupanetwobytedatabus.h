@@ -29,50 +29,27 @@
 
 #include "enu.h"
 
-#include "cpupanebasegraphicsitems.h"
 #include "cpupane.h"
-
-namespace Ui {
-    class CpuPane;
-}
 
 class CpuPaneTwoByteDataBus : public CpuPane
 {
     Q_OBJECT
 public:
     explicit CpuPaneTwoByteDataBus(QWidget *parent = 0);
-
-    void initModel();
-
-    void clearCpu();
-    void clearCpuControlSignals();
+    ~CpuPaneTwoByteDataBus();
 
 protected:
-    //simulation helper
-    void updateMainBusState();
 
     // called by the push buttons to simulate a single step; returns true if there were no issues
     bool step(QString& errorString);
 
-private:
-    Ui::CpuPane *ui;
-
 protected slots:
-    void on_copyToMicrocodePushButton_clicked();
-
     bool getAMuxOut(quint8& out, QString& errorString);
     bool getMARMuxOut(quint8& mara, quint8& marb, QString& errorString);
     bool getMDROMuxOut(quint8& out, QString& errorString);
     bool getMDREMuxOut(quint8& out, QString& errorString);
     bool getEOMuxOut(quint8& out, QString& errorString);
 
-signals:
-    void updateSimulation();
-    void stopSimulation();
-    void simulationFinished();
-    void appendMicrocodeLine(QString line);
-    void readByte(int address);
-    void writeByte(int address);
 
 };
 
