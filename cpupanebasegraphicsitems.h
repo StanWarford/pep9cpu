@@ -123,6 +123,9 @@ public:
     TristateLabel *MDREMuxTristateLabel;
     TristateLabel *EOMuxTristateLabel;
     TristateLabel *MARMuxTristateLabel;
+    //data section:
+    QLabel *MDROLabel;
+    QLabel *MDRELabel;
 private:
     QGraphicsScene *parentScene;
     QWidget *parent;
