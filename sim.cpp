@@ -529,7 +529,8 @@ bool Sim::getAMuxOut(quint8 &out, QString &errorString,
     return false;
 }
 
-bool Sim::getMDRMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems)
+bool Sim::getMDRMuxOut(quint8& out, QString& errorString,
+                       CpuPaneBaseGraphicsItems *cpuPaneItems)
 {
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
@@ -546,7 +547,9 @@ bool Sim::getMDRMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsIte
     return false;
 }
 
-bool Sim::getMARMuxOut(quint8& mara, quint8& marb, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems)
+bool Sim::getMARMuxOut(quint8& mara, quint8& marb,
+                       QString& errorString,
+                       CpuPaneBaseGraphicsItems *cpuPaneItems)
 {
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
@@ -563,7 +566,8 @@ bool Sim::getMARMuxOut(quint8& mara, quint8& marb, QString& errorString, CpuPane
     return false;
 }
 
-bool Sim::getMDROMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems)
+bool Sim::getMDROMuxOut(quint8& out, QString& errorString,
+                        CpuPaneBaseGraphicsItems *cpuPaneItems)
 {
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
@@ -580,7 +584,8 @@ bool Sim::getMDROMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsIt
     return false;
 }
 
-bool Sim::getMDREMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems)
+bool Sim::getMDREMuxOut(quint8& out, QString& errorString,
+                        CpuPaneBaseGraphicsItems *cpuPaneItems)
 {
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
@@ -597,7 +602,8 @@ bool Sim::getMDREMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsIt
     return false;
 }
 
-bool Sim::getEOMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems)
+bool Sim::getEOMuxOut(quint8& out, QString& errorString,
+                      CpuPaneBaseGraphicsItems *cpuPaneItems)
 {
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
