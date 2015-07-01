@@ -29,6 +29,7 @@
 #include "byteconverterchar.h"
 
 #include "cpupane.h"
+#include "cpupanetwobytedatabus.h"
 #include "mainmemory.h"
 #include "microcodepane.h"
 #include "objectcodepane.h"

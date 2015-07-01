@@ -114,8 +114,8 @@ public:
     QLineEdit *t5RegLineEdit;
     QLineEdit *t6RegLineEdit;
 
-    // Two byte data bus model features (temporary):
 #warning todo: remove
+    // Two byte data bus model features (temporary):
     QCheckBox *MDROCk;
     QCheckBox *MDRECk;
     TristateLabel *MDROMuxTristateLabel;

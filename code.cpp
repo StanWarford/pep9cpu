@@ -68,8 +68,14 @@ void MicroCode::setCpuLabels(CpuPaneBaseGraphicsItems *cpuPaneItems)
     cpuPaneItems->aLineEdit->setText(cA == -1 ? "" : QString("%1").arg(cA));
     cpuPaneItems->MARCk->setChecked(cMARCk != -1);
     cpuPaneItems->MDRCk->setChecked(cMDRCk != -1);
+    cpuPaneItems->MDRECk->setChecked(cMDRECk != -1);
+    cpuPaneItems->MDROCk->setChecked(cMDROCk != -1);
     cpuPaneItems->aMuxTristateLabel->setState(cAMux);
     cpuPaneItems->MDRMuxTristateLabel->setState(cMDRMux);
+    cpuPaneItems->MDREMuxTristateLabel->setState(cMDREMux);
+    cpuPaneItems->MDROMuxTristateLabel->setState(cMDROMux);
+    cpuPaneItems->EOMuxTristateLabel->setState(cEOMux);
+    cpuPaneItems->MARMuxTristateLabel->setState(cMARMux);
     cpuPaneItems->cMuxTristateLabel->setState(cCMux);
     cpuPaneItems->ALULineEdit->setText(cALU == -1 ? "" : QString("%1").arg(cALU));
     cpuPaneItems->CSMuxTristateLabel->setState(cCSMux);

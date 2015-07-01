@@ -32,6 +32,8 @@
 #include <QDesktopServices>
 #include <QUrl>
 
+#include <QDebug>
+
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent),
         ui(new Ui::MainWindow)
@@ -43,12 +45,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mainMemory = new MainMemory(ui->mainSplitter);
     delete ui->memoryFrame;
-    cpuPane = new CpuPane(ui->mainSplitter);
-    delete ui->cpuFrame;
     microcodePane = new MicrocodePane(ui->codeSplitter);
     delete ui->microcodeFrame;
     objectCodePane = new ObjectCodePane(ui->codeSplitter);
     delete ui->objectCodeFrame;
+    //cpuPane = new CpuPane(ui->mainSplitter);
+    cpuPane = NULL;
+    on_actionOne_Byte_Data_Bus_Model_triggered();
+    delete ui->cpuFrame;
 
     QList<int> list;
     list.append(3000);
@@ -56,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->codeSplitter->setSizes(list);
 
     ui->mainSplitter->insertWidget(0, mainMemory);
-    ui->mainSplitter->insertWidget(1, cpuPane);
+    //ui->mainSplitter->insertWidget(1, cpuPane);
 
     helpDialog = new HelpDialog(this);
     aboutPepDialog = new AboutPep(this);
@@ -82,19 +86,18 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(microcodePane, SIGNAL(undoAvailable(bool)), this, SLOT(setUndoability(bool)));
     connect(microcodePane, SIGNAL(redoAvailable(bool)), this, SLOT(setRedoability(bool)));
 
-    connect(cpuPane, SIGNAL(updateSimulation()), this, SLOT(updateSimulation()));
-    connect(cpuPane, SIGNAL(simulationFinished()), this, SLOT(simulationFinished()));
-    connect(cpuPane, SIGNAL(stopSimulation()), this, SLOT(stopSimulation()));
-    connect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
+    //connect(cpuPane, SIGNAL(updateSimulation()), this, SLOT(updateSimulation()));
+    //connect(cpuPane, SIGNAL(simulationFinished()), this, SLOT(simulationFinished()));
+    //connect(cpuPane, SIGNAL(stopSimulation()), this, SLOT(stopSimulation()));
+    //connect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
 
     //Pep::initEnumMnemonMaps();
-    on_actionOne_Byte_Data_Bus_Model_triggered();
 
     readSettings();
 
     qApp->installEventFilter(this);
 
-    connect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
+    //connect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
 }
 
 MainWindow::~MainWindow()
@@ -489,6 +492,24 @@ void MainWindow::on_actionOne_Byte_Data_Bus_Model_triggered()
 
     objectCodePane->clearSimulationView();
     mainMemory->clearMemory();
+
+    if (cpuPane != NULL) {
+        disconnect(cpuPane, SIGNAL(updateSimulation()), this, SLOT(updateSimulation()));
+        disconnect(cpuPane, SIGNAL(simulationFinished()), this, SLOT(simulationFinished()));
+        disconnect(cpuPane, SIGNAL(stopSimulation()), this, SLOT(stopSimulation()));
+        disconnect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
+        disconnect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
+        delete cpuPane;
+        cpuPane = NULL;
+    }
+    cpuPane = new CpuPane(ui->mainSplitter);
+    ui->mainSplitter->insertWidget(1, cpuPane);
+    connect(cpuPane, SIGNAL(updateSimulation()), this, SLOT(updateSimulation()));
+    connect(cpuPane, SIGNAL(simulationFinished()), this, SLOT(simulationFinished()));
+    connect(cpuPane, SIGNAL(stopSimulation()), this, SLOT(stopSimulation()));
+    connect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
+    connect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
+
     cpuPane->clearCpu();
     cpuPane->clearCpuControlSignals();
 
@@ -510,6 +531,26 @@ void MainWindow::on_actionTwo_Byte_Data_Bus_Model_triggered()
 
     objectCodePane->clearSimulationView();
     mainMemory->clearMemory();
+
+    if (cpuPane != NULL) {
+        disconnect(cpuPane, SIGNAL(updateSimulation()), this, SLOT(updateSimulation()));
+        disconnect(cpuPane, SIGNAL(simulationFinished()), this, SLOT(simulationFinished()));
+        disconnect(cpuPane, SIGNAL(stopSimulation()), this, SLOT(stopSimulation()));
+        disconnect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
+        disconnect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
+
+        delete cpuPane;
+        cpuPane = NULL;
+    }
+    cpuPane = new CpuPaneTwoByteDataBus(ui->mainSplitter);
+    ui->mainSplitter->insertWidget(1, cpuPane);
+    connect(cpuPane, SIGNAL(updateSimulation()), this, SLOT(updateSimulation()));
+    connect(cpuPane, SIGNAL(simulationFinished()), this, SLOT(simulationFinished()));
+    connect(cpuPane, SIGNAL(stopSimulation()), this, SLOT(stopSimulation()));
+    connect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
+    connect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
+
+
     cpuPane->clearCpu();
     cpuPane->clearCpuControlSignals();
 
@@ -713,6 +754,8 @@ void MainWindow::setRedoability(bool b)
 
 void MainWindow::updateSimulation()
 {
+    qDebug() << "update sim!";
+
     microcodePane->updateSimulationView();
     objectCodePane->highlightCurrentInstruction();
 }
