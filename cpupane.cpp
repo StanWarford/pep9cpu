@@ -277,6 +277,14 @@ void CpuPane::setRegister(Enu::EMnemonic reg, int value) {
         Sim::MDR = value;
         cpuPaneItems->MDRLabel->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper());
         break;
+    case Enu::MDRO:
+        Sim::MDROdd = value;
+        cpuPaneItems->MDROLabel->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper());
+        break;
+    case Enu::MDRE:
+        Sim::MDREven = value;
+        cpuPaneItems->MDRELabel->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper());
+        break;
     default:
         // the remainder of the array is 'read only' in our simulated CPU
         break;
@@ -480,6 +488,7 @@ void CpuPane::clearCpuControlSignals()
     cpuPaneItems->MemReadTristateLabel->setText("");
     cpuPaneItems->MemWriteTristateLabel->setText("");
 
+    // new signals:
     cpuPaneItems->MDRECk->setChecked(false);
     cpuPaneItems->MDROCk->setChecked(false);
     cpuPaneItems->MDROMuxTristateLabel->setText("");
@@ -818,6 +827,8 @@ bool CpuPane::stepTwoByteDataBus(QString &errorString)
             return false;
         }
         if (Sim::getCMuxOut(out, errorString, cpuPaneItems)) {
+            qDebug() << "Writing " << QString("0x%1").arg(out, 4, 16, QLatin1Char('0'))
+                     << " to register " << cDest;
             setRegisterByte(cDest, out);
         }
         else {
@@ -829,6 +840,7 @@ bool CpuPane::stepTwoByteDataBus(QString &errorString)
     if (cpuPaneItems->MDROCk->isChecked()) {
         quint8 out = 0;
         if (Sim::getMDROMuxOut(out, errorString, cpuPaneItems)) {
+            qDebug() << "MDRO out: " << QString("0x%1").arg(out, 4, 16, QLatin1Char('0'));
             int address = (Sim::MARA * 256 + Sim::MARB) & 0xFFFE;
             emit readByte(address);
             setRegister(Enu::MDRO, out);
@@ -1047,7 +1059,6 @@ void CpuPane::clockButtonPushed()
 
 void CpuPane::singleStepButtonPushed()
 {
-    qDebug() << "single step two byte pushed...";
     QString errorString = "";
 
     if (!step(errorString)) {
@@ -1080,7 +1091,6 @@ void CpuPane::singleStepButtonPushed()
             return;
         }
         code->setCpuLabels(cpuPaneItems);
-        qDebug() << "emit updateSim...";
         emit updateSimulation();
     }
 

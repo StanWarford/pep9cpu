@@ -54,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
     cpuPane = cpuPaneOneByteDataBus;
 
     cpuPaneTwoByteDataBus = new CpuPane(ui->mainSplitter);
-    cpuPaneTwoByteDataBus->setEnabled(false);
+    cpuPaneTwoByteDataBus->hide();
     ui->mainSplitter->insertWidget(1, cpuPaneTwoByteDataBus);
 
     delete ui->cpuFrame;
@@ -506,9 +506,9 @@ void MainWindow::on_actionOne_Byte_Data_Bus_Model_triggered()
     disconnect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
     disconnect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
 
-    cpuPane->setDisabled(true);
+    cpuPane->hide();
     cpuPane = cpuPaneOneByteDataBus;
-    cpuPane->setEnabled(true);
+    cpuPane->show();
 
     connect(cpuPane, SIGNAL(updateSimulation()), this, SLOT(updateSimulation()));
     connect(cpuPane, SIGNAL(simulationFinished()), this, SLOT(simulationFinished()));
@@ -544,9 +544,9 @@ void MainWindow::on_actionTwo_Byte_Data_Bus_Model_triggered()
     disconnect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
     disconnect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
 
-    cpuPane->setDisabled(true);
+    cpuPane->hide();
     cpuPane = cpuPaneTwoByteDataBus;
-    cpuPane->setEnabled(true);
+    cpuPane->show();
 
     connect(cpuPane, SIGNAL(updateSimulation()), this, SLOT(updateSimulation()));
     connect(cpuPane, SIGNAL(simulationFinished()), this, SLOT(simulationFinished()));
@@ -757,8 +757,6 @@ void MainWindow::setRedoability(bool b)
 
 void MainWindow::updateSimulation()
 {
-    qDebug() << "update sim!";
-
     microcodePane->updateSimulationView();
     objectCodePane->highlightCurrentInstruction();
 }

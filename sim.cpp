@@ -65,7 +65,7 @@ int Sim::readByte(int memAddr)
 
 void Sim::writeByte(int memAddr, int value)
 {
-    qDebug() << "Wrote byte " << memAddr << " with value " << value;
+    qDebug() << "Wrote byte " << memAddr << " with value " << QString("0x%1").arg(value, 4, 16, QLatin1Char('0'));
 
     Mem[memAddr & 0xffff] = value;
     modifiedBytes.insert(memAddr & 0xffff);
@@ -680,7 +680,6 @@ bool TwoByteModel::getAMuxOut(quint8& out, QString& errorString,
                               CpuPaneBaseGraphicsItems *cpuPaneItems)
 {
     if (cpuPaneItems->aMuxTristateLabel->text() == "0") {
-        //out = Sim::MDR;
         if (getEOMuxOut(out, errorString, cpuPaneItems)) {
             return true;
         }
@@ -707,13 +706,9 @@ bool TwoByteModel::getMARMuxOut(quint8& mara, quint8 &marb,
                                 CpuPaneBaseGraphicsItems *cpuPaneItems)
 {
     if (cpuPaneItems->MARMuxTristateLabel->text() == "0") {
-        if (getMDREMuxOut(mara, errorString, cpuPaneItems)
-                && getMDROMuxOut(marb, errorString, cpuPaneItems)) {
-            return true;
-        }
-        else {
-            // Error string will [already] be populated with the correct error
-        }
+        mara = Sim::MDREven;
+        marb = Sim::MDROdd;
+        return true;
     }
     else if (cpuPaneItems->MARMuxTristateLabel->text() == "1") {
         if (Sim::getABusOut(mara, errorString, cpuPaneItems)
@@ -741,6 +736,8 @@ bool TwoByteModel::getMDROMuxOut(quint8& out, QString& errorString,
             // address is odd (MDRO):
             address++;
             out = Sim::readByte(address);
+            qDebug() << "MDRO just read " << QString("0x%1").arg(out, 4, 16, QLatin1Char('0'))
+                     << " at address " << QString("0x%1").arg(address, 4, 16, QLatin1Char('0'));
             return true;
         }
         else {
@@ -767,6 +764,8 @@ bool TwoByteModel::getMDREMuxOut(quint8& out, QString& errorString,
             // align the address to even number, as per pg. 614 fig 12.14
             int address = (Sim::MARA * 256 + Sim::MARB) & 0xFFFE;
             out = Sim::readByte(address);
+            qDebug() << "MDRE just read " << QString("0x%1").arg(out, 4, 16, QLatin1Char('0'))
+                     << " at address " << QString("0x%1").arg(address, 4, 16, QLatin1Char('0'));
             return true;
         }
         else {
@@ -784,25 +783,16 @@ bool TwoByteModel::getMDREMuxOut(quint8& out, QString& errorString,
     return false;
 }
 
-
 bool TwoByteModel::getEOMuxOut(quint8& out, QString& errorString,
                                CpuPaneBaseGraphicsItems *cpuPaneItems)
 {
     if (cpuPaneItems->EOMuxTristateLabel->text() == "0") {
-        if (getMDREMuxOut(out, errorString, cpuPaneItems)) {
-            return true;
-        }
-        else {
-            // Error string will [already] be populated with the correct error
-        }
+        out = Sim::MDREven;
+        return true;
     }
     if (cpuPaneItems->EOMuxTristateLabel->text() == "1") {
-        if (getMDROMuxOut(out, errorString, cpuPaneItems)) {
-            return true;
-        }
-        else {
-            // Error string will [already] be populated with the correct error
-        }
+        out = Sim::MDROdd;
+        return true;
     }
     else {
         errorString.append("EOMux control signal not specified.\n");

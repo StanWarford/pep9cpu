@@ -41,18 +41,40 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
 {
 
     MDROCk = new QCheckBox("MDROCk");
-    MDROCk->hide();
+    MDROCk->setGeometry(550, 189, 60, 21);
+    scene->addWidget(MDROCk);
+    //MDROCk->hide();
     MDRECk = new QCheckBox("MDRECk");
-    MDRECk->hide();
+    MDRECk->setGeometry(550, 209, 60, 21);
+    scene->addWidget(MDRECk);
+    //MDRECk->hide();
     MDROMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
-    MDROMuxTristateLabel->hide();
+    MDROMuxTristateLabel->setGeometry(550, 245, 60, 21);
+    scene->addWidget(MDROMuxTristateLabel);
+    //MDROMuxTristateLabel->hide();
     MDREMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
-    MDREMuxTristateLabel->hide();
+    MDREMuxTristateLabel->setGeometry(550, 265, 60, 21);
+    scene->addWidget(MDREMuxTristateLabel);
+    //MDREMuxTristateLabel->hide();
     EOMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
-    EOMuxTristateLabel->hide();
-    MARMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
-    MARMuxTristateLabel->hide();
+    EOMuxTristateLabel->setGeometry(490, 245, 60, 21);
+    scene->addWidget(EOMuxTristateLabel);
 
+    //EOMuxTristateLabel->hide();
+    MARMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
+    MARMuxTristateLabel->setGeometry(550, 149, 60, 21);
+    scene->addWidget(MARMuxTristateLabel);
+
+    //MARMuxTristateLabel->hide();
+    MDRELabel = new QLabel("0x00");
+    MDRELabel->setGeometry(175, 349, 60, 21);
+    scene->addWidget(MDRELabel);
+
+    //MDRELabel->hide();
+    MDROLabel = new QLabel("0x00");
+    MDROLabel->setGeometry(175, 369, 60, 21);
+    scene->addWidget(MDROLabel);
+    //MDROLabel->hide();
 
     seqCircuitColor = QColor(0xffdd77);
     combCircuitRed = QColor(Qt::red).lighter(190);
@@ -806,6 +828,8 @@ CpuPaneBaseGraphicsItems::~CpuPaneBaseGraphicsItems()
     delete MDREMuxTristateLabel;
     delete EOMuxTristateLabel;
     delete MARMuxTristateLabel;
+    delete MDRELabel;
+    delete MDROLabel;
 }
 
 
