@@ -37,7 +37,7 @@
 
 using namespace Enu;
 
-CpuPane::CpuPane(QWidget *parent) :
+CpuPane::CpuPane(CPUType type, QWidget *parent) :
         QWidget(parent),
         ui(new Ui::CpuPane)
 {
@@ -52,7 +52,7 @@ CpuPane::CpuPane(QWidget *parent) :
 
     ui->graphicsView->setFont(QFont(Pep::cpuFont, Pep::cpuFontSize));
 
-    initModel();
+    initModel(type);
 
     ui->spinBox->hide();
     ui->singleStepPushButton->setEnabled(false);
@@ -84,9 +84,9 @@ void CpuPane::giveFocus()
     ui->graphicsView->setFocus();
 }
 
-void CpuPane::initModel()
+void CpuPane::initModel(Enu::CPUType type)
 {
-    cpuPaneItems = new CpuPaneBaseGraphicsItems(ui->graphicsView, 0, scene);
+    cpuPaneItems = new CpuPaneBaseGraphicsItems(type, ui->graphicsView, 0, scene);
 
     ui->graphicsView->scene()->addItem(cpuPaneItems);
 

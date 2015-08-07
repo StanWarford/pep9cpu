@@ -38,14 +38,14 @@ namespace Ui {
 class CpuPane : public QWidget {
     Q_OBJECT
 public:
-    CpuPane(QWidget *parent = 0);
+    CpuPane(Enu::CPUType type, QWidget *parent = 0);
     ~CpuPane();
 
     void highlightOnFocus();
     bool hasFocus();
     void giveFocus();
 
-    void initModel();
+    void initModel(Enu::CPUType type);
 
     void startDebugging();
     void stopDebugging();

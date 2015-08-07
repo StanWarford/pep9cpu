@@ -65,7 +65,8 @@ HEADERS += mainwindow.h \
     byteconverterinstr.h \
     aboutpep.h \
     cpupanebasegraphicsitems.h \
-    shapes_one_byte_data_bus.h
+    shapes_one_byte_data_bus.h \
+    shapes_two_byte_data_bus.h
 FORMS += mainwindow.ui \
     byteconverterhex.ui \
     byteconverterdec.ui \

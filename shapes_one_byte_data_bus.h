@@ -30,12 +30,6 @@
 
 #include <QVector>
 
-enum Direction {
-    Up,
-    Down,
-    Left,
-    Right,
-};
 
 class Arrow {
 public:
@@ -81,7 +75,10 @@ enum RegPos {
 };
 
 enum CommonPositions {
-    controlV = 579,
+    ctrlLabelX = 579,
+    ctrlInputX = 550,
+    interfaceRegsX = 175,
+    statusBitsX = 476,
 
 };
 
@@ -93,54 +90,54 @@ enum CommonPositions {
 //    const QPolygon lineEdit  = QPolygon(QRect(0,0, 25, 21));
 
     // input/label/control section:
-    const QRect loadCkCheckbox =     QRect(550, 18, check2W, check2H);
-    const QRect cLineEdit =          QRect(550, 39, lineEditW, lineEditH);
+    const QRect loadCkCheckbox =     QRect(ctrlInputX, 18, check2W, check2H);
+    const QRect cLineEdit =          QRect(ctrlInputX, 39, lineEditW, lineEditH);
     // todo: check on '21':
-    const QRect cLabel =             QRect(579, 41, labelW, 21);
-    const QRect bLineEdit =          QRect(550, 61, lineEditW, lineEditH);
-    const QRect bLabel =             QRect(579, 63, labelW, 21);
-    const QRect aLineEdit =          QRect(550, 83, lineEditW, lineEditH);
-    const QRect aLabel =             QRect(579, 85, labelW, 21);
-    const QRect MARCkCheckbox =      QRect(550, 169, check2W, check2H);
-    const QRect MARALabel =          QRect(175, 202, dataLabelW, dataLabelH);
-    const QRect MARBLabel =          QRect(175, 132, dataLabelW, dataLabelH);
-    const QRect MDRCkCheckbox =      QRect(550, 225, check2W, check2H);
-    const QRect aMuxLabel =          QRect(579, 297, labelW, labelH);
+    const QRect cLabel =             QRect(ctrlLabelX, 41, labelW, 21);
+    const QRect bLineEdit =          QRect(ctrlInputX, 61, lineEditW, lineEditH);
+    const QRect bLabel =             QRect(ctrlLabelX, 63, labelW, 21);
+    const QRect aLineEdit =          QRect(ctrlInputX, 83, lineEditW, lineEditH);
+    const QRect aLabel =             QRect(ctrlLabelX, 85, labelW, 21);
+    const QRect MARCkCheckbox =      QRect(ctrlInputX, 169, check2W, check2H);
+    const QRect MARALabel =          QRect(interfaceRegsX, 202, dataLabelW, dataLabelH);
+    const QRect MARBLabel =          QRect(interfaceRegsX, 132, dataLabelW, dataLabelH);
+    const QRect MDRCkCheckbox =      QRect(ctrlInputX, 225, check2W, check2H);
+    const QRect aMuxLabel =          QRect(ctrlLabelX, 297, labelW, labelH);
     const QRect aMuxerDataLabel =    QRect(306, 293, dataLabelW, dataLabelH);
-    const QRect aMuxTristateLabel =  QRect(550, 295, labelTriW, 21);
-    const QRect MDRMuxLabel =        QRect(579, 318, 61, 20);
-    const QRect MDRMuxerDataLabel =  QRect(175,293, dataLabelW, dataLabelH);
-    const QRect MDRMuxTristateLabel = QRect(550, 316, labelTriW, labelTriH);
-    const QRect MDRLabel =           QRect(175, 254, dataLabelW, dataLabelH);
-    const QRect cMuxLabel =          QRect(579, 349, 61,20);
+    const QRect aMuxTristateLabel =  QRect(ctrlInputX, 295, labelTriW, 21);
+    const QRect MDRMuxLabel =        QRect(ctrlLabelX, 318, 61, 20);
+    const QRect MDRMuxerDataLabel =  QRect(interfaceRegsX,293, dataLabelW, dataLabelH);
+    const QRect MDRMuxTristateLabel = QRect(ctrlInputX, 316, labelTriW, labelTriH);
+    const QRect MDRLabel =           QRect(interfaceRegsX, 254, dataLabelW, dataLabelH);
+    const QRect cMuxLabel =          QRect(ctrlLabelX, 349, 61,20);
     const QRect cMuxerLabel =        QRect(250, 374, dataLabelW, dataLabelH);
-    const QRect cMuxTristateLabel =  QRect(550, 348, labelTriW, labelTriH);
-    const QRect ALULineEdit  =       QRect(550, 368, 26, 20);
-    const QRect ALULabel =           QRect(579, 370, 31, 20);
+    const QRect cMuxTristateLabel =  QRect(ctrlInputX, 348, labelTriW, labelTriH);
+    const QRect ALULineEdit  =       QRect(ctrlInputX, 368, 26, 20);
+    const QRect ALULabel =           QRect(ctrlLabelX, 370, 31, 20);
     const QRect ALUFunctionLabel =   QRect(332, 355, 98, 20);
     //const QPolygon ALUPoly = QPolygon(QRect);
-    const QRect CSMuxLabel =         QRect(579, 399, labelW, labelH);
-    const QRect CSMuxerDataLabel =   QRect(476+19-69, 399, dataLabelW, dataLabelH);
-    const QRect CSMuxTristateLabel = QRect(550, 399, 25,21);
-    const QRect SCkCheckBox =        QRect(550, 437, checkW, checkH);
-    const QRect sBitLabel =          QRect(476, 437, 19, 19);
-    const QRect CCkCheckBox =        QRect(550, 464, checkW, checkH);
-    const QRect cBitLabel =          QRect(476, 463, 19, 19);
-    const QRect VCkCheckBox =        QRect(550, 491, checkW, checkH);
-    const QRect vBitLabel =          QRect(476, 491, 19, 19);
-    const QRect AndZLabel =          QRect(579, 517, 45, 20);
+    const QRect CSMuxLabel =         QRect(ctrlLabelX, 399, labelW, labelH);
+    const QRect CSMuxerDataLabel =   QRect(statusBitsX+19-69, 399, dataLabelW, dataLabelH);
+    const QRect CSMuxTristateLabel = QRect(ctrlInputX, 399, 25,21);
+    const QRect SCkCheckBox =        QRect(ctrlInputX, 437, checkW, checkH);
+    const QRect sBitLabel =          QRect(statusBitsX, 437, 19, dataLabelH);
+    const QRect CCkCheckBox =        QRect(ctrlInputX, 464, checkW, checkH);
+    const QRect cBitLabel =          QRect(statusBitsX, 463, 19, dataLabelH);
+    const QRect VCkCheckBox =        QRect(ctrlInputX, 491, checkW, checkH);
+    const QRect vBitLabel =          QRect(statusBitsX, 491, 19, dataLabelH);
+    const QRect AndZLabel =          QRect(ctrlLabelX, 517, 45, 20);
     //const QRect AndZTristateLabel =  QRect(415, 542, 41,21);
-    const QRect AndZTristateLabel =  QRect(550, 517, labelTriW,labelTriH);
-    //const QRect AndZMuxLabel =       QRect(550, 544, checkW, checkH);
+    const QRect AndZTristateLabel =  QRect(ctrlInputX, 517, labelTriW,labelTriH);
+    //const QRect AndZMuxLabel =       QRect(ctrlInputX, 544, checkW, checkH);
     const QRect AndZMuxLabel =       QRect(416, 544, 41,21);
-    const QRect ZCkCheckBox =        QRect(550, 544, 60, 20);
-    const QRect zBitLabel =          QRect(476, 544, 19, 19);
-    const QRect NCkCheckBox =        QRect(550, 582+4, checkW, checkH);
-    const QRect nBitLabel =          QRect(476, 582+4, 19, 19);
-    const QRect MemWriteLabel =      QRect(579, 611, check2W, check2H);
-    const QRect MemWriteTristateLabel =  QRect(550, 611, labelTriW, labelTriH);
-    const QRect MemReadLabel =       QRect(579, 631, check2W, check2H);
-    const QRect MemReadTristateLabel =   QRect(550, 631, labelTriW, labelTriH);
+    const QRect ZCkCheckBox =        QRect(ctrlInputX, 544, 60, 20);
+    const QRect zBitLabel =          QRect(statusBitsX, 544, 19, dataLabelH);
+    const QRect NCkCheckBox =        QRect(ctrlInputX, 582+4, checkW, checkH);
+    const QRect nBitLabel =          QRect(statusBitsX, 582+4, 19, dataLabelH);
+    const QRect MemWriteLabel =      QRect(ctrlLabelX, 611, check2W, check2H);
+    const QRect MemWriteTristateLabel =  QRect(ctrlInputX, 611, labelTriW, labelTriH);
+    const QRect MemReadLabel =       QRect(ctrlLabelX, 631, check2W, check2H);
+    const QRect MemReadTristateLabel =   QRect(ctrlInputX, 631, labelTriW, labelTriH);
 
     // registers
 
@@ -224,24 +221,28 @@ enum CommonPositions {
                                        << QPoint(274,407) << QPoint(264,397)
                                        << QPoint(254,407) << QPoint(259,407)
                                        << QPoint(259,523) << QPoint(310,523));
+
     const QRect RegBank = QRect(5, 5, 491, 113);
 
-    const QRect aRegLineEdit  = QRect(52,  10, regLineEditW, regLineEditH);
-    const QRect xRegLineEdit  = QRect(52,  38, regLineEditW, regLineEditH);
-    const QRect spRegLineEdit = QRect(52,  66, regLineEditW, regLineEditH);
-    const QRect pcRegLineEdit = QRect(52,  94, regLineEditW, regLineEditH);
-    const QRect irRegLineEdit = QRect(184, 10, regLineEditW + 15, regLineEditH);
-    const QRect t1RegLineEdit = QRect(184, 38, regLineEditW - 15, regLineEditH);
-    const QRect t2RegLineEdit = QRect(184, 66, regLineEditW, regLineEditH);
-    const QRect t3RegLineEdit = QRect(184, 94, regLineEditW, regLineEditH);
-    const QRect t4RegLineEdit = QRect(311, 10, regLineEditW, regLineEditH);
-    const QRect t5RegLineEdit = QRect(311, 38, regLineEditW, regLineEditH);
-    const QRect t6RegLineEdit = QRect(311, 66, regLineEditW, regLineEditH);
-    const QRect m1RegLabel    = QRect(311, 94, regLineEditW - 10, regLineEditH);
-    const QRect m2RegLabel    = QRect(440, 10, regLineEditW - 10, regLineEditH);
-    const QRect m3RegLabel    = QRect(440, 38, regLineEditW - 10, regLineEditH);
-    const QRect m4RegLabel    = QRect(440, 64, regLineEditW - 10, regLineEditH);
-    const QRect m5RegLabel    = QRect(440, 94, regLineEditW - 10, regLineEditH);
+    const QRect aRegLineEdit  = QRect(Col1X, Row1Y, regLineEditW, regLineEditH);
+    const QRect xRegLineEdit  = QRect(Col1X, Row2Y, regLineEditW, regLineEditH);
+    const QRect spRegLineEdit = QRect(Col1X, Row3Y, regLineEditW, regLineEditH);
+    const QRect pcRegLineEdit = QRect(Col1X, Row4Y, regLineEditW, regLineEditH);
+
+    const QRect irRegLineEdit = QRect(Col2X, Row1Y, regLineEditW + 15, regLineEditH);
+    const QRect t1RegLineEdit = QRect(Col2X, Row2Y, regLineEditW - 15, regLineEditH);
+    const QRect t2RegLineEdit = QRect(Col2X, Row3Y, regLineEditW, regLineEditH);
+    const QRect t3RegLineEdit = QRect(Col2X, Row4Y, regLineEditW, regLineEditH);
+
+    const QRect t4RegLineEdit = QRect(Col3X, Row1Y, regLineEditW, regLineEditH);
+    const QRect t5RegLineEdit = QRect(Col3X, Row2Y, regLineEditW, regLineEditH);
+    const QRect t6RegLineEdit = QRect(Col3X, Row3Y, regLineEditW, regLineEditH);
+    const QRect m1RegLabel    = QRect(Col3X, Row4Y, regLineEditW - 10, regLineEditH);
+
+    const QRect m2RegLabel    = QRect(Col4X, Row1Y, regLineEditW - 10, regLineEditH);
+    const QRect m3RegLabel    = QRect(Col4X, Row2Y, regLineEditW - 10, regLineEditH);
+    const QRect m4RegLabel    = QRect(Col4X, Row3Y, regLineEditW - 10, regLineEditH);
+    const QRect m5RegLabel    = QRect(Col4X, Row4Y, regLineEditW - 10, regLineEditH);
 
     const QPolygon BBus1 = QPolygon(QVector<QPoint>()   << QPoint(417, 118)
                                     << QPoint(417, 136) << QPoint(366, 136)
