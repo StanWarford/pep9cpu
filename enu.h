@@ -54,6 +54,14 @@ namespace Enu
         TwoByteDataBus
     };
 
+    // For our drawing/shapes classes:
+    enum Direction {
+        Up,
+        Down,
+        Left,
+        Right,
+    };
+
 }
 
 #endif // ENU_H

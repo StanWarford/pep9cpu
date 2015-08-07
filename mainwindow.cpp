@@ -49,11 +49,11 @@ MainWindow::MainWindow(QWidget *parent) :
     delete ui->microcodeFrame;
     objectCodePane = new ObjectCodePane(ui->codeSplitter);
     delete ui->objectCodeFrame;
-    cpuPaneOneByteDataBus = new CpuPane(ui->mainSplitter);
+    cpuPaneOneByteDataBus = new CpuPane(Enu::OneByteDataBus, ui->mainSplitter);
     ui->mainSplitter->insertWidget(1, cpuPaneOneByteDataBus);
     cpuPane = cpuPaneOneByteDataBus;
 
-    cpuPaneTwoByteDataBus = new CpuPane(ui->mainSplitter);
+    cpuPaneTwoByteDataBus = new CpuPane(Enu::TwoByteDataBus, ui->mainSplitter);
     cpuPaneTwoByteDataBus->hide();
     ui->mainSplitter->insertWidget(1, cpuPaneTwoByteDataBus);
 

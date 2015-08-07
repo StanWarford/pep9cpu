@@ -33,12 +33,14 @@
 
 #include "shapes_one_byte_data_bus.h"
 
-CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
+CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
                                                    QGraphicsItem *itemParent,
                                                    QGraphicsScene *scene)
     : QGraphicsItem(itemParent),
       parent(widgetParent)
 {
+    // save our current model for this set of items;
+    model = type;
 
     MDROCk = new QCheckBox("MDROCk");
     MDROCk->setGeometry(550, 189, 60, 21);
@@ -59,8 +61,8 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     EOMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
     EOMuxTristateLabel->setGeometry(490, 245, 60, 21);
     scene->addWidget(EOMuxTristateLabel);
-
     //EOMuxTristateLabel->hide();
+
     MARMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
     MARMuxTristateLabel->setGeometry(550, 149, 60, 21);
     scene->addWidget(MARMuxTristateLabel);
@@ -759,6 +761,25 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(QWidget *widgetParent,
     scene->addPolygon(OneByteShapes::NZVCDataPath,
                       QPen(QBrush(Qt::black), 1), QBrush(Qt::yellow));
     scene->addLine(310, 477, 310, 559);
+
+    // hide stuff based on the current model:
+    if (model == Enu::OneByteDataBus) {
+        MDROCk->hide();
+        MDRECk->hide();
+        MDROMuxTristateLabel->hide();
+        MDREMuxTristateLabel->hide();
+        EOMuxTristateLabel->hide();
+        MARMuxTristateLabel->hide();
+        MDRELabel->hide();
+        MDROLabel->hide();
+    }
+    else if (model == Enu::TwoByteDataBus) {
+        MDRCk->hide();
+        MDRLabel->hide();
+        MDRMuxerDataLabel->hide();
+        MDRMuxLabel->hide();
+        MDRMuxTristateLabel->hide();
+    }
 }
 
 CpuPaneBaseGraphicsItems::~CpuPaneBaseGraphicsItems()

@@ -26,12 +26,13 @@
 #include <QLabel>
 #include <QLineEdit>
 
+#include "enu.h"
 #include "tristatelabel.h"
 
 class CpuPaneBaseGraphicsItems : public QGraphicsItem
 {
 public:
-    CpuPaneBaseGraphicsItems(QWidget *widgetParent, QGraphicsItem *itemParent = 0,
+    CpuPaneBaseGraphicsItems(Enu::CPUType type, QWidget *widgetParent, QGraphicsItem *itemParent = 0,
                              QGraphicsScene *scene = 0);
     ~CpuPaneBaseGraphicsItems();
 
@@ -129,6 +130,7 @@ public:
 private:
     QGraphicsScene *parentScene;
     QWidget *parent;
+    Enu::CPUType model;
 
     QColor seqCircuitColor;
     QColor combCircuitRed;
