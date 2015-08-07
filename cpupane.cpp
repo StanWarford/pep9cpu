@@ -795,14 +795,17 @@ bool CpuPane::stepTwoByteDataBus(QString &errorString)
     Sim::getALUOut(result, a, b, carry, overflow, errtemp, cpuPaneItems);
 
     if (Sim::mainBusState == Enu::MemReadReady) {
-        // we are performing a 2nd consecutive MemRead
+        // we are performing a 3rd consecutive MemRead
         // do nothing - the memread is performed in the getMDRMuxOut fn
     }
     else if (Sim::mainBusState == Enu::MemWriteReady) {
-        // we are performing a 2nd consecutive MemWrite
-        int address = Sim::MARA * 256 + Sim::MARB;
-        Sim::writeByte(address, Sim::MDR);
+        // we are performing a 3rd consecutive MemWrite
+        int address = (Sim::MARA * 256 + Sim::MARB) & 0xFFFE;;
+        //Sim::writeByte(address, Sim::MDR);
+        Sim::writeByte(address, Sim::MDREven);
+        Sim::writeByte(address + 1, Sim::MDROdd);
         emit writeByte(address);
+        emit writeByte(address + 1);
     }
 
     // MARCk
