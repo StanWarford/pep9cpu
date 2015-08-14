@@ -685,9 +685,6 @@ bool OneByteModel::getMDRMuxOut(quint8 &out, QString &errorString,
     return false;
 }
 
-
-
-
 // ***************************************************************************
 // Two byte model-specific functionality:
 // ***************************************************************************

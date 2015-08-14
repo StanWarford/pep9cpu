@@ -132,8 +132,19 @@ const QRect DataBus                         = OneByteShapes::DataBus;
 const QPolygon AddrArrow                    = OneByteShapes::AddrArrow;
 //const QPolygon DataToMDRMuxBus;
 //const QPolygon MDRToDataBus;
-const QPolygon ALUOutBus;
+const QPolygon MDROToDataBus = QPolygon(QVector<QPoint>()  << QPoint(105, 258)
+                                        << QPoint(83, 258) << QPoint(83, 253)
+                                        << QPoint(73, 263) << QPoint(83, 273)
+                                        << QPoint(83, 268) << QPoint(105, 268));
+
+const QPolygon MDREToDataBus = QPolygon(QVector<QPoint>()  << QPoint(105, 298)
+                                        << QPoint(83, 298) << QPoint(83, 293)
+                                        << QPoint(73, 303) << QPoint(83, 313)
+                                        << QPoint(83, 308) << QPoint(105, 308));
 //const QPolygon MDRMuxOutBus;
+const QPolygon ALUOutBus;
+
+
 
 
 

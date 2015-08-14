@@ -30,6 +30,7 @@
 
 #include <QDebug>
 #include "sim.h"
+#include "pep.h"
 
 #include "shapes_one_byte_data_bus.h"
 
@@ -174,8 +175,6 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(Enu::CPUType type, QWidget *w
     MDRCk->setGeometry(OneByteShapes::MDRCkCheckbox);
     MDRCk->setPalette(QPalette(Qt::white));
     scene->addWidget(MDRCk);
-    // MDR
-    scene->addRect(OneByteShapes::MDRLabel);
 
     aMuxLabel = new QLabel("AMux");
     aMuxLabel->setGeometry(OneByteShapes::aMuxLabel);
@@ -210,21 +209,11 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(Enu::CPUType type, QWidget *w
     MDRMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MDRMuxTristateLabel->setPalette(QPalette(Qt::white));
     scene->addWidget(MDRMuxTristateLabel);
-    scene->addRect(OneByteShapes::MDRMuxTristateLabel, QPen(Qt::gray));
     MDRLabel = new QLabel("0x00");
     MDRLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MDRLabel->setGeometry(OneByteShapes::MDRLabel);
     MDRLabel->setPalette(QPalette(seqCircuitColor));
     scene->addWidget(MDRLabel);
-    scene->addRect(OneByteShapes::MDRLabel);
-    // MDR data section
-    scene->addRect(OneByteShapes::MDRMuxerDataLabel);
-    // MDRBus (output from MDR, right arrow):
-    scene->addRect(OneByteShapes::MDRBusOutRect,
-                   QPen(Qt::black), QBrush(Qt::yellow));
-    scene->addPolygon(OneByteShapes::MDRBusOutArrow,
-                      QPen(Qt::black), QBrush(Qt::yellow));
-    // note: left arrow gets drawn in repaintMemWrite
 
 
     // CMux
@@ -764,6 +753,7 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(Enu::CPUType type, QWidget *w
 
     // hide stuff based on the current model:
     if (model == Enu::OneByteDataBus) {
+        // hide 2 byte bus stuff:
         MDROCk->hide();
         MDRECk->hide();
         MDROMuxTristateLabel->hide();
@@ -772,13 +762,30 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(Enu::CPUType type, QWidget *w
         MARMuxTristateLabel->hide();
         MDRELabel->hide();
         MDROLabel->hide();
+
+        // MDR
+        scene->addRect(OneByteShapes::MDRLabel);
+        scene->addRect(OneByteShapes::MDRMuxTristateLabel, QPen(Qt::gray));
+        //scene->addRect(OneByteShapes::MDRLabel);
+        // MDR data section
+        scene->addRect(OneByteShapes::MDRMuxerDataLabel);
+        // MDRBus (output from MDR, right arrow):
+        scene->addRect(OneByteShapes::MDRBusOutRect,
+                       QPen(Qt::black), QBrush(Qt::yellow));
+        scene->addPolygon(OneByteShapes::MDRBusOutArrow,
+                          QPen(Qt::black), QBrush(Qt::yellow));
+        // note: left arrow gets drawn in repaintMemWrite
+
     }
     else if (model == Enu::TwoByteDataBus) {
+        // hide 1 byte bus stuff:
         MDRCk->hide();
         MDRLabel->hide();
         MDRMuxerDataLabel->hide();
         MDRMuxLabel->hide();
         MDRMuxTristateLabel->hide();
+
+
     }
 }
 
@@ -1072,15 +1079,26 @@ void CpuPaneBaseGraphicsItems::repaintMDRCk(QPainter *painter)
 {
     QColor color;
 
-    color = MDRCk->isChecked() ? Qt::black : Qt::gray;
-    painter->setPen(QPen(QBrush(color), 1));
-    painter->setBrush(color);
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
 
-    // MDRCk
-    painter->drawLines(OneByteShapes::MDRCk._lines);
+        color = MDRCk->isChecked() ? Qt::black : Qt::gray;
+        painter->setPen(QPen(QBrush(color), 1));
+        painter->setBrush(color);
 
-    painter->drawImage(QPoint(207,241),
-                       color == Qt::gray ? arrowDownGray : arrowDown);
+        // MDRCk
+        painter->drawLines(OneByteShapes::MDRCk._lines);
+
+        painter->drawImage(QPoint(207,241),
+                           color == Qt::gray ? arrowDownGray : arrowDown);
+        break;
+    case Enu::TwoByteDataBus:
+
+        break;
+    default:
+        break;
+    }
+
 }
 
 void CpuPaneBaseGraphicsItems::repaintAMuxSelect(QPainter *painter)
@@ -1678,21 +1696,7 @@ void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
 
 void CpuPaneBaseGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
 {
-    QColor color = Qt::gray;
-
-    if (MDRMuxTristateLabel->text() != "") {
-        color = Qt::black;
-    }
-    painter->setPen(color);
-    painter->setBrush(color);
-
-    // MDRMux Select
-    painter->drawLine(257,303, 265,303); painter->drawLine(265,303, 265,324);
-    painter->drawLine(265,324, 279,324); painter->drawLine(291,324, 335,324);
-    painter->drawLine(347,324, 416,324); painter->drawLine(428,324, 543,324);
-
-    painter->drawImage(QPoint(249,300),
-                       color == Qt::gray ? arrowLeftGray : arrowLeft);
+    QColor color;
 
     painter->setPen(Qt::black);
 
@@ -1727,8 +1731,35 @@ void CpuPaneBaseGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
         painter->setBrush(Qt::white);
     }
 
-    // MDRMuxOutBus (MDRMux to MDR arrow)
-    painter->drawPolygon(OneByteShapes::MDRMuxOutBus);
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
+        // MDRMuxOutBus (MDRMux to MDR arrow)
+        painter->drawPolygon(OneByteShapes::MDRMuxOutBus);
+
+        // finish up by drawing select lines:
+        color = Qt::gray;
+        if (MDRMuxTristateLabel->text() != "") {
+            color = Qt::black;
+        }
+        painter->setPen(color);
+        painter->setBrush(color);
+
+        // MDRMux Select
+        painter->drawLine(257,303, 265,303); painter->drawLine(265,303, 265,324);
+        painter->drawLine(265,324, 279,324); painter->drawLine(291,324, 335,324);
+        painter->drawLine(347,324, 416,324); painter->drawLine(428,324, 543,324);
+
+        painter->drawImage(QPoint(249,300),
+                           color == Qt::gray ? arrowLeftGray : arrowLeft);
+
+        break;
+    case Enu::TwoByteDataBus:
+
+        break;
+    default:
+        break;
+    }
+
 
 
 }
