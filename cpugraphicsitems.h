@@ -1,4 +1,4 @@
-// File: cpupanebasegraphicsitems.h
+// File: cpugraphicsitems.h
 /*
     Pep9CPU is a CPU simulator for executing microcode sequences to
     implement instructions in the instruction set of the Pep/9 computer.
@@ -18,8 +18,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef CPUPANEBASEGRAPHICSITEMS_H
-#define CPUPANEBASEGRAPHICSITEMS_H
+#ifndef CPUGRAPHICSITEMS_H
+#define CPUGRAPHICSITEMS_H
 
 #include <QGraphicsItem>
 #include <QCheckBox>
@@ -29,12 +29,12 @@
 #include "enu.h"
 #include "tristatelabel.h"
 
-class CpuPaneBaseGraphicsItems : public QGraphicsItem
+class CpuGraphicsItems : public QGraphicsItem
 {
 public:
-    CpuPaneBaseGraphicsItems(Enu::CPUType type, QWidget *widgetParent, QGraphicsItem *itemParent = 0,
+    CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent, QGraphicsItem *itemParent = 0,
                              QGraphicsScene *scene = 0);
-    ~CpuPaneBaseGraphicsItems();
+    ~CpuGraphicsItems();
 
     QRectF boundingRect() const;
 
@@ -178,4 +178,4 @@ private:
     void repaintMDRMuxSelect(QPainter *painter);
 };
 
-#endif // CPUPANEBASEGRAPHICSITEMS_H
+#endif // CPUGRAPHICSITEMS_H

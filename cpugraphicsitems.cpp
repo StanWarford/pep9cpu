@@ -1,4 +1,4 @@
-// File: cpupanebasegraphicsitems.cpp
+// File: cpugraphicsitems.cpp
 /*
     Pep9CPU is a CPU simulator for executing microcode sequences to
     implement instructions in the instruction set of the Pep/9 computer.
@@ -19,7 +19,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "cpupanebasegraphicsitems.h"
+#include "cpugraphicsitems.h"
 
 #include <QCheckBox>
 #include <QLabel>
@@ -34,7 +34,7 @@
 
 #include "shapes_one_byte_data_bus.h"
 
-CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
+CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
                                                    QGraphicsItem *itemParent,
                                                    QGraphicsScene *scene)
     : QGraphicsItem(itemParent),
@@ -789,7 +789,7 @@ CpuPaneBaseGraphicsItems::CpuPaneBaseGraphicsItems(Enu::CPUType type, QWidget *w
     }
 }
 
-CpuPaneBaseGraphicsItems::~CpuPaneBaseGraphicsItems()
+CpuGraphicsItems::~CpuGraphicsItems()
 {
     delete loadCk;
     delete cLabel;
@@ -861,12 +861,12 @@ CpuPaneBaseGraphicsItems::~CpuPaneBaseGraphicsItems()
 }
 
 
-QRectF CpuPaneBaseGraphicsItems::boundingRect() const
+QRectF CpuGraphicsItems::boundingRect() const
 {
     return QRectF(0,0, 650, 620);
 }
 
-bool CpuPaneBaseGraphicsItems::aluHasCorrectOutput()
+bool CpuGraphicsItems::aluHasCorrectOutput()
 {
     if (ALULineEdit->text() == "") {
         return false;
@@ -904,7 +904,7 @@ bool CpuPaneBaseGraphicsItems::aluHasCorrectOutput()
     return false;
 }
 
-void CpuPaneBaseGraphicsItems::paint(QPainter *painter,
+void CpuGraphicsItems::paint(QPainter *painter,
                                      const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setRenderHint(QPainter::Antialiasing, false);
@@ -967,7 +967,7 @@ void CpuPaneBaseGraphicsItems::paint(QPainter *painter,
 
 }
 
-void CpuPaneBaseGraphicsItems::repaintLoadCk(QPainter *painter)
+void CpuGraphicsItems::repaintLoadCk(QPainter *painter)
 {
     QColor color;
 
@@ -983,7 +983,7 @@ void CpuPaneBaseGraphicsItems::repaintLoadCk(QPainter *painter)
     }
 }
 
-void CpuPaneBaseGraphicsItems::repaintCSelect(QPainter *painter)
+void CpuGraphicsItems::repaintCSelect(QPainter *painter)
 {
     bool ok;
     QColor color;
@@ -1000,7 +1000,7 @@ void CpuPaneBaseGraphicsItems::repaintCSelect(QPainter *painter)
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
-void CpuPaneBaseGraphicsItems::repaintBSelect(QPainter *painter)
+void CpuGraphicsItems::repaintBSelect(QPainter *painter)
 {
     bool ok;
     QColor color;
@@ -1028,7 +1028,7 @@ void CpuPaneBaseGraphicsItems::repaintBSelect(QPainter *painter)
     painter->drawRect(OneByteShapes::BBusRect);
 }
 
-void CpuPaneBaseGraphicsItems::repaintASelect(QPainter *painter)
+void CpuGraphicsItems::repaintASelect(QPainter *painter)
 {
 
     bool ok;
@@ -1056,7 +1056,7 @@ void CpuPaneBaseGraphicsItems::repaintASelect(QPainter *painter)
 
 }
 
-void CpuPaneBaseGraphicsItems::repaintMARCk(QPainter *painter)
+void CpuGraphicsItems::repaintMARCk(QPainter *painter)
 {
     QColor color;
 
@@ -1075,7 +1075,7 @@ void CpuPaneBaseGraphicsItems::repaintMARCk(QPainter *painter)
                        color == Qt::gray ? arrowDownGray : arrowDown);
 }
 
-void CpuPaneBaseGraphicsItems::repaintMDRCk(QPainter *painter)
+void CpuGraphicsItems::repaintMDRCk(QPainter *painter)
 {
     QColor color;
 
@@ -1101,7 +1101,7 @@ void CpuPaneBaseGraphicsItems::repaintMDRCk(QPainter *painter)
 
 }
 
-void CpuPaneBaseGraphicsItems::repaintAMuxSelect(QPainter *painter)
+void CpuGraphicsItems::repaintAMuxSelect(QPainter *painter)
 {
     QColor color;
     bool ok;
@@ -1144,7 +1144,7 @@ void CpuPaneBaseGraphicsItems::repaintAMuxSelect(QPainter *painter)
     painter->drawPolygon(OneByteShapes::AMuxBus);
 }
 
-void CpuPaneBaseGraphicsItems::repaintCMuxSelect(QPainter *painter)
+void CpuGraphicsItems::repaintCMuxSelect(QPainter *painter)
 {
     QColor color;
 
@@ -1185,7 +1185,7 @@ void CpuPaneBaseGraphicsItems::repaintCMuxSelect(QPainter *painter)
     painter->drawPolygon(OneByteShapes::CBus);
 }
 
-void CpuPaneBaseGraphicsItems::repaintSCk(QPainter *painter)
+void CpuGraphicsItems::repaintSCk(QPainter *painter)
 {
     QColor color;
 
@@ -1201,7 +1201,7 @@ void CpuPaneBaseGraphicsItems::repaintSCk(QPainter *painter)
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
-void CpuPaneBaseGraphicsItems::repaintCCk(QPainter *painter)
+void CpuGraphicsItems::repaintCCk(QPainter *painter)
 {
     QColor color;
 
@@ -1217,7 +1217,7 @@ void CpuPaneBaseGraphicsItems::repaintCCk(QPainter *painter)
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
-void CpuPaneBaseGraphicsItems::repaintVCk(QPainter *painter)
+void CpuGraphicsItems::repaintVCk(QPainter *painter)
 {
     QColor color;
 
@@ -1231,7 +1231,7 @@ void CpuPaneBaseGraphicsItems::repaintVCk(QPainter *painter)
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
-void CpuPaneBaseGraphicsItems::repaintZCk(QPainter *painter)
+void CpuGraphicsItems::repaintZCk(QPainter *painter)
 {
     QColor color;
 
@@ -1245,7 +1245,7 @@ void CpuPaneBaseGraphicsItems::repaintZCk(QPainter *painter)
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
-void CpuPaneBaseGraphicsItems::repaintNCk(QPainter *painter)
+void CpuGraphicsItems::repaintNCk(QPainter *painter)
 {
     QColor color;
 
@@ -1259,7 +1259,7 @@ void CpuPaneBaseGraphicsItems::repaintNCk(QPainter *painter)
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
-void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
+void CpuGraphicsItems::repaintMemRead(QPainter *painter)
 {
     QPolygon poly;
     QColor color;
@@ -1337,7 +1337,7 @@ void CpuPaneBaseGraphicsItems::repaintMemRead(QPainter *painter)
 
 }
 
-void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
+void CpuGraphicsItems::repaintMemWrite(QPainter *painter)
 {
     QPolygon poly;
     QColor color;
@@ -1444,7 +1444,7 @@ void CpuPaneBaseGraphicsItems::repaintMemWrite(QPainter *painter)
     painter->drawPolygon(OneByteShapes::DataToMDRMuxBus);
 }
 
-void CpuPaneBaseGraphicsItems::repaintSBitOut(QPainter *painter)
+void CpuGraphicsItems::repaintSBitOut(QPainter *painter)
 {
     sBitLabel->text() = Sim::sBit ? "1" : "0";
 
@@ -1460,7 +1460,7 @@ void CpuPaneBaseGraphicsItems::repaintSBitOut(QPainter *painter)
     painter->drawImage(QPoint(484,421), arrowUp); //476+11-3 //437-8-8
 }
 
-void CpuPaneBaseGraphicsItems::repaintCBitOut(QPainter *painter)
+void CpuGraphicsItems::repaintCBitOut(QPainter *painter)
 {
     cBitLabel->text() = Sim::cBit ? "1" : "0";
 
@@ -1499,7 +1499,7 @@ void CpuPaneBaseGraphicsItems::repaintCBitOut(QPainter *painter)
 
 }
 
-void CpuPaneBaseGraphicsItems::repaintVBitOut(QPainter *painter)
+void CpuGraphicsItems::repaintVBitOut(QPainter *painter)
 {
     vBitLabel->text() = Sim::vBit ? "1" : "0";
 
@@ -1519,7 +1519,7 @@ void CpuPaneBaseGraphicsItems::repaintVBitOut(QPainter *painter)
     painter->drawImage(QPoint(314,493), arrowLeft);
 }
 
-void CpuPaneBaseGraphicsItems::repaintZBitOut(QPainter *painter)
+void CpuGraphicsItems::repaintZBitOut(QPainter *painter)
 {
     zBitLabel->text() = Sim::zBit ? "1" : "0";
 
@@ -1541,7 +1541,7 @@ void CpuPaneBaseGraphicsItems::repaintZBitOut(QPainter *painter)
     painter->drawImage(QPoint(434,566), arrowUp);  // AndZ arrow upwards
 }
 
-void CpuPaneBaseGraphicsItems::repaintNBitOut(QPainter *painter)
+void CpuGraphicsItems::repaintNBitOut(QPainter *painter)
 {
     nBitLabel->text() = Sim::nBit ? "1" : "0";
 
@@ -1559,7 +1559,7 @@ void CpuPaneBaseGraphicsItems::repaintNBitOut(QPainter *painter)
     painter->drawImage(QPoint(314,514), arrowLeft);
 }
 
-void CpuPaneBaseGraphicsItems::repaintCSMuxSelect(QPainter *painter)
+void CpuGraphicsItems::repaintCSMuxSelect(QPainter *painter)
 {
     QColor color;
 
@@ -1575,7 +1575,7 @@ void CpuPaneBaseGraphicsItems::repaintCSMuxSelect(QPainter *painter)
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
-void CpuPaneBaseGraphicsItems::repaintAndZSelect(QPainter *painter)
+void CpuGraphicsItems::repaintAndZSelect(QPainter *painter)
 {
     QPolygon poly;
 
@@ -1608,7 +1608,7 @@ void CpuPaneBaseGraphicsItems::repaintAndZSelect(QPainter *painter)
                        color == Qt::gray ? arrowRightGray : arrowRight);
 }
 
-void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
+void CpuGraphicsItems::repaintALUSelect(QPainter *painter)
 {
     QPolygon poly;
     QColor color;
@@ -1694,7 +1694,7 @@ void CpuPaneBaseGraphicsItems::repaintALUSelect(QPainter *painter)
                        color == Qt::gray ? arrowRightGray : arrowRight);
 }
 
-void CpuPaneBaseGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
+void CpuGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
 {
     QColor color;
 
