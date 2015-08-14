@@ -251,87 +251,19 @@ bool Sim::getBBusOut(quint8 &out, QString &errorString,
 }
 
 bool Sim::isCorrectALUInput(int ALUFn, CpuPaneBaseGraphicsItems *cpuPaneItems) {
-    bool abus = false;
-    bool bbus = false;
-    bool cin = false;
-
-    if (cpuPaneItems->aMuxTristateLabel->text() == "") {
-        abus = false;
-    }
-    else if (cpuPaneItems->aMuxTristateLabel->text() == "0") {
-        abus = true;
-    }
-    else if (cpuPaneItems->aMuxTristateLabel->text() == "1") {
-        if (cpuPaneItems->aLineEdit->text() == "") {
-            abus = false;
-        }
-        else {
-            abus = true;
-        }
-    }
-
-    if (cpuPaneItems->bLineEdit->text() == "") {
-        bbus = false;
-    }
-    else {
-        bbus = true;
-    }
-
-    if (cpuPaneItems->CSMuxTristateLabel->text() != "") {
-        cin = true;
-    }
-
-    // test A and B bus input:
-    switch(ALUFn) {
-    case 0:
-        if (!abus) {
-            return false;
-        }
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
+        return OneByteModel::isCorrectALUInput(ALUFn, cpuPaneItems);
         break;
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-        if (!abus || !bbus) {
-            return false;
-        }
-        break;
-    case 10:
-    case 11:
-    case 12:
-    case 13:
-    case 14:
-    case 15:
-        if (!abus) {
-            return false;
-        }
+    case Enu::TwoByteDataBus:
+        return TwoByteModel::isCorrectALUInput(ALUFn, cpuPaneItems);
         break;
     default:
         break;
     }
-
-    // test CIN:
-    switch(ALUFn) {
-    case 2:
-    case 4:
-    case 12:
-    case 14:
-        if (!cin) {
-            return false;
-        }
-        break;
-    default:
-        break;
-    }
-
-    return true;
+    qDebug() << "CPU model not specified in isCorrectALUInput.";
+    return false;
 }
-
 
 bool Sim::getALUOut(quint8 &result, quint8& a, quint8& b, int& carry,
                     int& overflow, QString &errorString,
@@ -624,6 +556,89 @@ bool Sim::getEOMuxOut(quint8& out, QString& errorString,
 // ***************************************************************************
 // One byte model-specific functionality
 // ***************************************************************************
+bool OneByteModel::isCorrectALUInput(int ALUFn, CpuPaneBaseGraphicsItems *cpuPaneItems)
+{
+    bool abus = false;
+    bool bbus = false;
+    bool cin = false;
+
+    if (cpuPaneItems->aMuxTristateLabel->text() == "") {
+        abus = false;
+    }
+    else if (cpuPaneItems->aMuxTristateLabel->text() == "0") {
+        abus = true;
+    }
+    else if (cpuPaneItems->aMuxTristateLabel->text() == "1") {
+        if (cpuPaneItems->aLineEdit->text() == "") {
+            abus = false;
+        }
+        else {
+            abus = true;
+        }
+    }
+
+    if (cpuPaneItems->bLineEdit->text() == "") {
+        bbus = false;
+    }
+    else {
+        bbus = true;
+    }
+
+    if (cpuPaneItems->CSMuxTristateLabel->text() != "") {
+        cin = true;
+    }
+
+    // test A and B bus input:
+    switch(ALUFn) {
+    case 0:
+        if (!abus) {
+            return false;
+        }
+        break;
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+        if (!abus || !bbus) {
+            return false;
+        }
+        break;
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+        if (!abus) {
+            return false;
+        }
+        break;
+    default:
+        break;
+    }
+
+    // test CIN:
+    switch(ALUFn) {
+    case 2:
+    case 4:
+    case 12:
+    case 14:
+        if (!cin) {
+            return false;
+        }
+        break;
+    default:
+        break;
+    }
+
+    return true;
+}
+
 bool OneByteModel::getAMuxOut(quint8 &out, QString &errorString,
                               CpuPaneBaseGraphicsItems *cpuPaneItems)
 {
@@ -676,6 +691,94 @@ bool OneByteModel::getMDRMuxOut(quint8 &out, QString &errorString,
 // ***************************************************************************
 // Two byte model-specific functionality:
 // ***************************************************************************
+bool TwoByteModel::isCorrectALUInput(int ALUFn, CpuPaneBaseGraphicsItems *cpuPaneItems)
+{
+    bool abus = false;
+    bool bbus = false;
+    bool cin = false;
+
+    if (cpuPaneItems->aMuxTristateLabel->text() == "") {
+        abus = false;
+    }
+    else if (cpuPaneItems->aMuxTristateLabel->text() == "0") {
+        if (cpuPaneItems->EOMuxTristateLabel->text() == "") {
+            abus = false;
+        }
+        else {
+            abus = true;
+        }
+    }
+    else if (cpuPaneItems->aMuxTristateLabel->text() == "1") {
+        if (cpuPaneItems->aLineEdit->text() == "") {
+            abus = false;
+        }
+        else {
+            abus = true;
+        }
+    }
+
+    if (cpuPaneItems->bLineEdit->text() == "") {
+        bbus = false;
+    }
+    else {
+        bbus = true;
+    }
+
+    if (cpuPaneItems->CSMuxTristateLabel->text() != "") {
+        cin = true;
+    }
+
+    // test A and B bus input:
+    switch(ALUFn) {
+    case 0:
+        if (!abus) {
+            return false;
+        }
+        break;
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+        if (!abus || !bbus) {
+            return false;
+        }
+        break;
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+        if (!abus) {
+            return false;
+        }
+        break;
+    default:
+        break;
+    }
+
+    // test CIN:
+    switch(ALUFn) {
+    case 2:
+    case 4:
+    case 12:
+    case 14:
+        if (!cin) {
+            return false;
+        }
+        break;
+    default:
+        break;
+    }
+
+    return true;
+}
+
 bool TwoByteModel::getAMuxOut(quint8& out, QString& errorString,
                               CpuPaneBaseGraphicsItems *cpuPaneItems)
 {
