@@ -176,6 +176,16 @@ private:
     void repaintAndZSelect(QPainter *painter);
     void repaintALUSelect(QPainter *painter);
     void repaintMDRMuxSelect(QPainter *painter);
+
+    // one byte specific repainting methods
+    void repaintMemReadOneByteModel(QPainter *painter);
+    void repaintMemWriteOneByteModel(QPainter *painter);
+
+    // two byte specific repainting methods
+    void repaintMemReadTwoByteModel(QPainter *painter);
+    void repaintMemWriteTwoByteModel(QPainter *painter);
+
 };
+
 
 #endif // CPUGRAPHICSITEMS_H

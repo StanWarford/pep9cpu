@@ -647,8 +647,6 @@ bool CpuPane::step(QString &errorString)
     default:
         break;
     }
-    errorString.append("CPU model not specified.");
-    return false;
 }
 
 bool CpuPane::stepOneByteDataBus(QString &errorString)
