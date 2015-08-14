@@ -76,24 +76,24 @@ public:
     static bool testStatusPostcondition(Enu::EMnemonic bit, bool value);
 
     // sim logic:
-    static bool getABusOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
-    static bool getBBusOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
+    static bool getABusOut(quint8& out, QString& errorString, CpuGraphicsItems *cpuPaneItems);
+    static bool getBBusOut(quint8& out, QString& errorString, CpuGraphicsItems *cpuPaneItems);
 
-    static bool isCorrectALUInput(int ALUFn, CpuPaneBaseGraphicsItems *cpuPaneItems);
+    static bool isCorrectALUInput(int ALUFn, CpuGraphicsItems *cpuPaneItems);
     static bool getALUOut(quint8 &result, quint8& a, quint8& b, int& carry,
                                int& overflow, QString &errorString,
-                               CpuPaneBaseGraphicsItems *cpuPaneItems);
+                               CpuGraphicsItems *cpuPaneItems);
 
-    static bool getCSMuxOut(bool &out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
-    static bool getCMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
+    static bool getCSMuxOut(bool &out, QString& errorString, CpuGraphicsItems *cpuPaneItems);
+    static bool getCMuxOut(quint8& out, QString& errorString, CpuGraphicsItems *cpuPaneItems);
 
     // redirection to the model classes:
-    static bool getAMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
-    static bool getMDRMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
-    static bool getMARMuxOut(quint8& mara, quint8& marb, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
-    static bool getMDROMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
-    static bool getMDREMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
-    static bool getEOMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
+    static bool getAMuxOut(quint8& out, QString& errorString, CpuGraphicsItems *cpuPaneItems);
+    static bool getMDRMuxOut(quint8& out, QString& errorString, CpuGraphicsItems *cpuPaneItems);
+    static bool getMARMuxOut(quint8& mara, quint8& marb, QString& errorString, CpuGraphicsItems *cpuPaneItems);
+    static bool getMDROMuxOut(quint8& out, QString& errorString, CpuGraphicsItems *cpuPaneItems);
+    static bool getMDREMuxOut(quint8& out, QString& errorString, CpuGraphicsItems *cpuPaneItems);
+    static bool getEOMuxOut(quint8& out, QString& errorString, CpuGraphicsItems *cpuPaneItems);
 
 
 };
@@ -101,21 +101,21 @@ public:
 class OneByteModel
 {
 public:
-    static bool isCorrectALUInput(int ALUFn, CpuPaneBaseGraphicsItems *cpuPaneItems);
-    static bool getAMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
-    static bool getMDRMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
+    static bool isCorrectALUInput(int ALUFn, CpuGraphicsItems *cpuPaneItems);
+    static bool getAMuxOut(quint8& out, QString& errorString, CpuGraphicsItems *cpuPaneItems);
+    static bool getMDRMuxOut(quint8& out, QString& errorString, CpuGraphicsItems *cpuPaneItems);
 
 };
 
 class TwoByteModel
 {
 public:
-    static bool isCorrectALUInput(int ALUFn, CpuPaneBaseGraphicsItems *cpuPaneItems);
-    static bool getAMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
-    static bool getMARMuxOut(quint8& mara, quint8& marb, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
-    static bool getMDROMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
-    static bool getMDREMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
-    static bool getEOMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
+    static bool isCorrectALUInput(int ALUFn, CpuGraphicsItems *cpuPaneItems);
+    static bool getAMuxOut(quint8& out, QString& errorString, CpuGraphicsItems *cpuPaneItems);
+    static bool getMARMuxOut(quint8& mara, quint8& marb, QString& errorString, CpuGraphicsItems *cpuPaneItems);
+    static bool getMDROMuxOut(quint8& out, QString& errorString, CpuGraphicsItems *cpuPaneItems);
+    static bool getMDREMuxOut(quint8& out, QString& errorString, CpuGraphicsItems *cpuPaneItems);
+    static bool getEOMuxOut(quint8& out, QString& errorString, CpuGraphicsItems *cpuPaneItems);
 
 };
 

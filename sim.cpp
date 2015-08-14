@@ -23,7 +23,7 @@
 #include "enu.h"
 #include "pep.h"
 
-#include "cpupanebasegraphicsitems.h"
+#include "cpugraphicsitems.h"
 
 #include <QDebug>
 
@@ -225,7 +225,7 @@ bool Sim::testStatusPostcondition(Enu::EMnemonic bit, bool value) {
 }
 
 bool Sim::getABusOut(quint8 &out, QString &errorString,
-                     CpuPaneBaseGraphicsItems *cpuPaneItems)
+                     CpuGraphicsItems *cpuPaneItems)
 {
     if (cpuPaneItems->aLineEdit->text() != "") {
         out = Sim::regBank[cpuPaneItems->aLineEdit->text().toInt()];
@@ -238,7 +238,7 @@ bool Sim::getABusOut(quint8 &out, QString &errorString,
 }
 
 bool Sim::getBBusOut(quint8 &out, QString &errorString,
-                     CpuPaneBaseGraphicsItems *cpuPaneItems)
+                     CpuGraphicsItems *cpuPaneItems)
 {
     if (cpuPaneItems->bLineEdit->text() != "") {
         out = Sim::regBank[cpuPaneItems->bLineEdit->text().toInt()];
@@ -250,7 +250,7 @@ bool Sim::getBBusOut(quint8 &out, QString &errorString,
     return false;
 }
 
-bool Sim::isCorrectALUInput(int ALUFn, CpuPaneBaseGraphicsItems *cpuPaneItems) {
+bool Sim::isCorrectALUInput(int ALUFn, CpuGraphicsItems *cpuPaneItems) {
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
         return OneByteModel::isCorrectALUInput(ALUFn, cpuPaneItems);
@@ -267,7 +267,7 @@ bool Sim::isCorrectALUInput(int ALUFn, CpuPaneBaseGraphicsItems *cpuPaneItems) {
 
 bool Sim::getALUOut(quint8 &result, quint8& a, quint8& b, int& carry,
                     int& overflow, QString &errorString,
-                    CpuPaneBaseGraphicsItems *cpuPaneItems)
+                    CpuGraphicsItems *cpuPaneItems)
 {
     a = 0;
     b = 0;
@@ -409,7 +409,7 @@ bool Sim::getALUOut(quint8 &result, quint8& a, quint8& b, int& carry,
 }
 
 bool Sim::getCSMuxOut(bool &out, QString &errorString,
-                      CpuPaneBaseGraphicsItems *cpuPaneItems)
+                      CpuGraphicsItems *cpuPaneItems)
 {
     if (cpuPaneItems->CSMuxTristateLabel->text() == "0") {
         out = Sim::cBit;
@@ -426,7 +426,7 @@ bool Sim::getCSMuxOut(bool &out, QString &errorString,
 }
 
 bool Sim::getCMuxOut(quint8 &out, QString &errorString,
-                     CpuPaneBaseGraphicsItems *cpuPaneItems)
+                     CpuGraphicsItems *cpuPaneItems)
 {
     if (cpuPaneItems->cMuxTristateLabel->text() == "0") {
         out = (Sim::nBit ? 8 : 0) + (Sim::zBit ? 4 : 0) + (Sim::vBit ? 2 : 0) + (Sim::cBit ? 1 : 0);
@@ -445,7 +445,7 @@ bool Sim::getCMuxOut(quint8 &out, QString &errorString,
 }
 
 bool Sim::getAMuxOut(quint8 &out, QString &errorString,
-                     CpuPaneBaseGraphicsItems *cpuPaneItems)
+                     CpuGraphicsItems *cpuPaneItems)
 {
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
@@ -462,7 +462,7 @@ bool Sim::getAMuxOut(quint8 &out, QString &errorString,
 }
 
 bool Sim::getMDRMuxOut(quint8& out, QString& errorString,
-                       CpuPaneBaseGraphicsItems *cpuPaneItems)
+                       CpuGraphicsItems *cpuPaneItems)
 {
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
@@ -481,7 +481,7 @@ bool Sim::getMDRMuxOut(quint8& out, QString& errorString,
 
 bool Sim::getMARMuxOut(quint8& mara, quint8& marb,
                        QString& errorString,
-                       CpuPaneBaseGraphicsItems *cpuPaneItems)
+                       CpuGraphicsItems *cpuPaneItems)
 {
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
@@ -499,7 +499,7 @@ bool Sim::getMARMuxOut(quint8& mara, quint8& marb,
 }
 
 bool Sim::getMDROMuxOut(quint8& out, QString& errorString,
-                        CpuPaneBaseGraphicsItems *cpuPaneItems)
+                        CpuGraphicsItems *cpuPaneItems)
 {
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
@@ -517,7 +517,7 @@ bool Sim::getMDROMuxOut(quint8& out, QString& errorString,
 }
 
 bool Sim::getMDREMuxOut(quint8& out, QString& errorString,
-                        CpuPaneBaseGraphicsItems *cpuPaneItems)
+                        CpuGraphicsItems *cpuPaneItems)
 {
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
@@ -535,7 +535,7 @@ bool Sim::getMDREMuxOut(quint8& out, QString& errorString,
 }
 
 bool Sim::getEOMuxOut(quint8& out, QString& errorString,
-                      CpuPaneBaseGraphicsItems *cpuPaneItems)
+                      CpuGraphicsItems *cpuPaneItems)
 {
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
@@ -556,7 +556,7 @@ bool Sim::getEOMuxOut(quint8& out, QString& errorString,
 // ***************************************************************************
 // One byte model-specific functionality
 // ***************************************************************************
-bool OneByteModel::isCorrectALUInput(int ALUFn, CpuPaneBaseGraphicsItems *cpuPaneItems)
+bool OneByteModel::isCorrectALUInput(int ALUFn, CpuGraphicsItems *cpuPaneItems)
 {
     bool abus = false;
     bool bbus = false;
@@ -640,7 +640,7 @@ bool OneByteModel::isCorrectALUInput(int ALUFn, CpuPaneBaseGraphicsItems *cpuPan
 }
 
 bool OneByteModel::getAMuxOut(quint8 &out, QString &errorString,
-                              CpuPaneBaseGraphicsItems *cpuPaneItems)
+                              CpuGraphicsItems *cpuPaneItems)
 {
     if (cpuPaneItems->aMuxTristateLabel->text() == "0") {
         out = Sim::MDR;
@@ -661,7 +661,7 @@ bool OneByteModel::getAMuxOut(quint8 &out, QString &errorString,
 }
 
 bool OneByteModel::getMDRMuxOut(quint8 &out, QString &errorString,
-                           CpuPaneBaseGraphicsItems *cpuPaneItems)
+                           CpuGraphicsItems *cpuPaneItems)
 {
     if (cpuPaneItems->MDRMuxTristateLabel->text() == "0") {
         if (Sim::mainBusState == Enu::MemReadReady) {
@@ -688,7 +688,7 @@ bool OneByteModel::getMDRMuxOut(quint8 &out, QString &errorString,
 // ***************************************************************************
 // Two byte model-specific functionality:
 // ***************************************************************************
-bool TwoByteModel::isCorrectALUInput(int ALUFn, CpuPaneBaseGraphicsItems *cpuPaneItems)
+bool TwoByteModel::isCorrectALUInput(int ALUFn, CpuGraphicsItems *cpuPaneItems)
 {
     bool abus = false;
     bool bbus = false;
@@ -777,7 +777,7 @@ bool TwoByteModel::isCorrectALUInput(int ALUFn, CpuPaneBaseGraphicsItems *cpuPan
 }
 
 bool TwoByteModel::getAMuxOut(quint8& out, QString& errorString,
-                              CpuPaneBaseGraphicsItems *cpuPaneItems)
+                              CpuGraphicsItems *cpuPaneItems)
 {
     if (cpuPaneItems->aMuxTristateLabel->text() == "0") {
         if (getEOMuxOut(out, errorString, cpuPaneItems)) {
@@ -803,7 +803,7 @@ bool TwoByteModel::getAMuxOut(quint8& out, QString& errorString,
 
 bool TwoByteModel::getMARMuxOut(quint8& mara, quint8 &marb,
                                 QString& errorString,
-                                CpuPaneBaseGraphicsItems *cpuPaneItems)
+                                CpuGraphicsItems *cpuPaneItems)
 {
     if (cpuPaneItems->MARMuxTristateLabel->text() == "0") {
         mara = Sim::MDREven;
@@ -826,7 +826,7 @@ bool TwoByteModel::getMARMuxOut(quint8& mara, quint8 &marb,
 }
 
 bool TwoByteModel::getMDROMuxOut(quint8& out, QString& errorString,
-                                 CpuPaneBaseGraphicsItems *cpuPaneItems)
+                                 CpuGraphicsItems *cpuPaneItems)
 {
     if (cpuPaneItems->MDROMuxTristateLabel->text() == "0") {
         if (Sim::mainBusState == Enu::MemReadReady) {
@@ -856,7 +856,7 @@ bool TwoByteModel::getMDROMuxOut(quint8& out, QString& errorString,
 }
 
 bool TwoByteModel::getMDREMuxOut(quint8& out, QString& errorString,
-                                 CpuPaneBaseGraphicsItems *cpuPaneItems)
+                                 CpuGraphicsItems *cpuPaneItems)
 {
     if (cpuPaneItems->MDREMuxTristateLabel->text() == "0") {
         if (Sim::mainBusState == Enu::MemReadReady) {
@@ -884,7 +884,7 @@ bool TwoByteModel::getMDREMuxOut(quint8& out, QString& errorString,
 }
 
 bool TwoByteModel::getEOMuxOut(quint8& out, QString& errorString,
-                               CpuPaneBaseGraphicsItems *cpuPaneItems)
+                               CpuGraphicsItems *cpuPaneItems)
 {
     if (cpuPaneItems->EOMuxTristateLabel->text() == "0") {
         out = Sim::MDREven;

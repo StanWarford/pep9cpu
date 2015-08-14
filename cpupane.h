@@ -27,7 +27,7 @@
 #include <QLabel>
 #include <QLineEdit>
 
-#include "cpupanebasegraphicsitems.h"
+#include "cpugraphicsitems.h"
 
 #include "enu.h"
 
@@ -72,7 +72,7 @@ protected:
 
     QGraphicsScene *scene;
 
-    CpuPaneBaseGraphicsItems *cpuPaneItems;
+    CpuGraphicsItems *cpuPaneItems;
 
     //simulation helper
     void updateMainBusState();

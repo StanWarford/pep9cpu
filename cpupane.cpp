@@ -86,7 +86,7 @@ void CpuPane::giveFocus()
 
 void CpuPane::initModel(Enu::CPUType type)
 {
-    cpuPaneItems = new CpuPaneBaseGraphicsItems(type, ui->graphicsView, 0, scene);
+    cpuPaneItems = new CpuGraphicsItems(type, ui->graphicsView, 0, scene);
 
     ui->graphicsView->scene()->addItem(cpuPaneItems);
 
