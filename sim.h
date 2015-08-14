@@ -101,6 +101,7 @@ public:
 class OneByteModel
 {
 public:
+    static bool isCorrectALUInput(int ALUFn, CpuPaneBaseGraphicsItems *cpuPaneItems);
     static bool getAMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
     static bool getMDRMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
 
@@ -109,6 +110,7 @@ public:
 class TwoByteModel
 {
 public:
+    static bool isCorrectALUInput(int ALUFn, CpuPaneBaseGraphicsItems *cpuPaneItems);
     static bool getAMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
     static bool getMARMuxOut(quint8& mara, quint8& marb, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);
     static bool getMDROMuxOut(quint8& out, QString& errorString, CpuPaneBaseGraphicsItems *cpuPaneItems);

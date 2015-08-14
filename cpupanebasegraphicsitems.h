@@ -55,13 +55,14 @@ public:
     QCheckBox *MARCk;
     QLabel *MARALabel; // data section
     QLabel *MARBLabel; // data section
-    QCheckBox *MDRCk;
 
     QLabel *aMuxLabel;
     QLabel *aMuxerDataLabel; // data section
     QGraphicsRectItem *aMuxerBorder; // data section
     TristateLabel *aMuxTristateLabel;
 
+    // 1 byte data bus:
+    QCheckBox *MDRCk;
     QLabel *MDRMuxLabel;
     QLabel *MDRMuxerDataLabel; // data section
     TristateLabel *MDRMuxTristateLabel;
