@@ -29,12 +29,12 @@
 using namespace Enu;
 
 // Fonts
-const QString Pep::codeFont = getSystem() == "Windows" ? "Courier" : (getSystem() == "Mac" ? "Courier" : "Courier 10 Pitch");
-const int Pep::codeFontSize = getSystem() == "Mac" ? 11 : 10;
-const QString Pep::labelFont = getSystem() == "Mac" ? "Lucida Grande" : "Verdana";
-const int Pep::labelFontSize = getSystem() == "Mac" ? 11 : 8;
-const QString Pep::cpuFont = getSystem() == "Mac" ? "Lucida Grande" : "Verdana";
-const int Pep::cpuFontSize = getSystem() == "Mac" ? 11 : 8;
+const QString Pep::codeFont = getSystem() == "Windows" ? "Courier" : (getSystem() == "Mac" ? "Courier" : "Ubuntu Mono,Courier New");
+const int Pep::codeFontSize = getSystem() == "Windows" ? 10 : (getSystem() == "Mac" ? 11 : 11);
+const QString Pep::labelFont = getSystem() == "Windows" ? "Verdana" : (getSystem() == "Mac" ? "Lucida Grande" : "Ubuntu");
+const int Pep::labelFontSize = getSystem() == "Windows" ? 8 : (getSystem() == "Mac" ? 11 : 9);
+const QString Pep::cpuFont = getSystem() == "Windows" ? "Verdana" : (getSystem() == "Mac" ? "Lucida Grande" : "Ubuntu");
+const int Pep::cpuFontSize = getSystem() == "Windows" ? 8 : (getSystem() == "Mac" ? 11 : 8);
 
 QString Pep::getSystem() {
     #ifdef Q_WS_X11
