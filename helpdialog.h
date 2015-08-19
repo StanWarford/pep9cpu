@@ -26,6 +26,8 @@
 #include "pephighlighter.h"
 #include "microcodeeditor.h"
 
+#include "pep.h"
+
 namespace Ui {
     class HelpDialog;
 }
@@ -37,6 +39,7 @@ public:
     ~HelpDialog();
 
     QString getExampleText();
+    Enu::CPUType getExamplesModel();
 
     void copy();
     // Post: the text edit that has focus has the copy() operation performed

@@ -76,6 +76,29 @@ QString HelpDialog::getExampleText()
     return microcodeEditor->toPlainText();
 }
 
+Enu::CPUType HelpDialog::getExamplesModel()
+{
+    // Is this a subcategory?
+    bool isHelpSubCat = ui->helpTreeWidget->currentIndex().parent().isValid();
+    // Parent row (if it has a parent, -1 else)
+    int parentRow = ui->helpTreeWidget->currentIndex().parent().row();
+    // Row (if it has a parent, this is the child row)
+    int row = ui->helpTreeWidget->currentIndex().row();
+
+    if ((!isHelpSubCat && row == eONEBYTEBUSEXAMPLES) || parentRow == eONEBYTEBUSEXAMPLES) {
+        return Enu::OneByteDataBus;
+    }
+    else if ((!isHelpSubCat && row == eTWOBYTEBUSEXAMPLES) || parentRow == eTWOBYTEBUSEXAMPLES) {
+        return Enu::TwoByteDataBus;
+    }
+    else if ((!isHelpSubCat && row == eONEBYTEBUSPROBLEMS) || parentRow == eONEBYTEBUSPROBLEMS) {
+        return Enu::OneByteDataBus;
+    }
+    else if ((!isHelpSubCat && row == eTWOBYTEBUSPROBLEMS) || parentRow == eTWOBYTEBUSPROBLEMS) {
+        return Enu::TwoByteDataBus;
+    }
+}
+
 void HelpDialog::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);

@@ -793,6 +793,13 @@ void MainWindow::appendMicrocodeLine(QString line)
 void MainWindow::helpCopyToMicrocodeButtonClicked()
 {
     if (maybeSave()) {
+        if (helpDialog->getExamplesModel() == Enu::OneByteDataBus) {
+            on_actionOne_Byte_Data_Bus_Model_triggered();
+        }
+        else if (helpDialog->getExamplesModel() == Enu::TwoByteDataBus) {
+            on_actionTwo_Byte_Data_Bus_Model_triggered();
+        }
+
         microcodePane->setMicrocode(helpDialog->getExampleText());
         objectCodePane->setObjectCode("");
         helpDialog->hide();
