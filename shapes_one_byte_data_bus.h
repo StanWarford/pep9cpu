@@ -197,6 +197,7 @@ enum CommonPositions {
                                       << QPoint(447,342) << QPoint(421,394)
                                       << QPoint(340,394));
 
+    // the two shapes that make up the arrow out to the right of the MDR
     const QRect MDRBusOutRect = QRect(244, 258, 36, 10);
     const QPolygon MDRBusOutArrow = QPolygon(QVector<QPoint>() << QPoint(290,258)
                                              << QPoint(326,258) << QPoint(326,280)
