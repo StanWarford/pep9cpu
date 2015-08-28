@@ -90,11 +90,11 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     //MDROLabel->hide();
 
     // http://colrd.com/image-dna/23448/
-    seqCircuitColor = QColor(0x6C7197).lighter(190); //QColor(0xffdd77);
-    combCircuitRed = QColor(0xD92405).lighter(120);  //Qt::red).lighter(190);
+    seqCircuitColor = QColor(0x3B3630).lighter(370); //QColor(0xffdd77);
+    combCircuitRed = QColor(0xD92405).lighter(140);  //Qt::red).lighter(190);
     combCircuitBlue = QColor(0x3563EB).lighter(120); //Qt::blue).lighter(190);
     combCircuitYellow = QColor(0xEAC124).lighter(120); //Qt::yellow).lighter(170);
-    combCircuitGreen = QColor(0x739211); //Qt::green).lighter(190);
+    combCircuitGreen = QColor(0x739211).lighter(130); //Qt::green).lighter(190);
 
     // setup arrow heads:
     arrowLeft = QImage(":/images/arrowhead.png");
@@ -287,7 +287,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ALUFunctionLabel = new QLabel("");
     ALUFunctionLabel->setGeometry(OneByteShapes::ALUFunctionLabel);
     ALUFunctionLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    ALUFunctionLabel->setPalette(QPalette(combCircuitBlue.lighter(190)));//QColor(Qt::blue).lighter(190)));
+    ALUFunctionLabel->setPalette(QPalette(combCircuitBlue.lighter(150)));//QColor(Qt::blue).lighter(190)));
     ALUFunctionLabel->setFont(QFont(Pep::labelFont, Pep::labelFontSizeSmall));
     scene->addWidget(ALUFunctionLabel);
 
@@ -297,7 +297,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
                                      2, Qt::SolidLine,
                                      Qt::SquareCap,
                                      Qt::MiterJoin),
-                                QBrush(combCircuitBlue.lighter(190)));//QColor(Qt::blue).lighter(190)));
+                                QBrush(combCircuitBlue.lighter(150)));//QColor(Qt::blue).lighter(190)));
     ALUPoly->setZValue(-1);
 
     // CSMux
@@ -1256,7 +1256,7 @@ void CpuGraphicsItems::repaintCMuxSelect(QPainter *painter)
             color = Qt::white;
         }
         else {
-            cMuxerLabel->setPalette(QPalette(combCircuitBlue));
+            cMuxerLabel->setPalette(QPalette(combCircuitBlue.lighter(150)));
             color = combCircuitBlue;
         }
     }
@@ -1397,7 +1397,7 @@ void CpuGraphicsItems::repaintMemWrite(QPainter *painter)
     //color = QColor(16, 150, 24); // green
     color = combCircuitGreen;
     if (!isHigh) {
-        color = color.lighter(150);
+        color = color.lighter(120);
     }
     painter->setBrush(color);
     painter->setPen(QPen(QBrush(Qt::black), 1));
@@ -1746,7 +1746,7 @@ void CpuGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
             painter->setBrush(combCircuitYellow);
         }
         else if (aluHasCorrectOutput()) {
-            MDRMuxerDataLabel->setPalette(QPalette(combCircuitBlue));
+            MDRMuxerDataLabel->setPalette(QPalette(combCircuitBlue.lighter(170)));
             painter->setBrush(combCircuitBlue);
         }
     }
