@@ -189,7 +189,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     scene->addRect(OneByteShapes::MARALabel);
     // MARBus (MARA/MARB output bus)
     scene->addPolygon(OneByteShapes::MARBus,
-                      QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow)); //Qt::yellow));
+                      QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
 
     // MDRCk
     MDRCk = new QCheckBox("MDRCk");
@@ -834,7 +834,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
                                                 Qt::MiterJoin));
     // NZVC data path, vertical black line
     scene->addPolygon(OneByteShapes::NZVCDataPath,
-                      QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow)); //Qt::yellow));
+                      QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
     scene->addLine(310, 477, 310, 559);
 
     // hide stuff based on the current model:
@@ -857,9 +857,9 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         scene->addRect(OneByteShapes::MDRMuxerDataLabel);
         // MDRBus (output from MDR, right arrow):
         scene->addRect(OneByteShapes::MDRBusOutRect,
-                       QPen(Qt::black), QBrush(combCircuitYellow)); //Qt::yellow));
+                       QPen(Qt::black), QBrush(combCircuitYellow));
         scene->addPolygon(OneByteShapes::MDRBusOutArrow,
-                          QPen(Qt::black), QBrush(combCircuitYellow)); //Qt::yellow));
+                          QPen(Qt::black), QBrush(combCircuitYellow));
         // note: left arrow gets drawn in repaintMemWrite
 
     }
@@ -1206,7 +1206,7 @@ void CpuGraphicsItems::repaintAMuxSelect(QPainter *painter)
     if (ok) {
         switch (aMux) {
         case (0):
-            color = combCircuitYellow; //Qt::yellow;
+            color = combCircuitYellow;
             aMuxerDataLabel->setPalette(QPalette(combCircuitYellow.lighter(120)));
             break;
         case (1):
@@ -1245,7 +1245,7 @@ void CpuGraphicsItems::repaintCMuxSelect(QPainter *painter)
                        color == Qt::gray ? arrowDownGray : arrowDown);
 
     if (cMuxTristateLabel->text() == "0") {
-        color = combCircuitYellow; //Qt::yellow;
+        color = combCircuitYellow;
         cMuxerLabel->setPalette(QPalette(combCircuitYellow));
     }
     else if (cMuxTristateLabel->text() == "1") {
@@ -1394,7 +1394,6 @@ void CpuGraphicsItems::repaintMemWrite(QPainter *painter)
 
     // repaint the MDR-to-main-bus line, based on if MemWrite is set or not
     // note: it should be lighter (disabled) when MemWrite is not set.
-    //color = QColor(16, 150, 24); // green
     color = combCircuitGreen;
     if (!isHigh) {
         color = color.lighter(120);
@@ -1415,7 +1414,7 @@ void CpuGraphicsItems::repaintMemWrite(QPainter *painter)
     if (isHigh) {
         // qDebug() << "mainBusState: " << Sim::mainBusState;
         // ADDR bus is yellow if the bus is high
-        color = combCircuitYellow; //Qt::yellow;
+        color = combCircuitYellow;
     }
     else {
         color = Qt::white;
@@ -1434,7 +1433,7 @@ void CpuGraphicsItems::repaintMemWrite(QPainter *painter)
     // figure out the color:
     if (isHigh && (Sim::mainBusState == Enu::MemWriteReady ||
                 Sim::mainBusState == Enu::MemWriteSecondWait)) {
-        color = combCircuitGreen; //QColor(16, 150, 24); // green
+        color = combCircuitGreen;
     }
     else {
         color = Qt::white;
@@ -1729,7 +1728,7 @@ void CpuGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
              MemReadTristateLabel->text() == "1") ||
                 Sim::mainBusState == Enu::MemReadReady) {
             MDRMuxerDataLabel->setPalette(QPalette(combCircuitGreen.lighter(120)));
-            painter->setBrush(QBrush(combCircuitGreen)); //QColor(16, 150, 24))); // green
+            painter->setBrush(QBrush(combCircuitGreen));
         }
         else {
             MDRMuxerDataLabel->setPalette(QPalette(Qt::white));
@@ -1835,7 +1834,7 @@ void CpuGraphicsItems::repaintMemReadOneByteModel(QPainter *painter)
     // Draw DATA bus stuff:
     if (isHigh && (Sim::mainBusState == Enu::MemReadReady ||
                 Sim::mainBusState == Enu::MemReadSecondWait)) {
-        color = combCircuitGreen; //QColor(16, 150, 24); // green
+        color = combCircuitGreen;
     }
     else {
         color = Qt::white;
