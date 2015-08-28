@@ -35,6 +35,7 @@ MainMemory::MainMemory(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->tableWidget->setFont(QFont(Pep::codeFont, Pep::codeFontSize));
     ui->tableWidget->setColumnCount(1);
     QStringList columns;
     columns << "Hex";
@@ -338,6 +339,7 @@ void MainMemory::resizeEvent(QResizeEvent *)
             address = ui->tableWidget->verticalHeaderItem(row)->text().toInt(&addrConvOk, 16);
             if (addrConvOk) {
                 ui->tableWidget->setItem(row, 0, new QTableWidgetItem("0x" + QString("%1").arg(Sim::readByte(address), 2, 16).toUpper().trimmed()));
+                //ui->tableWidget->itemAt(row, 0)->setFont(QFont(Pep::codeFont, Pep::codeFontSize));
             }
             else { // malformed address labels
             }

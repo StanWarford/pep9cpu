@@ -32,8 +32,11 @@ public:
     // Fonts:
     static const QString codeFont;
     static const int codeFontSize;
+    static const int codeFontSizeSmall;
+    static const int codeFontSizeLarge;
     static const QString labelFont;
     static const int labelFontSize;
+    static const int labelFontSizeSmall;
     static const QString cpuFont;
     static const int cpuFontSize;
 

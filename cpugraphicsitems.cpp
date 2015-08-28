@@ -287,9 +287,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ALUFunctionLabel->setGeometry(OneByteShapes::ALUFunctionLabel);
     ALUFunctionLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     ALUFunctionLabel->setPalette(QPalette(QColor(Qt::blue).lighter(190)));
-    ALUFunctionLabel->setFont(QFont(ALUFunctionLabel->font().family(),
-                                    ALUFunctionLabel->font().pointSize() - 2));
-    ALUFunctionLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    ALUFunctionLabel->setFont(QFont(Pep::labelFont, Pep::labelFontSizeSmall));
     scene->addWidget(ALUFunctionLabel);
 
     // ALU shape
@@ -297,7 +295,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
                                 QPen(QBrush(QColor(Qt::blue)),
                                      2, Qt::SolidLine,
                                      Qt::SquareCap,
-                                     Qt::BevelJoin),
+                                     Qt::MiterJoin),
                                 QBrush(QColor(Qt::blue).lighter(190)));
     ALUPoly->setZValue(-1);
 
@@ -457,22 +455,21 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     scene->addRect(OneByteShapes::RegBank, QPen(QBrush(QColor(Qt::red), Qt::SolidPattern),
                                         2, Qt::DotLine,
                                         Qt::SquareCap,
-                                        Qt::BevelJoin), QBrush(seqCircuitColor));
+                                        Qt::MiterJoin), QBrush(seqCircuitColor));
 
     QLabel *ph;
     ph = new QLabel("0,1");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(8,10, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize - 2));
-    //ph->setFont(QFont(ph->font().family(), ph->font().pointSize() - 2));
+    ph->setGeometry(OneByteShapes::getRegNoRect(1, 1));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeSmall));
     scene->addWidget(ph);
     ph = new QLabel("A");
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize + 1));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeLarge));
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(30,10, 20,22);
+    ph->setGeometry(OneByteShapes::getRegLabelRect(1, 1));
     scene->addWidget(ph);
     aRegLineEdit = new QLineEdit("0x0000");
     aRegLineEdit->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
@@ -490,14 +487,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ph = new QLabel("2,3");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(8,38, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize - 2));
+    ph->setGeometry(OneByteShapes::getRegNoRect(1, 2));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeSmall));
     scene->addWidget(ph);
     ph = new QLabel("X");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(30,38, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize + 1));
+    ph->setGeometry(OneByteShapes::getRegLabelRect(1, 2));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeLarge));
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
     xRegLineEdit = new QLineEdit("0x0000");
@@ -514,14 +511,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ph = new QLabel("4,5");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(8,66, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize - 2));
+    ph->setGeometry(OneByteShapes::getRegNoRect(1, 3));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeSmall));
     scene->addWidget(ph);
     ph = new QLabel("SP");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(30,66, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize + 1));
+    ph->setGeometry(OneByteShapes::getRegLabelRect(1, 3));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeLarge));
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
     spRegLineEdit = new QLineEdit("0x0000");
@@ -538,14 +535,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ph = new QLabel("6,7");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(8,93, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize - 2));
+    ph->setGeometry(OneByteShapes::getRegNoRect(1, 4));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeSmall));
     scene->addWidget(ph);
     ph = new QLabel("PC");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(30,93, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize + 1));
+    ph->setGeometry(OneByteShapes::getRegLabelRect(1, 4));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeLarge));
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
     pcRegLineEdit = new QLineEdit("0x0000");
@@ -564,14 +561,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ph = new QLabel("8-10");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(128,10, 30,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize - 2));
+    ph->setGeometry(OneByteShapes::getRegNoRect(2, 1));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeSmall));
     scene->addWidget(ph);
     ph = new QLabel("IR");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(160,10, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize + 1));
+    ph->setGeometry(OneByteShapes::getRegLabelRect(2, 1));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeLarge));
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
     irRegLineEdit = new QLineEdit("0x000000");
@@ -588,14 +585,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ph = new QLabel("11");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(128,38, 30,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize - 2));
+    ph->setGeometry(OneByteShapes::getRegNoRect(2, 2));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeSmall));
     scene->addWidget(ph);
     ph = new QLabel("T1");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(160,38, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize + 1));
+    ph->setGeometry(OneByteShapes::getRegLabelRect(2, 2));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeLarge));
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
     t1RegLineEdit = new QLineEdit("0x00");
@@ -612,14 +609,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ph = new QLabel("12,13");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(128,66, 30,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize - 2));
+    ph->setGeometry(OneByteShapes::getRegNoRect(2, 3));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeSmall));
     scene->addWidget(ph);
     ph = new QLabel("T2");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(160,66, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize + 1));
+    ph->setGeometry(OneByteShapes::getRegLabelRect(2, 3));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeLarge));
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
     t2RegLineEdit = new QLineEdit("0x0000");
@@ -636,14 +633,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ph = new QLabel("14,15");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(128,93, 30,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize - 2));
+    ph->setGeometry(OneByteShapes::getRegNoRect(2, 4));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeSmall));
     scene->addWidget(ph);
     ph = new QLabel("T3");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(160,93, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize + 1));
+    ph->setGeometry(OneByteShapes::getRegLabelRect(2, 4));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeLarge));
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
     t3RegLineEdit = new QLineEdit("0x0000");
@@ -660,14 +657,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ph = new QLabel("16,17");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(257,10, 30,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize - 2));
+    ph->setGeometry(OneByteShapes::getRegNoRect(3, 1));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeSmall));
     scene->addWidget(ph);
     ph = new QLabel("T4");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(289,10, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize + 1));
+    ph->setGeometry(OneByteShapes::getRegLabelRect(3, 1));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeLarge));
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
     t4RegLineEdit = new QLineEdit("0x0000");
@@ -684,14 +681,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ph = new QLabel("18,19");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(257,38, 30,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize - 2));
+    ph->setGeometry(OneByteShapes::getRegNoRect(3, 2));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeSmall));
     scene->addWidget(ph);
     ph = new QLabel("T5");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(289,38, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize + 1));
+    ph->setGeometry(OneByteShapes::getRegLabelRect(3, 2));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeLarge));
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
     t5RegLineEdit = new QLineEdit("0x0000");
@@ -708,14 +705,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ph = new QLabel("20,21");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(257,66, 30,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize - 2));
+    ph->setGeometry(OneByteShapes::getRegNoRect(3, 3));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeSmall));
     scene->addWidget(ph);
     ph = new QLabel("T6");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(289,66, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize + 1));
+    ph->setGeometry(OneByteShapes::getRegLabelRect(3, 3));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeLarge));
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
     t6RegLineEdit = new QLineEdit("0x0000");
@@ -732,14 +729,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ph = new QLabel("22,23");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(257,93, 30,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize - 2));
+    ph->setGeometry(OneByteShapes::getRegNoRect(3, 4));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeSmall));
     scene->addWidget(ph);
     ph = new QLabel("M1");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(289,93, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize + 1));
+    ph->setGeometry(OneByteShapes::getRegLabelRect(3, 4));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeLarge));
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
     ph = new QLabel("0x0001");
@@ -752,14 +749,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ph = new QLabel("24,25");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(386,10, 30,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize - 2));
+    ph->setGeometry(OneByteShapes::getRegNoRect(4, 1));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeSmall));
     scene->addWidget(ph);
     ph = new QLabel("M2");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(418,10, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize + 1));
+    ph->setGeometry(OneByteShapes::getRegLabelRect(4, 1));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeLarge));
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
     ph = new QLabel("0x0203");
@@ -772,14 +769,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ph = new QLabel("26,27");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(386,38, 30,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize - 2));
+    ph->setGeometry(OneByteShapes::getRegNoRect(4, 2));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeSmall));
     scene->addWidget(ph);
     ph = new QLabel("M3");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(418,38, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize + 1));
+    ph->setGeometry(OneByteShapes::getRegLabelRect(4, 2));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeLarge));
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
     ph = new QLabel("0x0408");
@@ -792,14 +789,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ph = new QLabel("28,29");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(386,66, 30,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize - 2));
+    ph->setGeometry(OneByteShapes::getRegNoRect(4, 3));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeSmall));
     scene->addWidget(ph);
     ph = new QLabel("M4");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(418,66, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize + 1));
+    ph->setGeometry(OneByteShapes::getRegLabelRect(4, 3));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeLarge));
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
     ph = new QLabel("0xF0F6");
@@ -812,14 +809,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ph = new QLabel("30,31");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(386,93, 30,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize - 2));
+    ph->setGeometry(OneByteShapes::getRegNoRect(4, 4));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeSmall));
     scene->addWidget(ph);
     ph = new QLabel("M5");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     ph->setPalette(QPalette(seqCircuitColor));
-    ph->setGeometry(418,93, 20,22);
-    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize + 1));
+    ph->setGeometry(OneByteShapes::getRegLabelRect(4, 4));
+    ph->setFont (QFont(Pep::codeFont, Pep::codeFontSizeLarge));
     ph->setFont(QFont(ph->font().family(), ph->font().pointSize(), QFont::Bold));
     scene->addWidget(ph);
     ph = new QLabel("0xFEFF");
@@ -829,10 +826,10 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     ph->setFont (QFont(Pep::codeFont, Pep::codeFontSize));
     scene->addWidget(ph);
 
-    scene->addRect(OneByteShapes::RegBank, QPen(QBrush(QColor(Qt::red),
+    scene->addRect(OneByteShapes::RegBank, QPen(QBrush(QColor(Qt::black), //Qt::red),
                                                Qt::SolidPattern),
                                         2, Qt::SolidLine, Qt::SquareCap,
-                                        Qt::BevelJoin));
+                                        Qt::MiterJoin));
     // NZVC data path, vertical black line
     scene->addPolygon(OneByteShapes::NZVCDataPath,
                       QPen(QBrush(Qt::black), 1), QBrush(Qt::yellow));

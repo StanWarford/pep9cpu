@@ -224,6 +224,10 @@ enum CommonPositions {
 
     const QRect RegBank = QRect(5, 5, 491, 113);
 
+    const int regNumberOffset = 48; // 54 in some spots?
+    const int regLabelOffset  = 24;
+    const QSize regLabelSize  = QSize(20,22);
+    const QSize regNumberSize = QSize(24,22);
     const QRect aRegLineEdit  = QRect(Col1X, Row1Y, regLineEditW, regLineEditH);
     const QRect xRegLineEdit  = QRect(Col1X, Row2Y, regLineEditW, regLineEditH);
     const QRect spRegLineEdit = QRect(Col1X, Row3Y, regLineEditW, regLineEditH);
@@ -321,6 +325,68 @@ enum CommonPositions {
                                            << QPoint(205, 286) << QPoint(200, 286)
                                            << QPoint(210, 276) << QPoint(220,286)
                                            << QPoint(215, 286) << QPoint(215,293));
+
+    const QRect getRegRect(int row, int col) {
+        QRect rect = QRect();
+        int x, y;
+        switch (row) {
+        case 1:
+            x = Col1X;
+            break;
+        case 2:
+            x = Col2X;
+            break;
+        case 3:
+            x = Col3X;
+            break;
+        case 4:
+            x = Col4X;
+            break;
+        default:
+            break;
+        }
+
+        switch (col) {
+        case 1:
+            y = Row1Y;
+            break;
+        case 2:
+            y = Row2Y;
+            break;
+        case 3:
+            y = Row3Y;
+            break;
+        case 4:
+            y = Row4Y;
+            break;
+        default:
+            break;
+        }
+
+        rect.setX(x);
+        rect.setY(y);
+
+        return rect;
+    }
+
+    const QRect getRegLabelRect(int row, int col) {
+        QRect rect = getRegRect(row, col);
+        rect.setX(rect.x() - regLabelOffset);
+        rect.setHeight(regLabelSize.height());
+        rect.setWidth(regLabelSize.width());
+
+        return rect;
+    }
+
+    const QRect getRegNoRect(int row, int col) {
+        QRect rect = getRegRect(row, col);
+        rect.setX(rect.x() - regNumberOffset);
+        rect.setHeight(regNumberSize.height());
+        rect.setWidth(regNumberSize.width());
+
+        return rect;
+    }
+
 }
 
 #endif // SHAPES_ONE_BYTE_DATA_BUS_H
