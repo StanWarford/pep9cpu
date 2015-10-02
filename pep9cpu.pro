@@ -12,7 +12,7 @@ QT += printsupport
 # Mac icon/plist
 ICON = images/icon.icns
 QMAKE_INFO_PLIST = app.plist
-QMAKE_MAC_SDK = macosx10.10
+QMAKE_MAC_SDK = macosx10.11
 
 #Windows RC file for icon:
 RC_FILE = pep9resources.rc
