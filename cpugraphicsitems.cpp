@@ -41,60 +41,90 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
                                                    QGraphicsScene *scene)
     : QGraphicsItem(itemParent),
       parent(widgetParent)
-{
-    // save our current model for this set of items;
-    model = type;
-
-    MDROCk = new QCheckBox("MDROCk");
-    MDROCk->setGeometry(550, 189, 60, 21);
-    MDROCk->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-    scene->addWidget(MDROCk);
-    //MDROCk->hide();
-    MDRECk = new QCheckBox("MDRECk");
-    MDRECk->setGeometry(550, 209, 60, 21);
-    MDRECk->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-    scene->addWidget(MDRECk);
-    //MDRECk->hide();
-    MDROMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
-    MDROMuxTristateLabel->setGeometry(550, 245, 60, 21);
-    MDROMuxTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-    scene->addWidget(MDROMuxTristateLabel);
-    //MDROMuxTristateLabel->hide();
-    MDREMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
-    MDREMuxTristateLabel->setGeometry(550, 265, 60, 21);
-    MDREMuxTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-    scene->addWidget(MDREMuxTristateLabel);
-    //MDREMuxTristateLabel->hide();
-    EOMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
-    EOMuxTristateLabel->setGeometry(490, 245, 60, 21);
-    EOMuxTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-    scene->addWidget(EOMuxTristateLabel);
-    //EOMuxTristateLabel->hide();
-
-    MARMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
-    MARMuxTristateLabel->setGeometry(550, 149, 60, 21);
-    MARMuxTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-    scene->addWidget(MARMuxTristateLabel);
-    //MARMuxTristateLabel->hide();
-
-    MDRELabel = new QLabel("0x00");
-    MDRELabel->setGeometry(175, 349, 60, 21);
-    MDRELabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-    scene->addWidget(MDRELabel);
-    //MDRELabel->hide();
-
-    MDROLabel = new QLabel("0x00");
-    MDROLabel->setGeometry(175, 369, 60, 21);
-    MDROLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-    scene->addWidget(MDROLabel);
-    //MDROLabel->hide();
-
+{    
     // http://colrd.com/image-dna/23448/
     seqCircuitColor = QColor(0x3B3630).lighter(370);
     combCircuitRed = QColor(0xD92405).lighter(140);
     combCircuitBlue = QColor(0x3563EB).lighter(120);
     combCircuitYellow = QColor(0xEAC124).lighter(120);
     combCircuitGreen = QColor(0x739211).lighter(130);
+
+    // save our current model for this set of items;
+    model = type;
+
+    MDROCk = new QCheckBox("MDROCk");
+    MDROCk->setGeometry(TwoByteShapes::MDROCkCheckbox);
+    MDROCk->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    MDROCk->setPalette(QPalette(Qt::white));
+    scene->addWidget(MDROCk);
+
+    MDRECk = new QCheckBox("MDRECk");
+    MDRECk->setGeometry(TwoByteShapes::MDRECkCheckbox);
+    MDRECk->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    MDRECk->setPalette(QPalette(Qt::white));
+    scene->addWidget(MDRECk);
+
+    MDROMuxLabel = new QLabel("MDROMux");
+    MDROMuxLabel->setGeometry(TwoByteShapes::MDROMuxLabel);
+    MDROMuxLabel->setPalette(QPalette(Qt::white));
+    MDROMuxLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MDROMuxLabel);
+    MDROMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
+    MDROMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    MDROMuxTristateLabel->setGeometry(TwoByteShapes::MDROMuxTristateLabel);
+    MDROMuxTristateLabel->setPalette(QPalette(Qt::white));
+    MDROMuxTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MDROMuxTristateLabel);
+
+    MDREMuxLabel = new QLabel("MDREMux");
+    MDREMuxLabel->setGeometry(TwoByteShapes::MDREMuxLabel);
+    MDREMuxLabel->setPalette(QPalette(Qt::white));
+    MDREMuxLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MDREMuxLabel);
+    MDREMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
+    MDREMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    MDREMuxTristateLabel->setGeometry(TwoByteShapes::MDREMuxTristateLabel);
+    MDREMuxTristateLabel->setPalette(QPalette(Qt::white));
+    MDREMuxTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MDREMuxTristateLabel);
+
+    EOMuxLabel = new QLabel("EOMux");
+    EOMuxLabel->setGeometry(TwoByteShapes::EOMuxLabel);
+    EOMuxLabel->setPalette(QPalette(Qt::white));
+    EOMuxLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(EOMuxLabel);
+    EOMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
+    EOMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    EOMuxTristateLabel->setGeometry(TwoByteShapes::EOMuxTristateLabel);
+    EOMuxTristateLabel->setPalette(QPalette(Qt::white));
+    EOMuxTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(EOMuxTristateLabel);
+
+    MARMuxLabel = new QLabel("MARMux");
+    MARMuxLabel->setGeometry(TwoByteShapes::MARMuxLabel);
+    MARMuxLabel->setPalette(QPalette(Qt::white));
+    MARMuxLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MARMuxLabel);
+    MARMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
+    MARMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    MARMuxTristateLabel->setGeometry(TwoByteShapes::MARMuxTristateLabel);
+    MARMuxTristateLabel->setPalette(QPalette(Qt::white));
+    MARMuxTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MARMuxTristateLabel);
+
+    MDRELabel = new QLabel("0x00");
+    MDRELabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    MDRELabel->setGeometry(TwoByteShapes::MDRELabel);
+    MDRELabel->setPalette(QPalette(seqCircuitColor));
+    MDRELabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MDRELabel);
+
+    MDROLabel = new QLabel("0x00");
+    MDROLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    MDROLabel->setGeometry(TwoByteShapes::MDROLabel);
+    MDROLabel->setPalette(QPalette(seqCircuitColor));
+    MDROLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MDROLabel);
 
     // setup arrow heads:
     arrowLeft = QImage(":/images/arrowhead.png");
@@ -846,8 +876,12 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         MDREMuxTristateLabel->hide();
         EOMuxTristateLabel->hide();
         MARMuxTristateLabel->hide();
+        MDROMuxLabel->hide();
+        MDREMuxLabel->hide();
+        EOMuxLabel->hide();
         MDRELabel->hide();
         MDROLabel->hide();
+        MARMuxLabel->hide();
 
         // MDR
         scene->addRect(OneByteShapes::MDRLabel);
@@ -871,7 +905,13 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         MDRMuxLabel->hide();
         MDRMuxTristateLabel->hide();
 
+        scene->addRect(TwoByteShapes::MDROMuxTristateLabel, QPen(Qt::gray));
+        scene->addRect(TwoByteShapes::MDREMuxTristateLabel, QPen(Qt::gray));
+        scene->addRect(TwoByteShapes::EOMuxTristateLabel, QPen(Qt::gray));
+        scene->addRect(TwoByteShapes::MARMuxTristateLabel, QPen(Qt::gray));
 
+        scene->addRect(TwoByteShapes::MDROLabel);
+        scene->addRect(TwoByteShapes::MDRELabel);
     }
 }
 
@@ -1027,7 +1067,19 @@ void CpuGraphicsItems::paint(QPainter *painter,
     repaintBSelect(painter);
     repaintASelect(painter);
     repaintMARCk(painter);
-    repaintMDRCk(painter);
+
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
+        repaintMDRCk(painter);
+        break;
+    case Enu::TwoByteDataBus:
+        repaintMDROCk(painter);
+        repaintMDRECk(painter);
+        break;
+    default:
+        break;
+    }
+
     repaintAMuxSelect(painter);
 
     repaintCMuxSelect(painter);
@@ -1161,31 +1213,6 @@ void CpuGraphicsItems::repaintMARCk(QPainter *painter)
                        color == Qt::gray ? arrowDownGray : arrowDown);
 }
 
-void CpuGraphicsItems::repaintMDRCk(QPainter *painter)
-{
-    QColor color;
-
-    switch (Pep::cpuFeatures) {
-    case Enu::OneByteDataBus:
-
-        color = MDRCk->isChecked() ? Qt::black : Qt::gray;
-        painter->setPen(QPen(QBrush(color), 1));
-        painter->setBrush(color);
-
-        // MDRCk
-        painter->drawLines(OneByteShapes::MDRCk._lines);
-
-        painter->drawImage(QPoint(207,241),
-                           color == Qt::gray ? arrowDownGray : arrowDown);
-        break;
-    case Enu::TwoByteDataBus:
-
-        break;
-    default:
-        break;
-    }
-
-}
 
 void CpuGraphicsItems::repaintAMuxSelect(QPainter *painter)
 {
@@ -1357,114 +1384,20 @@ void CpuGraphicsItems::repaintMemRead(QPainter *painter)
     default:
         break;
     }
-
 }
 
 void CpuGraphicsItems::repaintMemWrite(QPainter *painter)
 {
-    QPolygon poly;
-    QColor color;
-    bool isHigh = MemWriteTristateLabel->text() == "1";
-
-    // Draw memwrite select line
-    if (isHigh) {
-        MemReadTristateLabel->setDisabled(true);
-        color = Qt::black;
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
+        repaintMemWriteOneByteModel(painter);
+        break;
+    case Enu::TwoByteDataBus:
+        repaintMemWriteTwoByteModel(painter);
+        break;
+    default:
+        break;
     }
-    else {
-        MemReadTristateLabel->setDisabled(false);
-        color = Qt::gray;
-    }
-
-    painter->setPen(QPen(QBrush(color), 1));
-    painter->setBrush(color);
-
-    // memWrite line from the label to the bus:
-    painter->drawLine(81,619, 543,619); //611+8
-    painter->drawImage(QPoint(73,616), //611+8-3
-                       color == Qt::gray ? arrowLeftGray : arrowLeft);
-
-    // draw line from memWrite to MDR out:
-    painter->drawEllipse(QPoint(96,619), 2, 2); //611+8
-    painter->drawLine(96,619, 96,345); //611+8
-    // memWrite line from the label to the bus:
-    painter->drawLine(96,333, 96,280); //268+12
-    painter->drawImage(QPoint(93,271), //96-3 //268+12-9
-                       color == Qt::gray ? arrowUpGray : arrowUp);
-
-    // repaint the MDR-to-main-bus line, based on if MemWrite is set or not
-    // note: it should be lighter (disabled) when MemWrite is not set.
-    color = combCircuitGreen;
-    if (!isHigh) {
-        color = color.lighter(120);
-    }
-    painter->setBrush(color);
-    painter->setPen(QPen(QBrush(Qt::black), 1));
-
-    // mdr to data bus
-    painter->drawPolygon(OneByteShapes::MDRToDataBus);
-
-
-    if (MemReadTristateLabel->text() == "1") {
-        // Do not paint main bus if MemRead is high
-        return;
-    }
-
-    // Draw ADDR bus stuff:
-    if (isHigh) {
-        // qDebug() << "mainBusState: " << Sim::mainBusState;
-        // ADDR bus is yellow if the bus is high
-        color = combCircuitYellow;
-    }
-    else {
-        color = Qt::white;
-    }
-
-    painter->setPen(QPen(QBrush(Qt::black), 1));
-    painter->setBrush(color);
-
-    // Main Bus
-    // Main ADDR bus:
-    painter->drawRect(OneByteShapes::AddrBus);
-    // left arrow from addr bus to memory:
-    painter->drawPolygon(OneByteShapes::AddrArrow);
-
-    // Draw DATA bus stuff:
-    // figure out the color:
-    if (isHigh && (Sim::mainBusState == Enu::MemWriteReady ||
-                Sim::mainBusState == Enu::MemWriteSecondWait)) {
-        color = combCircuitGreen;
-    }
-    else {
-        color = Qt::white;
-    }
-    painter->setBrush(color);
-
-    // Main Data bus:
-    painter->drawRect(OneByteShapes::DataBus);
-
-    // Mem Data Bus (bidirectional arrow)
-    poly.clear();
-    // arrowhead:
-    poly << QPoint(13, 365) << QPoint(13, 360) << QPoint(3, 370)
-         << QPoint(13, 380) << QPoint(13, 375);
-    // other end of the bus:
-    if (color == QColor(16, 150, 24)) {
-        // flat end
-        poly << QPoint(40, 375) << QPoint(40, 365);
-    }
-    else {
-        // arrowhead
-        poly << QPoint(29, 375) << QPoint(29, 380) << QPoint(39, 370)
-             << QPoint(29, 360) << QPoint(29, 365);
-    }
-    painter->drawPolygon(poly);
-
-    // Main Bus to MDRMux is ALWAYS white on a memWrite:
-    painter->setBrush(Qt::white);
-
-    // right arrow from Bus to MDRMux:
-    painter->drawPolygon(OneByteShapes::DataToMDRMuxBus);
 }
 
 void CpuGraphicsItems::repaintSBitOut(QPainter *painter)
@@ -1787,6 +1720,33 @@ void CpuGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
 // ***************************************************************************
 // One byte model-specific functionality:
 // ***************************************************************************
+
+void CpuGraphicsItems::repaintMDRCk(QPainter *painter)
+{
+    QColor color;
+
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
+
+        color = MDRCk->isChecked() ? Qt::black : Qt::gray;
+        painter->setPen(QPen(QBrush(color), 1));
+        painter->setBrush(color);
+
+        // MDRCk
+        painter->drawLines(OneByteShapes::MDRCk._lines);
+
+        painter->drawImage(QPoint(207,241),
+                           color == Qt::gray ? arrowDownGray : arrowDown);
+        break;
+    case Enu::TwoByteDataBus:
+
+        break;
+    default:
+        break;
+    }
+
+}
+
 void CpuGraphicsItems::repaintMemReadOneByteModel(QPainter *painter)
 {
     QPolygon poly;
@@ -1867,6 +1827,109 @@ void CpuGraphicsItems::repaintMemReadOneByteModel(QPainter *painter)
 
 void CpuGraphicsItems::repaintMemWriteOneByteModel(QPainter *painter)
 {
+    QPolygon poly;
+    QColor color;
+    bool isHigh = MemWriteTristateLabel->text() == "1";
+
+    // Draw memwrite select line
+    if (isHigh) {
+        MemReadTristateLabel->setDisabled(true);
+        color = Qt::black;
+    }
+    else {
+        MemReadTristateLabel->setDisabled(false);
+        color = Qt::gray;
+    }
+
+    painter->setPen(QPen(QBrush(color), 1));
+    painter->setBrush(color);
+
+    // memWrite line from the label to the bus:
+    painter->drawLine(81,619, 543,619); //611+8
+    painter->drawImage(QPoint(73,616), //611+8-3
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
+
+    // draw line from memWrite to MDR out:
+    painter->drawEllipse(QPoint(96,619), 2, 2); //611+8
+    painter->drawLine(96,619, 96,345); //611+8
+    // memWrite line from the label to the bus:
+    painter->drawLine(96,333, 96,280); //268+12
+    painter->drawImage(QPoint(93,271), //96-3 //268+12-9
+                       color == Qt::gray ? arrowUpGray : arrowUp);
+
+    // repaint the MDR-to-main-bus line, based on if MemWrite is set or not
+    // note: it should be lighter (disabled) when MemWrite is not set.
+    color = combCircuitGreen;
+    if (!isHigh) {
+        color = color.lighter(120);
+    }
+    painter->setBrush(color);
+    painter->setPen(QPen(QBrush(Qt::black), 1));
+
+    // mdr to data bus
+    painter->drawPolygon(OneByteShapes::MDRToDataBus);
+
+
+    if (MemReadTristateLabel->text() == "1") {
+        // Do not paint main bus if MemRead is high
+        return;
+    }
+
+    // Draw ADDR bus stuff:
+    if (isHigh) {
+        // qDebug() << "mainBusState: " << Sim::mainBusState;
+        // ADDR bus is yellow if the bus is high
+        color = combCircuitYellow;
+    }
+    else {
+        color = Qt::white;
+    }
+
+    painter->setPen(QPen(QBrush(Qt::black), 1));
+    painter->setBrush(color);
+
+    // Main Bus
+    // Main ADDR bus:
+    painter->drawRect(OneByteShapes::AddrBus);
+    // left arrow from addr bus to memory:
+    painter->drawPolygon(OneByteShapes::AddrArrow);
+
+    // Draw DATA bus stuff:
+    // figure out the color:
+    if (isHigh && (Sim::mainBusState == Enu::MemWriteReady ||
+                Sim::mainBusState == Enu::MemWriteSecondWait)) {
+        color = combCircuitGreen;
+    }
+    else {
+        color = Qt::white;
+    }
+    painter->setBrush(color);
+
+    // Main Data bus:
+    painter->drawRect(OneByteShapes::DataBus);
+
+    // Mem Data Bus (bidirectional arrow)
+    poly.clear();
+    // arrowhead:
+    poly << QPoint(13, 365) << QPoint(13, 360) << QPoint(3, 370)
+         << QPoint(13, 380) << QPoint(13, 375);
+    // other end of the bus:
+    if (color == QColor(16, 150, 24)) {
+        // flat end
+        poly << QPoint(40, 375) << QPoint(40, 365);
+    }
+    else {
+        // arrowhead
+        poly << QPoint(29, 375) << QPoint(29, 380) << QPoint(39, 370)
+             << QPoint(29, 360) << QPoint(29, 365);
+    }
+    painter->drawPolygon(poly);
+
+    // Main Bus to MDRMux is ALWAYS white on a memWrite:
+    painter->setBrush(Qt::white);
+
+    // right arrow from Bus to MDRMux:
+    painter->drawPolygon(OneByteShapes::DataToMDRMuxBus);
 
 }
 
@@ -1875,6 +1938,37 @@ void CpuGraphicsItems::repaintMemWriteOneByteModel(QPainter *painter)
 // ***************************************************************************
 // Two byte model-specific functionality:
 // ***************************************************************************
+void CpuGraphicsItems::repaintMDROCk(QPainter *painter)
+{
+
+}
+
+void CpuGraphicsItems::repaintMDRECk(QPainter *painter)
+{
+//    QColor color;
+
+//    switch (Pep::cpuFeatures) {
+//    case Enu::OneByteDataBus:
+
+//        color = MDRCk->isChecked() ? Qt::black : Qt::gray;
+//        painter->setPen(QPen(QBrush(color), 1));
+//        painter->setBrush(color);
+
+//        // MDRCk
+//        painter->drawLines(OneByteShapes::MDRCk._lines);
+
+//        painter->drawImage(QPoint(207,241),
+//                           color == Qt::gray ? arrowDownGray : arrowDown);
+//        break;
+//    case Enu::TwoByteDataBus:
+
+//        break;
+//    default:
+//        break;
+//    }
+
+}
+
 void CpuGraphicsItems::repaintMemReadTwoByteModel(QPainter *painter)
 {
     QPolygon poly;
@@ -1930,7 +2024,7 @@ void CpuGraphicsItems::repaintMemReadTwoByteModel(QPainter *painter)
 
     painter->setBrush(combCircuitRed);
     // Data bus:
-    painter->drawRect(TwoByteShapes::DataBus);
+//painter->drawRect(TwoByteShapes::DataBus);
 
     // Mem Data Bus
     poly.clear();
@@ -1957,6 +2051,110 @@ void CpuGraphicsItems::repaintMemReadTwoByteModel(QPainter *painter)
 
 void CpuGraphicsItems::repaintMemWriteTwoByteModel(QPainter *painter)
 {
+    QPolygon poly;
+    QColor color;
+    bool isHigh = MemWriteTristateLabel->text() == "1";
+
+    // Draw memwrite select line
+    if (isHigh) {
+        MemReadTristateLabel->setDisabled(true);
+        color = Qt::black;
+    }
+    else {
+        MemReadTristateLabel->setDisabled(false);
+        color = Qt::gray;
+    }
+
+    painter->setPen(QPen(QBrush(color), 1));
+    painter->setBrush(color);
+
+    // memWrite line from the label to the bus:
+    painter->drawLine(81,619, 543,619); //611+8
+    painter->drawImage(QPoint(73,616), //611+8-3
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
+
+    // draw line from memWrite to MDR out:
+    painter->drawEllipse(QPoint(96,619), 2, 2); //611+8
+    painter->drawLine(96,619, 96,345); //611+8
+    // memWrite line from the label to the bus:
+    painter->drawLine(96,333, 96,280); //268+12
+    painter->drawImage(QPoint(93,271), //96-3 //268+12-9
+                       color == Qt::gray ? arrowUpGray : arrowUp);
+
+    // repaint the MDR-to-main-bus line, based on if MemWrite is set or not
+    // note: it should be lighter (disabled) when MemWrite is not set.
+    color = combCircuitGreen;
+    if (!isHigh) {
+        color = color.lighter(120);
+    }
+    painter->setBrush(color);
+    painter->setPen(QPen(QBrush(Qt::black), 1));
+
+    // mdr to data bus
+//painter->drawPolygon(OneByteShapes::MDRToDataBus);
+
+
+    if (MemReadTristateLabel->text() == "1") {
+        // Do not paint main bus if MemRead is high
+        return;
+    }
+
+    // Draw ADDR bus stuff:
+    if (isHigh) {
+        // qDebug() << "mainBusState: " << Sim::mainBusState;
+        // ADDR bus is yellow if the bus is high
+        color = combCircuitYellow;
+    }
+    else {
+        color = Qt::white;
+    }
+
+    painter->setPen(QPen(QBrush(Qt::black), 1));
+    painter->setBrush(color);
+
+    // Main Bus
+    // Main ADDR bus:
+    painter->drawRect(OneByteShapes::AddrBus);
+    // left arrow from addr bus to memory:
+    painter->drawPolygon(OneByteShapes::AddrArrow);
+
+    // Draw DATA bus stuff:
+    // figure out the color:
+    if (isHigh && (Sim::mainBusState == Enu::MemWriteReady ||
+                Sim::mainBusState == Enu::MemWriteSecondWait)) {
+        color = combCircuitGreen;
+    }
+    else {
+        color = Qt::white;
+    }
+    painter->setBrush(color);
+
+    // Main Data bus:
+    painter->drawRect(TwoByteShapes::DataBus);
+
+    // Mem Data Bus (bidirectional arrow)
+    poly.clear();
+    // arrowhead:
+    poly << QPoint(13, 365) << QPoint(13, 360) << QPoint(3, 370)
+         << QPoint(13, 380) << QPoint(13, 375);
+    // other end of the bus:
+    if (color == QColor(16, 150, 24)) {
+        // flat end
+        poly << QPoint(40, 375) << QPoint(40, 365);
+    }
+    else {
+        // arrowhead
+        poly << QPoint(29, 375) << QPoint(29, 380) << QPoint(39, 370)
+             << QPoint(29, 360) << QPoint(29, 365);
+    }
+    painter->drawPolygon(poly);
+
+    // Main Bus to MDRMux is ALWAYS white on a memWrite:
+    painter->setBrush(Qt::white);
+
+    // right arrow from Bus to MDR{O,E}Mux:
+    painter->drawPolygon(TwoByteShapes::DataToMDROMuxBus);
+    painter->drawPolygon(TwoByteShapes::DataToMDREMuxBus);
 
 }
 

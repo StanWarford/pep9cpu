@@ -121,10 +121,14 @@ public:
     // Two byte data bus model features:
     QCheckBox *MDROCk;
     QCheckBox *MDRECk;
+    TristateLabel *MARMuxTristateLabel;
     TristateLabel *MDROMuxTristateLabel;
     TristateLabel *MDREMuxTristateLabel;
     TristateLabel *EOMuxTristateLabel;
-    TristateLabel *MARMuxTristateLabel;
+    QLabel *MARMuxLabel;
+    QLabel *MDROMuxLabel;
+    QLabel *MDREMuxLabel;
+    QLabel *EOMuxLabel;
     //data section:
     QLabel *MDROLabel;
     QLabel *MDRELabel;
@@ -154,7 +158,6 @@ private:
     void repaintBSelect(QPainter *painter);
     void repaintASelect(QPainter *painter);
     void repaintMARCk(QPainter *painter);
-    void repaintMDRCk(QPainter *painter);
     void repaintAMuxSelect(QPainter *painter);
 
     void repaintCMuxSelect(QPainter *painter);
@@ -178,10 +181,15 @@ private:
     void repaintMDRMuxSelect(QPainter *painter);
 
     // one byte specific repainting methods
+    void repaintMDRCk(QPainter *painter);
+
     void repaintMemReadOneByteModel(QPainter *painter);
     void repaintMemWriteOneByteModel(QPainter *painter);
 
     // two byte specific repainting methods
+    void repaintMDROCk(QPainter *painter);
+    void repaintMDRECk(QPainter *painter);
+
     void repaintMemReadTwoByteModel(QPainter *painter);
     void repaintMemWriteTwoByteModel(QPainter *painter);
 

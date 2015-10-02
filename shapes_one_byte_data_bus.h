@@ -69,8 +69,8 @@ enum RegPos {
     Row3Y     = 66,
     Row4Y     = 93,
     Col1X     = 52,
-    Col2X     = 184,
-    Col3X     = 311,
+    Col2X     = 179,//184,
+    Col3X     = 316,//311,
     Col4X     = 440,
 };
 
@@ -105,11 +105,11 @@ enum CommonPositions {
     const QRect aMuxLabel =          QRect(ctrlLabelX, 297, labelW, labelH);
     const QRect aMuxerDataLabel =    QRect(306, 293, dataLabelW, dataLabelH);
     const QRect aMuxTristateLabel =  QRect(ctrlInputX, 295, labelTriW, 21);
-    const QRect MDRMuxLabel =        QRect(ctrlLabelX, 318, 61, 20);
+    const QRect MDRMuxLabel =        QRect(ctrlLabelX, 318, labelW, labelH);
     const QRect MDRMuxerDataLabel =  QRect(interfaceRegsX,293, dataLabelW, dataLabelH);
     const QRect MDRMuxTristateLabel = QRect(ctrlInputX, 316, labelTriW, labelTriH);
     const QRect MDRLabel =           QRect(interfaceRegsX, 254, dataLabelW, dataLabelH);
-    const QRect cMuxLabel =          QRect(ctrlLabelX, 349, 61,20);
+    const QRect cMuxLabel =          QRect(ctrlLabelX, 349, labelW, labelH);
     const QRect cMuxerLabel =        QRect(250, 374, dataLabelW, dataLabelH);
     const QRect cMuxTristateLabel =  QRect(ctrlInputX, 348, labelTriW, labelTriH);
     const QRect ALULineEdit  =       QRect(ctrlInputX, 368, 26, 20);
