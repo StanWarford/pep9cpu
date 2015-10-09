@@ -60,6 +60,8 @@ enum Shapes {
     lineEditH = 21,
     regLineEditW = 60,
     regLineEditH = 19,
+    arrowHDepth = 20, // really 15, but 20 with arrowHOffset
+    arrowHOffset = 5,
 
 };
 
@@ -142,6 +144,9 @@ enum CommonPositions {
     // registers
 
     // lines and shapes:
+    const QRect AddrBus = QRect(40, 151, 20, 499);
+    const QRect DataBus = QRect(AddrBus.x()+AddrBus.width(), AddrBus.top() + 100, 10, 399);
+
     const Arrow loadCkSelect = Arrow(QVector<QPoint>() << QPoint(499, 24),
                                      QVector<QLine>() << QLine(543, 27, 499, 27));
     const Arrow CSelect = Arrow(QVector<QPoint>() << QPoint(499, 47),
@@ -208,15 +213,19 @@ enum CommonPositions {
     const QPolygon MARBus = QPolygon(QVector<QPoint>() << QPoint(205,151)
                                      << QPoint(205,167)
                                      // arrow:
-                                     << QPoint(88,167)  << QPoint(88,162)
-                                     << QPoint(73,177)
-                                     << QPoint(88,192)  << QPoint(88,187)
+                                     << QPoint(AddrBus.x()+AddrBus.width()+arrowHDepth,167)
+                                     << QPoint(AddrBus.x()+AddrBus.width()+arrowHDepth,162)
+                                     << QPoint(AddrBus.x()+AddrBus.width()+arrowHOffset,177)
+                                     << QPoint(AddrBus.x()+AddrBus.width()+arrowHDepth,192)
+                                     << QPoint(AddrBus.x()+AddrBus.width()+arrowHDepth,187)
                                      << QPoint(205,187)
                                      << QPoint(205,202) << QPoint(215,202)
                                      // black line in the middle:
                                      << QPoint(215,151)
-                                     << QPoint(215,177) << QPoint(88,177)
-                                     << QPoint(215,177) << QPoint(215,151));
+                                     << QPoint(215,177)
+                                     << QPoint(OneByteShapes::AddrBus.right()+arrowHDepth,177)
+                                     << QPoint(215,177)
+                                     << QPoint(215,151));
     const QPolygon NZVCDataPath = QPolygon(QVector<QPoint>() << QPoint(310,513)
                                        << QPoint(269,513) << QPoint(269,407)
                                        << QPoint(274,407) << QPoint(264,397)
@@ -289,8 +298,6 @@ enum CommonPositions {
                                    << QPoint(230,344) << QPoint(280,344)
                                    << QPoint(280,374));
 
-    const QRect AddrBus = QRect(40, 151, 20, 499);
-    const QRect DataBus = QRect(60, 151, 10, 499);
 
     const QPolygon AddrArrow = QPolygon(QVector<QPoint>()
                                         // arrowhead

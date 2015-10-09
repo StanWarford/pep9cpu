@@ -217,9 +217,6 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     // MARA & MARB
     scene->addRect(OneByteShapes::MARBLabel);
     scene->addRect(OneByteShapes::MARALabel);
-    // MARBus (MARA/MARB output bus)
-    scene->addPolygon(OneByteShapes::MARBus,
-                      QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
 
     // MDRCk
     MDRCk = new QCheckBox("MDRCk");
@@ -869,6 +866,10 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
 
     // hide stuff based on the current model:
     if (model == Enu::OneByteDataBus) {
+        // MARBus (MARA/MARB output bus)
+        scene->addPolygon(OneByteShapes::MARBus,
+                          QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
+
         // hide 2 byte bus stuff:
         MDROCk->hide();
         MDRECk->hide();
@@ -889,6 +890,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         //scene->addRect(OneByteShapes::MDRLabel);
         // MDR data section
         scene->addRect(OneByteShapes::MDRMuxerDataLabel);
+
         // MDRBus (output from MDR, right arrow):
         scene->addRect(OneByteShapes::MDRBusOutRect,
                        QPen(Qt::black), QBrush(combCircuitYellow));
@@ -898,6 +900,10 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
 
     }
     else if (model == Enu::TwoByteDataBus) {
+        // MARBus (MARA/MARB output bus)
+        scene->addPolygon(TwoByteShapes::MARBus,
+                          QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
+
         // hide 1 byte bus stuff:
         MDRCk->hide();
         MDRLabel->hide();
@@ -909,6 +915,12 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         scene->addRect(TwoByteShapes::MDREMuxTristateLabel, QPen(Qt::gray));
         scene->addRect(TwoByteShapes::EOMuxTristateLabel, QPen(Qt::gray));
         scene->addRect(TwoByteShapes::MARMuxTristateLabel, QPen(Qt::gray));
+
+        scene->addRect(TwoByteShapes::MDROMuxerDataLabel);
+        scene->addRect(TwoByteShapes::MDREMuxerDataLabel);
+
+        //scene->addRect(TwoByteShapes::MDREMuxLabel);
+        //scene->addRect(TwoByteShapes::MDROMuxLabel);
 
         scene->addRect(TwoByteShapes::MDROLabel);
         scene->addRect(TwoByteShapes::MDRELabel);
@@ -2091,7 +2103,9 @@ void CpuGraphicsItems::repaintMemWriteTwoByteModel(QPainter *painter)
     painter->setPen(QPen(QBrush(Qt::black), 1));
 
     // mdr to data bus
-//painter->drawPolygon(OneByteShapes::MDRToDataBus);
+    painter->drawPolygon(TwoByteShapes::MDROToDataBus);
+    painter->drawPolygon(TwoByteShapes::MDREToDataBus);
+
 
 
     if (MemReadTristateLabel->text() == "1") {
