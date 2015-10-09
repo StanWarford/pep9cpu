@@ -69,6 +69,12 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     MDROMuxLabel->setPalette(QPalette(Qt::white));
     MDROMuxLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(MDROMuxLabel);
+    MDROMuxerDataLabel = new QLabel("MDROMux");
+    MDROMuxerDataLabel->setGeometry(TwoByteShapes::MDROMuxerDataLabel);
+    MDROMuxerDataLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    MDROMuxerDataLabel->setPalette(QPalette(Qt::white));
+    MDROMuxerDataLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MDROMuxerDataLabel);
     MDROMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
     MDROMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MDROMuxTristateLabel->setGeometry(TwoByteShapes::MDROMuxTristateLabel);
@@ -81,6 +87,12 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     MDREMuxLabel->setPalette(QPalette(Qt::white));
     MDREMuxLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(MDREMuxLabel);
+    MDREMuxerDataLabel = new QLabel("MDREMux");
+    MDREMuxerDataLabel->setGeometry(TwoByteShapes::MDREMuxerDataLabel);
+    MDREMuxerDataLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    MDREMuxerDataLabel->setPalette(QPalette(Qt::white));
+    MDREMuxerDataLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MDREMuxerDataLabel);
     MDREMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
     MDREMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MDREMuxTristateLabel->setGeometry(TwoByteShapes::MDREMuxTristateLabel);
@@ -877,6 +889,8 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         MDREMuxTristateLabel->hide();
         EOMuxTristateLabel->hide();
         MARMuxTristateLabel->hide();
+        MDROMuxerDataLabel->hide();
+        MDREMuxerDataLabel->hide();
         MDROMuxLabel->hide();
         MDREMuxLabel->hide();
         EOMuxLabel->hide();

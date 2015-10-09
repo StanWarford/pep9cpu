@@ -129,6 +129,8 @@ public:
     QLabel *MDROMuxLabel;
     QLabel *MDREMuxLabel;
     QLabel *EOMuxLabel;
+    QLabel *MDROMuxerDataLabel;
+    QLabel *MDREMuxerDataLabel;
     //data section:
     QLabel *MDROLabel;
     QLabel *MDRELabel;
