@@ -51,14 +51,18 @@ enum Shapes {
     lineEditH = 21,
     regLineEditW = 60,
     regLineEditH = 19,
+
     arrowHDepth = 20, // really 15, but 20 with arrowHOffset
     arrowHOffset = 5,
+    iRegXOffset = 40,
+    MDREOOffset = 100
 };
 
 enum CommonPositions {
     ctrlLabelX = 579,
     ctrlInputX = 550,
     interfaceRegsX = 175,
+    combCircX = interfaceRegsX - iRegXOffset,
     statusBitsX = 476,
 
 };
@@ -76,8 +80,8 @@ const QRect bLabel                      = OneByteShapes::bLabel;
 const QRect aLineEdit                   = OneByteShapes::aLineEdit;
 const QRect aLabel                      = OneByteShapes::aLabel;
 const QRect MARCkCheckbox               = OneByteShapes::MARCkCheckbox; // I think this stays the same
-const QRect MARALabel;
-const QRect MARBLabel;
+const QRect MARALabel                   = QRect(combCircX, 202, dataLabelW, dataLabelH);
+const QRect MARBLabel                   = QRect(combCircX, 132, dataLabelW, dataLabelH);
 
 const QRect MDROCkCheckbox       = QRect(ctrlInputX, 189, checkW+10, checkH);
 const QRect MDRECkCheckbox       = QRect(ctrlInputX, 209, checkW+10, checkH);
@@ -92,12 +96,12 @@ const QRect MDROMuxLabel         = QRect(ctrlLabelX, 245, labelW+20, labelH);
 const QRect MDREMuxLabel         = QRect(ctrlLabelX, 265, labelW+20, labelH);
 const QRect EOMuxLabel           = QRect(ctrlLabelX-100, 285, labelW, labelH);
 
-const QRect MDROMuxerDataLabel   = OneByteShapes::MDRMuxerDataLabel;
-const QRect MDREMuxerDataLabel   = QRect(interfaceRegsX,393, dataLabelW, dataLabelH);
+const QRect MDROMuxerDataLabel   = QRect(combCircX,293, dataLabelW, dataLabelH);
+const QRect MDREMuxerDataLabel   = QRect(combCircX,393, dataLabelW, dataLabelH);
 const QRect EOMuxerDataLabel;
 
-const QRect MDROLabel = QRect(interfaceRegsX, 254, dataLabelW, dataLabelH);
-const QRect MDRELabel = QRect(interfaceRegsX, 354, dataLabelW, dataLabelH);
+const QRect MDROLabel = QRect(combCircX, 254, dataLabelW, dataLabelH);
+const QRect MDRELabel = QRect(combCircX, 354, dataLabelW, dataLabelH);
 
 
 const QRect aMuxLabel = OneByteShapes::aMuxLabel;
@@ -142,7 +146,24 @@ const QPolygon CMuxBus = OneByteShapes::CMuxBus;
 const QPolygon ALUPoly = OneByteShapes::ALUPoly;
 const QRect MDRBusOutRect = OneByteShapes::MDRBusOutRect;
 const QPolygon MDRBusOutArrow = OneByteShapes::MDRBusOutArrow;
-const QPolygon MARBus = OneByteShapes::MARBus;
+const QPolygon MARBus = QPolygon(QVector<QPoint>()
+                                 << QPoint(combCircX + 30,151)
+                                 << QPoint(combCircX + 30,167)
+                                 // arrow:
+                                 << QPoint(AddrBus.x()+AddrBus.width()+arrowHDepth,167)
+                                 << QPoint(AddrBus.x()+AddrBus.width()+arrowHDepth,162)
+                                 << QPoint(AddrBus.x()+AddrBus.width()+arrowHOffset,177)
+                                 << QPoint(AddrBus.x()+AddrBus.width()+arrowHDepth,192)
+                                 << QPoint(AddrBus.x()+AddrBus.width()+arrowHDepth,187)
+                                 << QPoint(combCircX + 30,187)
+                                 << QPoint(combCircX + 30,202)
+                                 << QPoint(combCircX + 30 + 10,202)
+                                 // black line in the middle:
+                                 << QPoint(combCircX + 30 + 10,151)
+                                 << QPoint(combCircX + 30 + 10,177)
+                                 << QPoint(TwoByteShapes::AddrBus.right()+arrowHDepth,177)
+                                 << QPoint(combCircX + 30 + 10,177)
+                                 << QPoint(combCircX + 30 + 10,151));
 const QPolygon NZVCDataPath = OneByteShapes::NZVCDataPath;
 const QRect RegBank                         = OneByteShapes::RegBank;
 const QRect aRegLineEdit                    = OneByteShapes::aRegLineEdit;
@@ -170,24 +191,29 @@ const QPolygon CBus;
 const QPolygon AddrArrow                    = OneByteShapes::AddrArrow;
 //const QPolygon DataToMDRMuxBus;
 const QPolygon DataToMDROMuxBus = QPolygon(QVector<QPoint>()
-                                             // foot:
-                                             << QPoint(190, 344)
-                                             << QPoint(70,  344) << QPoint(70,  334)
-                                             << QPoint(180, 334)
-                                             // arrowhead:
-                                             << QPoint(180, 326) << QPoint(175, 326)
-                                             << QPoint(185, 316) << QPoint(195, 326)
-                                             << QPoint(190, 326));
+                                           // foot:
+                                           << QPoint(190 - iRegXOffset, 344)
+                                           << QPoint(70,  344)
+                                           << QPoint(70,  334)
+                                           << QPoint(180 - iRegXOffset, 334)
+                                           // arrowhead:
+                                           << QPoint(180 - iRegXOffset, 326)
+                                           << QPoint(175 - iRegXOffset, 326)
+                                           << QPoint(185 - iRegXOffset, 316)
+                                           << QPoint(195 - iRegXOffset, 326)
+                                           << QPoint(190 - iRegXOffset, 326));
 
 const QPolygon DataToMDREMuxBus = QPolygon(QVector<QPoint>()
-                                          // foot:
-                                           << QPoint(190, 344+100)
+                                           // foot:
+                                           << QPoint(190 - iRegXOffset, 344+100)
                                            << QPoint(80,  344+100) << QPoint(80,  334+100)
-                                           << QPoint(180, 334+100)
+                                           << QPoint(180 - iRegXOffset, 334+100)
                                            // arrowhead:
-                                           << QPoint(180, 326+100) << QPoint(175, 326+100)
-                                           << QPoint(185, 316+100) << QPoint(195, 326+100)
-                                           << QPoint(190, 326+100));
+                                           << QPoint(180 - iRegXOffset, 326+100)
+                                           << QPoint(175 - iRegXOffset, 326+100)
+                                           << QPoint(185 - iRegXOffset, 316+100)
+                                           << QPoint(195 - iRegXOffset, 326+100)
+                                           << QPoint(190 - iRegXOffset, 326+100));
 //const QPolygon MDRToDataBus;
 const QPolygon MDROToDataBus = QPolygon(QVector<QPoint>()  << QPoint(MDROLabel.x(), 258)
                                         << QPoint(DataBus.x()+DataBus.width()+13, 258)
@@ -205,10 +231,27 @@ const QPolygon MDREToDataBus = QPolygon(QVector<QPoint>()  << QPoint(MDROLabel.x
                                         << QPoint(DataBus.x()+DataBus.width()+13, 368)
                                         << QPoint(MDROLabel.x(), 368));
 
-
-
 //const QPolygon MDRMuxOutBus;
+const QPolygon MDROMuxOutBus = QPolygon(QVector<QPoint>()
+                                        << QPoint(combCircX + 25 + 05, MDROMuxerDataLabel.y()) // 293
+                                        << QPoint(combCircX + 25 + 05, MDROMuxerDataLabel.y() - 7)
+                                        << QPoint(combCircX + 25 + 00, MDROMuxerDataLabel.y() - 7)
+                                        << QPoint(combCircX + 25 + 10, MDROMuxerDataLabel.y() - 17)
+                                        << QPoint(combCircX + 25 + 20, MDROMuxerDataLabel.y() - 7)
+                                        << QPoint(combCircX + 25 + 15, MDROMuxerDataLabel.y() - 7)
+                                        << QPoint(combCircX + 25 + 15, MDROMuxerDataLabel.y()));
+
+const QPolygon MDREMuxOutBus = QPolygon(QVector<QPoint>()
+                                        << QPoint(combCircX + 25 + 05, MDREMuxerDataLabel.y()) // 293
+                                        << QPoint(combCircX + 25 + 05, MDREMuxerDataLabel.y() - 7)
+                                        << QPoint(combCircX + 25 + 00, MDREMuxerDataLabel.y() - 7)
+                                        << QPoint(combCircX + 25 + 10, MDREMuxerDataLabel.y() - 17)
+                                        << QPoint(combCircX + 25 + 20, MDREMuxerDataLabel.y() - 7)
+                                        << QPoint(combCircX + 25 + 15, MDREMuxerDataLabel.y() - 7)
+                                        << QPoint(combCircX + 25 + 15, MDREMuxerDataLabel.y()));
+
 const QPolygon ALUOutBus;
+
 
 }
 

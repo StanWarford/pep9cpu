@@ -60,6 +60,7 @@ enum Shapes {
     lineEditH = 21,
     regLineEditW = 60,
     regLineEditH = 19,
+
     arrowHDepth = 20, // really 15, but 20 with arrowHOffset
     arrowHOffset = 5,
 
@@ -210,7 +211,8 @@ enum CommonPositions {
                                              << QPoint(311,280) << QPoint(316,280)
                                              << QPoint(316,268) << QPoint(290,268));
 
-    const QPolygon MARBus = QPolygon(QVector<QPoint>() << QPoint(205,151)
+    const QPolygon MARBus = QPolygon(QVector<QPoint>()
+                                     << QPoint(205,151)
                                      << QPoint(205,167)
                                      // arrow:
                                      << QPoint(AddrBus.x()+AddrBus.width()+arrowHDepth,167)
@@ -219,7 +221,8 @@ enum CommonPositions {
                                      << QPoint(AddrBus.x()+AddrBus.width()+arrowHDepth,192)
                                      << QPoint(AddrBus.x()+AddrBus.width()+arrowHDepth,187)
                                      << QPoint(205,187)
-                                     << QPoint(205,202) << QPoint(215,202)
+                                     << QPoint(205,202)
+                                     << QPoint(215,202)
                                      // black line in the middle:
                                      << QPoint(215,151)
                                      << QPoint(215,177)
@@ -329,10 +332,12 @@ enum CommonPositions {
                                         << QPoint(304, 407) << QPoint(304, 424)
                                         << QPoint(356, 424) << QPoint(356, 394));
 
-    const QPolygon MDRMuxOutBus = QPolygon(QVector<QPoint>() << QPoint(205, 293)
+    const QPolygon MDRMuxOutBus = QPolygon(QVector<QPoint>()
+                                           << QPoint(205, MDRMuxerDataLabel.y()) // 293
                                            << QPoint(205, 286) << QPoint(200, 286)
                                            << QPoint(210, 276) << QPoint(220,286)
-                                           << QPoint(215, 286) << QPoint(215,293));
+                                           << QPoint(215, 286)
+                                           << QPoint(215,MDRMuxerDataLabel.y()));
 
     const QRect getRegRect(int row, int col) {
         QRect rect = QRect();

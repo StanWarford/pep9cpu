@@ -213,22 +213,6 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     MARCk->setPalette(QPalette(Qt::white));
     MARCk->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(MARCk);
-    MARALabel = new QLabel("0x00");
-    MARALabel->setGeometry(OneByteShapes::MARALabel);
-    MARALabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    MARALabel->setAutoFillBackground(false);
-    MARALabel->setPalette(QPalette(seqCircuitColor));
-    MARALabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-    scene->addWidget(MARALabel);
-    MARBLabel = new QLabel("0x00");
-    MARBLabel->setGeometry(OneByteShapes::MARBLabel);
-    MARBLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    MARBLabel->setPalette(QPalette(seqCircuitColor));
-    MARBLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-    scene->addWidget(MARBLabel);
-    // MARA & MARB
-    scene->addRect(OneByteShapes::MARBLabel);
-    scene->addRect(OneByteShapes::MARALabel);
 
     // MDRCk
     MDRCk = new QCheckBox("MDRCk");
@@ -882,6 +866,24 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         scene->addPolygon(OneByteShapes::MARBus,
                           QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
 
+        // MARA & MARB
+        MARALabel = new QLabel("0x00");
+        MARALabel->setGeometry(OneByteShapes::MARALabel);
+        MARALabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        MARALabel->setAutoFillBackground(false);
+        MARALabel->setPalette(QPalette(seqCircuitColor));
+        MARALabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+        scene->addWidget(MARALabel);
+        MARBLabel = new QLabel("0x00");
+        MARBLabel->setGeometry(OneByteShapes::MARBLabel);
+        MARBLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        MARBLabel->setPalette(QPalette(seqCircuitColor));
+        MARBLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+        scene->addWidget(MARBLabel);
+        scene->addRect(OneByteShapes::MARBLabel);
+        scene->addRect(OneByteShapes::MARALabel);
+
+
         // hide 2 byte bus stuff:
         MDROCk->hide();
         MDRECk->hide();
@@ -917,6 +919,24 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         // MARBus (MARA/MARB output bus)
         scene->addPolygon(TwoByteShapes::MARBus,
                           QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
+
+        // MARA & MARB
+        MARALabel = new QLabel("0x00");
+        MARALabel->setGeometry(TwoByteShapes::MARALabel);
+        MARALabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        MARALabel->setAutoFillBackground(false);
+        MARALabel->setPalette(QPalette(seqCircuitColor));
+        MARALabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+        scene->addWidget(MARALabel);
+        MARBLabel = new QLabel("0x00");
+        MARBLabel->setGeometry(TwoByteShapes::MARBLabel);
+        MARBLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        MARBLabel->setPalette(QPalette(seqCircuitColor));
+        MARBLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+        scene->addWidget(MARBLabel);
+        scene->addRect(TwoByteShapes::MARBLabel);
+        scene->addRect(TwoByteShapes::MARALabel);
+
 
         // hide 1 byte bus stuff:
         MDRCk->hide();
@@ -1080,8 +1100,6 @@ void CpuGraphicsItems::paint(QPainter *painter,
     painter->drawText(372,132, "ABus");
     painter->drawText(433,132, "BBus");
     painter->drawText(300,132, "CBus");
-    painter->drawText(138,215, "MARA");
-    painter->drawText(138,145, "MARB");
 
     painter->drawText(23,145, "System Bus");
 
@@ -1096,11 +1114,19 @@ void CpuGraphicsItems::paint(QPainter *painter,
 
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
+        painter->drawText(OneByteShapes::MARALabel.x() - 37, OneByteShapes::MARALabel.y() + 13, "MARA");
+        painter->drawText(OneByteShapes::MARBLabel.x() - 37, OneByteShapes::MARBLabel.y() + 13, "MARB");
+
         repaintMDRCk(painter);
+
         break;
     case Enu::TwoByteDataBus:
+        painter->drawText(TwoByteShapes::MARALabel.x() - 37, TwoByteShapes::MARALabel.y() + 13, "MARA");
+        painter->drawText(TwoByteShapes::MARBLabel.x() - 37, TwoByteShapes::MARBLabel.y() + 13, "MARB");
+
         repaintMDROCk(painter);
         repaintMDRECk(painter);
+
         break;
     default:
         break;
@@ -1735,13 +1761,33 @@ void CpuGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
 
         break;
     case Enu::TwoByteDataBus:
+        // MDRMuxOutBus (MDRMux to MDR arrow)
+        painter->drawPolygon(TwoByteShapes::MDREMuxOutBus);
+        painter->drawPolygon(TwoByteShapes::MDROMuxOutBus);
+
+        // finish up by drawing select lines:
+        color = Qt::gray;
+        if (MDREMuxTristateLabel->text() != "") {
+            color = Qt::black;
+        }
+        painter->setPen(color);
+        painter->setBrush(color);
+
+        // MDRMux Select
+        painter->drawLine(257,303, 265,303); painter->drawLine(265,303, 265,324);
+        painter->drawLine(265,324, 279,324); painter->drawLine(291,324, 335,324);
+        painter->drawLine(347,324, 416,324); painter->drawLine(428,324, 543,324);
+
+        painter->drawImage(QPoint(249,300),
+                           color == Qt::gray ? arrowLeftGray : arrowLeft);
+
 
         break;
     default:
         break;
     }
-
 }
+
 
 // ***************************************************************************
 // One byte model-specific functionality:
@@ -1964,6 +2010,7 @@ void CpuGraphicsItems::repaintMemWriteOneByteModel(QPainter *painter)
 // ***************************************************************************
 // Two byte model-specific functionality:
 // ***************************************************************************
+
 void CpuGraphicsItems::repaintMDROCk(QPainter *painter)
 {
 
