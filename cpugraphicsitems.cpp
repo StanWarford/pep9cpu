@@ -1112,6 +1112,8 @@ void CpuGraphicsItems::paint(QPainter *painter,
     repaintASelect(painter);
     repaintMARCk(painter);
 
+    painter->setPen(Qt::black);
+
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
         painter->drawText(OneByteShapes::MARALabel.x() - 37, OneByteShapes::MARALabel.y() + 13, "MARA");
