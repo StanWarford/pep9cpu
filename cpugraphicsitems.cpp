@@ -1840,9 +1840,9 @@ void CpuGraphicsItems::repaintMemReadOneByteModel(QPainter *painter)
     painter->setBrush(color);
 
     // memRead line from label to bus:
-    painter->drawLine(81,639, 543,639); //631+8
+    painter->drawLine(OneByteShapes::DataBus.right()+10,639, 543,639); //631+8
 
-    painter->drawImage(QPoint(73,636), //631+8-3
+    painter->drawImage(QPoint(OneByteShapes::DataBus.right()+5,636), //631+8-3
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     if (MemWriteTristateLabel->text() == "1") {
@@ -1919,16 +1919,16 @@ void CpuGraphicsItems::repaintMemWriteOneByteModel(QPainter *painter)
     painter->setBrush(color);
 
     // memWrite line from the label to the bus:
-    painter->drawLine(81,619, 543,619); //611+8
-    painter->drawImage(QPoint(73,616), //611+8-3
+    painter->drawLine(OneByteShapes::DataBus.right()+10,619, 543,619); //611+8
+    painter->drawImage(QPoint(OneByteShapes::DataBus.right()+5,616), //611+8-3
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     // draw line from memWrite to MDR out:
-    painter->drawEllipse(QPoint(96,619), 2, 2); //611+8
-    painter->drawLine(96,619, 96,345); //611+8
+    painter->drawEllipse(QPoint(OneByteShapes::DataBus.right()+25,619), 2, 2); //611+8
+    painter->drawLine(OneByteShapes::DataBus.right()+25,619, OneByteShapes::DataBus.right()+25,345); //611+8
     // memWrite line from the label to the bus:
-    painter->drawLine(96,333, 96,280); //268+12
-    painter->drawImage(QPoint(93,271), //96-3 //268+12-9
+    painter->drawLine(OneByteShapes::DataBus.right()+25,333, OneByteShapes::DataBus.right()+25,280); //268+12
+    painter->drawImage(QPoint(OneByteShapes::DataBus.right()+22,271), //96-3 //268+12-9
                        color == Qt::gray ? arrowUpGray : arrowUp);
 
     // repaint the MDR-to-main-bus line, based on if MemWrite is set or not
@@ -2063,9 +2063,9 @@ void CpuGraphicsItems::repaintMemReadTwoByteModel(QPainter *painter)
     painter->setBrush(color);
 
     // memRead line from label to bus:
-    painter->drawLine(81,639, 543,639); //631+8
+    painter->drawLine(TwoByteShapes::DataBus.right()+10,639, 543,639); //631+8
 
-    painter->drawImage(QPoint(73,636), //631+8-3
+    painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+5,636), //631+8-3
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     if (MemWriteTristateLabel->text() == "1") {
@@ -2144,16 +2144,23 @@ void CpuGraphicsItems::repaintMemWriteTwoByteModel(QPainter *painter)
     painter->setBrush(color);
 
     // memWrite line from the label to the bus:
-    painter->drawLine(81,619, 543,619); //611+8
-    painter->drawImage(QPoint(73,616), //611+8-3
+    painter->drawLine(TwoByteShapes::DataBus.right()+10,619, 543,619); //611+8
+    painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+5,616), //611+8-3
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 
-    // draw line from memWrite to MDR out:
-    painter->drawEllipse(QPoint(96,619), 2, 2); //611+8
-    painter->drawLine(96,619, 96,345); //611+8
+    // draw line from memWrite to MDRO out:
+    painter->drawEllipse(QPoint(TwoByteShapes::DataBus.right()+25,619), 2, 2); //611+8
+    painter->drawLine(TwoByteShapes::DataBus.right()+25,619, TwoByteShapes::DataBus.right()+25,345); //611+8
     // memWrite line from the label to the bus:
-    painter->drawLine(96,333, 96,280); //268+12
-    painter->drawImage(QPoint(93,271), //96-3 //268+12-9
+    painter->drawLine(TwoByteShapes::DataBus.right()+25,333, TwoByteShapes::DataBus.right()+25,280); //268+12
+    painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+22,271), //96-3 //268+12-9
+                       color == Qt::gray ? arrowUpGray : arrowUp);
+
+    // draw line from memWrite to MDRE out:
+    painter->drawEllipse(QPoint(TwoByteShapes::DataBus.right()+40,619), 2, 2); //611+8
+    painter->drawLine(TwoByteShapes::DataBus.right()+40,619, TwoByteShapes::DataBus.right()+40,380); //611+8
+    // memWrite line from the label to the bus:
+    painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+37,371), //96-3 //268+12-9
                        color == Qt::gray ? arrowUpGray : arrowUp);
 
     // repaint the MDR-to-main-bus line, based on if MemWrite is set or not
