@@ -72,71 +72,74 @@ enum CommonPositions {
 const QRect AddrBus = QRect(40, 151, 20, 600);
 const QRect DataBus = QRect(AddrBus.x()+AddrBus.width(), AddrBus.top() + 100, 20, 500);
 
-const QRect loadCkCheckbox              = OneByteShapes::loadCkCheckbox;
-const QRect cLineEdit                   = OneByteShapes::cLineEdit;
-const QRect cLabel                      = OneByteShapes::cLabel;
-const QRect bLineEdit                   = OneByteShapes::bLineEdit;
-const QRect bLabel                      = OneByteShapes::bLabel;
-const QRect aLineEdit                   = OneByteShapes::aLineEdit;
-const QRect aLabel                      = OneByteShapes::aLabel;
-const QRect MARCkCheckbox               = OneByteShapes::MARCkCheckbox; // I think this stays the same
-const QRect MARALabel                   = QRect(combCircX, 202, dataLabelW, dataLabelH);
-const QRect MARBLabel                   = QRect(combCircX, 132, dataLabelW, dataLabelH);
+const QRect loadCkCheckbox          = QRect(ctrlInputX, 18, check2W,   check2H);
+const QRect cLineEdit               = QRect(ctrlInputX, 39, lineEditW, lineEditH);
+const QRect cLabel                  = QRect(ctrlLabelX, 41, labelW,    labelH);
+const QRect bLineEdit               = QRect(ctrlInputX, 61, lineEditW, lineEditH);
+const QRect bLabel                  = QRect(ctrlLabelX, 63, labelW,    labelH);
+const QRect aLineEdit               = QRect(ctrlInputX, 83, lineEditW, lineEditH);
+const QRect aLabel                  = QRect(ctrlLabelX, 85, labelW,    labelH);
 
-const QRect MDROCkCheckbox       = QRect(ctrlInputX, 189, checkW+10, checkH);
-const QRect MDRECkCheckbox       = QRect(ctrlInputX, 209, checkW+10, checkH);
+const QRect MARCkCheckbox           = OneByteShapes::MARCkCheckbox; // I think this stays the same
+const QRect MARALabel               = QRect(combCircX, 202, dataLabelW, dataLabelH);
+const QRect MARBLabel               = QRect(combCircX, 132, dataLabelW, dataLabelH);
 
-const QRect MARMuxTristateLabel  = QRect(ctrlInputX, 149, labelTriW, labelTriH);
-const QRect MDROMuxTristateLabel = QRect(ctrlInputX, 245, labelTriW, labelTriH);
-const QRect MDREMuxTristateLabel = QRect(ctrlInputX, 265, labelTriW, labelTriH);
-const QRect EOMuxTristateLabel   = QRect(ctrlInputX, 316, labelTriW, labelTriH);
+const QRect MDROCkCheckbox          = QRect(ctrlInputX, 189, checkW+10, checkH);
+const QRect MDRECkCheckbox          = QRect(ctrlInputX, 209, checkW+10, checkH);
 
-const QRect MARMuxLabel          = QRect(ctrlLabelX, MARMuxTristateLabel.y(), labelW+20, labelH);
-const QRect MDROMuxLabel         = QRect(ctrlLabelX, MDROMuxTristateLabel.y(), labelW+20, labelH);
-const QRect MDREMuxLabel         = QRect(ctrlLabelX, MDREMuxTristateLabel.y(), labelW+20, labelH);
-const QRect EOMuxLabel           = QRect(ctrlLabelX, EOMuxTristateLabel.y(), labelW, labelH);
+const QRect MARMuxTristateLabel     = QRect(ctrlInputX, 149, labelTriW, labelTriH);
+const QRect MDROMuxTristateLabel    = QRect(ctrlInputX, 245, labelTriW, labelTriH);
+const QRect MDREMuxTristateLabel    = QRect(ctrlInputX, 265, labelTriW, labelTriH);
+const QRect EOMuxTristateLabel      = QRect(ctrlInputX, 316, labelTriW, labelTriH);
 
-const QRect MDROMuxerDataLabel   = QRect(combCircX,293, dataLabelW, dataLabelH);
-const QRect MDREMuxerDataLabel   = QRect(combCircX,393, dataLabelW, dataLabelH);
+const QRect MARMuxLabel             = QRect(ctrlLabelX, MARMuxTristateLabel.y(), labelW+20, labelH);
+const QRect MDROMuxLabel            = QRect(ctrlLabelX, MDROMuxTristateLabel.y(), labelW+20, labelH);
+const QRect MDREMuxLabel            = QRect(ctrlLabelX, MDREMuxTristateLabel.y(), labelW+20, labelH);
+const QRect EOMuxLabel              = QRect(ctrlLabelX, EOMuxTristateLabel.y(), labelW, labelH);
+
+const QRect MDROMuxerDataLabel      = QRect(combCircX,293, dataLabelW, dataLabelH);
+const QRect MDREMuxerDataLabel      = QRect(combCircX,393, dataLabelW, dataLabelH);
 const QRect EOMuxerDataLabel;
 
-const QRect MDROLabel = QRect(combCircX, 254, dataLabelW, dataLabelH);
-const QRect MDRELabel = QRect(combCircX, 354, dataLabelW, dataLabelH);
+const QRect MDROLabel               = QRect(combCircX, 254, dataLabelW, dataLabelH);
+const QRect MDRELabel               = QRect(combCircX, 354, dataLabelW, dataLabelH);
 
+const QRect aMuxTristateLabel       = QRect(ctrlInputX, 295, labelTriW, 21);
+const QRect aMuxLabel               = QRect(ctrlLabelX, aMuxTristateLabel.y(), labelW, labelH);
+const QRect aMuxerDataLabel         = QRect(306, 293, dataLabelW, dataLabelH);
+const QRect cMuxTristateLabel       = QRect(ctrlInputX, 348, labelTriW, labelTriH);
+const QRect cMuxLabel               = QRect(ctrlLabelX, cMuxTristateLabel.y(), labelW, labelH);
+const QRect cMuxerLabel             = QRect(250, 374, dataLabelW, dataLabelH);
+const QRect ALULineEdit             = QRect(ctrlInputX,  368, 26,     lineEditH);
+const QRect ALULabel                = QRect(ctrlLabelX,  370, 31,     labelH);
+const QRect ALUFunctionLabel        = QRect(332, 355, 98, 20);
 
-const QRect aMuxLabel                 = OneByteShapes::aMuxLabel;
-const QRect aMuxerDataLabel           = OneByteShapes::aMuxerDataLabel;
-const QRect aMuxTristateLabel         = OneByteShapes::aMuxTristateLabel;
-const QRect cMuxLabel                 = OneByteShapes::cMuxLabel;
-const QRect cMuxerLabel               = OneByteShapes::cMuxerLabel;
-const QRect cMuxTristateLabel         = OneByteShapes::cMuxTristateLabel;
-const QRect ALULineEdit               = OneByteShapes::ALULineEdit;
-const QRect ALULabel                  = OneByteShapes::ALULabel;
-const QRect ALUFunctionLabel          = OneByteShapes::ALUFunctionLabel;
-const QRect CSMuxLabel                = OneByteShapes::CSMuxLabel;
-const QRect CSMuxerDataLabel          = OneByteShapes::CSMuxerDataLabel;
-const QRect CSMuxTristateLabel        = OneByteShapes::CSMuxTristateLabel;
-const QRect SCkCheckBox               = OneByteShapes::SCkCheckBox;
-const QRect sBitLabel                 = OneByteShapes::sBitLabel;
-const QRect CCkCheckBox               = OneByteShapes::CCkCheckBox;
-const QRect cBitLabel                 = OneByteShapes::cBitLabel;
-const QRect VCkCheckBox               = OneByteShapes::VCkCheckBox;
-const QRect vBitLabel                 = OneByteShapes::vBitLabel;
-const QRect AndZLabel                 = OneByteShapes::AndZLabel;
-const QRect AndZTristateLabel         = OneByteShapes::AndZTristateLabel;
-const QRect AndZMuxLabel              = OneByteShapes::AndZMuxLabel;
-const QRect ZCkCheckBox               = OneByteShapes::ZCkCheckBox;
-const QRect zBitLabel                 = OneByteShapes::zBitLabel;
-const QRect NCkCheckBox               = OneByteShapes::NCkCheckBox;
-const QRect nBitLabel                 = OneByteShapes::nBitLabel;
+const QRect CSMuxLabel              = QRect(ctrlLabelX,  399, labelW, labelH);
+const QRect CSMuxerDataLabel        = QRect(statusBitsX+19-69, 399, dataLabelW, dataLabelH);
+const QRect CSMuxTristateLabel      = QRect(ctrlInputX,  399, 25,     21);
+const QRect SCkCheckBox             = QRect(ctrlInputX,  437, checkW, checkH);
+const QRect sBitLabel               = QRect(statusBitsX, 437, 19,     dataLabelH);
+const QRect CCkCheckBox             = QRect(ctrlInputX,  464, checkW, checkH);
+const QRect cBitLabel               = QRect(statusBitsX, 463, 19,     dataLabelH);
+const QRect VCkCheckBox             = QRect(ctrlInputX,  491, checkW, checkH);
+const QRect vBitLabel               = QRect(statusBitsX, 491, 19,     dataLabelH);
+const QRect AndZLabel               = QRect(ctrlLabelX,  517, 45,     20);
+const QRect AndZTristateLabel       = QRect(ctrlInputX, 517, labelTriW,labelTriH);
+const QRect AndZMuxLabel            = QRect(416, 544, 41,21);
+const QRect ZCkCheckBox             = QRect(ctrlInputX, 544, 60, 20);
+const QRect zBitLabel               = QRect(statusBitsX, 544, 19, dataLabelH);
+const QRect NCkCheckBox             = QRect(ctrlInputX, 582+4, checkW, checkH);
+const QRect nBitLabel               = QRect(statusBitsX, 582+4, 19, dataLabelH);
+
 const QRect MemWriteLabel           = QRect(ctrlLabelX, 711, check2W, check2H);
 const QRect MemWriteTristateLabel   = QRect(ctrlInputX, 711, labelTriW, labelTriH);
 const QRect MemReadLabel            = QRect(ctrlLabelX, 731, check2W, check2H);
 const QRect MemReadTristateLabel    = QRect(ctrlInputX, 731, labelTriW, labelTriH);
-const Arrow loadCkSelect              = OneByteShapes::loadCkSelect;
-const Arrow CSelect                   = OneByteShapes::CSelect;
-const Arrow BSelect                   = OneByteShapes::BSelect;
-const Arrow ASelect                   = OneByteShapes::ASelect;
+
+const Arrow loadCkSelect            = OneByteShapes::loadCkSelect;
+const Arrow CSelect                 = OneByteShapes::CSelect;
+const Arrow BSelect                 = OneByteShapes::BSelect;
+const Arrow ASelect                 = OneByteShapes::ASelect;
 const Arrow MARCk = Arrow(QVector<QPoint>() << QPoint(232-40,155)
                                         << QPoint(232-40,191),
                           QVector<QLine > () << QLine(428,177, 543,177)
