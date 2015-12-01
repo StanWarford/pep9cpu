@@ -446,35 +446,6 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     scene->addRect(QRectF(nBitLabel->pos(), nBitLabel->size())); // N
     scene->addRect(QRectF(sBitLabel->pos(), sBitLabel->size())); // S
 
-    MemWriteLabel = new QLabel("MemWrite");
-    MemWriteLabel->setGeometry(OneByteShapes::MemWriteLabel);
-    MemWriteLabel->setPalette(QPalette(Qt::white));
-    MemWriteLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-    scene->addWidget(MemWriteLabel);
-    MemWriteTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
-    MemWriteTristateLabel->setGeometry(OneByteShapes::MemWriteTristateLabel);
-    MemWriteTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    MemWriteTristateLabel->setPalette(QPalette(Qt::white));
-    MemWriteTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-    scene->addWidget(MemWriteTristateLabel);
-    scene->addRect(QRectF(MemWriteTristateLabel->pos(),
-                          MemWriteTristateLabel->size()), QPen(Qt::gray));
-
-    MemReadLabel = new QLabel("MemRead");
-    MemReadLabel->setGeometry(OneByteShapes::MemReadLabel);
-    MemReadLabel->setPalette(QPalette(Qt::white));
-    MemReadLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-    scene->addWidget(MemReadLabel);
-    MemReadTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
-    MemReadTristateLabel->setGeometry(OneByteShapes::MemReadTristateLabel);
-    MemReadTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    MemReadTristateLabel->setPalette(QPalette(Qt::white));
-    MemReadTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-    scene->addWidget(MemReadTristateLabel);
-    scene->addRect(QRectF(MemReadTristateLabel->pos(),
-                          MemReadTristateLabel->size()), QPen(Qt::gray));
-
-
     // Registers
     scene->addRect(OneByteShapes::RegBank, QPen(QBrush(QColor(Qt::red), Qt::SolidPattern),
                                         2, Qt::DotLine,
@@ -881,8 +852,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         MARBLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
         scene->addWidget(MARBLabel);
         scene->addRect(OneByteShapes::MARBLabel);
-        scene->addRect(OneByteShapes::MARALabel);
-
+        scene->addRect(OneByteShapes::MARALabel);     
 
         // hide 2 byte bus stuff:
         MDROCk->hide();
@@ -914,6 +884,36 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
                           QPen(Qt::black), QBrush(combCircuitYellow));
         // note: left arrow gets drawn in repaintMemWrite
 
+        // MemRead/Write
+        MemWriteLabel = new QLabel("MemWrite");
+        MemWriteLabel->setGeometry(OneByteShapes::MemWriteLabel);
+        MemWriteLabel->setPalette(QPalette(Qt::white));
+        MemWriteLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+        scene->addWidget(MemWriteLabel);
+        MemWriteTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
+        MemWriteTristateLabel->setGeometry(OneByteShapes::MemWriteTristateLabel);
+        MemWriteTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        MemWriteTristateLabel->setPalette(QPalette(Qt::white));
+        MemWriteTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+        scene->addWidget(MemWriteTristateLabel);
+        scene->addRect(QRectF(MemWriteTristateLabel->pos(),
+                              MemWriteTristateLabel->size()), QPen(Qt::gray));
+
+        MemReadLabel = new QLabel("MemRead");
+        MemReadLabel->setGeometry(OneByteShapes::MemReadLabel);
+        MemReadLabel->setPalette(QPalette(Qt::white));
+        MemReadLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+        scene->addWidget(MemReadLabel);
+        MemReadTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
+        MemReadTristateLabel->setGeometry(OneByteShapes::MemReadTristateLabel);
+        MemReadTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        MemReadTristateLabel->setPalette(QPalette(Qt::white));
+        MemReadTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+        scene->addWidget(MemReadTristateLabel);
+        scene->addRect(QRectF(MemReadTristateLabel->pos(),
+                              MemReadTristateLabel->size()), QPen(Qt::gray));
+
+
     }
     else if (model == Enu::TwoByteDataBus) {
         // MARBus (MARA/MARB output bus)
@@ -936,6 +936,35 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         scene->addWidget(MARBLabel);
         scene->addRect(TwoByteShapes::MARBLabel);
         scene->addRect(TwoByteShapes::MARALabel);
+
+        // MemRead/Write
+        MemWriteLabel = new QLabel("MemWrite");
+        MemWriteLabel->setGeometry(TwoByteShapes::MemWriteLabel);
+        MemWriteLabel->setPalette(QPalette(Qt::white));
+        MemWriteLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+        scene->addWidget(MemWriteLabel);
+        MemWriteTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
+        MemWriteTristateLabel->setGeometry(TwoByteShapes::MemWriteTristateLabel);
+        MemWriteTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        MemWriteTristateLabel->setPalette(QPalette(Qt::white));
+        MemWriteTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+        scene->addWidget(MemWriteTristateLabel);
+        scene->addRect(QRectF(MemWriteTristateLabel->pos(),
+                              MemWriteTristateLabel->size()), QPen(Qt::gray));
+
+        MemReadLabel = new QLabel("MemRead");
+        MemReadLabel->setGeometry(TwoByteShapes::MemReadLabel);
+        MemReadLabel->setPalette(QPalette(Qt::white));
+        MemReadLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+        scene->addWidget(MemReadLabel);
+        MemReadTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
+        MemReadTristateLabel->setGeometry(TwoByteShapes::MemReadTristateLabel);
+        MemReadTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        MemReadTristateLabel->setPalette(QPalette(Qt::white));
+        MemReadTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+        scene->addWidget(MemReadTristateLabel);
+        scene->addRect(QRectF(MemReadTristateLabel->pos(),
+                              MemReadTristateLabel->size()), QPen(Qt::gray));
 
 
         // hide 1 byte bus stuff:
@@ -1250,21 +1279,17 @@ void CpuGraphicsItems::repaintASelect(QPainter *painter)
 
 void CpuGraphicsItems::repaintMARCk(QPainter *painter)
 {
-    QColor color;
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
+        repaintMARCkOneByteModel(painter);
+        break;
+    case Enu::TwoByteDataBus:
+        repaintMARCkTwoByteModel(painter);
+        break;
+    default:
+        break;
+    }
 
-    color = MARCk->isChecked() ? Qt::black : Qt::gray;
-    painter->setPen(QPen(QBrush(color), 1));
-    painter->setBrush(color);
-
-    // MARCk
-    painter->drawLines(OneByteShapes::MARCk._lines);
-
-    painter->drawEllipse(QPoint(235,177), 2, 2);
-
-    painter->drawImage(QPoint(232,155),
-                       color == Qt::gray ? arrowUpGray : arrowUp);
-    painter->drawImage(QPoint(232,191),
-                       color == Qt::gray ? arrowDownGray : arrowDown);
 }
 
 
@@ -1795,6 +1820,26 @@ void CpuGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
 // One byte model-specific functionality:
 // ***************************************************************************
 
+void CpuGraphicsItems::repaintMARCkOneByteModel(QPainter *painter)
+{
+    QColor color;
+
+    color = MARCk->isChecked() ? Qt::black : Qt::gray;
+    painter->setPen(QPen(QBrush(color), 1));
+    painter->setBrush(color);
+
+    // MARCk
+    painter->drawLines(OneByteShapes::MARCk._lines);
+
+    painter->drawEllipse(QPoint(235,177), 2, 2);
+
+    painter->drawImage(QPoint(232,155),
+                       color == Qt::gray ? arrowUpGray : arrowUp);
+    painter->drawImage(QPoint(232,191),
+                       color == Qt::gray ? arrowDownGray : arrowDown);
+}
+
+
 void CpuGraphicsItems::repaintMDRCk(QPainter *painter)
 {
     QColor color;
@@ -2013,6 +2058,26 @@ void CpuGraphicsItems::repaintMemWriteOneByteModel(QPainter *painter)
 // Two byte model-specific functionality:
 // ***************************************************************************
 
+void CpuGraphicsItems::repaintMARCkTwoByteModel(QPainter *painter)
+{
+    QColor color;
+
+    color = MARCk->isChecked() ? Qt::black : Qt::gray;
+    painter->setPen(QPen(QBrush(color), 1));
+    painter->setBrush(color);
+
+    // MARCk
+    painter->drawLines(TwoByteShapes::MARCk._lines);
+
+    painter->drawEllipse(QPoint(235-40,177), 2, 2);
+
+    painter->drawImage(QPoint(232-40,155),
+                       color == Qt::gray ? arrowUpGray : arrowUp);
+    painter->drawImage(QPoint(232-40,191),
+                       color == Qt::gray ? arrowDownGray : arrowDown);
+}
+
+
 void CpuGraphicsItems::repaintMDROCk(QPainter *painter)
 {
 
@@ -2063,9 +2128,9 @@ void CpuGraphicsItems::repaintMemReadTwoByteModel(QPainter *painter)
     painter->setBrush(color);
 
     // memRead line from label to bus:
-    painter->drawLine(TwoByteShapes::DataBus.right()+10,639, 543,639); //631+8
+    painter->drawLine(TwoByteShapes::DataBus.right()+10,739, 543,739); //631+8
 
-    painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+5,636), //631+8-3
+    painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+5,736), //631+8-3
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     if (MemWriteTristateLabel->text() == "1") {
@@ -2144,21 +2209,21 @@ void CpuGraphicsItems::repaintMemWriteTwoByteModel(QPainter *painter)
     painter->setBrush(color);
 
     // memWrite line from the label to the bus:
-    painter->drawLine(TwoByteShapes::DataBus.right()+10,619, 543,619); //611+8
-    painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+5,616), //611+8-3
+    painter->drawLine(TwoByteShapes::DataBus.right()+10,719, 543,719); //611+8
+    painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+5,716), //611+8-3
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     // draw line from memWrite to MDRO out:
-    painter->drawEllipse(QPoint(TwoByteShapes::DataBus.right()+25,619), 2, 2); //611+8
-    painter->drawLine(TwoByteShapes::DataBus.right()+25,619, TwoByteShapes::DataBus.right()+25,345); //611+8
+    painter->drawEllipse(QPoint(TwoByteShapes::DataBus.right()+25,719), 2, 2); //611+8
+    painter->drawLine(TwoByteShapes::DataBus.right()+25,719, TwoByteShapes::DataBus.right()+25,345); //611+8
     // memWrite line from the label to the bus:
     painter->drawLine(TwoByteShapes::DataBus.right()+25,333, TwoByteShapes::DataBus.right()+25,280); //268+12
     painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+22,271), //96-3 //268+12-9
                        color == Qt::gray ? arrowUpGray : arrowUp);
 
     // draw line from memWrite to MDRE out:
-    painter->drawEllipse(QPoint(TwoByteShapes::DataBus.right()+40,619), 2, 2); //611+8
-    painter->drawLine(TwoByteShapes::DataBus.right()+40,619, TwoByteShapes::DataBus.right()+40,380); //611+8
+    painter->drawEllipse(QPoint(TwoByteShapes::DataBus.right()+40,719), 2, 2); //611+8
+    painter->drawLine(TwoByteShapes::DataBus.right()+40,719, TwoByteShapes::DataBus.right()+40,380); //611+8
     // memWrite line from the label to the bus:
     painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+37,371), //96-3 //268+12-9
                        color == Qt::gray ? arrowUpGray : arrowUp);
@@ -2198,9 +2263,9 @@ void CpuGraphicsItems::repaintMemWriteTwoByteModel(QPainter *painter)
 
     // Main Bus
     // Main ADDR bus:
-    painter->drawRect(OneByteShapes::AddrBus);
+    painter->drawRect(TwoByteShapes::AddrBus);
     // left arrow from addr bus to memory:
-    painter->drawPolygon(OneByteShapes::AddrArrow);
+    painter->drawPolygon(TwoByteShapes::AddrArrow);
 
     // Draw DATA bus stuff:
     // figure out the color:

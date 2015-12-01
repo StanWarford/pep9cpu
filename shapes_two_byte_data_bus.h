@@ -69,8 +69,8 @@ enum CommonPositions {
 
 
 // input/label/control section:
-const QRect AddrBus = OneByteShapes::AddrBus;
-const QRect DataBus = QRect(AddrBus.x()+AddrBus.width(), AddrBus.top() + 100, 20, 399);
+const QRect AddrBus = QRect(40, 151, 20, 600);
+const QRect DataBus = QRect(AddrBus.x()+AddrBus.width(), AddrBus.top() + 100, 20, 500);
 
 const QRect loadCkCheckbox              = OneByteShapes::loadCkCheckbox;
 const QRect cLineEdit                   = OneByteShapes::cLineEdit;
@@ -129,15 +129,21 @@ const QRect ZCkCheckBox               = OneByteShapes::ZCkCheckBox;
 const QRect zBitLabel                 = OneByteShapes::zBitLabel;
 const QRect NCkCheckBox               = OneByteShapes::NCkCheckBox;
 const QRect nBitLabel                 = OneByteShapes::nBitLabel;
-const QRect MemWriteLabel             = OneByteShapes::MemWriteLabel;
-const QRect MemWriteTristateLabel     = OneByteShapes::MemWriteTristateLabel;
-const QRect MemReadLabel              = OneByteShapes::MemReadLabel;
-const QRect MemReadTristateLabel      = OneByteShapes::MemReadTristateLabel;
+const QRect MemWriteLabel           = QRect(ctrlLabelX, 711, check2W, check2H);
+const QRect MemWriteTristateLabel   = QRect(ctrlInputX, 711, labelTriW, labelTriH);
+const QRect MemReadLabel            = QRect(ctrlLabelX, 731, check2W, check2H);
+const QRect MemReadTristateLabel    = QRect(ctrlInputX, 731, labelTriW, labelTriH);
 const Arrow loadCkSelect              = OneByteShapes::loadCkSelect;
 const Arrow CSelect                   = OneByteShapes::CSelect;
 const Arrow BSelect                   = OneByteShapes::BSelect;
 const Arrow ASelect                   = OneByteShapes::ASelect;
-const Arrow MARCk                     = OneByteShapes::MARCk;
+const Arrow MARCk = Arrow(QVector<QPoint>() << QPoint(232-40,155)
+                                        << QPoint(232-40,191),
+                          QVector<QLine > () << QLine(428,177, 543,177)
+                                        << QLine(367,177, 416,177)
+                                        << QLine(291,177, 355,177)
+                                        << QLine(235-40,177, 279,177)
+                                        << QLine(235-40,163, 235-40,191));
 //const Arrow MDRCk                   = OneByteShapes::MDRCk;
 const Arrow AMuxSelect                = OneByteShapes::AMuxSelect;
 const QPolygon AMuxBus                = OneByteShapes::AMuxBus;

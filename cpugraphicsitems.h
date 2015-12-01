@@ -183,12 +183,16 @@ private:
     void repaintMDRMuxSelect(QPainter *painter);
 
     // one byte specific repainting methods
+    void repaintMARCkOneByteModel(QPainter *painter);
+
     void repaintMDRCk(QPainter *painter);
 
     void repaintMemReadOneByteModel(QPainter *painter);
     void repaintMemWriteOneByteModel(QPainter *painter);
 
     // two byte specific repainting methods
+    void repaintMARCkTwoByteModel(QPainter *painter);
+
     void repaintMDROCk(QPainter *painter);
     void repaintMDRECk(QPainter *painter);
 

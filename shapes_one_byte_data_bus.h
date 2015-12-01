@@ -145,8 +145,8 @@ enum CommonPositions {
     // registers
 
     // lines and shapes:
-    const QRect AddrBus = QRect(40, 151, 20, 499);
-    const QRect DataBus = QRect(AddrBus.x()+AddrBus.width(), AddrBus.top() + 100, 10, 399);
+    const QRect AddrBus = QRect(40, 151, 20, 500);
+    const QRect DataBus = QRect(AddrBus.x()+AddrBus.width(), AddrBus.top() + 100, 10, 400);
 
     const Arrow loadCkSelect = Arrow(QVector<QPoint>() << QPoint(499, 24),
                                      QVector<QLine>() << QLine(543, 27, 499, 27));
