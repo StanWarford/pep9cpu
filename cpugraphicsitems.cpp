@@ -49,9 +49,29 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     combCircuitYellow = QColor(0xEAC124).lighter(120);
     combCircuitGreen = QColor(0x739211).lighter(130);
 
+    // set up arrow heads:
+    arrowLeft = QImage(":/images/arrowhead.png");
+    arrowRight = arrowLeft.mirrored(true, false);
+    QTransform t;
+    t.rotate(90);
+    arrowUp = arrowLeft.transformed(t);
+    t.rotate(-180);
+    arrowDown = arrowLeft.transformed(t);
+
+    arrowLeftGray = QImage(":/images/arrowhead_gray.png");
+    arrowRightGray = arrowLeftGray.mirrored(true, false);
+    QTransform t_gray;
+    t_gray.rotate(90);
+    arrowUpGray = arrowLeftGray.transformed(t_gray);
+    t_gray.rotate(-180);
+    arrowDownGray = arrowLeftGray.transformed(t_gray);
+
     // save our current model for this set of items;
     model = type;
 
+    // ************************************
+    // two byte exclusive stuff
+    // ************************************
     MDROCk = new QCheckBox("MDROCk");
     MDROCk->setGeometry(TwoByteShapes::MDROCkCheckbox);
     MDROCk->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
@@ -112,18 +132,6 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     EOMuxTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(EOMuxTristateLabel);
 
-    MARMuxLabel = new QLabel("MARMux");
-    MARMuxLabel->setGeometry(TwoByteShapes::MARMuxLabel);
-    MARMuxLabel->setPalette(QPalette(Qt::white));
-    MARMuxLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-    scene->addWidget(MARMuxLabel);
-    MARMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
-    MARMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    MARMuxTristateLabel->setGeometry(TwoByteShapes::MARMuxTristateLabel);
-    MARMuxTristateLabel->setPalette(QPalette(Qt::white));
-    MARMuxTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-    scene->addWidget(MARMuxTristateLabel);
-
     MDRELabel = new QLabel("0x00");
     MDRELabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     MDRELabel->setGeometry(TwoByteShapes::MDRELabel);
@@ -138,27 +146,38 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     MDROLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(MDROLabel);
 
-    // setup arrow heads:
-    arrowLeft = QImage(":/images/arrowhead.png");
-    arrowRight = arrowLeft.mirrored(true, false);
-    QTransform t;
-    t.rotate(90);
-    arrowUp = arrowLeft.transformed(t);
-    t.rotate(-180);
-    arrowDown = arrowLeft.transformed(t);
+    MARMuxLabel = new QLabel("MARMux");
+    MARMuxLabel->setGeometry(TwoByteShapes::MARMuxLabel);
+    MARMuxLabel->setPalette(QPalette(Qt::white));
+    MARMuxLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MARMuxLabel);
+    MARMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
+    MARMuxTristateLabel->setGeometry(TwoByteShapes::MARMuxTristateLabel);
+    MARMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    MARMuxTristateLabel->setPalette(QPalette(Qt::white));
+    MARMuxTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MARMuxTristateLabel);
+    // ************************************
+    // end two byte exclusive stuff
+    // ************************************
 
-    arrowLeftGray = QImage(":/images/arrowhead_gray.png");
-    arrowRightGray = arrowLeftGray.mirrored(true, false);
-    QTransform t_gray;
-    t_gray.rotate(90);
-    arrowUpGray = arrowLeftGray.transformed(t_gray);
-    t_gray.rotate(-180);
-    arrowDownGray = arrowLeftGray.transformed(t_gray);
+    // MARA & MARB
+    MARALabel = new QLabel("0x00");
+    MARALabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    MARALabel->setAutoFillBackground(false);
+    MARALabel->setPalette(QPalette(seqCircuitColor));
+    MARALabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MARALabel);
+    MARBLabel = new QLabel("0x00");
+    MARBLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    MARBLabel->setPalette(QPalette(seqCircuitColor));
+    MARBLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MARBLabel);
 
     // LoadCk
     loadCk = new QCheckBox("LoadCk");
-    loadCk->setPalette(QPalette(Qt::white));
     loadCk->setGeometry(OneByteShapes::loadCkCheckbox);
+    loadCk->setPalette(QPalette(Qt::white));
     loadCk->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(loadCk);
 
@@ -174,8 +193,8 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     cLineEdit->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(cLineEdit);
     cLabel = new QLabel("C");
-    cLabel->setPalette(QPalette(Qt::white));
     cLabel->setGeometry(OneByteShapes::cLabel);
+    cLabel->setPalette(QPalette(Qt::white));
     cLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(cLabel);
 
@@ -221,6 +240,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     MDRCk->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(MDRCk);
 
+    // AMux
     aMuxLabel = new QLabel("AMux");
     aMuxLabel->setGeometry(OneByteShapes::aMuxLabel);
     aMuxLabel->setPalette(QPalette(Qt::white));
@@ -238,9 +258,6 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     aMuxTristateLabel->setPalette(QPalette(Qt::white));
     aMuxTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(aMuxTristateLabel);
-    scene->addRect(OneByteShapes::aMuxTristateLabel, QPen(Qt::gray));
-    // AMux
-    aMuxerBorder = scene->addRect(OneByteShapes::aMuxerDataLabel);
 
     // MDRMux
     MDRMuxLabel = new QLabel("MDRMux");
@@ -286,8 +303,6 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     cMuxTristateLabel->setPalette(QPalette(Qt::white));
     cMuxTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(cMuxTristateLabel);
-    scene->addRect(OneByteShapes::cMuxTristateLabel, QPen(Qt::gray));
-    scene->addRect(OneByteShapes::cMuxerLabel);
 
     // ALU
     // keep this before the label that goes with it, or the line edit
@@ -341,10 +356,6 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     CSMuxTristateLabel->setPalette(QPalette(Qt::white));
     CSMuxTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(CSMuxTristateLabel);
-    scene->addRect(QRectF(CSMuxTristateLabel->pos(),
-                          CSMuxTristateLabel->size()),QPen(Qt::gray));
-    scene->addRect(QRectF(CSMuxerDataLabel->pos(),
-                          CSMuxerDataLabel->size()));
 
     // SCk
     SCkCheckBox = new QCheckBox ("SCk");
@@ -400,8 +411,6 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     AndZTristateLabel->setPalette(QPalette(Qt::white));
     AndZTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(AndZTristateLabel);
-    scene->addRect(QRectF(AndZTristateLabel->pos(), AndZTristateLabel->size()),
-                   QPen(Qt::gray));
 
     AndZMuxLabel = new QLabel("AndZ");
     AndZMuxLabel->setGeometry(OneByteShapes::AndZMuxLabel);
@@ -409,7 +418,6 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     AndZMuxLabel->setPalette(QPalette(Qt::white));
     AndZMuxLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(AndZMuxLabel);
-    scene->addRect(OneByteShapes::AndZMuxLabel);
 
     // ZCk
     ZCkCheckBox = new QCheckBox("ZCk");
@@ -427,17 +435,40 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
 
     // NCk
     NCkCheckBox = new QCheckBox ("NCk");
-    NCkCheckBox->setGeometry(OneByteShapes::NCkCheckBox); //582+4
+    NCkCheckBox->setGeometry(OneByteShapes::NCkCheckBox);
     NCkCheckBox->setPalette(QPalette(Qt::white));
     NCkCheckBox->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(NCkCheckBox);
     nBitLabel = new TristateLabel(0, TristateLabel::ZeroOne);
     nBitLabel->setText("0");
-    nBitLabel->setGeometry(OneByteShapes::nBitLabel); //582+4
+    nBitLabel->setGeometry(OneByteShapes::nBitLabel);
     nBitLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     nBitLabel->setPalette(QPalette(seqCircuitColor));
     nBitLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(nBitLabel);
+
+    // MemRead/Write
+    MemWriteLabel = new QLabel("MemWrite");
+    MemWriteLabel->setPalette(QPalette(Qt::white));
+    MemWriteLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MemWriteLabel);
+    MemWriteTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
+    MemWriteTristateLabel->setGeometry(OneByteShapes::MemWriteTristateLabel);
+    MemWriteTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    MemWriteTristateLabel->setPalette(QPalette(Qt::white));
+    MemWriteTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MemWriteTristateLabel);
+
+    MemReadLabel = new QLabel("MemRead");
+    MemReadLabel->setPalette(QPalette(Qt::white));
+    MemReadLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MemReadLabel);
+    MemReadTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
+    MemReadTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    MemReadTristateLabel->setPalette(QPalette(Qt::white));
+    MemReadTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MemReadTristateLabel);
+
 
     // Status Bits
     scene->addRect(QRectF(cBitLabel->pos(), cBitLabel->size())); // C
@@ -833,27 +864,6 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
 
     // hide stuff based on the current model:
     if (model == Enu::OneByteDataBus) {
-        // MARBus (MARA/MARB output bus)
-        scene->addPolygon(OneByteShapes::MARBus,
-                          QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
-
-        // MARA & MARB
-        MARALabel = new QLabel("0x00");
-        MARALabel->setGeometry(OneByteShapes::MARALabel);
-        MARALabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        MARALabel->setAutoFillBackground(false);
-        MARALabel->setPalette(QPalette(seqCircuitColor));
-        MARALabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-        scene->addWidget(MARALabel);
-        MARBLabel = new QLabel("0x00");
-        MARBLabel->setGeometry(OneByteShapes::MARBLabel);
-        MARBLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        MARBLabel->setPalette(QPalette(seqCircuitColor));
-        MARBLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-        scene->addWidget(MARBLabel);
-        scene->addRect(OneByteShapes::MARBLabel);
-        scene->addRect(OneByteShapes::MARALabel);     
-
         // hide 2 byte bus stuff:
         MDROCk->hide();
         MDRECk->hide();
@@ -870,6 +880,15 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         MDROLabel->hide();
         MARMuxLabel->hide();
 
+        // MARBus (MARA/MARB output bus)
+        scene->addPolygon(OneByteShapes::MARBus,
+                          QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
+        // MAR
+        MARALabel->setGeometry(OneByteShapes::MARALabel);
+        MARBLabel->setGeometry(OneByteShapes::MARBLabel);
+        scene->addRect(OneByteShapes::MARBLabel);
+        scene->addRect(OneByteShapes::MARALabel);
+
         // MDR
         scene->addRect(OneByteShapes::MDRLabel);
         scene->addRect(OneByteShapes::MDRMuxTristateLabel, QPen(Qt::gray));
@@ -885,94 +904,101 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         // note: left arrow gets drawn in repaintMemWrite
 
         // MemRead/Write
-        MemWriteLabel = new QLabel("MemWrite");
         MemWriteLabel->setGeometry(OneByteShapes::MemWriteLabel);
-        MemWriteLabel->setPalette(QPalette(Qt::white));
-        MemWriteLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-        scene->addWidget(MemWriteLabel);
-        MemWriteTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
+        MemReadLabel->setGeometry(OneByteShapes::MemReadLabel);
         MemWriteTristateLabel->setGeometry(OneByteShapes::MemWriteTristateLabel);
-        MemWriteTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        MemWriteTristateLabel->setPalette(QPalette(Qt::white));
-        MemWriteTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-        scene->addWidget(MemWriteTristateLabel);
+        MemReadTristateLabel->setGeometry(OneByteShapes::MemReadTristateLabel);
+        scene->addRect(QRectF(MemReadTristateLabel->pos(),
+                              MemReadTristateLabel->size()), QPen(Qt::gray));
         scene->addRect(QRectF(MemWriteTristateLabel->pos(),
                               MemWriteTristateLabel->size()), QPen(Qt::gray));
 
-        MemReadLabel = new QLabel("MemRead");
-        MemReadLabel->setGeometry(OneByteShapes::MemReadLabel);
-        MemReadLabel->setPalette(QPalette(Qt::white));
-        MemReadLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-        scene->addWidget(MemReadLabel);
-        MemReadTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
-        MemReadTristateLabel->setGeometry(OneByteShapes::MemReadTristateLabel);
-        MemReadTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        MemReadTristateLabel->setPalette(QPalette(Qt::white));
-        MemReadTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-        scene->addWidget(MemReadTristateLabel);
-        scene->addRect(QRectF(MemReadTristateLabel->pos(),
-                              MemReadTristateLabel->size()), QPen(Qt::gray));
+        scene->addRect(OneByteShapes::aMuxTristateLabel, QPen(Qt::gray));
+        scene->addRect(OneByteShapes::cMuxTristateLabel, QPen(Qt::gray));
+        scene->addRect(OneByteShapes::cMuxerLabel);
+        aMuxerBorder = scene->addRect(OneByteShapes::aMuxerDataLabel);
+        scene->addRect(QRectF(CSMuxTristateLabel->pos(), CSMuxTristateLabel->size()),QPen(Qt::gray));
+        scene->addRect(QRectF(CSMuxerDataLabel->pos(), CSMuxerDataLabel->size()));
+        scene->addRect(QRectF(AndZTristateLabel->pos(), AndZTristateLabel->size()),
+                       QPen(Qt::gray));
+        scene->addRect(OneByteShapes::AndZMuxLabel);
 
 
     }
     else if (model == Enu::TwoByteDataBus) {
-        // MARBus (MARA/MARB output bus)
-        scene->addPolygon(TwoByteShapes::MARBus,
-                          QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
-
-        // MARA & MARB
-        MARALabel = new QLabel("0x00");
-        MARALabel->setGeometry(TwoByteShapes::MARALabel);
-        MARALabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        MARALabel->setAutoFillBackground(false);
-        MARALabel->setPalette(QPalette(seqCircuitColor));
-        MARALabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-        scene->addWidget(MARALabel);
-        MARBLabel = new QLabel("0x00");
-        MARBLabel->setGeometry(TwoByteShapes::MARBLabel);
-        MARBLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        MARBLabel->setPalette(QPalette(seqCircuitColor));
-        MARBLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-        scene->addWidget(MARBLabel);
-        scene->addRect(TwoByteShapes::MARBLabel);
-        scene->addRect(TwoByteShapes::MARALabel);
-
-        // MemRead/Write
-        MemWriteLabel = new QLabel("MemWrite");
-        MemWriteLabel->setGeometry(TwoByteShapes::MemWriteLabel);
-        MemWriteLabel->setPalette(QPalette(Qt::white));
-        MemWriteLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-        scene->addWidget(MemWriteLabel);
-        MemWriteTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
-        MemWriteTristateLabel->setGeometry(TwoByteShapes::MemWriteTristateLabel);
-        MemWriteTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        MemWriteTristateLabel->setPalette(QPalette(Qt::white));
-        MemWriteTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-        scene->addWidget(MemWriteTristateLabel);
-        scene->addRect(QRectF(MemWriteTristateLabel->pos(),
-                              MemWriteTristateLabel->size()), QPen(Qt::gray));
-
-        MemReadLabel = new QLabel("MemRead");
-        MemReadLabel->setGeometry(TwoByteShapes::MemReadLabel);
-        MemReadLabel->setPalette(QPalette(Qt::white));
-        MemReadLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-        scene->addWidget(MemReadLabel);
-        MemReadTristateLabel = new TristateLabel(0, TristateLabel::OneUndefined);
-        MemReadTristateLabel->setGeometry(TwoByteShapes::MemReadTristateLabel);
-        MemReadTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        MemReadTristateLabel->setPalette(QPalette(Qt::white));
-        MemReadTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
-        scene->addWidget(MemReadTristateLabel);
-        scene->addRect(QRectF(MemReadTristateLabel->pos(),
-                              MemReadTristateLabel->size()), QPen(Qt::gray));
-
-
         // hide 1 byte bus stuff:
         MDRCk->hide();
         MDRLabel->hide();
         MDRMuxerDataLabel->hide();
         MDRMuxLabel->hide();
         MDRMuxTristateLabel->hide();
+
+        // MARBus (MARA/MARB output bus)
+        scene->addPolygon(TwoByteShapes::MARBus,
+                          QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
+
+        // ***************************************
+        // fix geometry for the two byte bus
+        // ***************************************
+        // MAR
+        MARALabel->setGeometry(TwoByteShapes::MARALabel);
+        MARBLabel->setGeometry(TwoByteShapes::MARBLabel);
+        scene->addRect(TwoByteShapes::MARBLabel);
+        scene->addRect(TwoByteShapes::MARALabel);
+
+        loadCk->setGeometry(TwoByteShapes::loadCkCheckbox);
+        cLineEdit->setGeometry(TwoByteShapes::cLineEdit);
+        cLabel->setGeometry(TwoByteShapes::cLabel);
+        bLineEdit->setGeometry(TwoByteShapes::bLineEdit);
+        bLabel->setGeometry(TwoByteShapes::bLabel);
+        aLineEdit->setGeometry(TwoByteShapes::aLineEdit);
+        aLabel->setGeometry(TwoByteShapes::aLabel);
+        MARCk->setGeometry(TwoByteShapes::MARCkCheckbox);
+        aMuxLabel->setGeometry(TwoByteShapes::aMuxLabel);
+        aMuxerDataLabel->setGeometry(TwoByteShapes::aMuxerDataLabel);
+        aMuxTristateLabel->setGeometry(TwoByteShapes::aMuxTristateLabel);
+        cMuxLabel->setGeometry(TwoByteShapes::cMuxLabel);
+        cMuxerLabel->setGeometry(TwoByteShapes::cMuxerLabel);
+        cMuxTristateLabel->setGeometry(TwoByteShapes::cMuxTristateLabel);
+        ALULineEdit->setGeometry(TwoByteShapes::ALULineEdit);
+        ALULabel->setGeometry(TwoByteShapes::ALULabel);
+        ALUFunctionLabel->setGeometry(TwoByteShapes::ALUFunctionLabel);
+        CSMuxLabel->setGeometry(TwoByteShapes::CSMuxLabel);
+        CSMuxerDataLabel->setGeometry(TwoByteShapes::CSMuxerDataLabel);
+        CSMuxTristateLabel->setGeometry(TwoByteShapes::CSMuxTristateLabel);
+        SCkCheckBox->setGeometry(TwoByteShapes::SCkCheckBox);
+        sBitLabel->setGeometry(TwoByteShapes::sBitLabel);
+        CCkCheckBox->setGeometry(TwoByteShapes::CCkCheckBox);
+        cBitLabel->setGeometry(TwoByteShapes::cBitLabel);
+        VCkCheckBox->setGeometry(TwoByteShapes::VCkCheckBox);
+        vBitLabel->setGeometry(TwoByteShapes::vBitLabel);
+        AndZLabel->setGeometry(TwoByteShapes::AndZLabel);
+        AndZTristateLabel->setGeometry(TwoByteShapes::AndZTristateLabel);
+        AndZMuxLabel->setGeometry(TwoByteShapes::AndZMuxLabel);
+        ZCkCheckBox->setGeometry(TwoByteShapes::ZCkCheckBox);
+        zBitLabel->setGeometry(TwoByteShapes::zBitLabel);
+        NCkCheckBox->setGeometry(TwoByteShapes::NCkCheckBox);
+        nBitLabel->setGeometry(TwoByteShapes::nBitLabel);
+
+        // MemRead/Write
+        MemWriteLabel->setGeometry(TwoByteShapes::MemWriteLabel);
+        MemReadLabel->setGeometry(TwoByteShapes::MemReadLabel);
+        MemWriteTristateLabel->setGeometry(TwoByteShapes::MemWriteTristateLabel);
+        MemReadTristateLabel->setGeometry(TwoByteShapes::MemReadTristateLabel);
+        scene->addRect(QRectF(MemWriteTristateLabel->pos(),
+                              MemWriteTristateLabel->size()), QPen(Qt::gray));
+        scene->addRect(QRectF(MemReadTristateLabel->pos(),
+                              MemReadTristateLabel->size()), QPen(Qt::gray));
+
+        scene->addRect(TwoByteShapes::aMuxTristateLabel, QPen(Qt::gray));
+        scene->addRect(TwoByteShapes::cMuxTristateLabel, QPen(Qt::gray));
+        scene->addRect(TwoByteShapes::cMuxerLabel);
+        aMuxerBorder = scene->addRect(TwoByteShapes::aMuxerDataLabel);
+        scene->addRect(QRectF(CSMuxTristateLabel->pos(), CSMuxTristateLabel->size()),QPen(Qt::gray));
+        scene->addRect(QRectF(CSMuxerDataLabel->pos(), CSMuxerDataLabel->size()));
+        scene->addRect(QRectF(AndZTristateLabel->pos(), AndZTristateLabel->size()),
+                       QPen(Qt::gray));
+        scene->addRect(TwoByteShapes::AndZMuxLabel);
 
         scene->addRect(TwoByteShapes::MDROMuxTristateLabel, QPen(Qt::gray));
         scene->addRect(TwoByteShapes::MDREMuxTristateLabel, QPen(Qt::gray));

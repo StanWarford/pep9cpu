@@ -59,8 +59,8 @@ enum Shapes {
 };
 
 enum CommonPositions {
-    ctrlLabelX = 579,
-    ctrlInputX = 550,
+    ctrlLabelX = 579 + 50,
+    ctrlInputX = 550 + 50,
     interfaceRegsX = 175,
     combCircX = interfaceRegsX - iRegXOffset,
     statusBitsX = 476,
@@ -80,7 +80,7 @@ const QRect bLabel                  = QRect(ctrlLabelX, 63, labelW,    labelH);
 const QRect aLineEdit               = QRect(ctrlInputX, 83, lineEditW, lineEditH);
 const QRect aLabel                  = QRect(ctrlLabelX, 85, labelW,    labelH);
 
-const QRect MARCkCheckbox           = OneByteShapes::MARCkCheckbox; // I think this stays the same
+const QRect MARCkCheckbox           = QRect(ctrlInputX, 169, check2W, check2H);
 const QRect MARALabel               = QRect(combCircX, 202, dataLabelW, dataLabelH);
 const QRect MARBLabel               = QRect(combCircX, 132, dataLabelW, dataLabelH);
 
