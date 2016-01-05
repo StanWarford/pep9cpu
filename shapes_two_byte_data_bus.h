@@ -55,7 +55,9 @@ enum Shapes {
     arrowHDepth = 20, // really 15, but 20 with arrowHOffset
     arrowHOffset = 5,
     iRegXOffset = 40,
-    MDREOOffset = 100
+    MDREOOffset = 100,
+    selectYOffset = 9,
+    selectSlashOffset = 5,
 };
 
 enum CommonPositions {
@@ -136,10 +138,26 @@ const QRect MemWriteTristateLabel   = QRect(ctrlInputX, 711, labelTriW, labelTri
 const QRect MemReadLabel            = QRect(ctrlLabelX, 731, check2W, check2H);
 const QRect MemReadTristateLabel    = QRect(ctrlInputX, 731, labelTriW, labelTriH);
 
-const Arrow loadCkSelect            = OneByteShapes::loadCkSelect;
-const Arrow CSelect                 = OneByteShapes::CSelect;
-const Arrow BSelect                 = OneByteShapes::BSelect;
-const Arrow ASelect                 = OneByteShapes::ASelect;
+const Arrow loadCkSelect = Arrow(QVector<QPoint>() << QPoint(499, 24),
+                                 QVector<QLine>()  << QLine(ctrlInputX - 7,
+                                                            loadCkCheckbox.y() + selectYOffset,
+                                                            499,
+                                                            loadCkCheckbox.y() + selectYOffset));
+const Arrow CSelect = Arrow(QVector<QPoint>() << QPoint(499, 47),
+                            QVector<QLine>()  <<  QLine(ctrlInputX - 7, cLabel.y() + selectYOffset,
+                                                        499, cLabel.y() + selectYOffset)
+                                              <<  QLine(523, cLabel.y() + selectYOffset - 5,
+                                                        533, cLabel.y() + selectYOffset + 5));
+const Arrow BSelect = Arrow(QVector<QPoint>() << QPoint(499, 69),
+                            QVector<QLine>()  <<  QLine(ctrlInputX - 7, bLabel.y() + selectYOffset,
+                                                        499, bLabel.y() + selectYOffset)
+                                              <<  QLine(523, bLabel.y() + selectYOffset - selectSlashOffset,
+                                                        533, bLabel.y() + selectYOffset + selectSlashOffset));
+const Arrow ASelect = Arrow(QVector<QPoint>() << QPoint(499, 91),
+                            QVector<QLine>()  <<  QLine(ctrlInputX - 7, aLabel.y() + selectYOffset,
+                                                        499, aLabel.y() + selectYOffset)
+                                              <<  QLine(523, aLabel.y() + selectYOffset - selectSlashOffset,
+                                                        533, aLabel.y() + selectYOffset + selectSlashOffset));
 const Arrow MARCk = Arrow(QVector<QPoint>() << QPoint(232-40,155)
                                         << QPoint(232-40,191),
                           QVector<QLine > () << QLine(428,177, 543,177)
@@ -261,6 +279,25 @@ const QPolygon MDREMuxOutBus = QPolygon(QVector<QPoint>()
 
 const QPolygon ALUOutBus;
 
+const QLine SBitSelect     = QLine(505,            sBitLabel.y() + selectYOffset,
+                                   ctrlInputX - 7, sBitLabel.y() + selectYOffset);
+const QLine CBitSelect     = QLine(505,            cBitLabel.y() + selectYOffset,
+                                   ctrlInputX - 7, cBitLabel.y() + selectYOffset);
+const QLine VBitSelect     = QLine(505,            vBitLabel.y() + selectYOffset,
+                                   ctrlInputX - 7, vBitLabel.y() + selectYOffset);
+const QLine ZBitSelect     = QLine(505,            zBitLabel.y() + selectYOffset,
+                                   ctrlInputX - 7, zBitLabel.y() + selectYOffset);
+const QLine NBitSelect     = QLine(505,            nBitLabel.y() + selectYOffset,
+                                   ctrlInputX - 7, nBitLabel.y() + selectYOffset);
+
+const QLine MemReadSelect  = QLine(DataBus.right()   + arrowHOffset,
+                                  MemReadLabel.y() + selectYOffset,
+                                  ctrlInputX - 7,
+                                  MemReadLabel.y() + selectYOffset);
+const QLine MemWriteSelect = QLine(DataBus.right()   + arrowHOffset,
+                                  MemWriteLabel.y() + selectYOffset,
+                                  ctrlInputX - 7,
+                                  MemWriteLabel.y() + selectYOffset);
 
 }
 

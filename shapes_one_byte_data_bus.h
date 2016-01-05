@@ -63,6 +63,9 @@ enum Shapes {
 
     arrowHDepth = 20, // really 15, but 20 with arrowHOffset
     arrowHOffset = 5,
+    selectYOffset = 9,
+    selectSlashOffset = 5,
+
 
 };
 
@@ -135,8 +138,8 @@ enum CommonPositions {
     const QRect AndZMuxLabel            = QRect(416, 544, 41,21);
     const QRect ZCkCheckBox             = QRect(ctrlInputX, 544, 60, 20);
     const QRect zBitLabel               = QRect(statusBitsX, 544, 19, dataLabelH);
-    const QRect NCkCheckBox             = QRect(ctrlInputX, 582+4, checkW, checkH);
-    const QRect nBitLabel               = QRect(statusBitsX, 582+4, 19, dataLabelH);
+    const QRect NCkCheckBox             = QRect(ctrlInputX, 586, checkW, checkH);
+    const QRect nBitLabel               = QRect(statusBitsX, 586, 19, dataLabelH);
 
     const QRect MemWriteLabel           = QRect(ctrlLabelX, 611, check2W, check2H);
     const QRect MemWriteTristateLabel   = QRect(ctrlInputX, 611, labelTriW, labelTriH);
@@ -150,16 +153,23 @@ enum CommonPositions {
     const QRect DataBus = QRect(AddrBus.x()+AddrBus.width(), AddrBus.top() + 100, 10, 400);
 
     const Arrow loadCkSelect = Arrow(QVector<QPoint>() << QPoint(499, 24),
-                                     QVector<QLine>() << QLine(543, 27, 499, 27));
+                                     QVector<QLine>() << QLine(ctrlInputX - 7, loadCkCheckbox.y()+9,
+                                                               499, loadCkCheckbox.y()+9));
     const Arrow CSelect = Arrow(QVector<QPoint>() << QPoint(499, 47),
-                                QVector<QLine>() << QLine(543, 50, 499, 50)
-                                               << QLine(523, 45, 533, 55));
+                                QVector<QLine>()  <<  QLine(ctrlInputX - 7, cLabel.y() + selectYOffset,
+                                                            499, cLabel.y() + selectYOffset)
+                                                  <<  QLine(523, cLabel.y() + selectYOffset - 5,
+                                                            533, cLabel.y() + selectYOffset + 5));
     const Arrow BSelect = Arrow(QVector<QPoint>() << QPoint(499, 69),
-                                QVector<QLine>() << QLine(543, 72, 499, 72)
-                                               << QLine(523, 67, 533, 77));
+                                QVector<QLine>()  <<  QLine(ctrlInputX - 7, bLabel.y() + selectYOffset,
+                                                            499, bLabel.y() + selectYOffset)
+                                                  <<  QLine(523, bLabel.y() + selectYOffset - selectSlashOffset,
+                                                            533, bLabel.y() + selectYOffset + selectSlashOffset));
     const Arrow ASelect = Arrow(QVector<QPoint>() << QPoint(499, 91),
-                                QVector<QLine>() << QLine(543, 94, 499, 94)
-                                               << QLine(523, 89, 533, 99));
+                                QVector<QLine>()  <<  QLine(ctrlInputX - 7, aLabel.y() + selectYOffset,
+                                                            499, aLabel.y() + selectYOffset)
+                                                  <<  QLine(523, aLabel.y() + selectYOffset - selectSlashOffset,
+                                                            533, aLabel.y() + selectYOffset + selectSlashOffset));
     const Arrow MARCk = Arrow(QVector<QPoint>() << QPoint(232,155)
                                             << QPoint(232,191),
                               QVector<QLine > () << QLine(428,177, 543,177)
@@ -339,6 +349,26 @@ enum CommonPositions {
                                            << QPoint(210, 276) << QPoint(220,286)
                                            << QPoint(215, 286)
                                            << QPoint(215,MDRMuxerDataLabel.y()));
+
+    const QLine SBitSelect = QLine(505,            sBitLabel.y() + selectYOffset,
+                                   ctrlInputX - 7, sBitLabel.y() + selectYOffset);
+    const QLine CBitSelect = QLine(505,            cBitLabel.y() + selectYOffset,
+                                   ctrlInputX - 7, cBitLabel.y() + selectYOffset);
+    const QLine VBitSelect = QLine(505,            vBitLabel.y() + selectYOffset,
+                                   ctrlInputX - 7, vBitLabel.y() + selectYOffset);
+    const QLine ZBitSelect = QLine(505,            zBitLabel.y() + selectYOffset,
+                                   ctrlInputX - 7, zBitLabel.y() + selectYOffset);
+    const QLine NBitSelect = QLine(505,            nBitLabel.y() + selectYOffset,
+                                   ctrlInputX - 7, nBitLabel.y() + selectYOffset);
+
+    const QLine MemReadSelect  = QLine(DataBus.right()   + arrowHOffset,
+                                      MemReadLabel.y() + selectYOffset,
+                                      ctrlInputX - 7,
+                                      MemReadLabel.y() + selectYOffset);
+    const QLine MemWriteSelect = QLine(DataBus.right()   + arrowHOffset,
+                                      MemWriteLabel.y() + selectYOffset,
+                                      ctrlInputX - 7,
+                                      MemWriteLabel.y() + selectYOffset);
 
     const QRect getRegRect(int row, int col) {
         QRect rect = QRect();
