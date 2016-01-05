@@ -2071,7 +2071,7 @@ void CpuGraphicsItems::repaintMemReadOneByteModel(QPainter *painter)
     // Mem Data Bus
     poly.clear();
     // arrowhead into the main bus:
-    if (color == QColor(16, 150, 24)) {
+    if (color == combCircuitGreen) {
         // square end (when reading):
         poly << QPoint(3, 365) << QPoint(3, 375);
     }
@@ -2319,7 +2319,7 @@ void CpuGraphicsItems::repaintMemReadTwoByteModel(QPainter *painter)
     // Mem Data Bus
     poly.clear();
     // arrowhead into the main bus:
-    if (color == QColor(16, 150, 24)) {
+    if (color == combCircuitGreen) {
         // square end (when reading):
         poly << QPoint(3, 365) << QPoint(3, 375);
     }
@@ -2442,7 +2442,7 @@ void CpuGraphicsItems::repaintMemWriteTwoByteModel(QPainter *painter)
     poly << QPoint(13, 365) << QPoint(13, 360) << QPoint(3, 370)
          << QPoint(13, 380) << QPoint(13, 375);
     // other end of the bus:
-    if (color == QColor(16, 150, 24)) {
+    if (color == combCircuitGreen) {
         // flat end
         poly << QPoint(40, 375) << QPoint(40, 365);
     }
