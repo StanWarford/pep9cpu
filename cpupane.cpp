@@ -28,6 +28,8 @@
 #include <QErrorMessage>
 #include <QMessageBox>
 
+#include <QWebView>
+
 #include "tristatelabel.h"
 #include "pep.h"
 #include "code.h"
@@ -59,10 +61,17 @@ CpuPane::CpuPane(CPUType type, QWidget *parent) :
 
     if (type == Enu::TwoByteDataBus) {
         ui->graphicsView->hide();
-        QFrame *tempFrame = new QFrame(this);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        tempFrame->setSizePolicy(sizePolicy);
-        ui->verticalLayout->insertWidget(1, tempFrame);
+//        QFrame *betaFrame = new QFrame(this);
+//        betaFrame->setSizePolicy(sizePolicy);
+//        ui->verticalLayout->insertWidget(1, betaFrame);
+
+        QWebView *webView = new QWebView(this);
+        webView->load(QUrl("qrc:/help/beta.html"));
+        ui->verticalLayout->insertWidget(1, webView);
+        webView->setSizePolicy(sizePolicy);
+
+
     }
 }
 
