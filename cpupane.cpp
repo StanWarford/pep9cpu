@@ -62,16 +62,11 @@ CpuPane::CpuPane(CPUType type, QWidget *parent) :
     if (type == Enu::TwoByteDataBus) {
         ui->graphicsView->hide();
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-//        QFrame *betaFrame = new QFrame(this);
-//        betaFrame->setSizePolicy(sizePolicy);
-//        ui->verticalLayout->insertWidget(1, betaFrame);
 
         QWebView *webView = new QWebView(this);
         webView->load(QUrl("qrc:/help/beta.html"));
         ui->verticalLayout->insertWidget(1, webView);
         webView->setSizePolicy(sizePolicy);
-
-
     }
 }
 
