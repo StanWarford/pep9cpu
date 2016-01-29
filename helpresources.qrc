@@ -126,5 +126,6 @@
         <file>help/figures/prob1236d.pepcpu</file>
         <file>help/figures/prob1236e.pepcpu</file>
         <file>help/figures/prob1236f.pepcpu</file>
+        <file>help/beta.html</file>
     </qresource>
 </RCC>
