@@ -56,6 +56,14 @@ CpuPane::CpuPane(CPUType type, QWidget *parent) :
 
     ui->spinBox->hide();
     ui->singleStepPushButton->setEnabled(false);
+
+    if (type == Enu::TwoByteDataBus) {
+        ui->graphicsView->hide();
+        QFrame *tempFrame = new QFrame(this);
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        tempFrame->setSizePolicy(sizePolicy);
+        ui->verticalLayout->insertWidget(1, tempFrame);
+    }
 }
 
 CpuPane::~CpuPane()
