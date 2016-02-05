@@ -621,7 +621,7 @@ void MainWindow::on_actionHelp_About_Pep9CPU_triggered()
 
 void MainWindow::on_actionHelp_About_Qt_triggered()
 {
-    QDesktopServices::openUrl(QUrl("http://qt.nokia.com/"));
+    QDesktopServices::openUrl(QUrl("http://www.qt.io/"));
 }
 
 // Byte Converter slots
