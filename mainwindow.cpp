@@ -390,7 +390,7 @@ void MainWindow::on_actionEdit_UnComment_Line_triggered()
 
 void MainWindow::on_actionEdit_Auto_Format_Microcode_triggered()
 {
-#warning "todo: fix bug with formatting from previous run"
+#pragma message("todo: fix bug with formatting from previous run")
     Sim::setMicrocodeSourceList();
     if (!Sim::microcodeSourceList.isEmpty()) {
         microcodePane->setMicrocode(Sim::microcodeSourceList.join("\n"));

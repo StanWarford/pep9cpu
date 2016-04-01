@@ -28,7 +28,7 @@
 #include <QErrorMessage>
 #include <QMessageBox>
 
-#include <QWebView>
+#include <QWebEngineView>
 
 #include "tristatelabel.h"
 #include "pep.h"
@@ -63,7 +63,7 @@ CpuPane::CpuPane(CPUType type, QWidget *parent) :
         ui->graphicsView->hide();
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-        QWebView *webView = new QWebView(this);
+        QWebEngineView *webView = new QWebEngineView(this);
         webView->load(QUrl("qrc:/help/beta.html"));
         ui->verticalLayout->insertWidget(1, webView);
         webView->setSizePolicy(sizePolicy);

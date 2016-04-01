@@ -59,7 +59,7 @@ MicroCode::MicroCode()
 
 bool MicroCode::isMicrocode() { return true; }
 
-#warning In code.cpp, to do when CpuGraphicsItems is completed
+#pragma message("In code.cpp, to do when CpuGraphicsItems is completed")
 void MicroCode::setCpuLabels(CpuGraphicsItems *cpuPaneItems)
 {
     cpuPaneItems->loadCk->setChecked(cLoadCk != -1);

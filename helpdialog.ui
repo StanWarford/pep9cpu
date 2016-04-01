@@ -481,7 +481,7 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QWebView" name="helpTopWebView">
+      <widget class="QWebEngineView" name="helpTopWebView" native="true">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -499,11 +499,6 @@
        </property>
        <property name="contextMenuPolicy">
         <enum>Qt::NoContextMenu</enum>
-       </property>
-       <property name="url">
-        <url>
-         <string>about:blank</string>
-        </url>
        </property>
       </widget>
       <widget class="QWidget" name="layoutWidget">
@@ -618,9 +613,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QWebView</class>
+   <class>QWebEngineView</class>
    <extends>QWidget</extends>
-   <header>QtWebKitWidgets/QWebView</header>
+   <header>qwebengineview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

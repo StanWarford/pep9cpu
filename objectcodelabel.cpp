@@ -47,7 +47,7 @@ void ObjectCodeLabel::paintEvent(QPaintEvent *)
 
     // Draw the rotated text. Magic numbers are the offsets from the labels
     // to spread them out to correspond to the correct object code numbers.
-#warning "todo: update to accomodate both one byte and two byte data busses"
+#pragma message("todo: update to accomodate both one byte and two byte data busses")
     drawRotatedText(&p, 270, height * 2 - 2, this->height() - 2, "LoadCk");
     drawRotatedText(&p, 270, height * 4 - 2, this->height() - 2, "C");
     drawRotatedText(&p, 270, height * 7 - 2, this->height() - 2, "B");

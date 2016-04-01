@@ -4,8 +4,7 @@
 TEMPLATE = app
 TARGET = Pep9CPU
 
-QT += webkit
-QT += webkitwidgets
+QT += webenginewidgets
 QT += widgets
 QT += printsupport
 
