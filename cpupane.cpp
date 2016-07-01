@@ -60,6 +60,7 @@ CpuPane::CpuPane(CPUType type, QWidget *parent) :
     ui->singleStepPushButton->setEnabled(false);
 
     if (type == Enu::TwoByteDataBus) {
+        this->setMaximumWidth(730);
 
 //        ui->graphicsView->hide();
 //        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
