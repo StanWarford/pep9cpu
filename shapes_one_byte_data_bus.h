@@ -67,6 +67,7 @@ enum Shapes {
     arrowHOffset = 5,
     selectYOffset = 9,
     selectSlashOffset = 5,
+    incrementerOffset = 10,
 
 
 };
@@ -110,6 +111,12 @@ enum CommonPositions {
     const QRect MARBLabel               = QRect(interfaceRegsX, 132, dataLabelW, dataLabelH);
     const QRect MARALabel               = QRect(interfaceRegsX, 202, dataLabelW, dataLabelH);
     const QRect MDRCkCheckbox           = QRect(ctrlInputX, 225, check2W, check2H);
+
+    const QRect MARIncrementer          = QRect(MARBLabel.right() + incrementerOffset,
+                                                MARBLabel.top(),
+                                                MARALabel.bottom() - MARBLabel.top(),
+                                                MARALabel.bottom() - MARBLabel.top());
+
 
     const QRect MDRMuxTristateLabel     = QRect(ctrlInputX, 316, labelTriW, labelTriH);
     const QRect MDRMuxLabel             = QRect(ctrlLabelX, MDRMuxTristateLabel.y(), dataLabelW, labelH);

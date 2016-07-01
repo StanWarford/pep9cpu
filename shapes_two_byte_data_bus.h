@@ -52,9 +52,9 @@ enum Shapes {
     regLineEditW = 60,
     regLineEditH = 19,
 
-    arrowHDepth = 20, // really 15, but 20 with arrowHOffset
+    arrowHDepth = 20, // 20 with arrowHOffset, "really" 15
     arrowHOffset = 5,
-    iRegXOffset = 40,
+    iRegXOffset = 50,
     MDREOOffset = 100,
     selectYOffset = 9,
     selectSlashOffset = 5,
@@ -116,6 +116,7 @@ const QRect ALULineEdit             = QRect(ctrlInputX,  368, 26,     lineEditH)
 const QRect ALULabel                = QRect(ctrlLabelX,  370, 31,     labelH);
 const QRect ALUFunctionLabel        = QRect(332, 355, 98, 20);
 
+// status bits:
 const QRect CSMuxLabel              = QRect(ctrlLabelX,  399, labelW, labelH);
 const QRect CSMuxerDataLabel        = QRect(statusBitsX+19-69, 399, dataLabelW, dataLabelH);
 const QRect CSMuxTristateLabel      = QRect(ctrlInputX,  399, 25,     21);
@@ -192,6 +193,8 @@ const QPolygon MARBus = QPolygon(QVector<QPoint>()
                                  << QPoint(combCircX + 30 + 10,177)
                                  << QPoint(combCircX + 30 + 10,151));
 const QPolygon NZVCDataPath = OneByteShapes::NZVCDataPath;
+
+// registers
 const QRect RegBank                         = OneByteShapes::RegBank;
 const QRect aRegLineEdit                    = OneByteShapes::aRegLineEdit;
 const QRect xRegLineEdit                    = OneByteShapes::xRegLineEdit;

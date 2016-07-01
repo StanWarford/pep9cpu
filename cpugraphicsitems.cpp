@@ -157,6 +157,8 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     MARMuxTristateLabel->setPalette(QPalette(Qt::white));
     MARMuxTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(MARMuxTristateLabel);
+
+
     // ************************************
     // end two byte exclusive stuff
     // ************************************
@@ -1160,7 +1162,8 @@ void CpuGraphicsItems::paint(QPainter *painter,
     painter->drawText(433,132, "BBus");
     painter->drawText(300,132, "CBus");
 
-    painter->drawText(23,145, "System Bus");
+    painter->drawText(34,132, "System");
+    painter->drawText(44,147, "Bus");
 
     painter->drawText(7, 320, "Addr");
     painter->drawText(7, 395, "Data");
