@@ -163,6 +163,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     // end two byte exclusive stuff
     // ************************************
 
+
     // MARA & MARB
     MARALabel = new QLabel("0x00");
     MARALabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -471,13 +472,6 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     MemReadTristateLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(MemReadTristateLabel);
 
-
-    // Status Bits
-    scene->addRect(QRectF(cBitLabel->pos(), cBitLabel->size())); // C
-    scene->addRect(QRectF(vBitLabel->pos(), vBitLabel->size())); // V
-    scene->addRect(QRectF(zBitLabel->pos(), zBitLabel->size())); // Z
-    scene->addRect(QRectF(nBitLabel->pos(), nBitLabel->size())); // N
-    scene->addRect(QRectF(sBitLabel->pos(), sBitLabel->size())); // S
 
     // Registers
     scene->addRect(OneByteShapes::RegBank, QPen(QBrush(QColor(Qt::red), Qt::SolidPattern),
@@ -982,6 +976,16 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         NCkCheckBox->setGeometry(TwoByteShapes::NCkCheckBox);
         nBitLabel->setGeometry(TwoByteShapes::nBitLabel);
 
+        // Status Bits
+        CSMuxerDataLabel->setGeometry(TwoByteShapes::CSMuxerDataLabel);
+        sBitLabel->setGeometry(TwoByteShapes::sBitLabel);
+        cBitLabel->setGeometry(TwoByteShapes::cBitLabel);
+        vBitLabel->setGeometry(TwoByteShapes::vBitLabel);
+        AndZMuxLabel->setGeometry(TwoByteShapes::AndZMuxLabel);
+        zBitLabel->setGeometry(TwoByteShapes::zBitLabel);
+        nBitLabel->setGeometry(TwoByteShapes::nBitLabel);
+
+
         // MemRead/Write
         MemWriteLabel->setGeometry(TwoByteShapes::MemWriteLabel);
         MemReadLabel->setGeometry(TwoByteShapes::MemReadLabel);
@@ -1016,6 +1020,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         scene->addRect(TwoByteShapes::MDROLabel);
         scene->addRect(TwoByteShapes::MDRELabel);
     }
+
+    // Status Bits
+    scene->addRect(QRectF(cBitLabel->pos(), cBitLabel->size())); // C
+    scene->addRect(QRectF(vBitLabel->pos(), vBitLabel->size())); // V
+    scene->addRect(QRectF(zBitLabel->pos(), zBitLabel->size())); // Z
+    scene->addRect(QRectF(nBitLabel->pos(), nBitLabel->size())); // N
+    scene->addRect(QRectF(sBitLabel->pos(), sBitLabel->size())); // S
+
 }
 
 CpuGraphicsItems::~CpuGraphicsItems()
@@ -1482,14 +1494,16 @@ void CpuGraphicsItems::repaintSCk(QPainter *painter)
     case Enu::OneByteDataBus:
         painter->drawLine(OneByteShapes::SBitSelect);
         // arrow
-        painter->drawImage(QPoint(497, OneByteShapes::SBitSelect.y1() - 3),
+        painter->drawImage(QPoint(OneByteShapes::sBitLabel.right() + OneByteShapes::arrowHOffset,
+                                  OneByteShapes::SBitSelect.y1() - 3),
                            color == Qt::gray ? arrowLeftGray : arrowLeft);
 
         break;
     case Enu::TwoByteDataBus:
         painter->drawLine(TwoByteShapes::SBitSelect);
         // arrow
-        painter->drawImage(QPoint(497, TwoByteShapes::SBitSelect.y1() - 3),
+        painter->drawImage(QPoint(TwoByteShapes::sBitLabel.right() + TwoByteShapes::arrowHOffset,
+                                  TwoByteShapes::SBitSelect.y1() - 3),
                            color == Qt::gray ? arrowLeftGray : arrowLeft);
 
         break;
@@ -1512,13 +1526,15 @@ void CpuGraphicsItems::repaintCCk(QPainter *painter)
     case Enu::OneByteDataBus:
         painter->drawLine(OneByteShapes::CBitSelect);
         // arrow
-        painter->drawImage(QPoint(497, OneByteShapes::CBitSelect.y1() - 3),
+        painter->drawImage(QPoint(OneByteShapes::cBitLabel.right() + OneByteShapes::arrowHOffset,
+                                  OneByteShapes::CBitSelect.y1() - 3),
                            color == Qt::gray ? arrowLeftGray : arrowLeft);
         break;
     case Enu::TwoByteDataBus:
         painter->drawLine(TwoByteShapes::CBitSelect);
         // arrow
-        painter->drawImage(QPoint(497, TwoByteShapes::CBitSelect.y1() - 3),
+        painter->drawImage(QPoint(TwoByteShapes::cBitLabel.right() + TwoByteShapes::arrowHOffset,
+                                  TwoByteShapes::CBitSelect.y1() - 3),
                            color == Qt::gray ? arrowLeftGray : arrowLeft);
         break;
     default:
@@ -1538,12 +1554,14 @@ void CpuGraphicsItems::repaintVCk(QPainter *painter)
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
         painter->drawLine(OneByteShapes::VBitSelect);
-        painter->drawImage(QPoint(497, OneByteShapes::VBitSelect.y1() - 3),
+        painter->drawImage(QPoint(OneByteShapes::vBitLabel.right() + OneByteShapes::arrowHOffset,
+                                  OneByteShapes::VBitSelect.y1() - 3),
                            color == Qt::gray ? arrowLeftGray : arrowLeft);
         break;
     case Enu::TwoByteDataBus:
         painter->drawLine(TwoByteShapes::VBitSelect);
-        painter->drawImage(QPoint(497, TwoByteShapes::VBitSelect.y1() - 3),
+        painter->drawImage(QPoint(TwoByteShapes::vBitLabel.right() + TwoByteShapes::arrowHOffset,
+                                  TwoByteShapes::VBitSelect.y1() - 3),
                            color == Qt::gray ? arrowLeftGray : arrowLeft);
         break;
     default:
@@ -1563,12 +1581,14 @@ void CpuGraphicsItems::repaintZCk(QPainter *painter)
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
         painter->drawLine(OneByteShapes::ZBitSelect);
-        painter->drawImage(QPoint(497, OneByteShapes::ZBitSelect.y1() - 3),
+        painter->drawImage(QPoint(OneByteShapes::zBitLabel.right() + OneByteShapes::arrowHOffset,
+                                  OneByteShapes::ZBitSelect.y1() - 3),
                            color == Qt::gray ? arrowLeftGray : arrowLeft);
         break;
     case Enu::TwoByteDataBus:
         painter->drawLine(TwoByteShapes::ZBitSelect);
-        painter->drawImage(QPoint(497, TwoByteShapes::ZBitSelect.y1() - 3),
+        painter->drawImage(QPoint(TwoByteShapes::zBitLabel.right() + TwoByteShapes::arrowHOffset,
+                                  TwoByteShapes::ZBitSelect.y1() - 3),
                            color == Qt::gray ? arrowLeftGray : arrowLeft);
         break;
     default:
@@ -1588,12 +1608,14 @@ void CpuGraphicsItems::repaintNCk(QPainter *painter)
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
         painter->drawLine(OneByteShapes::NBitSelect);
-        painter->drawImage(QPoint(497, OneByteShapes::NBitSelect.y1() - 3),
+        painter->drawImage(QPoint(OneByteShapes::nBitLabel.right() + OneByteShapes::arrowHOffset,
+                                  OneByteShapes::NBitSelect.y1() - 3),
                            color == Qt::gray ? arrowLeftGray : arrowLeft);
         break;
     case Enu::TwoByteDataBus:
         painter->drawLine(TwoByteShapes::NBitSelect);
-        painter->drawImage(QPoint(497, TwoByteShapes::NBitSelect.y1() - 3),
+        painter->drawImage(QPoint(TwoByteShapes::nBitLabel.right() + TwoByteShapes::arrowHOffset,
+                                  TwoByteShapes::NBitSelect.y1() - 3),
                            color == Qt::gray ? arrowLeftGray : arrowLeft);
         break;
     default:

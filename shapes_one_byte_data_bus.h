@@ -359,16 +359,26 @@ enum CommonPositions {
                                            << QPoint(215, 286)
                                            << QPoint(215,MDRMuxerDataLabel.y()));
 
-    const QLine SBitSelect = QLine(505,            sBitLabel.y() + selectYOffset,
-                                   ctrlInputX - 7, sBitLabel.y() + selectYOffset);
-    const QLine CBitSelect = QLine(505,            cBitLabel.y() + selectYOffset,
-                                   ctrlInputX - 7, cBitLabel.y() + selectYOffset);
-    const QLine VBitSelect = QLine(505,            vBitLabel.y() + selectYOffset,
-                                   ctrlInputX - 7, vBitLabel.y() + selectYOffset);
-    const QLine ZBitSelect = QLine(505,            zBitLabel.y() + selectYOffset,
-                                   ctrlInputX - 7, zBitLabel.y() + selectYOffset);
-    const QLine NBitSelect = QLine(505,            nBitLabel.y() + selectYOffset,
-                                   ctrlInputX - 7, nBitLabel.y() + selectYOffset);
+    const QLine SBitSelect     = QLine(sBitLabel.right() + arrowHOffset,
+                                       sBitLabel.y() + selectYOffset,
+                                       ctrlInputX - 7,
+                                       sBitLabel.y() + selectYOffset);
+    const QLine CBitSelect     = QLine(cBitLabel.right() + arrowHOffset,
+                                       cBitLabel.y() + selectYOffset,
+                                       ctrlInputX - 7,
+                                       cBitLabel.y() + selectYOffset);
+    const QLine VBitSelect     = QLine(vBitLabel.right() + arrowHOffset,
+                                       vBitLabel.y() + selectYOffset,
+                                       ctrlInputX - 7,
+                                       vBitLabel.y() + selectYOffset);
+    const QLine ZBitSelect     = QLine(zBitLabel.right() + arrowHOffset,
+                                       zBitLabel.y() + selectYOffset,
+                                       ctrlInputX - 7,
+                                       zBitLabel.y() + selectYOffset);
+    const QLine NBitSelect     = QLine(nBitLabel.right() + arrowHOffset,
+                                       nBitLabel.y() + selectYOffset,
+                                       ctrlInputX - 7,
+                                       nBitLabel.y() + selectYOffset);
 
     const QLine MemReadSelect  = QLine(DataBus.right()   + arrowHOffset,
                                       MemReadLabel.y() + selectYOffset,
