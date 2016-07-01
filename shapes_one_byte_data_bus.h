@@ -250,10 +250,10 @@ enum CommonPositions {
 
     const QRect RegBank = QRect(5, 5, 491, 113);
 
-    const int regNumberOffset = Pep::getSystem() == "Mac" ? 50 : 48; // 54 in some spots?
+    const int regNumberOffset = Pep::getSystem() == "Mac" ? 52 : 48; // 54 in some spots?
     const int regLabelOffset  = 24;
     const QSize regLabelSize  = QSize(20,22);
-    const QSize regNumberSize = QSize(24,22);
+    const QSize regNumberSize = Pep::getSystem() == "Mac" ? QSize(28,22) : QSize(24,22);
     const QRect aRegLineEdit  = QRect(Col1X, Row1Y, regLineEditW, regLineEditH);
     const QRect xRegLineEdit  = QRect(Col1X, Row2Y, regLineEditW, regLineEditH);
     const QRect spRegLineEdit = QRect(Col1X, Row3Y, regLineEditW, regLineEditH);
