@@ -60,13 +60,14 @@ CpuPane::CpuPane(CPUType type, QWidget *parent) :
     ui->singleStepPushButton->setEnabled(false);
 
     if (type == Enu::TwoByteDataBus) {
-        ui->graphicsView->hide();
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-        QWebEngineView *webView = new QWebEngineView(this);
-        webView->load(QUrl("qrc:/help/beta.html"));
-        ui->verticalLayout->insertWidget(1, webView);
-        webView->setSizePolicy(sizePolicy);
+//        ui->graphicsView->hide();
+//        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+//        QWebEngineView *webView = new QWebEngineView(this);
+//        webView->load(QUrl("qrc:/help/beta.html"));
+//        ui->verticalLayout->insertWidget(1, webView);
+//        webView->setSizePolicy(sizePolicy);
     }
 }
 

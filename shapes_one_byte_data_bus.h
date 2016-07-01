@@ -30,6 +30,8 @@
 
 #include <QVector>
 
+#include "pep.h"
+
 
 class Arrow {
 public:
@@ -248,7 +250,7 @@ enum CommonPositions {
 
     const QRect RegBank = QRect(5, 5, 491, 113);
 
-    const int regNumberOffset = 48; // 54 in some spots?
+    const int regNumberOffset = Pep::getSystem() == "Mac" ? 50 : 48; // 54 in some spots?
     const int regLabelOffset  = 24;
     const QSize regLabelSize  = QSize(20,22);
     const QSize regNumberSize = QSize(24,22);

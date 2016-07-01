@@ -1087,10 +1087,14 @@ CpuGraphicsItems::~CpuGraphicsItems()
     delete MDROLabel;
 }
 
-
 QRectF CpuGraphicsItems::boundingRect() const
 {
-    return QRectF(0,0, 650, 620);
+    if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
+        return QRectF(0,0, 650, 620);
+    }
+    else if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
+        return QRectF(0,0, 650, 720);
+    }
 }
 
 bool CpuGraphicsItems::aluHasCorrectOutput()
