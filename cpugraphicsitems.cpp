@@ -1775,12 +1775,24 @@ void CpuGraphicsItems::repaintCSMuxSelect(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    // line from checkbox to data
-    painter->drawLine(505,409, 543,409); //399+10
-
-    // arrow
-    painter->drawImage(QPoint(497,406), //399+10-3
-                       color == Qt::gray ? arrowLeftGray : arrowLeft);
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
+        // line from checkbox to data
+        painter->drawLine(OneByteShapes::CSMuxSelect); //399+10
+        // arrow
+        painter->drawImage(QPoint(497,406), //399+10-3
+                           color == Qt::gray ? arrowLeftGray : arrowLeft);
+        break;
+    case Enu::TwoByteDataBus:
+        // line from checkbox to data
+        painter->drawLine(TwoByteShapes::CSMuxSelect); //399+10
+        // arrow
+        painter->drawImage(QPoint(497,406), //399+10-3
+                           color == Qt::gray ? arrowLeftGray : arrowLeft);
+        break;
+    default:
+        break;
+    }
 }
 
 void CpuGraphicsItems::repaintAndZSelect(QPainter *painter)

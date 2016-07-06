@@ -359,6 +359,10 @@ enum CommonPositions {
                                            << QPoint(215, 286)
                                            << QPoint(215,MDRMuxerDataLabel.y()));
 
+    const QLine CSMuxSelect    = QLine(CSMuxLabel.right() + arrowHOffset - 120,
+                                       CSMuxLabel.y() + selectYOffset +1,
+                                       ctrlInputX - 7,
+                                       CSMuxLabel.y() + selectYOffset + 1);
     const QLine SBitSelect     = QLine(sBitLabel.right() + arrowHOffset,
                                        sBitLabel.y() + selectYOffset,
                                        ctrlInputX - 7,
@@ -453,14 +457,4 @@ enum CommonPositions {
 }
 
 #endif // SHAPES_ONE_BYTE_DATA_BUS_H
-
-
-
-
-
-
-
-
-
-
 
