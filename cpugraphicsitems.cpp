@@ -1949,9 +1949,9 @@ void CpuGraphicsItems::repaintMARCkOneByteModel(QPainter *painter)
 
     painter->drawEllipse(QPoint(235,177), 2, 2);
 
-    painter->drawImage(QPoint(232,155),
+    painter->drawImage(OneByteShapes::MARCk._arrowheads.first(),
                        color == Qt::gray ? arrowUpGray : arrowUp);
-    painter->drawImage(QPoint(232,191),
+    painter->drawImage(OneByteShapes::MARCk._arrowheads.last(),
                        color == Qt::gray ? arrowDownGray : arrowDown);
 }
 
@@ -1970,7 +1970,7 @@ void CpuGraphicsItems::repaintMDRCk(QPainter *painter)
         // MDRCk
         painter->drawLines(OneByteShapes::MDRCk._lines);
 
-        painter->drawImage(QPoint(207,241),
+        painter->drawImage(OneByteShapes::MDRCk._arrowheads.first(),
                            color == Qt::gray ? arrowDownGray : arrowDown);
         break;
     case Enu::TwoByteDataBus:
@@ -1982,7 +1982,7 @@ void CpuGraphicsItems::repaintMDRCk(QPainter *painter)
 
 }
 
-void repaintALUSelectOneByteModel(QPainter *painter)
+void CpuGraphicsItems::repaintALUSelectOneByteModel(QPainter *painter)
 {
     QColor color;
 
@@ -1991,10 +1991,9 @@ void repaintALUSelectOneByteModel(QPainter *painter)
     painter->setBrush(color);
 
     // ALU Select
-    painter->drawLine(439,376, 543,376);
-    painter->drawLine(523,371, 533,381); // diagonal line
+    painter->drawLines(OneByteShapes::ALUSelect._lines);
 
-    painter->drawImage(QPoint(433,373),
+    painter->drawImage(OneByteShapes::ALUSelect._arrowheads.first(),
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     painter->setPen(Qt::black);
@@ -2316,7 +2315,7 @@ void CpuGraphicsItems::repaintMDRECk(QPainter *painter)
 
 }
 
-void repaintALUSelectTwoByteModel(QPainter *painter)
+void CpuGraphicsItems::repaintALUSelectTwoByteModel(QPainter *painter)
 {
 
 }

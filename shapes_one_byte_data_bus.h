@@ -359,6 +359,16 @@ enum CommonPositions {
                                            << QPoint(215, 286)
                                            << QPoint(215,MDRMuxerDataLabel.y()));
 
+    const Arrow ALUSelect      = Arrow(QVector<QPoint>() <<
+                                       QPoint(ALUPoly.boundingRect().right() - 13,
+                                              ALUPoly.boundingRect().bottom() - 21),
+                                       QVector<QLine>() << QLine(439,376,
+                                                                 ctrlInputX - 7,
+                                                                 ALULineEdit.y() + selectYOffset - 1)
+                                    << QLine(523,371, 533,381)); // diagonal line
+
+    //const Arrow ALUSelectStatus = QLine(QVector<QPoint>() <<);
+
     const QLine CSMuxSelect    = QLine(CSMuxLabel.right() + arrowHOffset - 120,
                                        CSMuxLabel.y() + selectYOffset +1,
                                        ctrlInputX - 7,
