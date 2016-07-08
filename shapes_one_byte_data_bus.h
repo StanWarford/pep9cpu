@@ -65,10 +65,13 @@ enum Shapes {
 
     arrowHDepth = 20, // really 15, but 20 with arrowHOffset
     arrowHOffset = 5,
+    arrowLeftOff = 12,
     selectYOffset = 9,
     selectSlashOffset = 5,
     incrementerOffset = 10,
 
+    aluSelOff = 57,
+    selLineOff = 15,
 
 };
 
@@ -367,7 +370,62 @@ enum CommonPositions {
                                                                  ALULineEdit.y() + selectYOffset - 1)
                                     << QLine(523,371, 533,381)); // diagonal line
 
-    //const Arrow ALUSelectStatus = QLine(QVector<QPoint>() <<);
+    const Arrow ALUSelectOut = Arrow(QVector<QPoint>() <<
+                                        QPoint(nBitLabel.left() - arrowLeftOff,
+                                               nBitLabel.y() + arrowHOffset + 1) << // N
+                                        QPoint(AndZMuxLabel.left() - arrowLeftOff,
+                                               zBitLabel.y() + arrowHOffset + 1) << // Z
+                                        QPoint(vBitLabel.left() - arrowLeftOff,
+                                               vBitLabel.y() + arrowHOffset + 1) << // V
+                                        QPoint(cBitLabel.left() - arrowLeftOff,
+                                               cBitLabel.y() + arrowHOffset + 1) << // C
+                                        QPoint(sBitLabel.left() - arrowLeftOff,
+                                               sBitLabel.y() + arrowHOffset + 1),   // S
+                                        QVector<QLine>() <<
+                                        // N
+                                        QLine(ALUPoly.boundingRect().left() + aluSelOff,
+                                              ALUPoly.boundingRect().bottom(),
+                                              ALUPoly.boundingRect().left() + aluSelOff,
+                                              nBitLabel.y() + selectYOffset) << //586+8
+                                        QLine(ALUPoly.boundingRect().left() + aluSelOff,
+                                              nBitLabel.y() + selectYOffset,
+                                              nBitLabel.left() - arrowLeftOff,
+                                              nBitLabel.y() + selectYOffset) << //586+8
+                                        // Z
+                                        QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff,
+                                              ALUPoly.boundingRect().bottom(),
+                                              ALUPoly.boundingRect().left() + aluSelOff + selLineOff,
+                                              zBitLabel.y() + selectYOffset) <<
+                                        QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff,
+                                              zBitLabel.y() + selectYOffset,
+                                              AndZMuxLabel.left() - arrowLeftOff,
+                                              zBitLabel.y() + selectYOffset) <<
+
+                                        // V
+                                        QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 2,
+                                              ALUPoly.boundingRect().bottom(),
+                                              ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 2,
+                                              vBitLabel.y() + selectYOffset) <<
+                                        QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 2,
+                                              vBitLabel.y() + selectYOffset,
+                                              vBitLabel.left() - arrowLeftOff,
+                                              vBitLabel.y() + selectYOffset) <<
+
+                                        // C
+                                        QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 3,
+                                              ALUPoly.boundingRect().bottom(),
+                                              ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 3,
+                                              cBitLabel.y() + selectYOffset) <<
+                                        QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 3,
+                                              cBitLabel.y() + selectYOffset,
+                                              cBitLabel.left() - arrowLeftOff,
+                                              cBitLabel.y() + selectYOffset) <<
+                                        // S
+                                        QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 3,
+                                              sBitLabel.y() + selectYOffset,
+                                              sBitLabel.left() - arrowLeftOff,
+                                              sBitLabel.y() + selectYOffset)
+                                        );
 
     const QLine CSMuxSelect    = QLine(CSMuxLabel.right() + arrowHOffset - 120,
                                        CSMuxLabel.y() + selectYOffset +1,

@@ -2050,39 +2050,15 @@ void CpuGraphicsItems::repaintALUSelectOneByteModel(QPainter *painter)
     painter->setPen(aluHasCorrectOutput() ? Qt::black : Qt::gray);
     painter->setBrush(aluHasCorrectOutput() ? Qt::black : Qt::gray);
 
-    // N
-    painter->drawLine(371,395, 371,594); //586+8
-    painter->drawLine(371,594, 465,594); //586+8
+    painter->drawLines(OneByteShapes::ALUSelectStatus._lines);
 
-    painter->drawImage(QPoint(465,591), //586+8-3
-                       color == Qt::gray ? arrowRightGray : arrowRight);
+    for (int i = 0; i < OneByteShapes::ALUSelectStatus._arrowheads.length(); i++) {
+        painter->drawImage(OneByteShapes::ALUSelectStatus._arrowheads.at(i),
+                           color == Qt::gray ? arrowRightGray : arrowRight);
+    }
 
-    // Z
-    painter->drawLine(386,395, 386,552);
-    painter->drawLine(386,552, 404,552);
-
-    painter->drawImage(QPoint(404,549),
-                       color == Qt::gray ? arrowRightGray : arrowRight);
-
-    // V
-    painter->drawLine(401,395, 401,499);
-    painter->drawLine(401,499, 466,499);
-
-    painter->drawImage(QPoint(466,496),
-                       color == Qt::gray ? arrowRightGray : arrowRight);
-
-    // Cout:
-    // C
-    painter->drawLine(416,395, 416,472);
-    painter->drawLine(416,472, 465,472);
-    painter->drawImage(QPoint(465,469),
-                       color == Qt::gray ? arrowRightGray : arrowRight);
-    // S
-    painter->drawLine(416,446, 465,446); //476-11 //437+9
+    // S ellipse
     painter->drawEllipse(QPoint(416,446), 2, 2); //437+9
-    painter->drawImage(QPoint(465,443), //476-11 //437+9-3
-                       color == Qt::gray ? arrowRightGray : arrowRight);
-
 }
 
 void CpuGraphicsItems::repaintMemReadOneByteModel(QPainter *painter)
