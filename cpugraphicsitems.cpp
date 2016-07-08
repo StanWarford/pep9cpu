@@ -1778,16 +1778,18 @@ void CpuGraphicsItems::repaintCSMuxSelect(QPainter *painter)
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
         // line from checkbox to data
-        painter->drawLine(OneByteShapes::CSMuxSelect); //399+10
+        painter->drawLine(OneByteShapes::CSMuxSelect);
         // arrow
-        painter->drawImage(QPoint(497,406), //399+10-3
+        painter->drawImage(QPoint(OneByteShapes::CSMuxerDataLabel.right() + OneByteShapes::arrowHOffset,
+                                  OneByteShapes::CSMuxSelect.y1() - 3),
                            color == Qt::gray ? arrowLeftGray : arrowLeft);
         break;
     case Enu::TwoByteDataBus:
         // line from checkbox to data
-        painter->drawLine(TwoByteShapes::CSMuxSelect); //399+10
+        painter->drawLine(TwoByteShapes::CSMuxSelect);
         // arrow
-        painter->drawImage(QPoint(497,406), //399+10-3
+        painter->drawImage(QPoint(TwoByteShapes::CSMuxerDataLabel.right() + TwoByteShapes::arrowHOffset,
+                                  TwoByteShapes::CSMuxSelect.y1() - 3),
                            color == Qt::gray ? arrowLeftGray : arrowLeft);
         break;
     default:
