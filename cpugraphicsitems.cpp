@@ -1449,11 +1449,20 @@ void CpuGraphicsItems::repaintCMuxSelect(QPainter *painter)
     painter->setBrush(color);
 
     // CMux Select
-    painter->drawLines(OneByteShapes::CMuxSelect._lines);
-
-    painter->drawImage(QPoint(257,362),
-                       color == Qt::gray ? arrowDownGray : arrowDown);
-
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
+        painter->drawLines(OneByteShapes::CMuxSelect._lines);
+        painter->drawImage(QPoint(OneByteShapes::cMuxerLabel.left()+7,OneByteShapes::cMuxerLabel.top()-12),
+                           color == Qt::gray ? arrowDownGray : arrowDown);
+        break;
+    case Enu::TwoByteDataBus:
+        painter->drawLines(TwoByteShapes::CMuxSelect._lines);
+        painter->drawImage(QPoint(257,362),
+                           color == Qt::gray ? arrowDownGray : arrowDown);
+        break;
+    default:
+        break;
+    }
     if (cMuxTristateLabel->text() == "0") {
         color = combCircuitYellow;
         cMuxerLabel->setPalette(QPalette(combCircuitYellow));
@@ -1478,7 +1487,16 @@ void CpuGraphicsItems::repaintCMuxSelect(QPainter *painter)
     painter->setBrush(color);
 
     // CMuxBus (output)
-    painter->drawPolygon(OneByteShapes::CBus);
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
+        painter->drawPolygon(OneByteShapes::CBus);
+        break;
+    case Enu::TwoByteDataBus:
+        painter->drawPolygon(TwoByteShapes::CBus);
+        break;
+    default:
+        break;
+    }
 }
 
 void CpuGraphicsItems::repaintSCk(QPainter *painter)
