@@ -187,6 +187,8 @@ private:
 
     void repaintMDRCk(QPainter *painter);
 
+    void repaintALUSelectOneByteModel(QPainter *painter);
+
     void repaintMemReadOneByteModel(QPainter *painter);
     void repaintMemWriteOneByteModel(QPainter *painter);
 
@@ -195,6 +197,8 @@ private:
 
     void repaintMDROCk(QPainter *painter);
     void repaintMDRECk(QPainter *painter);
+
+    void repaintALUSelectTwoByteModel(QPainter *painter);
 
     void repaintMemReadTwoByteModel(QPainter *painter);
     void repaintMemWriteTwoByteModel(QPainter *painter);

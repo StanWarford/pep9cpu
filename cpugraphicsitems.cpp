@@ -1830,87 +1830,16 @@ void CpuGraphicsItems::repaintAndZSelect(QPainter *painter)
 
 void CpuGraphicsItems::repaintALUSelect(QPainter *painter)
 {
-    QColor color;
-
-    color = ALULineEdit->text() != "" ? Qt::black : Qt::gray;
-    painter->setPen(QPen(QBrush(color), 1));
-    painter->setBrush(color);
-
-    // ALU Select
-    painter->drawLine(439,376, 543,376);
-    painter->drawLine(523,371, 533,381); // diagonal line
-
-    painter->drawImage(QPoint(433,373),
-                       color == Qt::gray ? arrowLeftGray : arrowLeft);
-
-    painter->setPen(Qt::black);
-
-    if (ALULineEdit->text() != "" && ALULineEdit->text() != "15") {
-        int aluFn = ALULineEdit->text().toInt();
-        if (aMuxTristateLabel->text() == "0" && Sim::aluFnIsUnary(aluFn)) {
-            painter->setBrush(combCircuitBlue);
-        }
-        else if (aMuxTristateLabel->text() == "0" && bLineEdit->text() != "") {
-            painter->setBrush(combCircuitBlue);
-        }
-        else if (aMuxTristateLabel->text() == "1") {
-            if (aLineEdit->text() != "" && Sim::aluFnIsUnary(aluFn)) {
-                painter->setBrush(combCircuitBlue);
-            }
-            else if (aLineEdit->text() != "" && bLineEdit->text() != "") {
-                painter->setBrush(combCircuitBlue);
-            }
-            else {
-                painter->setBrush(Qt::white);
-            }
-        }
-        else {
-            painter->setBrush(Qt::white);
-        }
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
+        repaintALUSelectOneByteModel(painter);
+        break;
+    case Enu::TwoByteDataBus:
+        repaintALUSelectTwoByteModel(painter);
+        break;
+    default:
+        break;
     }
-    else {
-        painter->setBrush(Qt::white);
-    }
-
-    // CBus
-    painter->drawPolygon(OneByteShapes::ALUOutBus);
-
-    // Draw status bit lines
-    painter->setPen(aluHasCorrectOutput() ? Qt::black : Qt::gray);
-    painter->setBrush(aluHasCorrectOutput() ? Qt::black : Qt::gray);
-
-    // N
-    painter->drawLine(371,395, 371,594); //586+8
-    painter->drawLine(371,594, 465,594); //586+8
-
-    painter->drawImage(QPoint(465,591), //586+8-3
-                       color == Qt::gray ? arrowRightGray : arrowRight);
-
-    // Z
-    painter->drawLine(386,395, 386,552);
-    painter->drawLine(386,552, 404,552);
-
-    painter->drawImage(QPoint(404,549),
-                       color == Qt::gray ? arrowRightGray : arrowRight);
-
-    // V
-    painter->drawLine(401,395, 401,499);
-    painter->drawLine(401,499, 466,499);
-
-    painter->drawImage(QPoint(466,496),
-                       color == Qt::gray ? arrowRightGray : arrowRight);
-
-    // Cout:
-    // C
-    painter->drawLine(416,395, 416,472);
-    painter->drawLine(416,472, 465,472);
-    painter->drawImage(QPoint(465,469),
-                       color == Qt::gray ? arrowRightGray : arrowRight);
-    // S
-    painter->drawLine(416,446, 465,446); //476-11 //437+9
-    painter->drawEllipse(QPoint(416,446), 2, 2); //437+9
-    painter->drawImage(QPoint(465,443), //476-11 //437+9-3
-                       color == Qt::gray ? arrowRightGray : arrowRight);
 }
 
 void CpuGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
@@ -2048,6 +1977,92 @@ void CpuGraphicsItems::repaintMDRCk(QPainter *painter)
     default:
         break;
     }
+
+}
+
+void repaintALUSelectOneByteModel(QPainter *painter)
+{
+    QColor color;
+
+    color = ALULineEdit->text() != "" ? Qt::black : Qt::gray;
+    painter->setPen(QPen(QBrush(color), 1));
+    painter->setBrush(color);
+
+    // ALU Select
+    painter->drawLine(439,376, 543,376);
+    painter->drawLine(523,371, 533,381); // diagonal line
+
+    painter->drawImage(QPoint(433,373),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
+
+    painter->setPen(Qt::black);
+
+    if (ALULineEdit->text() != "" && ALULineEdit->text() != "15") {
+        int aluFn = ALULineEdit->text().toInt();
+        if (aMuxTristateLabel->text() == "0" && Sim::aluFnIsUnary(aluFn)) {
+            painter->setBrush(combCircuitBlue);
+        }
+        else if (aMuxTristateLabel->text() == "0" && bLineEdit->text() != "") {
+            painter->setBrush(combCircuitBlue);
+        }
+        else if (aMuxTristateLabel->text() == "1") {
+            if (aLineEdit->text() != "" && Sim::aluFnIsUnary(aluFn)) {
+                painter->setBrush(combCircuitBlue);
+            }
+            else if (aLineEdit->text() != "" && bLineEdit->text() != "") {
+                painter->setBrush(combCircuitBlue);
+            }
+            else {
+                painter->setBrush(Qt::white);
+            }
+        }
+        else {
+            painter->setBrush(Qt::white);
+        }
+    }
+    else {
+        painter->setBrush(Qt::white);
+    }
+
+    // CBus
+    painter->drawPolygon(OneByteShapes::ALUOutBus);
+
+    // Draw status bit lines
+    painter->setPen(aluHasCorrectOutput() ? Qt::black : Qt::gray);
+    painter->setBrush(aluHasCorrectOutput() ? Qt::black : Qt::gray);
+
+    // N
+    painter->drawLine(371,395, 371,594); //586+8
+    painter->drawLine(371,594, 465,594); //586+8
+
+    painter->drawImage(QPoint(465,591), //586+8-3
+                       color == Qt::gray ? arrowRightGray : arrowRight);
+
+    // Z
+    painter->drawLine(386,395, 386,552);
+    painter->drawLine(386,552, 404,552);
+
+    painter->drawImage(QPoint(404,549),
+                       color == Qt::gray ? arrowRightGray : arrowRight);
+
+    // V
+    painter->drawLine(401,395, 401,499);
+    painter->drawLine(401,499, 466,499);
+
+    painter->drawImage(QPoint(466,496),
+                       color == Qt::gray ? arrowRightGray : arrowRight);
+
+    // Cout:
+    // C
+    painter->drawLine(416,395, 416,472);
+    painter->drawLine(416,472, 465,472);
+    painter->drawImage(QPoint(465,469),
+                       color == Qt::gray ? arrowRightGray : arrowRight);
+    // S
+    painter->drawLine(416,446, 465,446); //476-11 //437+9
+    painter->drawEllipse(QPoint(416,446), 2, 2); //437+9
+    painter->drawImage(QPoint(465,443), //476-11 //437+9-3
+                       color == Qt::gray ? arrowRightGray : arrowRight);
 
 }
 
@@ -2296,6 +2311,11 @@ void CpuGraphicsItems::repaintMDRECk(QPainter *painter)
 //    default:
 //        break;
 //    }
+
+}
+
+void repaintALUSelectTwoByteModel(QPainter *painter)
+{
 
 }
 
