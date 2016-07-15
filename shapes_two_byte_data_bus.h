@@ -104,10 +104,10 @@ const QRect MARMuxLabel             = QRect(ctrlLabelX, MARMuxTristateLabel.y(),
 const QRect MDROMuxLabel            = QRect(ctrlLabelX, MDROMuxTristateLabel.y(), labelW+20, labelH);
 const QRect MDREMuxLabel            = QRect(ctrlLabelX, MDREMuxTristateLabel.y(), labelW+20, labelH);
 const QRect EOMuxLabel              = QRect(ctrlLabelX, EOMuxTristateLabel.y(), labelW, labelH);
+const QRect EOMuxerDataLabel        = QRect(combCircX,350, dataLabelW, dataLabelH);
 
 const QRect MDROMuxerDataLabel      = QRect(combCircX,293, dataLabelW, dataLabelH);
 const QRect MDREMuxerDataLabel      = QRect(combCircX,393, dataLabelW, dataLabelH);
-const QRect EOMuxerDataLabel;
 
 const QRect MDROLabel               = QRect(combCircX, 254, dataLabelW, dataLabelH);
 const QRect MDRELabel               = QRect(combCircX, 354, dataLabelW, dataLabelH);

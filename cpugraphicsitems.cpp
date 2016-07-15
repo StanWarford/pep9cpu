@@ -125,6 +125,14 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     EOMuxLabel->setPalette(QPalette(Qt::white));
     EOMuxLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
     scene->addWidget(EOMuxLabel);
+
+    EOMuxerDataLabel = new QLabel("EOMux");
+    EOMuxerDataLabel->setGeometry(TwoByteShapes::EOMuxerDataLabel);
+    EOMuxerDataLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    EOMuxerDataLabel->setPalette(QPalette(Qt::white));
+    EOMuxerDataLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(EOMuxerDataLabel);
+
     EOMuxTristateLabel = new TristateLabel(0, TristateLabel::Tristate);
     EOMuxTristateLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     EOMuxTristateLabel->setGeometry(TwoByteShapes::EOMuxTristateLabel);
@@ -872,6 +880,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         MDROMuxLabel->hide();
         MDREMuxLabel->hide();
         EOMuxLabel->hide();
+        EOMuxerDataLabel->hide();
         MDRELabel->hide();
         MDROLabel->hide();
         MARMuxLabel->hide();
