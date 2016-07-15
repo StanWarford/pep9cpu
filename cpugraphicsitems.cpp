@@ -2050,10 +2050,10 @@ void CpuGraphicsItems::repaintALUSelectOneByteModel(QPainter *painter)
     painter->setPen(aluHasCorrectOutput() ? Qt::black : Qt::gray);
     painter->setBrush(aluHasCorrectOutput() ? Qt::black : Qt::gray);
 
-    painter->drawLines(OneByteShapes::ALUSelectStatus._lines);
+    painter->drawLines(OneByteShapes::ALUSelectOut._lines);
 
-    for (int i = 0; i < OneByteShapes::ALUSelectStatus._arrowheads.length(); i++) {
-        painter->drawImage(OneByteShapes::ALUSelectStatus._arrowheads.at(i),
+    for (int i = 0; i < OneByteShapes::ALUSelectOut._arrowheads.length(); i++) {
+        painter->drawImage(OneByteShapes::ALUSelectOut._arrowheads.at(i),
                            color == Qt::gray ? arrowRightGray : arrowRight);
     }
 
