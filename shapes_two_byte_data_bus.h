@@ -54,10 +54,16 @@ enum Shapes {
 
     arrowHDepth = 20, // 20 with arrowHOffset, "really" 15
     arrowHOffset = 5,
+    arrowLeftOff = 12,
     iRegXOffset = 50,
     MDREOOffset = 100,
     selectYOffset = 9,
     selectSlashOffset = 5,
+    incrementerOffset = 10,
+
+    aluSelOff = 57,
+    selLineOff = 15,
+
 };
 
 enum CommonPositions {
@@ -280,7 +286,78 @@ const QPolygon MDREMuxOutBus = QPolygon(QVector<QPoint>()
                                         << QPoint(combCircX + 25 + 15, MDREMuxerDataLabel.y() - 7)
                                         << QPoint(combCircX + 25 + 15, MDREMuxerDataLabel.y()));
 
+
+
 const QPolygon ALUOutBus;
+
+const Arrow ALUSelect      = Arrow(QVector<QPoint>() <<
+                                   QPoint(ALUPoly.boundingRect().right() - 13,
+                                          ALUPoly.boundingRect().bottom() - 21),
+                                   QVector<QLine>() << QLine(439,376,
+                                                             ctrlInputX - 7,
+                                                             ALULineEdit.y() + selectYOffset - 1)
+                                   << QLine(ctrlInputX - 17,
+                                            ALULineEdit.y() + 13,
+                                            ctrlInputX - 27,
+                                            ALULineEdit.y() + 3)); // diagonal line
+
+const Arrow ALUSelectOut = Arrow(QVector<QPoint>() <<
+                                 QPoint(nBitLabel.left() - arrowLeftOff,
+                                        nBitLabel.y() + arrowHOffset + 1) << // N
+                                 QPoint(AndZMuxLabel.left() - arrowLeftOff,
+                                        zBitLabel.y() + arrowHOffset + 1) << // Z
+                                 QPoint(vBitLabel.left() - arrowLeftOff,
+                                        vBitLabel.y() + arrowHOffset + 1) << // V
+                                 QPoint(cBitLabel.left() - arrowLeftOff,
+                                        cBitLabel.y() + arrowHOffset + 1) << // C
+                                 QPoint(sBitLabel.left() - arrowLeftOff,
+                                        sBitLabel.y() + arrowHOffset + 1),   // S
+                                 QVector<QLine>() <<
+                                 // N
+                                 QLine(ALUPoly.boundingRect().left() + aluSelOff,
+                                       ALUPoly.boundingRect().bottom(),
+                                       ALUPoly.boundingRect().left() + aluSelOff,
+                                       nBitLabel.y() + selectYOffset) << //586+8
+                                 QLine(ALUPoly.boundingRect().left() + aluSelOff,
+                                       nBitLabel.y() + selectYOffset,
+                                       nBitLabel.left() - arrowLeftOff,
+                                       nBitLabel.y() + selectYOffset) << //586+8
+                                 // Z
+                                 QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff,
+                                       ALUPoly.boundingRect().bottom(),
+                                       ALUPoly.boundingRect().left() + aluSelOff + selLineOff,
+                                       zBitLabel.y() + selectYOffset) <<
+                                 QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff,
+                                       zBitLabel.y() + selectYOffset,
+                                       AndZMuxLabel.left() - arrowLeftOff,
+                                       zBitLabel.y() + selectYOffset) <<
+
+                                 // V
+                                 QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 2,
+                                       ALUPoly.boundingRect().bottom(),
+                                       ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 2,
+                                       vBitLabel.y() + selectYOffset) <<
+                                 QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 2,
+                                       vBitLabel.y() + selectYOffset,
+                                       vBitLabel.left() - arrowLeftOff,
+                                       vBitLabel.y() + selectYOffset) <<
+
+                                 // C
+                                 QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 3,
+                                       ALUPoly.boundingRect().bottom(),
+                                       ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 3,
+                                       cBitLabel.y() + selectYOffset) <<
+                                 QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 3,
+                                       cBitLabel.y() + selectYOffset,
+                                       cBitLabel.left() - arrowLeftOff,
+                                       cBitLabel.y() + selectYOffset) <<
+                                 // S
+                                 QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 3,
+                                       sBitLabel.y() + selectYOffset,
+                                       sBitLabel.left() - arrowLeftOff,
+                                       sBitLabel.y() + selectYOffset)
+                                 );
+
 
 const QLine CSMuxSelect    = QLine(CSMuxLabel.right() + arrowHOffset - 120,
                                    CSMuxLabel.y() + selectYOffset +1,

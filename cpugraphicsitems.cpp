@@ -1159,8 +1159,6 @@ void CpuGraphicsItems::paint(QPainter *painter,
     painter->drawText(528,92, "5");
     painter->drawText(528,70, "5");
     painter->drawText(528,48, "5");
-    // alu select line text
-    painter->drawText(528,374, "4");
 
     // NZVC data path text
     painter->drawText(314,531, "0");
@@ -1190,6 +1188,9 @@ void CpuGraphicsItems::paint(QPainter *painter,
 
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
+        // alu select line text
+        painter->drawText(OneByteShapes::ctrlInputX - 23, ALULineEdit->y() + 5, "4");
+
         painter->drawText(OneByteShapes::MARALabel.x() - 37, OneByteShapes::MARALabel.y() + 13, "MARA");
         painter->drawText(OneByteShapes::MARBLabel.x() - 37, OneByteShapes::MARBLabel.y() + 13, "MARB");
 
@@ -1197,6 +1198,9 @@ void CpuGraphicsItems::paint(QPainter *painter,
 
         break;
     case Enu::TwoByteDataBus:
+        // alu select line text
+        painter->drawText(TwoByteShapes::ctrlInputX - 23, ALULineEdit->y() + 5, "4");
+
         painter->drawText(TwoByteShapes::MARALabel.x() - 37, TwoByteShapes::MARALabel.y() + 13, "MARA");
         painter->drawText(TwoByteShapes::MARBLabel.x() - 37, TwoByteShapes::MARBLabel.y() + 13, "MARB");
 
@@ -2311,6 +2315,63 @@ void CpuGraphicsItems::repaintMDRECk(QPainter *painter)
 
 void CpuGraphicsItems::repaintALUSelectTwoByteModel(QPainter *painter)
 {
+    QColor color;
+
+    color = ALULineEdit->text() != "" ? Qt::black : Qt::gray;
+    painter->setPen(QPen(QBrush(color), 1));
+    painter->setBrush(color);
+
+    // ALU Select
+    painter->drawLines(TwoByteShapes::ALUSelect._lines);
+
+    painter->drawImage(TwoByteShapes::ALUSelect._arrowheads.first(),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);
+
+    painter->setPen(Qt::black);
+
+    if (ALULineEdit->text() != "" && ALULineEdit->text() != "15") {
+        int aluFn = ALULineEdit->text().toInt();
+        if (aMuxTristateLabel->text() == "0" && Sim::aluFnIsUnary(aluFn)) {
+            painter->setBrush(combCircuitBlue);
+        }
+        else if (aMuxTristateLabel->text() == "0" && bLineEdit->text() != "") {
+            painter->setBrush(combCircuitBlue);
+        }
+        else if (aMuxTristateLabel->text() == "1") {
+            if (aLineEdit->text() != "" && Sim::aluFnIsUnary(aluFn)) {
+                painter->setBrush(combCircuitBlue);
+            }
+            else if (aLineEdit->text() != "" && bLineEdit->text() != "") {
+                painter->setBrush(combCircuitBlue);
+            }
+            else {
+                painter->setBrush(Qt::white);
+            }
+        }
+        else {
+            painter->setBrush(Qt::white);
+        }
+    }
+    else {
+        painter->setBrush(Qt::white);
+    }
+
+    // CBus
+    painter->drawPolygon(TwoByteShapes::ALUOutBus);
+
+    // Draw status bit lines
+    painter->setPen(aluHasCorrectOutput() ? Qt::black : Qt::gray);
+    painter->setBrush(aluHasCorrectOutput() ? Qt::black : Qt::gray);
+
+    painter->drawLines(TwoByteShapes::ALUSelectOut._lines);
+
+    for (int i = 0; i < TwoByteShapes::ALUSelectOut._arrowheads.length(); i++) {
+        painter->drawImage(TwoByteShapes::ALUSelectOut._arrowheads.at(i),
+                           color == Qt::gray ? arrowRightGray : arrowRight);
+    }
+
+    // S ellipse
+    painter->drawEllipse(QPoint(416,446), 2, 2); //437+9
 
 }
 
