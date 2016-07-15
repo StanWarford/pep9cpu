@@ -162,6 +162,7 @@ private:
     void repaintASelect(QPainter *painter);
     void repaintMARCk(QPainter *painter);
     void repaintAMuxSelect(QPainter *painter);
+    void repaintEOMuxSelect(QPainter *painter);
 
     void repaintCMuxSelect(QPainter *painter);
 

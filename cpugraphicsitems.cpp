@@ -1215,6 +1215,7 @@ void CpuGraphicsItems::paint(QPainter *painter,
 
         repaintMDROCk(painter);
         repaintMDRECk(painter);
+        repaintEOMuxSelect(painter);
 
         break;
     default:
@@ -1451,6 +1452,49 @@ void CpuGraphicsItems::repaintAMuxSelect(QPainter *painter)
 
     // AMux bus
     painter->drawPolygon(OneByteShapes::AMuxBus);
+}
+
+void CpuGraphicsItems::repaintEOMuxSelect(QPainter *painter)
+{
+//    QColor color;
+//    bool ok;
+//    int aMux = aMuxTristateLabel->text().toInt(&ok, 10);
+
+//    color = ok ? Qt::black : Qt::gray;
+//    painter->setPen(QPen(QBrush(color), 1));
+//    painter->setBrush(color);
+
+//    // AMux Select
+//    painter->drawLines(OneByteShapes::AMuxSelect._lines);
+
+//    painter->drawImage(QPoint(380,300),
+//                       color == Qt::gray ? arrowLeftGray : arrowLeft);
+
+//    if (ok) {
+//        switch (aMux) {
+//        case (0):
+//            color = combCircuitYellow;
+//            aMuxerDataLabel->setPalette(QPalette(combCircuitYellow.lighter(120)));
+//            break;
+//        case (1):
+//            if (aLineEdit->text() == "") { // ABus.state == UNDEFINED
+//                color = Qt::white;
+//                aMuxerDataLabel->setPalette(QPalette(Qt::white));
+//            } else {
+//                color = combCircuitRed;
+//                aMuxerDataLabel->setPalette(QPalette(combCircuitRed.lighter(120)));
+//            }
+//            break;
+//        }
+//    } else {
+//        aMuxerDataLabel->setPalette(QPalette(Qt::white));
+//        color = Qt::white;
+//    }
+//    painter->setPen(QPen(QBrush(Qt::black), 1));
+//    painter->setBrush(color);
+
+//    // AMux bus
+//    painter->drawPolygon(OneByteShapes::AMuxBus);
 }
 
 void CpuGraphicsItems::repaintCMuxSelect(QPainter *painter)
