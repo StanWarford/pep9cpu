@@ -368,6 +368,10 @@ const Arrow ALUSelect      = Arrow(QVector<QPoint>() <<
                                    QVector<QLine>() << QLine(439,376,
                                                              ctrlInputX - 7,
                                                              ALULineEdit.y() + selectYOffset - 1)
+                                   << QLine(ctrlInputX - 17,
+                                            ALULineEdit.y() + 13,
+                                            ctrlInputX - 27,
+                                            ALULineEdit.y() + 3)); // diagonal line
 
 const Arrow ALUSelectOut = Arrow(QVector<QPoint>() <<
                                  QPoint(nBitLabel.left() - arrowLeftOff,
