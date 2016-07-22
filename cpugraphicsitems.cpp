@@ -942,6 +942,9 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         scene->addPolygon(TwoByteShapes::MARBus,
                           QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
 
+        // ALU drawing:
+        ALUPoly->moveBy(0, 100);
+
         // ***************************************
         // fix geometry for the two byte bus
         // ***************************************
@@ -951,6 +954,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         scene->addRect(TwoByteShapes::MARBLabel);
         scene->addRect(TwoByteShapes::MARALabel);
 
+        // register signals
         loadCk->setGeometry(TwoByteShapes::loadCkCheckbox);
         cLineEdit->setGeometry(TwoByteShapes::cLineEdit);
         cLabel->setGeometry(TwoByteShapes::cLabel);
@@ -958,6 +962,8 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         bLabel->setGeometry(TwoByteShapes::bLabel);
         aLineEdit->setGeometry(TwoByteShapes::aLineEdit);
         aLabel->setGeometry(TwoByteShapes::aLabel);
+
+        // misc control signals
         MARCk->setGeometry(TwoByteShapes::MARCkCheckbox);
         aMuxLabel->setGeometry(TwoByteShapes::aMuxLabel);
         aMuxerDataLabel->setGeometry(TwoByteShapes::aMuxerDataLabel);
@@ -968,6 +974,8 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         ALULineEdit->setGeometry(TwoByteShapes::ALULineEdit);
         ALULabel->setGeometry(TwoByteShapes::ALULabel);
         ALUFunctionLabel->setGeometry(TwoByteShapes::ALUFunctionLabel);
+
+        // status bit control signals
         CSMuxLabel->setGeometry(TwoByteShapes::CSMuxLabel);
         CSMuxerDataLabel->setGeometry(TwoByteShapes::CSMuxerDataLabel);
         CSMuxTristateLabel->setGeometry(TwoByteShapes::CSMuxTristateLabel);
@@ -984,6 +992,8 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         zBitLabel->setGeometry(TwoByteShapes::zBitLabel);
         NCkCheckBox->setGeometry(TwoByteShapes::NCkCheckBox);
         nBitLabel->setGeometry(TwoByteShapes::nBitLabel);
+
+
 
         // Status Bits
         CSMuxerDataLabel->setGeometry(TwoByteShapes::CSMuxerDataLabel);
@@ -1118,7 +1128,7 @@ QRectF CpuGraphicsItems::boundingRect() const
         return QRectF(0,0, 650, 620);
     }
     else if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
-        return QRectF(0,0, 650, 720);
+        return QRectF(0,0, 650, 620);
     }
 }
 

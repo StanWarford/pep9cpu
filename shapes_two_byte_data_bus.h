@@ -117,28 +117,28 @@ const QRect aMuxLabel               = QRect(ctrlLabelX, aMuxTristateLabel.y(), l
 const QRect aMuxerDataLabel         = QRect(306, 293, dataLabelW, dataLabelH);
 const QRect cMuxTristateLabel       = QRect(ctrlInputX, 348, labelTriW, labelTriH);
 const QRect cMuxLabel               = QRect(ctrlLabelX, cMuxTristateLabel.y(), labelW, labelH);
-const QRect cMuxerLabel             = QRect(250, 374, dataLabelW, dataLabelH);
-const QRect ALULineEdit             = QRect(ctrlInputX,  368, 26,     lineEditH);
-const QRect ALULabel                = QRect(ctrlLabelX,  370, 31,     labelH);
-const QRect ALUFunctionLabel        = QRect(332, 355, 98, 20);
+const QRect cMuxerLabel             = QRect(250, 474, dataLabelW, dataLabelH);
+const QRect ALULineEdit             = QRect(ctrlInputX,  468, 26,     lineEditH);
+const QRect ALULabel                = QRect(ctrlLabelX,  470, 31,     labelH);
+const QRect ALUFunctionLabel        = QRect(332, 455, 98, 20);
 
 // status bits:
-const QRect CSMuxLabel              = QRect(ctrlLabelX,  399, labelW, labelH);
-const QRect CSMuxerDataLabel        = QRect(statusBitsX+19-69, 399, dataLabelW, dataLabelH);
-const QRect CSMuxTristateLabel      = QRect(ctrlInputX,  399, 25,     21);
-const QRect SCkCheckBox             = QRect(ctrlInputX,  437, checkW, checkH);
-const QRect sBitLabel               = QRect(statusBitsX, 437, 19,     dataLabelH);
-const QRect CCkCheckBox             = QRect(ctrlInputX,  464, checkW, checkH);
-const QRect cBitLabel               = QRect(statusBitsX, 463, 19,     dataLabelH);
-const QRect VCkCheckBox             = QRect(ctrlInputX,  491, checkW, checkH);
-const QRect vBitLabel               = QRect(statusBitsX, 491, 19,     dataLabelH);
-const QRect AndZLabel               = QRect(ctrlLabelX,  517, 45,     20);
-const QRect AndZTristateLabel       = QRect(ctrlInputX, 517, labelTriW,labelTriH);
-const QRect AndZMuxLabel            = QRect(416, 544, 41,21);
-const QRect ZCkCheckBox             = QRect(ctrlInputX, 544, 60, 20);
-const QRect zBitLabel               = QRect(statusBitsX, 544, 19, dataLabelH);
-const QRect NCkCheckBox             = QRect(ctrlInputX, 582+4, checkW, checkH);
-const QRect nBitLabel               = QRect(statusBitsX, 582+4, 19, dataLabelH);
+const QRect CSMuxLabel              = QRect(ctrlLabelX,  499, labelW, labelH);
+const QRect CSMuxerDataLabel        = QRect(statusBitsX+19-69, 499, dataLabelW, dataLabelH);
+const QRect CSMuxTristateLabel      = QRect(ctrlInputX,  499, 25,     21);
+const QRect SCkCheckBox             = QRect(ctrlInputX,  537, checkW, checkH);
+const QRect sBitLabel               = QRect(statusBitsX, 537, 19,     dataLabelH);
+const QRect CCkCheckBox             = QRect(ctrlInputX,  564, checkW, checkH);
+const QRect cBitLabel               = QRect(statusBitsX, 563, 19,     dataLabelH);
+const QRect VCkCheckBox             = QRect(ctrlInputX,  591, checkW, checkH);
+const QRect vBitLabel               = QRect(statusBitsX, 591, 19,     dataLabelH);
+const QRect AndZLabel               = QRect(ctrlLabelX,  617, 45,     20);
+const QRect AndZTristateLabel       = QRect(ctrlInputX, 617, labelTriW,labelTriH);
+const QRect AndZMuxLabel            = QRect(416, 644, 41,21);
+const QRect ZCkCheckBox             = QRect(ctrlInputX, 644, 60, 20);
+const QRect zBitLabel               = QRect(statusBitsX, 644, 19, dataLabelH);
+const QRect NCkCheckBox             = QRect(ctrlInputX, 686, checkW, checkH);
+const QRect nBitLabel               = QRect(statusBitsX, 686, 19, dataLabelH);
 
 const QRect MemWriteLabel           = QRect(ctrlLabelX, 711, check2W, check2H);
 const QRect MemWriteTristateLabel   = QRect(ctrlInputX, 711, labelTriW, labelTriH);
@@ -180,7 +180,11 @@ const Arrow AMuxSelect                = OneByteShapes::AMuxSelect;
 const QPolygon AMuxBus                = OneByteShapes::AMuxBus;
 const Arrow CMuxSelect                = OneByteShapes::CMuxSelect;
 const QPolygon CMuxBus                = OneByteShapes::CMuxBus;
-const QPolygon ALUPoly                = OneByteShapes::ALUPoly;
+const QPolygon ALUPoly = QPolygon(QVector<QPoint>()  << QPoint(314,442)
+                                  << QPoint(366,442) << QPoint(370,453)
+                                  << QPoint(390,453) << QPoint(394,442)
+                                  << QPoint(447,442) << QPoint(421,494)
+                                  << QPoint(340,494));
 const QRect MDRBusOutRect             = OneByteShapes::MDRBusOutRect;
 const QPolygon MDRBusOutArrow         = OneByteShapes::MDRBusOutArrow;
 const QPolygon MARBus = QPolygon(QVector<QPoint>()
