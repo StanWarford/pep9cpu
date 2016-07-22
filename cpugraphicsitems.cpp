@@ -1022,6 +1022,8 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
 
         scene->addRect(TwoByteShapes::MDROMuxerDataLabel);
         scene->addRect(TwoByteShapes::MDREMuxerDataLabel);
+        scene->addRect(TwoByteShapes::EOMuxerDataLabel);
+
 
         //scene->addRect(TwoByteShapes::MDREMuxLabel);
         //scene->addRect(TwoByteShapes::MDROMuxLabel);
