@@ -1205,6 +1205,8 @@ void CpuGraphicsItems::paint(QPainter *painter,
         painter->drawText(OneByteShapes::MARALabel.x() - 37, OneByteShapes::MARALabel.y() + 13, "MARA");
         painter->drawText(OneByteShapes::MARBLabel.x() - 37, OneByteShapes::MARBLabel.y() + 13, "MARB");
 
+        repaintMDRMuxSelect(painter);
+
         repaintMDRCk(painter);
 
         break;
@@ -1245,7 +1247,6 @@ void CpuGraphicsItems::paint(QPainter *painter,
 
     repaintAndZSelect(painter);
     repaintALUSelect(painter);
-    repaintMDRMuxSelect(painter);
 
 }
 
