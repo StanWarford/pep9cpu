@@ -172,6 +172,9 @@ const Arrow MARCk = Arrow(QVector<QPoint>() << QPoint(232-40,155)
                                         << QLine(291,177, 355,177)
                                         << QLine(235-40,177, 279,177)
                                         << QLine(235-40,163, 235-40,191));
+const Arrow EOMuxSelect = Arrow(QVector<QPoint>() << QPoint(390,310),
+                               QVector<QLine>()  << QLine(EOMuxerDataLabel.right()+5, EOMuxTristateLabel.y()+9, 326, EOMuxTristateLabel.y()+9)
+                               << QLine(350, EOMuxTristateLabel.y()+9, ctrlInputX - 7, EOMuxTristateLabel.y()+9));
 //const Arrow MDRCk                   = OneByteShapes::MDRCk;
 const Arrow AMuxSelect                = OneByteShapes::AMuxSelect;
 const QPolygon AMuxBus                = OneByteShapes::AMuxBus;
