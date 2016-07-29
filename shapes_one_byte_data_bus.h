@@ -41,6 +41,22 @@ public:
     }
     QVector<QPoint> _arrowheads;
     QVector<QLine> _lines;
+
+    Arrow translated(int dx, int dy) const {
+        QVector<QPoint> arrowHeads;
+        QVector<QLine> lines;
+
+        for (int i = 0; i < _arrowheads.length(); i++) {
+            arrowHeads.append(_arrowheads.at(i) + QPoint(dx, dy));
+        }
+        for (int i = 0; i < _lines.length(); i++) {
+            lines.append(_lines.at(i).translated(dx, dy));
+        }
+
+        Arrow retVal(arrowHeads, lines);
+        return retVal;
+
+    }
 };
 
 namespace OneByteShapes

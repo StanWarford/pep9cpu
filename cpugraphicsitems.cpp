@@ -861,12 +861,8 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
                                                        Qt::SolidPattern),
                                                 2, Qt::SolidLine, Qt::SquareCap,
                                                 Qt::MiterJoin));
-    // NZVC data path, vertical black line
-    scene->addPolygon(OneByteShapes::NZVCDataPath,
-                      QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
-    scene->addLine(310, 477, 310, 559);
 
-    // hide stuff based on the current model:
+    // do stuff based on the current model:
     if (model == Enu::OneByteDataBus) {
         // hide 2 byte bus stuff:
         MDROCk->hide();
@@ -928,6 +924,10 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
                        QPen(Qt::gray));
         scene->addRect(OneByteShapes::AndZMuxLabel);
 
+        // NZVC data path to CMux, vertical black line
+        scene->addPolygon(OneByteShapes::NZVCDataPath,
+                          QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
+        scene->addLine(310, 477, 310, 559);
 
     }
     else if (model == Enu::TwoByteDataBus) {
@@ -943,7 +943,6 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
                           QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
 
         // ALU drawing:
-        ALUPoly->moveBy(0, 100);
 
         // ***************************************
         // fix geometry for the two byte bus
@@ -1040,6 +1039,12 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
 
         scene->addRect(TwoByteShapes::MDROLabel);
         scene->addRect(TwoByteShapes::MDRELabel);
+
+        // NZVC data path to CMux, vertical black line
+        scene->addPolygon(TwoByteShapes::NZVCDataPath,
+                          QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
+        scene->addLine(QLine(310, 477, 310, 559).translated(TwoByteShapes::controlOffsetX,
+
     }
 
     // Status Bits
@@ -1181,13 +1186,6 @@ void CpuGraphicsItems::paint(QPainter *painter,
     painter->drawText(528,70, "5");
     painter->drawText(528,48, "5");
 
-    // NZVC data path text
-    painter->drawText(314,531, "0");
-    painter->drawText(314,541, "0");
-    painter->drawText(314,551, "0");
-    painter->drawText(314,561, "0");
-
-    painter->drawText(368,388, "ALU");
 
     painter->drawText(372,132, "ABus");
     painter->drawText(433,132, "BBus");
@@ -1212,6 +1210,14 @@ void CpuGraphicsItems::paint(QPainter *painter,
         // alu select line text
         painter->drawText(OneByteShapes::ctrlInputX - 23, ALULineEdit->y() + 5, "4");
 
+        painter->drawText(368,388, "ALU");
+
+        // NZVC data path text
+        painter->drawText(314,531, "0");
+        painter->drawText(314,541, "0");
+        painter->drawText(314,551, "0");
+        painter->drawText(314,561, "0");
+
         painter->drawText(OneByteShapes::MARALabel.x() - 37, OneByteShapes::MARALabel.y() + 13, "MARA");
         painter->drawText(OneByteShapes::MARBLabel.x() - 37, OneByteShapes::MARBLabel.y() + 13, "MARB");
 
@@ -1223,6 +1229,14 @@ void CpuGraphicsItems::paint(QPainter *painter,
     case Enu::TwoByteDataBus:
         // alu select line text
         painter->drawText(TwoByteShapes::ctrlInputX - 23, ALULineEdit->y() + 5, "4");
+
+        painter->drawText(368 + TwoByteShapes::controlOffsetX,
+
+        // NZVC data path text
+        painter->drawText(314 + TwoByteShapes::controlOffsetX,
+        painter->drawText(314 + TwoByteShapes::controlOffsetX,
+        painter->drawText(314 + TwoByteShapes::controlOffsetX,
+        painter->drawText(314 + TwoByteShapes::controlOffsetX,
 
         painter->drawText(TwoByteShapes::MARALabel.x() - 37, TwoByteShapes::MARALabel.y() + 13, "MARA");
         painter->drawText(TwoByteShapes::MARBLabel.x() - 37, TwoByteShapes::MARBLabel.y() + 13, "MARB");
@@ -2412,7 +2426,9 @@ void CpuGraphicsItems::repaintALUSelectTwoByteModel(QPainter *painter)
     }
 
     // S ellipse
-    painter->drawEllipse(QPoint(416,446), 2, 2); //437+9
+    painter->drawEllipse(QPoint(416 + TwoByteShapes::controlOffsetX,
+                                TwoByteShapes::sBitLabel.y() + TwoByteShapes::selectYOffset),
+                         2, 2);
 
 }
 

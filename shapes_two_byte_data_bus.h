@@ -62,13 +62,15 @@ enum Shapes {
     incrementerOffset = 10,
 
     aluSelOff = 57,
+    aluOffsetY = 100,
     selLineOff = 15,
 
 };
 
 enum CommonPositions {
-    ctrlLabelX = 579 + 50,
-    ctrlInputX = 550 + 50,
+    controlOffsetX = 50,
+    ctrlLabelX = 579 + controlOffsetX,
+    ctrlInputX = 550 + controlOffsetX,
     interfaceRegsX = 175,
     combCircX = interfaceRegsX - iRegXOffset,
     statusBitsX = 526,//476,
@@ -117,10 +119,11 @@ const QRect aMuxLabel               = QRect(ctrlLabelX, aMuxTristateLabel.y(), l
 const QRect aMuxerDataLabel         = QRect(306, 293, dataLabelW, dataLabelH);
 const QRect cMuxTristateLabel       = QRect(ctrlInputX, 348, labelTriW, labelTriH);
 const QRect cMuxLabel               = QRect(ctrlLabelX, cMuxTristateLabel.y(), labelW, labelH);
-const QRect cMuxerLabel             = QRect(250, 474, dataLabelW, dataLabelH);
+const QRect cMuxerLabel             = OneByteShapes::cMuxerLabel.translated(controlOffsetX, aluOffsetY);
 const QRect ALULineEdit             = QRect(ctrlInputX,  468, 26,     lineEditH);
 const QRect ALULabel                = QRect(ctrlLabelX,  470, 31,     labelH);
-const QRect ALUFunctionLabel        = QRect(332, 455, 98, 20);
+const QRect ALUFunctionLabel        = OneByteShapes::ALUFunctionLabel.translated(controlOffsetX,
+                                                                                 aluOffsetY);
 
 // status bits:
 const QRect CSMuxLabel              = QRect(ctrlLabelX,  499, labelW, labelH);
@@ -134,7 +137,7 @@ const QRect VCkCheckBox             = QRect(ctrlInputX,  591, checkW, checkH);
 const QRect vBitLabel               = QRect(statusBitsX, 591, 19,     dataLabelH);
 const QRect AndZLabel               = QRect(ctrlLabelX,  617, 45,     20);
 const QRect AndZTristateLabel       = QRect(ctrlInputX, 617, labelTriW,labelTriH);
-const QRect AndZMuxLabel            = QRect(416, 644, 41,21);
+const QRect AndZMuxLabel            = QRect(416 + controlOffsetX, 644, 41,21);
 const QRect ZCkCheckBox             = QRect(ctrlInputX, 644, 60, 20);
 const QRect zBitLabel               = QRect(statusBitsX, 644, 19, dataLabelH);
 const QRect NCkCheckBox             = QRect(ctrlInputX, 686, checkW, checkH);
@@ -179,12 +182,8 @@ const Arrow EOMuxSelect = Arrow(QVector<QPoint>() << QPoint(390,310),
 const Arrow AMuxSelect                = OneByteShapes::AMuxSelect;
 const QPolygon AMuxBus                = OneByteShapes::AMuxBus;
 const Arrow CMuxSelect                = OneByteShapes::CMuxSelect;
-const QPolygon CMuxBus                = OneByteShapes::CMuxBus;
-const QPolygon ALUPoly = QPolygon(QVector<QPoint>()  << QPoint(314,442)
-                                  << QPoint(366,442) << QPoint(370,453)
-                                  << QPoint(390,453) << QPoint(394,442)
-                                  << QPoint(447,442) << QPoint(421,494)
-                                  << QPoint(340,494));
+const QPolygon CMuxBus                = OneByteShapes::CMuxBus.translated(controlOffsetX, aluOffsetY);
+const QPolygon ALUPoly = OneByteShapes::ALUPoly.translated(controlOffsetX, aluOffsetY);
 const QRect MDRBusOutRect             = OneByteShapes::MDRBusOutRect;
 const QPolygon MDRBusOutArrow         = OneByteShapes::MDRBusOutArrow;
 const QPolygon MARBus = QPolygon(QVector<QPoint>()
@@ -205,7 +204,7 @@ const QPolygon MARBus = QPolygon(QVector<QPoint>()
                                  << QPoint(TwoByteShapes::AddrBus.right()+arrowHDepth,177)
                                  << QPoint(combCircX + 30 + 10,177)
                                  << QPoint(combCircX + 30 + 10,151));
-const QPolygon NZVCDataPath = OneByteShapes::NZVCDataPath;
+const QPolygon NZVCDataPath = OneByteShapes::NZVCDataPath.translated(controlOffsetX, aluOffsetY);
 
 // registers
 const QRect RegBank                         = OneByteShapes::RegBank;
@@ -295,12 +294,13 @@ const QPolygon MDREMuxOutBus = QPolygon(QVector<QPoint>()
 
 
 
-const QPolygon ALUOutBus;
+const QPolygon ALUOutBus = OneByteShapes::ALUOutBus.translated(controlOffsetX, aluOffsetY);
 
 const Arrow ALUSelect      = Arrow(QVector<QPoint>() <<
                                    QPoint(ALUPoly.boundingRect().right() - 13,
                                           ALUPoly.boundingRect().bottom() - 21),
-                                   QVector<QLine>() << QLine(439,376,
+                                   QVector<QLine>() << QLine(ALUPoly.boundingRect().right() - 13,
+                                                             ALULineEdit.y() + selectYOffset - 1,
                                                              ctrlInputX - 7,
                                                              ALULineEdit.y() + selectYOffset - 1)
                                    << QLine(ctrlInputX - 17,
@@ -308,63 +308,7 @@ const Arrow ALUSelect      = Arrow(QVector<QPoint>() <<
                                             ctrlInputX - 27,
                                             ALULineEdit.y() + 3)); // diagonal line
 
-const Arrow ALUSelectOut = Arrow(QVector<QPoint>() <<
-                                 QPoint(nBitLabel.left() - arrowLeftOff,
-                                        nBitLabel.y() + arrowHOffset + 1) << // N
-                                 QPoint(AndZMuxLabel.left() - arrowLeftOff,
-                                        zBitLabel.y() + arrowHOffset + 1) << // Z
-                                 QPoint(vBitLabel.left() - arrowLeftOff,
-                                        vBitLabel.y() + arrowHOffset + 1) << // V
-                                 QPoint(cBitLabel.left() - arrowLeftOff,
-                                        cBitLabel.y() + arrowHOffset + 1) << // C
-                                 QPoint(sBitLabel.left() - arrowLeftOff,
-                                        sBitLabel.y() + arrowHOffset + 1),   // S
-                                 QVector<QLine>() <<
-                                 // N
-                                 QLine(ALUPoly.boundingRect().left() + aluSelOff,
-                                       ALUPoly.boundingRect().bottom(),
-                                       ALUPoly.boundingRect().left() + aluSelOff,
-                                       nBitLabel.y() + selectYOffset) << //586+8
-                                 QLine(ALUPoly.boundingRect().left() + aluSelOff,
-                                       nBitLabel.y() + selectYOffset,
-                                       nBitLabel.left() - arrowLeftOff,
-                                       nBitLabel.y() + selectYOffset) << //586+8
-                                 // Z
-                                 QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff,
-                                       ALUPoly.boundingRect().bottom(),
-                                       ALUPoly.boundingRect().left() + aluSelOff + selLineOff,
-                                       zBitLabel.y() + selectYOffset) <<
-                                 QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff,
-                                       zBitLabel.y() + selectYOffset,
-                                       AndZMuxLabel.left() - arrowLeftOff,
-                                       zBitLabel.y() + selectYOffset) <<
-
-                                 // V
-                                 QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 2,
-                                       ALUPoly.boundingRect().bottom(),
-                                       ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 2,
-                                       vBitLabel.y() + selectYOffset) <<
-                                 QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 2,
-                                       vBitLabel.y() + selectYOffset,
-                                       vBitLabel.left() - arrowLeftOff,
-                                       vBitLabel.y() + selectYOffset) <<
-
-                                 // C
-                                 QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 3,
-                                       ALUPoly.boundingRect().bottom(),
-                                       ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 3,
-                                       cBitLabel.y() + selectYOffset) <<
-                                 QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 3,
-                                       cBitLabel.y() + selectYOffset,
-                                       cBitLabel.left() - arrowLeftOff,
-                                       cBitLabel.y() + selectYOffset) <<
-                                 // S
-                                 QLine(ALUPoly.boundingRect().left() + aluSelOff + selLineOff * 3,
-                                       sBitLabel.y() + selectYOffset,
-                                       sBitLabel.left() - arrowLeftOff,
-                                       sBitLabel.y() + selectYOffset)
-                                 );
-
+const Arrow ALUSelectOut = OneByteShapes::ALUSelectOut.translated(controlOffsetX, aluOffsetY);
 
 const QLine CSMuxSelect    = QLine(CSMuxLabel.right() + arrowHOffset - 120,
                                    CSMuxLabel.y() + selectYOffset +1,
