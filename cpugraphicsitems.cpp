@@ -943,6 +943,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
                           QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
 
         // ALU drawing:
+        ALUPoly->moveBy(TwoByteShapes::controlOffsetX, TwoByteShapes::aluOffsetY);
 
         // ***************************************
         // fix geometry for the two byte bus
@@ -1044,6 +1045,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         scene->addPolygon(TwoByteShapes::NZVCDataPath,
                           QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
         scene->addLine(QLine(310, 477, 310, 559).translated(TwoByteShapes::controlOffsetX,
+                                                            TwoByteShapes::aluOffsetY));
 
     }
 
@@ -1231,12 +1233,17 @@ void CpuGraphicsItems::paint(QPainter *painter,
         painter->drawText(TwoByteShapes::ctrlInputX - 23, ALULineEdit->y() + 5, "4");
 
         painter->drawText(368 + TwoByteShapes::controlOffsetX,
+                          388 + TwoByteShapes::aluOffsetY, "ALU");
 
         // NZVC data path text
         painter->drawText(314 + TwoByteShapes::controlOffsetX,
+                          531 + TwoByteShapes::aluOffsetY, "0");
         painter->drawText(314 + TwoByteShapes::controlOffsetX,
+                          541 + TwoByteShapes::aluOffsetY, "0");
         painter->drawText(314 + TwoByteShapes::controlOffsetX,
+                          551 + TwoByteShapes::aluOffsetY, "0");
         painter->drawText(314 + TwoByteShapes::controlOffsetX,
+                          561 + TwoByteShapes::aluOffsetY, "0");
 
         painter->drawText(TwoByteShapes::MARALabel.x() - 37, TwoByteShapes::MARALabel.y() + 13, "MARA");
         painter->drawText(TwoByteShapes::MARBLabel.x() - 37, TwoByteShapes::MARBLabel.y() + 13, "MARB");

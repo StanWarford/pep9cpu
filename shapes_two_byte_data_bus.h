@@ -94,32 +94,45 @@ const QRect MARCkCheckbox           = QRect(ctrlInputX, 169, check2W, check2H);
 const QRect MARALabel               = QRect(combCircX, 202, dataLabelW, dataLabelH);
 const QRect MARBLabel               = QRect(combCircX, 132, dataLabelW, dataLabelH);
 
-const QRect MDROCkCheckbox          = QRect(ctrlInputX, 189, checkW+10, checkH);
-const QRect MDRECkCheckbox          = QRect(ctrlInputX, 209, checkW+10, checkH);
-
+// MARMux and its control
+// MARMuxerDataLabel to do
 const QRect MARMuxTristateLabel     = QRect(ctrlInputX, 149, labelTriW, labelTriH);
-const QRect MDROMuxTristateLabel    = QRect(ctrlInputX, 245, labelTriW, labelTriH);
-const QRect MDREMuxTristateLabel    = QRect(ctrlInputX, 265, labelTriW, labelTriH);
-const QRect EOMuxTristateLabel      = QRect(ctrlInputX, 316, labelTriW, labelTriH);
-
 const QRect MARMuxLabel             = QRect(ctrlLabelX, MARMuxTristateLabel.y(), labelW+20, labelH);
-const QRect MDROMuxLabel            = QRect(ctrlLabelX, MDROMuxTristateLabel.y(), labelW+20, labelH);
-const QRect MDREMuxLabel            = QRect(ctrlLabelX, MDREMuxTristateLabel.y(), labelW+20, labelH);
-const QRect EOMuxLabel              = QRect(ctrlLabelX, EOMuxTristateLabel.y(), labelW, labelH);
-const QRect EOMuxerDataLabel        = QRect(200, EOMuxTristateLabel.y(), dataLabelW, dataLabelH);
 
-const QRect MDROMuxerDataLabel      = QRect(combCircX,293, dataLabelW, dataLabelH);
-const QRect MDREMuxerDataLabel      = QRect(combCircX,393, dataLabelW, dataLabelH);
-
+// MDROdd and MDROCk
 const QRect MDROLabel               = QRect(combCircX, 254, dataLabelW, dataLabelH);
-const QRect MDRELabel               = QRect(combCircX, 354, dataLabelW, dataLabelH);
+const QRect MDROCkCheckbox          = QRect(ctrlInputX, MDROLabel.y()-20, checkW+10, checkH);
 
-const QRect aMuxTristateLabel       = QRect(ctrlInputX, 295, labelTriW, 21);
+// MDROMux and its control
+const QRect MDROMuxerDataLabel      = QRect(combCircX, 293, dataLabelW, dataLabelH);
+const QRect MDROMuxTristateLabel    = QRect(ctrlInputX, MDROMuxerDataLabel.y()-20, labelTriW, labelTriH);
+const QRect MDROMuxLabel            = QRect(ctrlLabelX, MDROMuxTristateLabel.y(), labelW+20, labelH);
+
+// MDREven and MDRECk
+const QRect MDRELabel               = QRect(combCircX, 354, dataLabelW, dataLabelH);
+const QRect MDRECkCheckbox          = QRect(ctrlInputX, MDRELabel.y()-20, checkW+10, checkH);
+
+// MDREMux and its control
+const QRect MDREMuxerDataLabel      = QRect(combCircX,393, dataLabelW, dataLabelH);
+const QRect MDREMuxTristateLabel    = QRect(ctrlInputX, MDREMuxerDataLabel.y()-20, labelTriW, labelTriH);
+const QRect MDREMuxLabel            = QRect(ctrlLabelX, MDREMuxTristateLabel.y(), labelW+20, labelH);
+
+// EOMux and its control
+const QRect EOMuxerDataLabel        = QRect(200, 316, dataLabelW, dataLabelH);
+const QRect EOMuxTristateLabel      = QRect(ctrlInputX, EOMuxerDataLabel.y(), labelTriW, labelTriH);
+const QRect EOMuxLabel              = QRect(ctrlLabelX, EOMuxTristateLabel.y(), labelW, labelH);
+
+// AMux and its control
+const QRect aMuxerDataLabel         = QRect(306, 400, dataLabelW, dataLabelH);
+const QRect aMuxTristateLabel       = QRect(ctrlInputX, aMuxerDataLabel.y(), labelTriW, 21);
 const QRect aMuxLabel               = QRect(ctrlLabelX, aMuxTristateLabel.y(), labelW, labelH);
-const QRect aMuxerDataLabel         = QRect(306, 293, dataLabelW, dataLabelH);
-const QRect cMuxTristateLabel       = QRect(ctrlInputX, 348, labelTriW, labelTriH);
-const QRect cMuxLabel               = QRect(ctrlLabelX, cMuxTristateLabel.y(), labelW, labelH);
+
+// CMux and its control
 const QRect cMuxerLabel             = OneByteShapes::cMuxerLabel.translated(controlOffsetX, aluOffsetY);
+const QRect cMuxTristateLabel       = QRect(ctrlInputX, cMuxerLabel.y()-20, labelTriW, labelTriH);
+const QRect cMuxLabel               = QRect(ctrlLabelX, cMuxTristateLabel.y(), labelW, labelH);
+
+// ALU and its control
 const QRect ALULineEdit             = QRect(ctrlInputX,  468, 26,     lineEditH);
 const QRect ALULabel                = QRect(ctrlLabelX,  470, 31,     labelH);
 const QRect ALUFunctionLabel        = OneByteShapes::ALUFunctionLabel.translated(controlOffsetX,
