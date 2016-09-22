@@ -48,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     microcodePane = new MicrocodePane(ui->codeSplitter);
     delete ui->microcodeFrame;
     objectCodePane = new ObjectCodePane(ui->codeSplitter);
+    objectCodePane->hide();
     delete ui->objectCodeFrame;
     cpuPaneOneByteDataBus = new CpuPane(Enu::OneByteDataBus, ui->mainSplitter);
     ui->mainSplitter->insertWidget(1, cpuPaneOneByteDataBus);
