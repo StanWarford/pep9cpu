@@ -1139,6 +1139,9 @@ CpuGraphicsItems::~CpuGraphicsItems()
 
 QRectF CpuGraphicsItems::boundingRect() const
 {
+    return QRectF(0,0, 650, 620);
+
+
     if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
         return QRectF(0,0, 650, 620);
     }
@@ -1916,7 +1919,9 @@ void CpuGraphicsItems::repaintAndZSelect(QPainter *painter)
     painter->setBrush(color);
 
     // AndZ out
-    painter->drawLine(458,552, 465,552);
+#pragma message("todo: get rid of magic numbers")
+    //painter->drawLine(458,552, 465,552);
+    painter->drawLine(TwoByteShapes::AndZMuxLabel.right(),552, TwoByteShapes::zBitLabel.left() - 2,552);
 
     painter->drawImage(QPoint(465,549),
                        color == Qt::gray ? arrowRightGray : arrowRight);
