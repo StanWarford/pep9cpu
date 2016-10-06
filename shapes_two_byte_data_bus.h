@@ -95,7 +95,7 @@ const QRect MARALabel               = QRect(combCircX, 202, dataLabelW, dataLabe
 const QRect MARBLabel               = QRect(combCircX, 132, dataLabelW, dataLabelH);
 
 // MARMux and its control
-// MARMuxerDataLabel to do
+const QRect MARMuxerDataLabel       = QRect(200, 150, dataLabelW, dataLabelW); // Square
 const QRect MARMuxTristateLabel     = QRect(ctrlInputX, 149, labelTriW, labelTriH);
 const QRect MARMuxLabel             = QRect(ctrlLabelX, MARMuxTristateLabel.y(), labelW+20, labelH);
 

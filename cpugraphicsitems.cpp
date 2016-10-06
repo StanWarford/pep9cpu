@@ -72,6 +72,13 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     // ************************************
     // two byte exclusive stuff
     // ************************************
+    MARMuxerDataLabel = new QLabel("MARMux");
+    MARMuxerDataLabel->setGeometry(TwoByteShapes::MARMuxerDataLabel);
+    MARMuxerDataLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    MARMuxerDataLabel->setPalette(QPalette(Qt::white));
+    MARMuxerDataLabel->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
+    scene->addWidget(MARMuxerDataLabel);
+
     MDROCk = new QCheckBox("MDROCk");
     MDROCk->setGeometry(TwoByteShapes::MDROCkCheckbox);
     MDROCk->setFont (QFont(Pep::labelFont, Pep::labelFontSize));
@@ -870,6 +877,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         MDROMuxTristateLabel->hide();
         MDREMuxTristateLabel->hide();
         EOMuxTristateLabel->hide();
+        MARMuxerDataLabel->hide();
         MARMuxTristateLabel->hide();
         MDROMuxerDataLabel->hide();
         MDREMuxerDataLabel->hide();
@@ -1030,10 +1038,10 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         scene->addRect(TwoByteShapes::EOMuxTristateLabel, QPen(Qt::gray));
         scene->addRect(TwoByteShapes::MARMuxTristateLabel, QPen(Qt::gray));
 
+        scene->addRect(TwoByteShapes::MARMuxerDataLabel);
         scene->addRect(TwoByteShapes::MDROMuxerDataLabel);
         scene->addRect(TwoByteShapes::MDREMuxerDataLabel);
         scene->addRect(TwoByteShapes::EOMuxerDataLabel);
-
 
         //scene->addRect(TwoByteShapes::MDREMuxLabel);
         //scene->addRect(TwoByteShapes::MDROMuxLabel);
