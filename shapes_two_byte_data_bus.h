@@ -82,24 +82,61 @@ enum CommonPositions {
 const QRect AddrBus = QRect(40, 151, 20, 600);
 const QRect DataBus = QRect(AddrBus.x()+AddrBus.width(), AddrBus.top() + 100, 20, 500);
 
+// LoadCk and its control
 const QRect loadCkCheckbox          = QRect(ctrlInputX, 18, check2W,   check2H);
+const Arrow loadCkSelect            = Arrow(QVector<QPoint>() << QPoint(499, 24),
+                                            QVector<QLine>()
+                                            << QLine(ctrlInputX - 7, loadCkCheckbox.y() + selectYOffset,
+                                                      499, loadCkCheckbox.y() + selectYOffset));
+
+// C and its control
 const QRect cLineEdit               = QRect(ctrlInputX, 39, lineEditW, lineEditH);
 const QRect cLabel                  = QRect(ctrlLabelX, 41, labelW,    labelH);
+const Arrow CSelect                 = Arrow(QVector<QPoint>() << QPoint(499, 47),
+                                            QVector<QLine>()
+                                            << QLine(ctrlInputX - 7, cLabel.y() + selectYOffset,
+                                                     499, cLabel.y() + selectYOffset)
+                                            << QLine(523, cLabel.y() + selectYOffset - 5,
+                                                     533, cLabel.y() + selectYOffset + 5));
+
+// B and its control
 const QRect bLineEdit               = QRect(ctrlInputX, 61, lineEditW, lineEditH);
 const QRect bLabel                  = QRect(ctrlLabelX, 63, labelW,    labelH);
+const Arrow BSelect                 = Arrow(QVector<QPoint>() << QPoint(499, 69),
+                                            QVector<QLine>()
+                                            << QLine(ctrlInputX - 7, bLabel.y() + selectYOffset,
+                                                     499, bLabel.y() + selectYOffset)
+                                            << QLine(523, bLabel.y() + selectYOffset - selectSlashOffset,
+                                                     533, bLabel.y() + selectYOffset + selectSlashOffset));
+
+// A and its control
 const QRect aLineEdit               = QRect(ctrlInputX, 83, lineEditW, lineEditH);
 const QRect aLabel                  = QRect(ctrlLabelX, 85, labelW,    labelH);
-
-const QRect MARCkCheckbox           = QRect(ctrlInputX, 169, check2W, check2H);
-const QRect MARALabel               = QRect(combCircX, 202, dataLabelW, dataLabelH);
-const QRect MARBLabel               = QRect(combCircX, 132, dataLabelW, dataLabelH);
+const Arrow ASelect                 = Arrow(QVector<QPoint>() << QPoint(499, 91),
+                                            QVector<QLine>()
+                                            << QLine(ctrlInputX - 7, aLabel.y() + selectYOffset,
+                                                     499, aLabel.y() + selectYOffset)
+                                            << QLine(523, aLabel.y() + selectYOffset - selectSlashOffset,
+                                                     533, aLabel.y() + selectYOffset + selectSlashOffset));
 
 // MARMux and its control
 const QRect MARMuxerDataLabel       = QRect(200, 150, dataLabelW, dataLabelW); // Square
 const QRect MARMuxTristateLabel     = QRect(ctrlInputX, 149, labelTriW, labelTriH);
 const QRect MARMuxLabel             = QRect(ctrlLabelX, MARMuxTristateLabel.y(), labelW+20, labelH);
 
-// MDROdd and MDROCk
+// MARCk and its control
+const QRect MARCkCheckbox           = QRect(ctrlInputX, 169, check2W, check2H);
+const QRect MARALabel               = QRect(combCircX, 202, dataLabelW, dataLabelH);
+const QRect MARBLabel               = QRect(combCircX, 132, dataLabelW, dataLabelH);
+const Arrow MARCk                   = Arrow(QVector<QPoint>() << QPoint(232-40,155) << QPoint(232-40,191),
+                                            QVector<QLine> ()
+                                            << QLine(428,177, 543,177)
+                                            << QLine(367,177, 416,177)
+                                            << QLine(291,177, 355,177)
+                                            << QLine(235-40,177, 279,177)
+                                            << QLine(235-40,163, 235-40,191));
+
+// MDROdd, MDROCk and its control
 const QRect MDROLabel               = QRect(combCircX, 254, dataLabelW, dataLabelH);
 const QRect MDROCkCheckbox          = QRect(ctrlInputX, MDROLabel.y()-20, checkW+10, checkH);
 
@@ -108,7 +145,7 @@ const QRect MDROMuxerDataLabel      = QRect(combCircX, 293, dataLabelW, dataLabe
 const QRect MDROMuxTristateLabel    = QRect(ctrlInputX, MDROMuxerDataLabel.y()-20, labelTriW, labelTriH);
 const QRect MDROMuxLabel            = QRect(ctrlLabelX, MDROMuxTristateLabel.y(), labelW+20, labelH);
 
-// MDREven and MDRECk
+// MDREven, MDRECk and its control
 const QRect MDRELabel               = QRect(combCircX, 354, dataLabelW, dataLabelH);
 const QRect MDRECkCheckbox          = QRect(ctrlInputX, MDRELabel.y()-20, checkW+10, checkH);
 
@@ -121,6 +158,12 @@ const QRect MDREMuxLabel            = QRect(ctrlLabelX, MDREMuxTristateLabel.y()
 const QRect EOMuxerDataLabel        = QRect(200, 316, dataLabelW, dataLabelH);
 const QRect EOMuxTristateLabel      = QRect(ctrlInputX, EOMuxerDataLabel.y(), labelTriW, labelTriH);
 const QRect EOMuxLabel              = QRect(ctrlLabelX, EOMuxTristateLabel.y(), labelW, labelH);
+const Arrow EOMuxSelect             = Arrow(QVector<QPoint>() << QPoint(390,310),
+                                            QVector<QLine>()
+                                            << QLine(EOMuxerDataLabel.right()+5, EOMuxTristateLabel.y()+9,
+                                                     326, EOMuxTristateLabel.y()+9)
+                                            << QLine(350, EOMuxTristateLabel.y()+9,
+                                                     ctrlInputX - 7, EOMuxTristateLabel.y()+9));
 
 // AMux and its control
 const QRect aMuxerDataLabel         = QRect(306, 400, dataLabelW, dataLabelH);
@@ -137,60 +180,44 @@ const QRect ALULineEdit             = QRect(ctrlInputX,  468, 26,     lineEditH)
 const QRect ALULabel                = QRect(ctrlLabelX,  470, 31,     labelH);
 const QRect ALUFunctionLabel        = OneByteShapes::ALUFunctionLabel.translated(controlOffsetX,
                                                                                  aluOffsetY);
-
-// status bits:
+// CSMux and its control
 const QRect CSMuxLabel              = QRect(ctrlLabelX,  499, labelW, labelH);
 const QRect CSMuxerDataLabel        = QRect(statusBitsX+19-69, 499, dataLabelW, dataLabelH);
 const QRect CSMuxTristateLabel      = QRect(ctrlInputX,  499, 25,     21);
+
+// Status bit S, SCk and its control
 const QRect SCkCheckBox             = QRect(ctrlInputX,  537, checkW, checkH);
 const QRect sBitLabel               = QRect(statusBitsX, 537, 19,     dataLabelH);
+
+// Status bit C, CCk and its control
 const QRect CCkCheckBox             = QRect(ctrlInputX,  564, checkW, checkH);
 const QRect cBitLabel               = QRect(statusBitsX, 563, 19,     dataLabelH);
+
+// Status bit V, VCk and its control
 const QRect VCkCheckBox             = QRect(ctrlInputX,  591, checkW, checkH);
 const QRect vBitLabel               = QRect(statusBitsX, 591, 19,     dataLabelH);
+
+// AndZ and its control
 const QRect AndZLabel               = QRect(ctrlLabelX,  617, 45,     20);
 const QRect AndZTristateLabel       = QRect(ctrlInputX, 617, labelTriW,labelTriH);
 const QRect AndZMuxLabel            = QRect(416 + controlOffsetX, 644, 41,21);
+
+// Status bit Z, ZCk and its control
 const QRect ZCkCheckBox             = QRect(ctrlInputX, 644, 60, 20);
 const QRect zBitLabel               = QRect(statusBitsX, 644, 19, dataLabelH);
+
+// Status bit N, NCk and its control
 const QRect NCkCheckBox             = QRect(ctrlInputX, 686, checkW, checkH);
 const QRect nBitLabel               = QRect(statusBitsX, 686, 19, dataLabelH);
 
+// MemWrite and its control
 const QRect MemWriteLabel           = QRect(ctrlLabelX, 711, check2W, check2H);
 const QRect MemWriteTristateLabel   = QRect(ctrlInputX, 711, labelTriW, labelTriH);
+
+// MemRead and its control
 const QRect MemReadLabel            = QRect(ctrlLabelX, 731, check2W, check2H);
 const QRect MemReadTristateLabel    = QRect(ctrlInputX, 731, labelTriW, labelTriH);
 
-const Arrow loadCkSelect = Arrow(QVector<QPoint>() << QPoint(499, 24),
-                                 QVector<QLine>()  << QLine(ctrlInputX - 7,
-                                                            loadCkCheckbox.y() + selectYOffset,
-                                                            499,
-                                                            loadCkCheckbox.y() + selectYOffset));
-const Arrow CSelect = Arrow(QVector<QPoint>() << QPoint(499, 47),
-                            QVector<QLine>()  <<  QLine(ctrlInputX - 7, cLabel.y() + selectYOffset,
-                                                        499, cLabel.y() + selectYOffset)
-                                              <<  QLine(523, cLabel.y() + selectYOffset - 5,
-                                                        533, cLabel.y() + selectYOffset + 5));
-const Arrow BSelect = Arrow(QVector<QPoint>() << QPoint(499, 69),
-                            QVector<QLine>()  <<  QLine(ctrlInputX - 7, bLabel.y() + selectYOffset,
-                                                        499, bLabel.y() + selectYOffset)
-                                              <<  QLine(523, bLabel.y() + selectYOffset - selectSlashOffset,
-                                                        533, bLabel.y() + selectYOffset + selectSlashOffset));
-const Arrow ASelect = Arrow(QVector<QPoint>() << QPoint(499, 91),
-                            QVector<QLine>()  <<  QLine(ctrlInputX - 7, aLabel.y() + selectYOffset,
-                                                        499, aLabel.y() + selectYOffset)
-                                              <<  QLine(523, aLabel.y() + selectYOffset - selectSlashOffset,
-                                                        533, aLabel.y() + selectYOffset + selectSlashOffset));
-const Arrow MARCk = Arrow(QVector<QPoint>() << QPoint(232-40,155)
-                                        << QPoint(232-40,191),
-                          QVector<QLine > () << QLine(428,177, 543,177)
-                                        << QLine(367,177, 416,177)
-                                        << QLine(291,177, 355,177)
-                                        << QLine(235-40,177, 279,177)
-                                        << QLine(235-40,163, 235-40,191));
-const Arrow EOMuxSelect = Arrow(QVector<QPoint>() << QPoint(390,310),
-                               QVector<QLine>()  << QLine(EOMuxerDataLabel.right()+5, EOMuxTristateLabel.y()+9, 326, EOMuxTristateLabel.y()+9)
-                               << QLine(350, EOMuxTristateLabel.y()+9, ctrlInputX - 7, EOMuxTristateLabel.y()+9));
 //const Arrow MDRCk                   = OneByteShapes::MDRCk;
 const Arrow AMuxSelect                = OneByteShapes::AMuxSelect;
 const QPolygon AMuxBus                = OneByteShapes::AMuxBus;
