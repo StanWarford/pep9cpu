@@ -374,6 +374,10 @@ const QLine NBitSelect     = QLine(nBitLabel.right() + arrowHOffset,
                                    nBitLabel.y() + selectYOffset,
                                    ctrlInputX - 7,
                                    nBitLabel.y() + selectYOffset);
+const QLine NZVCDataLine   = QLine(OneByteShapes::NZVCDataLine).translated(controlOffsetX, aluOffsetY);
+const Arrow CBitToNZVC     = OneByteShapes::CBitToNZVC.translated(controlOffsetX, aluOffsetY);
+const Arrow CBitToCSMux    = OneByteShapes::CBitToCSMux.translated(controlOffsetX, aluOffsetY);
+const Arrow CInToALU       = OneByteShapes::CInToALU.translated(controlOffsetX, aluOffsetY);
 
 const QLine MemReadSelect  = QLine(DataBus.right()   + arrowHOffset,
                                   MemReadLabel.y() + selectYOffset,

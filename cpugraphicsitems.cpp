@@ -935,7 +935,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         // NZVC data path to CMux, vertical black line
         scene->addPolygon(OneByteShapes::NZVCDataPath,
                           QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
-        scene->addLine(310, 477, 310, 559);
+        scene->addLine(OneByteShapes::NZVCDataLine);
 
     }
     else if (model == Enu::TwoByteDataBus) {
@@ -1052,8 +1052,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
         // NZVC data path to CMux, vertical black line
         scene->addPolygon(TwoByteShapes::NZVCDataPath,
                           QPen(QBrush(Qt::black), 1), QBrush(combCircuitYellow));
-        scene->addLine(QLine(310, 477, 310, 559).translated(TwoByteShapes::controlOffsetX,
-                                                            TwoByteShapes::aluOffsetY));
+        scene->addLine(QLine(TwoByteShapes::NZVCDataLine));
 
     }
 
@@ -1772,33 +1771,42 @@ void CpuGraphicsItems::repaintCBitOut(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    // line from C bit to bus
-    painter->drawLine(487,482, 487,486); // bitty bit under C bit
-    painter->drawLine(330,486, 322,486);
-    painter->drawLine(330,486, 487,486);
-    // arrow to the NZVC data bus
-    painter->drawImage(QPoint(314,483), arrowLeft);
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
+        // line from C bit to NZVC bus
+        painter->drawLines(OneByteShapes::CBitToNZVC._lines);
+        // arrow to the NZVC data bus
+        painter->drawImage(OneByteShapes::CBitToNZVC._arrowheads.first(), arrowLeft);
 
-    // line from C bit to CSMux
-    // bitty bit above C bit:
-    painter->drawLine(487,459, 487,463); //463-4
-    painter->drawLine(434,459, //426+8 //463-4
-                      487,459); //463-4
-    painter->drawLine(434, //426+8
-                      426, //399+19+8
-                      434,459); //426+8 //463-4
-    // arrow to the CSMux
-    painter->drawImage(
-                QPoint(431,  //426+8-3
-                       421), //399+19+3
-                       arrowUp);
+        // line from C bit to CSMux
+        painter->drawLines(OneByteShapes::CBitToCSMux._lines);
+        // arrow to the CSMux
+        painter->drawImage(QPoint(OneByteShapes::CBitToCSMux._arrowheads.first()), arrowUp);
 
-    // CIN line back to the ALU
-    painter->drawLine(461,389, 433,389); //426+35
-    painter->drawLine(461,399,  //426+35
-                      461,389); //426+35
-    // CIN arrow to the ALU
-    painter->drawImage(QPoint(428,386), arrowLeft);
+        // CIN line back to the ALU
+        painter->drawLines(OneByteShapes::CInToALU._lines);
+        // CIN arrow to the ALU
+        painter->drawImage(OneByteShapes::CInToALU._arrowheads.first(), arrowLeft);
+        break;
+    case Enu::TwoByteDataBus:
+        // line from C bit to NZVC bus
+        painter->drawLines(TwoByteShapes::CBitToNZVC._lines);
+        // arrow to the NZVC data bus
+        painter->drawImage(TwoByteShapes::CBitToNZVC._arrowheads.first(), arrowLeft);
+
+        // line from C bit to CSMux
+        painter->drawLines(TwoByteShapes::CBitToCSMux._lines);
+        // arrow to the CSMux
+        painter->drawImage(QPoint(TwoByteShapes::CBitToCSMux._arrowheads.first()), arrowUp);
+
+        // CIN line back to the ALU
+        painter->drawLines(TwoByteShapes::CInToALU._lines);
+        // CIN arrow to the ALU
+        painter->drawImage(TwoByteShapes::CInToALU._arrowheads.first(), arrowLeft);
+        break;
+    default:
+        break;
+    }
 
 }
 

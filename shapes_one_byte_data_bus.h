@@ -471,6 +471,23 @@ const QLine NBitSelect     = QLine(nBitLabel.right() + arrowHOffset,
                                    ctrlInputX - 7,
                                    nBitLabel.y() + selectYOffset);
 
+const QLine NZVCDataLine   = QLine(310, 477, 310, 559);
+const Arrow CBitToNZVC        = Arrow(QVector<QPoint>() <<
+                                   QPoint(314,483),
+                                   QVector<QLine>()
+                                   << QLine(487,482, 487,486)
+                                   << QLine(330,486, 322,486)
+                                   << QLine(330,486, 487,486));
+const Arrow CBitToCSMux   = Arrow(QVector<QPoint>() << QPoint(431, 421),
+                                  QVector<QLine>()
+                                  << QLine(487,459, 487,463)
+                                  << QLine(434,459, 487,459)
+                                  << QLine(434,426, 434,459));
+const Arrow CInToALU      = Arrow(QVector<QPoint>() << QPoint(428, 386),
+                                  QVector<QLine>()
+                                  << QLine(461,389, 433,389)
+                                  << QLine(461,399, 461,389));
+
 const QLine MemReadSelect  = QLine(DataBus.right()   + arrowHOffset,
                                    MemReadLabel.y() + selectYOffset,
                                    ctrlInputX - 7,
