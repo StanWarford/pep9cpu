@@ -221,7 +221,7 @@ const QPolygon AMuxBus = QPolygon(QVector<QPoint>() << QPoint(336,312)
                                   << QPoint(351,331)
                                   << QPoint(346,331)
                                   << QPoint(346,312));
-const Arrow CMuxSelect = Arrow(QVector<QPoint>() << QPoint(257,362),
+const Arrow CMuxSelect = Arrow(QVector<QPoint>() << QPoint(cMuxerLabel.left()+7,cMuxerLabel.top()-12),
                                QVector<QLine>() << QLine(449,355, 543,355)
                                << QLine(315,355, 290,355)
                                << QLine(280,355, 260,355)
@@ -487,6 +487,18 @@ const Arrow CInToALU      = Arrow(QVector<QPoint>() << QPoint(428, 386),
                                   QVector<QLine>()
                                   << QLine(461,389, 433,389)
                                   << QLine(461,399, 461,389));
+const Arrow SBitToCSMux   = Arrow(QVector<QPoint>() << QPoint(484,421),
+                                  QVector<QLine>()
+                                  << QLine(487,437, 487,429));
+const Arrow ZBitOut       = Arrow(QVector<QPoint>()
+                                  << QPoint(314,503)
+                                  << QPoint(434,566),
+                                  QVector<QLine>()
+                                  << QLine(487,563, 487,582) // vertical line to Z bit
+                                  << QLine(487,582, 341,582) // long horizontal line
+                                  << QLine(341,582, 341,506) // vertical line closest to arrowhead
+                                  << QLine(341,506, 322,506) // line from arrowhead on left
+                                  << QLine(437,582, 437,574));
 
 const QLine MemReadSelect  = QLine(DataBus.right()   + arrowHOffset,
                                    MemReadLabel.y() + selectYOffset,

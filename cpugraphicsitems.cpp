@@ -1529,7 +1529,7 @@ void CpuGraphicsItems::repaintEOMuxSelect(QPainter *painter)
     // AMux Select
     painter->drawLines(TwoByteShapes::EOMuxSelect._lines);
 
-    painter->drawImage(QPoint(TwoByteShapes::EOMuxerDataLabel.right()+4,EOMuxTristateLabel->y()+6),
+    painter->drawImage(TwoByteShapes::EOMuxSelect._arrowheads.first(),
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 
 }
@@ -1546,7 +1546,7 @@ void CpuGraphicsItems::repaintCMuxSelect(QPainter *painter)
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
         painter->drawLines(OneByteShapes::CMuxSelect._lines);
-        painter->drawImage(QPoint(OneByteShapes::cMuxerLabel.left()+7,OneByteShapes::cMuxerLabel.top()-12),
+        painter->drawImage(OneByteShapes::CMuxSelect._arrowheads.first(),
                            color == Qt::gray ? arrowDownGray : arrowDown);
         break;
     case Enu::TwoByteDataBus:
@@ -1774,10 +1774,9 @@ void CpuGraphicsItems::repaintSBitOut(QPainter *painter)
     painter->setBrush(color);
 
     // line from S bit to CSMux
-    painter->drawLine(487,437, //476+11
-                      487,437-8); //476+11
+    painter->drawLines(OneByteShapes::SBitToCSMux._lines);
     // arrow:
-    painter->drawImage(QPoint(484,421), arrowUp); //476+11-3 //437-8-8
+    painter->drawImage(OneByteShapes::SBitToCSMux._arrowheads.first(), arrowUp);
 }
 
 void CpuGraphicsItems::repaintCBitOut(QPainter *painter)
@@ -1857,17 +1856,29 @@ void CpuGraphicsItems::repaintZBitOut(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    painter->drawLine(487,563, 487,582); // vertical line to Z bit
-    painter->drawLine(487,582, 341,582); // long horizontal line
-    painter->drawLine(341,582, 341,506); // vertical line closest to arrowhead
-    painter->drawLine(341,506, 322,506); // line from arrowhead on left
+    QPoint point;
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
+        painter->drawEllipse(QPoint(437,582), 2, 2);
+        painter->drawLines(OneByteShapes::ZBitOut._lines);
 
-    // line up to AndZ
-    painter->drawEllipse(QPoint(437,582), 2, 2);
-    painter->drawLine(437,582, 437,574);
+        painter->drawImage(OneByteShapes::ZBitOut._arrowheads.first(), arrowLeft);
+        painter->drawImage(OneByteShapes::ZBitOut._arrowheads.last(), arrowUp);  // AndZ arrow upwards
+        break;
+    case Enu::TwoByteDataBus:
+        point = QPoint(437,582);
+        point.setX(point.x() + TwoByteShapes::controlOffsetX);
+        point.setY(point.y() + TwoByteShapes::aluOffsetY);
+        painter->drawEllipse(point, 2, 2);
+        painter->drawLines(TwoByteShapes::ZBitOut._lines);
 
-    painter->drawImage(QPoint(314,503), arrowLeft);
-    painter->drawImage(QPoint(434,566), arrowUp);  // AndZ arrow upwards
+        painter->drawImage(TwoByteShapes::ZBitOut._arrowheads.first(), arrowLeft);
+        painter->drawImage(TwoByteShapes::ZBitOut._arrowheads.last(), arrowUp);  // AndZ arrow upwards
+        break;
+    default:
+        break;
+    }
+
 }
 
 void CpuGraphicsItems::repaintNBitOut(QPainter *painter)

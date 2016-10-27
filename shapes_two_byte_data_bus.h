@@ -167,7 +167,8 @@ const QRect MDREMuxLabel            = QRect(ctrlLabelX, MDREMuxTristateLabel.y()
 const QRect EOMuxerDataLabel        = QRect(200, 316, dataLabelW, dataLabelH);
 const QRect EOMuxTristateLabel      = QRect(ctrlInputX, EOMuxerDataLabel.y(), labelTriW, labelTriH);
 const QRect EOMuxLabel              = QRect(ctrlLabelX, EOMuxTristateLabel.y(), labelW, labelH);
-const Arrow EOMuxSelect             = Arrow(QVector<QPoint>() << QPoint(390,310),
+const Arrow EOMuxSelect             = Arrow(QVector<QPoint>() << QPoint(EOMuxerDataLabel.right()+4,
+                                                                        EOMuxTristateLabel.y()+6),
                                             QVector<QLine>()
                                             << QLine(EOMuxerDataLabel.right()+5, EOMuxTristateLabel.y()+9,
                                                      326, EOMuxTristateLabel.y()+9)
@@ -387,6 +388,8 @@ const QLine NZVCDataLine   = QLine(OneByteShapes::NZVCDataLine).translated(contr
 const Arrow CBitToNZVC     = OneByteShapes::CBitToNZVC.translated(controlOffsetX, aluOffsetY);
 const Arrow CBitToCSMux    = OneByteShapes::CBitToCSMux.translated(controlOffsetX, aluOffsetY);
 const Arrow CInToALU       = OneByteShapes::CInToALU.translated(controlOffsetX, aluOffsetY);
+const Arrow SBitToCSMux    = OneByteShapes::SBitToCSMux.translated(controlOffsetX, aluOffsetY);
+const Arrow ZBitOut        = OneByteShapes::ZBitOut.translated(controlOffsetX, aluOffsetY);
 
 const QLine MemReadSelect  = QLine(DataBus.right()   + arrowHOffset,
                                   MemReadLabel.y() + selectYOffset,
