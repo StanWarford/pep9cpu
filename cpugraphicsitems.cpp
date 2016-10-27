@@ -1258,6 +1258,7 @@ void CpuGraphicsItems::paint(QPainter *painter,
         painter->drawText(TwoByteShapes::MARALabel.x() - 37, TwoByteShapes::MARALabel.y() + 13, "MARA");
         painter->drawText(TwoByteShapes::MARBLabel.x() - 37, TwoByteShapes::MARBLabel.y() + 13, "MARB");
 
+        repaintMARMuxSelect(painter);
         repaintMDROCk(painter);
         repaintMDRECk(painter);
         repaintEOMuxSelect(painter);
@@ -1498,11 +1499,28 @@ void CpuGraphicsItems::repaintAMuxSelect(QPainter *painter)
     painter->drawPolygon(OneByteShapes::AMuxBus);
 }
 
+void CpuGraphicsItems::repaintMARMuxSelect(QPainter *painter)
+{
+    QColor color;
+    bool ok;
+    MARMuxTristateLabel->text().toInt(&ok, 10);
+
+    color = ok ? Qt::black : Qt::gray;
+    painter->setPen(QPen(QBrush(color), 1));
+    painter->setBrush(color);
+
+    // AMux Select
+    painter->drawLines(TwoByteShapes::MARMuxSelect._lines);
+    painter->drawImage(TwoByteShapes::MARMuxSelect._arrowheads.first(),
+                       color == Qt::gray ? arrowDownGray : arrowDown);
+
+}
+
 void CpuGraphicsItems::repaintEOMuxSelect(QPainter *painter)
 {
     QColor color;
     bool ok;
-    int EOMuxMux = EOMuxTristateLabel->text().toInt(&ok, 10);
+    EOMuxTristateLabel->text().toInt(&ok, 10);
 
     color = ok ? Qt::black : Qt::gray;
     painter->setPen(QPen(QBrush(color), 1));

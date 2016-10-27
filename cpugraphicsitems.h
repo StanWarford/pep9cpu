@@ -196,6 +196,7 @@ private:
     void repaintMemWriteOneByteModel(QPainter *painter);
 
     // two byte specific repainting methods
+    void repaintMARMuxSelect(QPainter *painter);
     void repaintMARCkTwoByteModel(QPainter *painter);
 
     void repaintMDROCk(QPainter *painter);

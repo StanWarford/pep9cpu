@@ -121,8 +121,17 @@ const Arrow ASelect                 = Arrow(QVector<QPoint>() << QPoint(499, 91)
 
 // MARMux and its control
 const QRect MARMuxerDataLabel       = QRect(200, 150, dataLabelW, dataLabelW); // Square
-const QRect MARMuxTristateLabel     = QRect(ctrlInputX, 149, labelTriW, labelTriH);
+const QRect MARMuxTristateLabel     = QRect(ctrlInputX, MARMuxerDataLabel.y()-28, labelTriW, labelTriH);
 const QRect MARMuxLabel             = QRect(ctrlLabelX, MARMuxTristateLabel.y(), labelW+20, labelH);
+const Arrow MARMuxSelect            = Arrow(QVector<QPoint>() << QPoint(MARMuxerDataLabel.x()+MARMuxerDataLabel.width()/2, MARMuxerDataLabel.y()-12),
+                                            QVector<QLine>()
+                                            << QLine(MARMuxerDataLabel.x()+MARMuxerDataLabel.width()/2+3, MARMuxerDataLabel.y()-4,
+                                                     MARMuxerDataLabel.x()+MARMuxerDataLabel.width()/2+3, MARMuxerDataLabel.y()-19)
+                                            << QLine(MARMuxerDataLabel.x()+MARMuxerDataLabel.width()/2+3, MARMuxTristateLabel.y()+9,
+                                                     326, MARMuxTristateLabel.y()+9)
+                                            << QLine(350, MARMuxTristateLabel.y()+9,
+                                                     ctrlInputX - 7, MARMuxTristateLabel.y()+9));
+
 
 // MARCk and its control
 const QRect MARCkCheckbox           = QRect(ctrlInputX, 169, check2W, check2H);
@@ -174,6 +183,7 @@ const QRect aMuxLabel               = QRect(ctrlLabelX, aMuxTristateLabel.y(), l
 const QRect cMuxerLabel             = OneByteShapes::cMuxerLabel.translated(controlOffsetX, aluOffsetY);
 const QRect cMuxTristateLabel       = QRect(ctrlInputX, cMuxerLabel.y()-20, labelTriW, labelTriH);
 const QRect cMuxLabel               = QRect(ctrlLabelX, cMuxTristateLabel.y(), labelW, labelH);
+const Arrow CMuxSelect              = OneByteShapes::CMuxSelect;
 
 // ALU and its control
 const QRect ALULineEdit             = QRect(ctrlInputX,  468, 26,     lineEditH);
@@ -221,9 +231,8 @@ const QRect MemReadTristateLabel    = QRect(ctrlInputX, 731, labelTriW, labelTri
 //const Arrow MDRCk                   = OneByteShapes::MDRCk;
 const Arrow AMuxSelect                = OneByteShapes::AMuxSelect;
 const QPolygon AMuxBus                = OneByteShapes::AMuxBus;
-const Arrow CMuxSelect                = OneByteShapes::CMuxSelect;
 const QPolygon CMuxBus                = OneByteShapes::CMuxBus.translated(controlOffsetX, aluOffsetY);
-const QPolygon ALUPoly = OneByteShapes::ALUPoly.translated(controlOffsetX, aluOffsetY);
+const QPolygon ALUPoly                = OneByteShapes::ALUPoly.translated(controlOffsetX, aluOffsetY);
 const QRect MDRBusOutRect             = OneByteShapes::MDRBusOutRect;
 const QPolygon MDRBusOutArrow         = OneByteShapes::MDRBusOutArrow;
 const QPolygon MARBus = QPolygon(QVector<QPoint>()
