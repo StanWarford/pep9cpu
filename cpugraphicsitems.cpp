@@ -1262,6 +1262,7 @@ void CpuGraphicsItems::paint(QPainter *painter,
         repaintMDROCk(painter);
         repaintMDRECk(painter);
         repaintEOMuxSelect(painter);
+        repaintMDROSelect(painter);
 
         break;
     default:
