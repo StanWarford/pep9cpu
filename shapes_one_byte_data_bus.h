@@ -499,6 +499,28 @@ const Arrow ZBitOut       = Arrow(QVector<QPoint>()
                                   << QLine(341,582, 341,506) // vertical line closest to arrowhead
                                   << QLine(341,506, 322,506) // line from arrowhead on left
                                   << QLine(437,582, 437,574));
+const Arrow VBitOut       = Arrow(QVector<QPoint>()
+                                  << QPoint(314,493),
+                                  QVector<QLine>()
+                                  << QLine(487,510, 487,514) // bitty bit
+                                  << QLine(487,514, 352,514)
+                                  << QLine(352,513, 352,496)
+                                  << QLine(352,496, 322,496));  // short line from the arrow
+const Arrow NBitOut       = Arrow(QVector<QPoint>()
+                                  << QPoint(314,514),
+                                  QVector<QLine>()
+                                  << QLine(487,605, 487,609)
+                                  << QLine(487,609, 330,609)
+                                  << QLine(330,609, 330,517)
+                                  << QLine(330,517, 322,517));
+
+const Arrow AndZOut       = Arrow(QVector<QPoint>()
+                                  << QPoint(434,532)
+                                  << QPoint(465,549),
+                                  QVector<QLine>()
+                                  << QLine(437,532, 437,524)
+                                  << QLine(437,524, 543,524)
+                                  << QLine(458,552, 465,552));
 
 const QLine MemReadSelect  = QLine(DataBus.right()   + arrowHOffset,
                                    MemReadLabel.y() + selectYOffset,

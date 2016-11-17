@@ -1851,15 +1851,23 @@ void CpuGraphicsItems::repaintVBitOut(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    /* V out */
-    painter->drawLine(487,510,  //491+19
-                      487,514); // bitty bit //491+19+4
-    painter->drawLine(487,514,  //491+19+4
-                      352,514); //491+19+4
-    painter->drawLine(352,513, 352,496);
-    painter->drawLine(352,496, 322,496); // short line from the arrow
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
+        painter->drawLines(OneByteShapes::VBitOut._lines);
 
-    painter->drawImage(QPoint(314,493), arrowLeft);
+        painter->drawImage(OneByteShapes::VBitOut._arrowheads.first(), arrowLeft);
+
+        break;
+    case Enu::TwoByteDataBus:
+        painter->drawLines(TwoByteShapes::VBitOut._lines);
+
+        painter->drawImage(TwoByteShapes::VBitOut._arrowheads.first(), arrowLeft);
+
+        break;
+    default:
+        break;
+    }
+
 }
 
 void CpuGraphicsItems::repaintZBitOut(QPainter *painter)
@@ -1871,17 +1879,16 @@ void CpuGraphicsItems::repaintZBitOut(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    QPoint point;
+    QPoint point = QPoint(437,582);
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
-        painter->drawEllipse(QPoint(437,582), 2, 2);
+        painter->drawEllipse(point, 2, 2);
         painter->drawLines(OneByteShapes::ZBitOut._lines);
 
         painter->drawImage(OneByteShapes::ZBitOut._arrowheads.first(), arrowLeft);
         painter->drawImage(OneByteShapes::ZBitOut._arrowheads.last(), arrowUp);  // AndZ arrow upwards
         break;
     case Enu::TwoByteDataBus:
-        point = QPoint(437,582);
         point.setX(point.x() + TwoByteShapes::controlOffsetX);
         point.setY(point.y() + TwoByteShapes::aluOffsetY);
         painter->drawEllipse(point, 2, 2);
@@ -1906,12 +1913,22 @@ void CpuGraphicsItems::repaintNBitOut(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    painter->drawLine(487,605, 487,609); //605+4
-    painter->drawLine(487,609, 330,609); //605+4
-    painter->drawLine(330,609, 330,517); //605+4
-    painter->drawLine(330,517, 322,517);
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
+        painter->drawLines(OneByteShapes::NBitOut._lines);
 
-    painter->drawImage(QPoint(314,514), arrowLeft);
+        painter->drawImage(OneByteShapes::NBitOut._arrowheads.first(), arrowLeft);
+
+        break;
+    case Enu::TwoByteDataBus:
+        painter->drawLines(TwoByteShapes::NBitOut._lines);
+
+        painter->drawImage(TwoByteShapes::NBitOut._arrowheads.first(), arrowLeft);
+
+        break;
+    default:
+        break;
+    }
 }
 
 void CpuGraphicsItems::repaintCSMuxSelect(QPainter *painter)
@@ -1957,11 +1974,24 @@ void CpuGraphicsItems::repaintAndZSelect(QPainter *painter)
     painter->setBrush(color);
 
     // lines coming out of tristate label
-    painter->drawLine(437,532, 437,524); // vertical line //517+7+8 //517+7
-    painter->drawLine(437,524, 543,524); // horiz line //517+7
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
+        painter->drawLines(OneByteShapes::AndZOut._lines);
 
-    painter->drawImage(QPoint(434,532), //517+7+8
-                       color == Qt::gray ? arrowDownGray : arrowDown);
+        painter->drawImage(OneByteShapes::AndZOut._arrowheads.first(),
+                           color == Qt::gray ? arrowDownGray : arrowDown);
+
+        break;
+    case Enu::TwoByteDataBus:
+        painter->drawLines(TwoByteShapes::AndZOut._lines);
+
+        painter->drawImage(TwoByteShapes::AndZOut._arrowheads.first(),
+                           color == Qt::gray ? arrowDownGray : arrowDown);
+
+        break;
+    default:
+        break;
+    }
 
     color = Qt::gray;
     if (ALULineEdit->text() != "" && AndZTristateLabel->text() != "") {
@@ -1971,12 +2001,26 @@ void CpuGraphicsItems::repaintAndZSelect(QPainter *painter)
     painter->setBrush(color);
 
     // AndZ out
+    switch (Pep::cpuFeatures) {
+    case Enu::OneByteDataBus:
 #pragma message("todo: get rid of magic numbers")
-    //painter->drawLine(458,552, 465,552);
-    painter->drawLine(TwoByteShapes::AndZMuxLabel.right(),552, TwoByteShapes::zBitLabel.left() - 2,552);
+        painter->drawLine(458,552, 465,552);
+        painter->drawImage(QPoint(465,549),
+                           color == Qt::gray ? arrowRightGray : arrowRight);
 
-    painter->drawImage(QPoint(465,549),
-                       color == Qt::gray ? arrowRightGray : arrowRight);
+        break;
+    case Enu::TwoByteDataBus:
+        painter->drawLine(TwoByteShapes::AndZMuxLabel.right(),552,
+                          TwoByteShapes::zBitLabel.left() - 2,552);
+        painter->drawImage(QPoint(465,549),
+                           color == Qt::gray ? arrowRightGray : arrowRight);
+
+        break;
+    default:
+        break;
+    }
+
+
 }
 
 void CpuGraphicsItems::repaintALUSelect(QPainter *painter)

@@ -398,6 +398,10 @@ const Arrow CBitToCSMux    = OneByteShapes::CBitToCSMux.translated(controlOffset
 const Arrow CInToALU       = OneByteShapes::CInToALU.translated(controlOffsetX, aluOffsetY);
 const Arrow SBitToCSMux    = OneByteShapes::SBitToCSMux.translated(controlOffsetX, aluOffsetY);
 const Arrow ZBitOut        = OneByteShapes::ZBitOut.translated(controlOffsetX, aluOffsetY);
+const Arrow VBitOut        = OneByteShapes::VBitOut.translated(controlOffsetX, aluOffsetY);
+const Arrow NBitOut        = OneByteShapes::NBitOut.translated(controlOffsetX, aluOffsetY);
+
+const Arrow AndZOut        = OneByteShapes::AndZOut.translated(controlOffsetX, aluOffsetY);
 
 const QLine MemReadSelect  = QLine(DataBus.right()   + arrowHOffset,
                                   MemReadLabel.y() + selectYOffset,
