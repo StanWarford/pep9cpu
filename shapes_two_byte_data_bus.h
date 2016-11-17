@@ -148,6 +148,14 @@ const Arrow MARCk                   = Arrow(QVector<QPoint>() << QPoint(232-40,1
 // MDROdd, MDROCk and its control
 const QRect MDROLabel               = QRect(combCircX, 254, dataLabelW, dataLabelH);
 const QRect MDROCkCheckbox          = QRect(ctrlInputX, MDROLabel.y()-20, checkW+10, checkH);
+const Arrow MDROSelect              = Arrow(QVector<QPoint>() << QPoint(MDROLabel.x()+MDROLabel.width()/2, MDROLabel.y()-12),
+                                            QVector<QLine>()
+                                            << QLine(MDROLabel.x()+MDROLabel.width()/2+3, MDROLabel.y()-4,
+                                                     MDROLabel.x()+MDROLabel.width()/2+3, MDROLabel.y()-19)
+                                            << QLine(MDROLabel.x()+MDROLabel.width()/2+3, MDROCkCheckbox.y()+9,
+                                                     326, MDROCkCheckbox.y()+9)
+                                            << QLine(350, MDROCkCheckbox.y()+9,
+                                                     ctrlInputX - 7, MDROCkCheckbox.y()+9));
 
 // MDROMux and its control
 const QRect MDROMuxerDataLabel      = QRect(combCircX, 293, dataLabelW, dataLabelH);

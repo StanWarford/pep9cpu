@@ -200,6 +200,7 @@ private:
     void repaintMARCkTwoByteModel(QPainter *painter);
 
     void repaintMDROCk(QPainter *painter);
+    void repaintMDROSelect(QPainter *painter);
     void repaintMDRECk(QPainter *painter);
 
     void repaintALUSelectTwoByteModel(QPainter *painter);

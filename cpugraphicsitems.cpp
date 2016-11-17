@@ -1516,6 +1516,21 @@ void CpuGraphicsItems::repaintMARMuxSelect(QPainter *painter)
 
 }
 
+void CpuGraphicsItems::repaintMDROSelect(QPainter *painter)
+{
+    QColor color;
+
+    color = MDROCk->isChecked() ? Qt::black : Qt::gray;
+    painter->setPen(QPen(QBrush(color), 1));
+    painter->setBrush(color);
+
+    // MDROdd Select
+    painter->drawLines(TwoByteShapes::MDROSelect._lines);
+    painter->drawImage(TwoByteShapes::MDROSelect._arrowheads.first(),
+                       color == Qt::gray ? arrowDownGray : arrowDown);
+
+}
+
 void CpuGraphicsItems::repaintEOMuxSelect(QPainter *painter)
 {
     QColor color;
@@ -1629,7 +1644,7 @@ void CpuGraphicsItems::repaintCCk(QPainter *painter)
 {
     QColor color;
 
-    color = CCkCheckBox->isChecked() ? Qt::black : Qt::gray;
+    color = MDROCk->isChecked() ? Qt::black : Qt::gray;
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
