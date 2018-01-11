@@ -71,7 +71,7 @@ enum CommonPositions {
     controlOffsetX = 50,
     ctrlLabelX = 579 + controlOffsetX,
     ctrlInputX = 550 + controlOffsetX,
-    interfaceRegsX = 175,
+    interfaceRegsX = 175,               // x-center of MARB, MARA, ...
     combCircX = interfaceRegsX - iRegXOffset,
     statusBitsX = 526,//476,
 
@@ -120,7 +120,7 @@ const Arrow ASelect                 = Arrow(QVector<QPoint>() << QPoint(499, 91)
                                                      533, aLabel.y() + selectYOffset + selectSlashOffset));
 
 // MARMux and its control
-const QRect MARMuxerDataLabel       = QRect(200, 150, dataLabelW, dataLabelW); // Square
+const QRect MARMuxerDataLabel       = QRect(230, 132, 89, 89); // 89 x 89 square from bottom of MARA to top of MARB
 const QRect MARMuxTristateLabel     = QRect(ctrlInputX, MARMuxerDataLabel.y()-28, labelTriW, labelTriH);
 const QRect MARMuxLabel             = QRect(ctrlLabelX, MARMuxTristateLabel.y(), labelW+20, labelH);
 const Arrow MARMuxSelect            = Arrow(QVector<QPoint>() << QPoint(MARMuxerDataLabel.x()+MARMuxerDataLabel.width()/2, MARMuxerDataLabel.y()-12),
@@ -132,18 +132,17 @@ const Arrow MARMuxSelect            = Arrow(QVector<QPoint>() << QPoint(MARMuxer
                                             << QLine(350, MARMuxTristateLabel.y()+9,
                                                      ctrlInputX - 7, MARMuxTristateLabel.y()+9));
 
-
 // MARCk and its control
 const QRect MARCkCheckbox           = QRect(ctrlInputX, 169, check2W, check2H);
-const QRect MARALabel               = QRect(combCircX, 202, dataLabelW, dataLabelH);
-const QRect MARBLabel               = QRect(combCircX, 132, dataLabelW, dataLabelH);
-const Arrow MARCk                   = Arrow(QVector<QPoint>() << QPoint(232-40,155) << QPoint(232-40,191),
+const QRect MARALabel               = QRect(combCircX, 202, dataLabelW, dataLabelH); // MARA register
+const QRect MARBLabel               = QRect(combCircX, 132, dataLabelW, dataLabelH); // MARB register
+const Arrow MARCk                   = Arrow(QVector<QPoint>() << QPoint(232-40,155) << QPoint(232-40,191), // What does this do?
                                             QVector<QLine> ()
                                             << QLine(428,177, 543,177)
                                             << QLine(367,177, 416,177)
                                             << QLine(291,177, 355,177)
-                                            << QLine(235-40,177, 279,177)
-                                            << QLine(235-40,163, 235-40,191));
+                                            << QLine(235-50,177, 279,177)
+                                            << QLine(235-50,163, 235-50,191));
 
 // MDROdd, MDROCk and its control
 const QRect MDROLabel               = QRect(combCircX, 254, dataLabelW, dataLabelH);
