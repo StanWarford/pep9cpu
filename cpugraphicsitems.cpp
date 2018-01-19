@@ -1263,6 +1263,7 @@ void CpuGraphicsItems::paint(QPainter *painter,
         repaintMDRECk(painter);
         repaintEOMuxSelect(painter);
         repaintMDROSelect(painter);
+        repaintMARMUXToMARBusses(painter);
 
         break;
     default:
@@ -2744,5 +2745,22 @@ void CpuGraphicsItems::repaintMemWriteTwoByteModel(QPainter *painter)
     painter->drawPolygon(TwoByteShapes::DataToMDROMuxBus);
     painter->drawPolygon(TwoByteShapes::DataToMDREMuxBus);
 
+}
+
+void CpuGraphicsItems::repaintMARMUXToMARBusses(QPainter *painter)
+{
+    //Needs conditional painting based on the state of the bus.
+    bool marckIsHigh = MARCk->isChecked();
+    QColor color;
+    if(marckIsHigh){
+        color=combCircuitRed;
+    }
+    else{
+        color=Qt::white;
+    }
+    painter->setPen(QPen(QBrush(Qt::black), 1));
+    painter->setBrush(color);
+    painter->drawPolygon(TwoByteShapes::MARMuxToMARABus);
+    painter->drawPolygon(TwoByteShapes::MARMuxToMARBBus);
 }
 
