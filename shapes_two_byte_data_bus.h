@@ -142,7 +142,23 @@ const Arrow MARCk                   = Arrow(QVector<QPoint>() << QPoint(232-40,1
                                             << QLine(367,177, 416,177)
                                             << QLine(291,177, 355,177)
                                             << QLine(235-50,177, 279,177)
-                                            << QLine(235-50,163, 235-50,191));
+                                            << QLine(235-50,163, 235-50,191));  //Vertical line at left end of MARck
+// MARMux output busses
+const QPolygon MARMuxToMARABus = QPolygon(QVector<QPoint>()  << QPoint(MARMuxerDataLabel.x(), MARALabel.y()+MARALabel.height()/2-5)        //Top Right Corner
+                                        << QPoint(MARMuxerDataLabel.x(), MARALabel.y()+MARALabel.height()/2+5)                             //Bottom Right Corner
+                                        << QPoint(MARALabel.x()+MARALabel.width()+arrowHDepth-5, MARALabel.y()+MARALabel.height()/2+5)     //Arrow Bottom Left Inner edge
+                                        << QPoint(MARALabel.x()+MARALabel.width()+arrowHDepth-5, MARALabel.y()+MARALabel.height()/2+10)    //Arrow Bottom Left Outer Edge
+                                        << QPoint(MARALabel.x()+MARALabel.width()+arrowHOffset, MARALabel.y()+MARALabel.height()/2)        //Arrow Middle Point
+                                        << QPoint(MARALabel.x()+MARALabel.width()+arrowHDepth-5, MARALabel.y()+MARALabel.height()/2-10)    //Arrow Top Left Outer Edge
+                                        << QPoint(MARALabel.x()+MARALabel.width()+arrowHDepth-5, MARALabel.y()+MARALabel.height()/2-5));   //Arrow Top Left Inner Edge
+
+const QPolygon MARMuxToMARBBus = QPolygon(QVector<QPoint>()  << QPoint(MARMuxerDataLabel.x(), MARBLabel.y()+MARALabel.height()/2-5)        //Top Right Corner
+                                        << QPoint(MARMuxerDataLabel.x(), MARBLabel.y()+MARALabel.height()/2+5)                             //Bottom Right Corner
+                                        << QPoint(MARBLabel.x()+MARBLabel.width()+arrowHDepth-5, MARBLabel.y()+MARALabel.height()/2+5)     //Arrow Bottom Left Inner edge
+                                        << QPoint(MARBLabel.x()+MARBLabel.width()+arrowHDepth-5, MARBLabel.y()+MARALabel.height()/2+10)    //Arrow Bottom Left Outer Edge
+                                        << QPoint(MARBLabel.x()+MARBLabel.width()+arrowHOffset, MARBLabel.y()+MARALabel.height()/2)        //Arrow Middle Point
+                                        << QPoint(MARBLabel.x()+MARBLabel.width()+arrowHDepth-5, MARBLabel.y()+MARALabel.height()/2-10)    //Arrow Top Left Outer Edge
+                                        << QPoint(MARBLabel.x()+MARBLabel.width()+arrowHDepth-5, MARBLabel.y()+MARALabel.height()/2-5));   //Arrow Top Left Inner Edge
 
 // MDROdd, MDROCk and its control
 const QRect MDROLabel               = QRect(combCircX, 254, dataLabelW, dataLabelH);

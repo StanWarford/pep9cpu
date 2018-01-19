@@ -208,6 +208,8 @@ private:
     void repaintMemReadTwoByteModel(QPainter *painter);
     void repaintMemWriteTwoByteModel(QPainter *painter);
 
+    void repaintMARMUXToMARBusses(QPainter *painter);
+
 };
 
 
