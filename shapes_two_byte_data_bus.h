@@ -278,7 +278,7 @@ const QPolygon NZVCDataPath = OneByteShapes::NZVCDataPath.translated(controlOffs
 
 // AMux, its controls, selection lines, and output.
 const QRect aMuxerDataLabel         =  QRect(((controlOffsetX+OneByteShapes::ALUUpperLeftLine_LeftPoint)+(controlOffsetX+OneByteShapes::ALUUpperLeftLine_RightPoint))/2-dataLabelW/2,
-                                            //Center AMUX's x on the midpoint of the ALUPolygon, which ahs been shifter by controlOffsetX pixels.
+                                            //Center AMUX's x on the midpoint of the ALUPolygon, which has been shifter by controlOffsetX pixels.
                                             ALUPoly.boundingRect().y()-AMuxYOffsetFromALUPoly, dataLabelW, dataLabelH);//Place AMuxYOffsetFromALUPoly pixels distance between AMux and the ALU
 
 const QRect aMuxTristateLabel       = QRect(ctrlInputX, aMuxerDataLabel.y(), labelTriW, 21);
