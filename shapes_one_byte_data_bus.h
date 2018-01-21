@@ -236,8 +236,14 @@ const QPolygon CMuxBus = QPolygon(QVector<QPoint>() << QPoint(290,374)
                                   << QPoint(230,344) << QPoint(280,344)
                                   << QPoint(280,374));
 
-const QPolygon ALUPoly = QPolygon(QVector<QPoint>() << QPoint(314,342)
-                                  << QPoint(366,342) << QPoint(370,353)
+//Use an enumeration for points that other shapes (like AMux) rely on, so that it is easier to re-arrange the diagram.
+enum ALUPolyNumbers
+{
+    ALUUpperLeftLine_LeftPoint = 314,
+    ALUUpperLeftLine_RightPoint=366
+};
+const QPolygon ALUPoly = QPolygon(QVector<QPoint>() << QPoint(ALUUpperLeftLine_LeftPoint,342)
+                                  << QPoint(ALUUpperLeftLine_RightPoint,342) << QPoint(370,353)
                                   << QPoint(390,353) << QPoint(394,342)
                                   << QPoint(447,342) << QPoint(421,394)
                                   << QPoint(340,394));

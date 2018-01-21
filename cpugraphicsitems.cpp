@@ -1467,13 +1467,20 @@ void CpuGraphicsItems::repaintAMuxSelect(QPainter *painter)
     color = ok ? Qt::black : Qt::gray;
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
-
-    // AMux Select
-    painter->drawLines(OneByteShapes::AMuxSelect._lines);
-
-    painter->drawImage(QPoint(380,300),
-                       color == Qt::gray ? arrowLeftGray : arrowLeft);
-
+    // Draw AMux select depending on the enabled feature set
+    switch(Pep::cpuFeatures)
+    {
+    case Enu::OneByteDataBus:
+        painter->drawLines(OneByteShapes::AMuxSelect._lines);
+        painter->drawImage(QPoint(380,300),
+                           color == Qt::gray ? arrowLeftGray : arrowLeft);
+        break;
+    case Enu::TwoByteDataBus:
+        painter->drawLines(TwoByteShapes::AMuxSelect._lines);
+        painter->drawImage(TwoByteShapes::AMuxSelect._arrowheads.first(), //Should more arrowheads be added, this will need to be a proper for loop.
+                           color == Qt::gray ? arrowLeftGray : arrowLeft);
+        break;
+    }
     if (ok) {
         switch (aMux) {
         case (0):
@@ -1497,8 +1504,17 @@ void CpuGraphicsItems::repaintAMuxSelect(QPainter *painter)
     painter->setPen(QPen(QBrush(Qt::black), 1));
     painter->setBrush(color);
 
-    // AMux bus
-    painter->drawPolygon(OneByteShapes::AMuxBus);
+    // Draw AMux bus depending on the enabled feature set
+    switch(Pep::cpuFeatures)
+    {
+    case Enu::OneByteDataBus:
+        painter->drawPolygon(OneByteShapes::AMuxBus);
+        break;
+    case Enu::TwoByteDataBus:
+        painter->drawPolygon(TwoByteShapes::AMuxBus);
+        break;
+    }
+
 }
 
 void CpuGraphicsItems::repaintMARMuxSelect(QPainter *painter)

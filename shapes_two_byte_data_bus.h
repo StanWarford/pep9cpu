@@ -77,6 +77,10 @@ enum CommonPositions {
 
 };
 
+//Enumeration that controls the distance between items in the diagram. Hopefully this makes spacing easier to adjust.
+enum CommonOffsets{
+    AMuxYOffsetFromALUPoly=40, //The number of pixels between AMux and the ALU Polygon
+};
 
 // input/label/control section:
 const QRect AddrBus = QRect(40, 151, 20, 600);
@@ -198,11 +202,6 @@ const Arrow EOMuxSelect             = Arrow(QVector<QPoint>() << QPoint(EOMuxerD
                                             << QLine(350, EOMuxTristateLabel.y()+9,
                                                      ctrlInputX - 7, EOMuxTristateLabel.y()+9));
 
-// AMux and its control
-const QRect aMuxerDataLabel         = QRect(306, 400, dataLabelW, dataLabelH);
-const QRect aMuxTristateLabel       = QRect(ctrlInputX, aMuxerDataLabel.y(), labelTriW, 21);
-const QRect aMuxLabel               = QRect(ctrlLabelX, aMuxTristateLabel.y(), labelW, labelH);
-
 // CMux and its control
 const QRect cMuxerLabel             = OneByteShapes::cMuxerLabel.translated(controlOffsetX, aluOffsetY);
 const QRect cMuxTristateLabel       = QRect(ctrlInputX, cMuxerLabel.y()-20, labelTriW, labelTriH);
@@ -253,8 +252,6 @@ const QRect MemReadLabel            = QRect(ctrlLabelX, 731, check2W, check2H);
 const QRect MemReadTristateLabel    = QRect(ctrlInputX, 731, labelTriW, labelTriH);
 
 //const Arrow MDRCk                   = OneByteShapes::MDRCk;
-const Arrow AMuxSelect                = OneByteShapes::AMuxSelect;
-const QPolygon AMuxBus                = OneByteShapes::AMuxBus;
 const QPolygon CMuxBus                = OneByteShapes::CMuxBus.translated(controlOffsetX, aluOffsetY);
 const QPolygon ALUPoly                = OneByteShapes::ALUPoly.translated(controlOffsetX, aluOffsetY);
 const QRect MDRBusOutRect             = OneByteShapes::MDRBusOutRect;
@@ -278,6 +275,31 @@ const QPolygon MARBus = QPolygon(QVector<QPoint>()
                                  << QPoint(combCircX + 30 + 10,177)
                                  << QPoint(combCircX + 30 + 10,151));
 const QPolygon NZVCDataPath = OneByteShapes::NZVCDataPath.translated(controlOffsetX, aluOffsetY);
+
+// AMux, its controls, selection lines, and output.
+const QRect aMuxerDataLabel         = QRect((OneByteShapes::ALUUpperLeftLine_LeftPoint+OneByteShapes::ALUUpperLeftLine_RightPoint)/2,
+                                            //Center AMUX's x on the midpoint of the ALUPolygon
+                                            ALUPoly.boundingRect().y()-AMuxYOffsetFromALUPoly, dataLabelW, dataLabelH);//Place AMuxYOffsetFromALUPoly pixels distance between AMux and the ALU
+
+const QRect aMuxTristateLabel       = QRect(ctrlInputX, aMuxerDataLabel.y(), labelTriW, 21);
+const QRect aMuxLabel               = QRect(ctrlLabelX, aMuxTristateLabel.y(), labelW, labelH);
+const Arrow AMuxSelect              = Arrow(QVector<QPoint>()
+                                            //Place the arrowhead slightly off-centered from AMux, otherwise it is visually odd.
+                                            << QPoint(aMuxerDataLabel.x()+aMuxerDataLabel.width()+3,aMuxerDataLabel.y()+aMuxerDataLabel.height()/2-2),
+                                            //Draw a line from the aMuxTristateLabel to AMux, and center the line vertically between the two.
+                                            //Add one to the calculated y coordinates, otherwise the line and arrow don't appear to be centered.
+                                            QVector<QLine>()<<QLine(aMuxTristateLabel.x(),aMuxerDataLabel.y()+aMuxerDataLabel.height()/2+1,
+                                                                    //Add 5 to the x coordinate, otherwise the line extends past the arrow.
+                                                                    aMuxerDataLabel.x()+aMuxerDataLabel.width()+5,aMuxerDataLabel.y()+aMuxerDataLabel.height()/2+1));
+const QPolygon AMuxBus              = QPolygon(QVector<QPoint>()
+                                               <<QPoint(aMuxerDataLabel.x()+aMuxerDataLabel.width()/2-5,aMuxerDataLabel.y()+aMuxerDataLabel.height()) //Upper Left Corner
+                                               <<QPoint(aMuxerDataLabel.x()+aMuxerDataLabel.width()/2+5,aMuxerDataLabel.y()+aMuxerDataLabel.height()) //Upper Right Corner
+                                               <<QPoint(aMuxerDataLabel.x()+aMuxerDataLabel.width()/2+5,ALUPoly.boundingRect().y()-(arrowHDepth-5)) //Arrow Inner Right Edge
+                                               <<QPoint(aMuxerDataLabel.x()+aMuxerDataLabel.width()/2+10,ALUPoly.boundingRect().y()-(arrowHDepth-5)) //Arrow Outer Right Edge
+                                               <<QPoint(aMuxerDataLabel.x()+aMuxerDataLabel.width()/2,ALUPoly.boundingRect().y()-arrowHOffset) //Arrow Outer Right Edge
+                                               <<QPoint(aMuxerDataLabel.x()+aMuxerDataLabel.width()/2-10,ALUPoly.boundingRect().y()-(arrowHDepth-5)) //Arrow Outer Left Edge
+                                               <<QPoint(aMuxerDataLabel.x()+aMuxerDataLabel.width()/2-5,ALUPoly.boundingRect().y()-(arrowHDepth-5)) //Arrow Inner Left Edge
+                                               );
 
 // registers
 const QRect RegBank                         = OneByteShapes::RegBank;
