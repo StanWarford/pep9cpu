@@ -1263,7 +1263,9 @@ void CpuGraphicsItems::paint(QPainter *painter,
         repaintMDRECk(painter);
         repaintEOMuxSelect(painter);
         repaintMDROSelect(painter);
-        repaintMARMUXToMARBusses(painter);
+        repaintMARMUXToMARBuses(painter);
+        repaintMDRSelect(painter);
+        repaintMDRMuxOutputBuses(painter);
 
         break;
     default:
@@ -1537,7 +1539,6 @@ void CpuGraphicsItems::repaintMARMuxSelect(QPainter *painter)
 void CpuGraphicsItems::repaintMDROSelect(QPainter *painter)
 {
     QColor color;
-
     color = MDROCk->isChecked() ? Qt::black : Qt::gray;
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
@@ -2115,27 +2116,7 @@ void CpuGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
 
         break;
     case Enu::TwoByteDataBus:
-        // MDRMuxOutBus (MDRMux to MDR arrow)
-        painter->drawPolygon(TwoByteShapes::MDREMuxOutBus);
-        painter->drawPolygon(TwoByteShapes::MDROMuxOutBus);
-
-        // finish up by drawing select lines:
-        color = Qt::gray;
-        if (MDREMuxTristateLabel->text() != "") {
-            color = Qt::black;
-        }
-        painter->setPen(color);
-        painter->setBrush(color);
-
-        // MDRMux Select
-        painter->drawLine(257,303, 265,303); painter->drawLine(265,303, 265,324);
-        painter->drawLine(265,324, 279,324); painter->drawLine(291,324, 335,324);
-        painter->drawLine(347,324, 416,324); painter->drawLine(428,324, 543,324);
-
-        painter->drawImage(QPoint(249,300),
-                           color == Qt::gray ? arrowLeftGray : arrowLeft);
-
-
+        //This function is only called from the one byte section of paint(...), so this code will never be used.
         break;
     default:
         break;
@@ -2763,7 +2744,7 @@ void CpuGraphicsItems::repaintMemWriteTwoByteModel(QPainter *painter)
 
 }
 
-void CpuGraphicsItems::repaintMARMUXToMARBusses(QPainter *painter)
+void CpuGraphicsItems::repaintMARMUXToMARBuses(QPainter *painter)
 {
     //Needs conditional painting based on the state of the bus.
     bool marckIsHigh = MARCk->isChecked();
@@ -2778,5 +2759,61 @@ void CpuGraphicsItems::repaintMARMUXToMARBusses(QPainter *painter)
     painter->setBrush(color);
     painter->drawPolygon(TwoByteShapes::MARMuxToMARABus);
     painter->drawPolygon(TwoByteShapes::MARMuxToMARBBus);
+}
+
+void CpuGraphicsItems::repaintMDRSelect(QPainter *painter)
+{
+    //Figure out which control lines are high, and set store the appropriate color to paint the control line
+    bool MDREIsHigh=MDREMuxTristateLabel->text()=="1",MDROIsHigh=MDROMuxTristateLabel->text()=="1";
+    QColor MDREColor=MDREIsHigh?Qt::black:Qt::gray;
+    QColor MDROColor=MDROIsHigh?Qt::black:Qt::gray;
+
+    //Paint MDRESelect's lines and arrow in the appropriate color
+    painter->setPen(MDREColor);
+    painter->drawLines(TwoByteShapes::MDREMuxSelect._lines);
+    painter->drawImage(TwoByteShapes::MDREMuxSelect._arrowheads.first(),
+                       MDREColor == Qt::gray ? arrowLeftGray : arrowLeft);
+
+    //Paint MDROSelect's lines and arrow in the appropriate color
+    painter->setPen(MDROColor);
+    painter->drawLines(TwoByteShapes::MDROMuxSelect._lines);
+    painter->drawImage(TwoByteShapes::MDROMuxSelect._arrowheads.first(),
+                       MDROColor == Qt::gray ? arrowLeftGray : arrowLeft);
+}
+
+void CpuGraphicsItems::repaintMDRMuxOutputBuses(QPainter *painter)
+{
+    // MDRMuxOutBus (MDRMux to MDR arrow)
+    QColor colorMDRE = Qt::white,colorMDRO=Qt::white;
+    // Depending on which input is selected on the MDRMuxes, the color might need to change.
+    // For now red seems to be the most logical color to use all the time.
+    if(MDRECk->isChecked()){
+        colorMDRE=combCircuitRed;
+    }
+    if(MDROCk->isChecked()){
+        colorMDRO=combCircuitRed;
+    }
+    painter->setPen(Qt::black);
+    painter->setBrush(colorMDRE);
+    painter->drawPolygon(TwoByteShapes::MDREMuxOutBus);
+    painter->setBrush(colorMDRO);
+    painter->drawPolygon(TwoByteShapes::MDROMuxOutBus);
+
+    // Selection lines are now handled in a seperate function, but the code originall used to do it is preserved here.
+    //QColor color = Qt::gray;
+    //if (MDREMuxTristateLabel->text() != "") {
+    //    color = Qt::black;
+    //}
+    //painter->setPen(color);
+    //painter->setBrush(color);
+    // MDRMux Select
+    //painter->drawLine(257,303, 265,303); painter->drawLine(265,303, 265,324);
+    //painter->drawLine(265,324, 279,324); painter->drawLine(291,324, 335,324);
+    //painter->drawLine(347,324, 416,324); painter->drawLine(428,324, 543,324);
+
+    /*painter->drawImage(QPoint(249,300),
+                       color == Qt::gray ? arrowLeftGray : arrowLeft);*/
+
+
 }
 
