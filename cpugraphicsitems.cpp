@@ -1263,8 +1263,8 @@ void CpuGraphicsItems::paint(QPainter *painter,
         repaintMDRECk(painter);
         repaintEOMuxSelect(painter);
         repaintMDROSelect(painter);
+        repaintMDRESelect(painter);
         repaintMARMUXToMARBuses(painter);
-        repaintMDRSelect(painter);
         repaintMDRMuxOutputBuses(painter);
 
         break;
@@ -1538,16 +1538,15 @@ void CpuGraphicsItems::repaintMARMuxSelect(QPainter *painter)
 
 void CpuGraphicsItems::repaintMDROSelect(QPainter *painter)
 {
-    QColor color;
-    color = MDROCk->isChecked() ? Qt::black : Qt::gray;
-    painter->setPen(QPen(QBrush(color), 1));
-    painter->setBrush(color);
+    //Determine if control line is high, so that the color may be set accordingly
+    bool MDROIsHigh=MDROMuxTristateLabel->text()=="1";
+    QColor MDROColor=MDROIsHigh?Qt::black:Qt::gray;
 
-    // MDROdd Select
-    painter->drawLines(TwoByteShapes::MDROSelect._lines);
-    painter->drawImage(TwoByteShapes::MDROSelect._arrowheads.first(),
-                       color == Qt::gray ? arrowDownGray : arrowDown);
-
+    //Paint MDROSelect's lines and arrow in the appropriate color
+    painter->setPen(MDROColor);
+    painter->drawLines(TwoByteShapes::MDROMuxSelect._lines);
+    painter->drawImage(TwoByteShapes::MDROMuxSelect._arrowheads.first(),
+                       MDROColor == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuGraphicsItems::repaintEOMuxSelect(QPainter *painter)
@@ -2454,7 +2453,15 @@ void CpuGraphicsItems::repaintMARCkTwoByteModel(QPainter *painter)
 
 void CpuGraphicsItems::repaintMDROCk(QPainter *painter)
 {
+    QColor color;
+    color = MDROCk->isChecked() ? Qt::black : Qt::gray;
+    painter->setPen(QPen(QBrush(color), 1));
+    painter->setBrush(color);
 
+    // MDROdd Clock
+    painter->drawLines(TwoByteShapes::MDROck._lines);
+    painter->drawImage(TwoByteShapes::MDROck._arrowheads.first(),
+                       color == Qt::gray ? arrowDownGray : arrowDown);
 }
 
 void CpuGraphicsItems::repaintMDRECk(QPainter *painter)
@@ -2761,24 +2768,17 @@ void CpuGraphicsItems::repaintMARMUXToMARBuses(QPainter *painter)
     painter->drawPolygon(TwoByteShapes::MARMuxToMARBBus);
 }
 
-void CpuGraphicsItems::repaintMDRSelect(QPainter *painter)
+void CpuGraphicsItems::repaintMDRESelect(QPainter *painter)
 {
-    //Figure out which control lines are high, and set store the appropriate color to paint the control line
-    bool MDREIsHigh=MDREMuxTristateLabel->text()=="1",MDROIsHigh=MDROMuxTristateLabel->text()=="1";
+    //Determine if control line is high, so that the color may be set accordingly
+    bool MDREIsHigh=MDREMuxTristateLabel->text()=="1";
     QColor MDREColor=MDREIsHigh?Qt::black:Qt::gray;
-    QColor MDROColor=MDROIsHigh?Qt::black:Qt::gray;
 
     //Paint MDRESelect's lines and arrow in the appropriate color
     painter->setPen(MDREColor);
     painter->drawLines(TwoByteShapes::MDREMuxSelect._lines);
     painter->drawImage(TwoByteShapes::MDREMuxSelect._arrowheads.first(),
                        MDREColor == Qt::gray ? arrowLeftGray : arrowLeft);
-
-    //Paint MDROSelect's lines and arrow in the appropriate color
-    painter->setPen(MDROColor);
-    painter->drawLines(TwoByteShapes::MDROMuxSelect._lines);
-    painter->drawImage(TwoByteShapes::MDROMuxSelect._arrowheads.first(),
-                       MDROColor == Qt::gray ? arrowLeftGray : arrowLeft);
 }
 
 void CpuGraphicsItems::repaintMDRMuxOutputBuses(QPainter *painter)

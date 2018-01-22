@@ -167,7 +167,7 @@ const QPolygon MARMuxToMARBBus = QPolygon(QVector<QPoint>()  << QPoint(MARMuxerD
 // MDROdd, MDROCk and its control
 const QRect MDROLabel               = QRect(combCircX, 254, dataLabelW, dataLabelH);
 const QRect MDROCkCheckbox          = QRect(ctrlInputX, MDROLabel.y()-20, checkW+10, checkH);
-const Arrow MDROSelect              = Arrow(QVector<QPoint>() << QPoint(MDROLabel.x()+MDROLabel.width()/2, MDROLabel.y()-12),
+const Arrow MDROck              = Arrow(QVector<QPoint>() << QPoint(MDROLabel.x()+MDROLabel.width()/2, MDROLabel.y()-12),
                                             QVector<QLine>()
                                             << QLine(MDROLabel.x()+MDROLabel.width()/2+3, MDROLabel.y()-4,
                                                      MDROLabel.x()+MDROLabel.width()/2+3, MDROLabel.y()-19)

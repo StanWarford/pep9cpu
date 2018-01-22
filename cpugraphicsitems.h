@@ -203,6 +203,7 @@ private:
     void repaintMDROCk(QPainter *painter);
     //MDROSelect actually repaints MDROCk
     void repaintMDROSelect(QPainter *painter);
+    void repaintMDRESelect(QPainter *painter);
     void repaintMDRECk(QPainter *painter);
 
     void repaintALUSelectTwoByteModel(QPainter *painter);
@@ -211,7 +212,7 @@ private:
     void repaintMemWriteTwoByteModel(QPainter *painter);
 
     void repaintMARMUXToMARBuses(QPainter *painter);
-    void repaintMDRSelect(QPainter *painter);
+
     void repaintMDRMuxOutputBuses(QPainter *painter);
 
 };
