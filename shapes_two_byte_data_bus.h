@@ -150,24 +150,24 @@ const Arrow MARCk                   = Arrow(QVector<QPoint>() << QPoint(232-40,1
 // MARMux output busses
 const QPolygon MARMuxToMARABus = QPolygon(QVector<QPoint>()  << QPoint(MARMuxerDataLabel.x(), MARALabel.y()+MARALabel.height()/2-5)        //Top Right Corner
                                         << QPoint(MARMuxerDataLabel.x(), MARALabel.y()+MARALabel.height()/2+5)                             //Bottom Right Corner
-                                        << QPoint(MARALabel.x()+MARALabel.width()+arrowHDepth-5, MARALabel.y()+MARALabel.height()/2+5)     //Arrow Bottom Left Inner edge
-                                        << QPoint(MARALabel.x()+MARALabel.width()+arrowHDepth-5, MARALabel.y()+MARALabel.height()/2+10)    //Arrow Bottom Left Outer Edge
-                                        << QPoint(MARALabel.x()+MARALabel.width()+arrowHOffset, MARALabel.y()+MARALabel.height()/2)        //Arrow Middle Point
-                                        << QPoint(MARALabel.x()+MARALabel.width()+arrowHDepth-5, MARALabel.y()+MARALabel.height()/2-10)    //Arrow Top Left Outer Edge
-                                        << QPoint(MARALabel.x()+MARALabel.width()+arrowHDepth-5, MARALabel.y()+MARALabel.height()/2-5));   //Arrow Top Left Inner Edge
+                                        << QPoint(MARALabel.right()+arrowHDepth-5, MARALabel.y()+MARALabel.height()/2+5)     //Arrow Bottom Left Inner edge
+                                        << QPoint(MARALabel.right()+arrowHDepth-5, MARALabel.y()+MARALabel.height()/2+10)    //Arrow Bottom Left Outer Edge
+                                        << QPoint(MARALabel.right()+arrowHOffset, MARALabel.y()+MARALabel.height()/2)        //Arrow Middle Point
+                                        << QPoint(MARALabel.right()+arrowHDepth-5, MARALabel.y()+MARALabel.height()/2-10)    //Arrow Top Left Outer Edge
+                                        << QPoint(MARALabel.right()+arrowHDepth-5, MARALabel.y()+MARALabel.height()/2-5));   //Arrow Top Left Inner Edge
 
 const QPolygon MARMuxToMARBBus = QPolygon(QVector<QPoint>()  << QPoint(MARMuxerDataLabel.x(), MARBLabel.y()+MARALabel.height()/2-5)        //Top Right Corner
                                         << QPoint(MARMuxerDataLabel.x(), MARBLabel.y()+MARALabel.height()/2+5)                             //Bottom Right Corner
-                                        << QPoint(MARBLabel.x()+MARBLabel.width()+arrowHDepth-5, MARBLabel.y()+MARALabel.height()/2+5)     //Arrow Bottom Left Inner edge
-                                        << QPoint(MARBLabel.x()+MARBLabel.width()+arrowHDepth-5, MARBLabel.y()+MARALabel.height()/2+10)    //Arrow Bottom Left Outer Edge
-                                        << QPoint(MARBLabel.x()+MARBLabel.width()+arrowHOffset, MARBLabel.y()+MARALabel.height()/2)        //Arrow Middle Point
-                                        << QPoint(MARBLabel.x()+MARBLabel.width()+arrowHDepth-5, MARBLabel.y()+MARALabel.height()/2-10)    //Arrow Top Left Outer Edge
-                                        << QPoint(MARBLabel.x()+MARBLabel.width()+arrowHDepth-5, MARBLabel.y()+MARALabel.height()/2-5));   //Arrow Top Left Inner Edge
+                                        << QPoint(MARBLabel.right()+arrowHDepth-5, MARBLabel.y()+MARALabel.height()/2+5)     //Arrow Bottom Left Inner edge
+                                        << QPoint(MARBLabel.right()+arrowHDepth-5, MARBLabel.y()+MARALabel.height()/2+10)    //Arrow Bottom Left Outer Edge
+                                        << QPoint(MARBLabel.right()+arrowHOffset, MARBLabel.y()+MARALabel.height()/2)        //Arrow Middle Point
+                                        << QPoint(MARBLabel.right()+arrowHDepth-5, MARBLabel.y()+MARALabel.height()/2-10)    //Arrow Top Left Outer Edge
+                                        << QPoint(MARBLabel.right()+arrowHDepth-5, MARBLabel.y()+MARALabel.height()/2-5));   //Arrow Top Left Inner Edge
 
 // MDROdd, MDROCk and its control
 const QRect MDROLabel               = QRect(combCircX, 254, dataLabelW, dataLabelH);
 const QRect MDROCkCheckbox          = QRect(ctrlInputX, MDROLabel.y()-20, checkW+10, checkH);
-const Arrow MDROSelect              = Arrow(QVector<QPoint>() << QPoint(MDROLabel.x()+MDROLabel.width()/2, MDROLabel.y()-12),
+const Arrow MDROck              = Arrow(QVector<QPoint>() << QPoint(MDROLabel.x()+MDROLabel.width()/2, MDROLabel.y()-12),
                                             QVector<QLine>()
                                             << QLine(MDROLabel.x()+MDROLabel.width()/2+3, MDROLabel.y()-4,
                                                      MDROLabel.x()+MDROLabel.width()/2+3, MDROLabel.y()-19)
@@ -180,6 +180,11 @@ const Arrow MDROSelect              = Arrow(QVector<QPoint>() << QPoint(MDROLabe
 const QRect MDROMuxerDataLabel      = QRect(combCircX, 293, dataLabelW, dataLabelH);
 const QRect MDROMuxTristateLabel    = QRect(ctrlInputX, MDROMuxerDataLabel.y()-20, labelTriW, labelTriH);
 const QRect MDROMuxLabel            = QRect(ctrlLabelX, MDROMuxTristateLabel.y(), labelW+20, labelH);
+const Arrow MDROMuxSelect           = Arrow(QVector<QPoint>()
+                                            <<QPoint(MDROMuxerDataLabel.right(),MDROMuxTristateLabel.y()+MDROMuxTristateLabel.height()/2-3),
+                                            QVector<QLine>()
+                                            <<QLine(MDROMuxTristateLabel.x(),MDROMuxTristateLabel.y()+MDROMuxTristateLabel.height()/2,
+                                                    MDROMuxerDataLabel.right()+5,MDROMuxTristateLabel.y()+MDROMuxTristateLabel.height()/2));
 
 // MDREven, MDRECk and its control
 const QRect MDRELabel               = QRect(combCircX, 354, dataLabelW, dataLabelH);
@@ -189,7 +194,11 @@ const QRect MDRECkCheckbox          = QRect(ctrlInputX, MDRELabel.y()-20, checkW
 const QRect MDREMuxerDataLabel      = QRect(combCircX,393, dataLabelW, dataLabelH);
 const QRect MDREMuxTristateLabel    = QRect(ctrlInputX, MDREMuxerDataLabel.y()-20, labelTriW, labelTriH);
 const QRect MDREMuxLabel            = QRect(ctrlLabelX, MDREMuxTristateLabel.y(), labelW+20, labelH);
-
+const Arrow MDREMuxSelect           = Arrow(QVector<QPoint>()
+                                            << QPoint(MDREMuxerDataLabel.right(),MDREMuxTristateLabel.y()+MDREMuxTristateLabel.height()/2-3),
+                                            QVector<QLine>()
+                                            <<QLine(MDREMuxTristateLabel.x(),MDREMuxTristateLabel.y()+MDREMuxTristateLabel.height()/2,
+                                                    MDREMuxerDataLabel.right()+5,MDREMuxTristateLabel.y()+MDREMuxTristateLabel.height()/2));
 // EOMux and its control
 const QRect EOMuxerDataLabel        = QRect(200, 316, dataLabelW, dataLabelH);
 const QRect EOMuxTristateLabel      = QRect(ctrlInputX, EOMuxerDataLabel.y(), labelTriW, labelTriH);
@@ -278,7 +287,7 @@ const QPolygon NZVCDataPath = OneByteShapes::NZVCDataPath.translated(controlOffs
 
 // AMux, its controls, selection lines, and output.
 const QRect aMuxerDataLabel         =  QRect(((controlOffsetX+OneByteShapes::ALUUpperLeftLine_LeftPoint)+(controlOffsetX+OneByteShapes::ALUUpperLeftLine_RightPoint))/2-dataLabelW/2,
-                                            //Center AMUX's x on the midpoint of the ALUPolygon, which has been shifter by controlOffsetX pixels.
+                                            //Center AMUX's x on the midpoint of the ALUPolygon, which has been shifted by controlOffsetX pixels.
                                             ALUPoly.boundingRect().y()-AMuxYOffsetFromALUPoly, dataLabelW, dataLabelH);//Place AMuxYOffsetFromALUPoly pixels distance between AMux and the ALU
 
 const QRect aMuxTristateLabel       = QRect(ctrlInputX, aMuxerDataLabel.y(), labelTriW, 21);
@@ -370,22 +379,22 @@ const QPolygon MDREToDataBus = QPolygon(QVector<QPoint>()  << QPoint(MDROLabel.x
 
 //const QPolygon MDRMuxOutBus;
 const QPolygon MDROMuxOutBus = QPolygon(QVector<QPoint>()
-                                        << QPoint(combCircX + 25 + 05, MDROMuxerDataLabel.y()) // 293
-                                        << QPoint(combCircX + 25 + 05, MDROMuxerDataLabel.y() - 7)
-                                        << QPoint(combCircX + 25 + 00, MDROMuxerDataLabel.y() - 7)
-                                        << QPoint(combCircX + 25 + 10, MDROMuxerDataLabel.y() - 17)
-                                        << QPoint(combCircX + 25 + 20, MDROMuxerDataLabel.y() - 7)
-                                        << QPoint(combCircX + 25 + 15, MDROMuxerDataLabel.y() - 7)
-                                        << QPoint(combCircX + 25 + 15, MDROMuxerDataLabel.y()));
+                                        << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2-5, MDROMuxerDataLabel.y()) //Bottom Left Corner
+                                        << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2-5, MDROMuxerDataLabel.y() - 7) //Arrow Inner Left Edge
+                                        << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2-10, MDROMuxerDataLabel.y() - 7) //Arrow  Outer left Edge
+                                        << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2, MDROMuxerDataLabel.y() - 17) //Arrow Point
+                                        << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2+10, MDROMuxerDataLabel.y() - 7) //Arrow Outer Right Edge
+                                        << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2+5, MDROMuxerDataLabel.y() - 7) //Arrow Inner Right Edge
+                                        << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2+5, MDROMuxerDataLabel.y())); //Bottom Right Corner
 
 const QPolygon MDREMuxOutBus = QPolygon(QVector<QPoint>()
-                                        << QPoint(combCircX + 25 + 05, MDREMuxerDataLabel.y()) // 293
-                                        << QPoint(combCircX + 25 + 05, MDREMuxerDataLabel.y() - 7)
-                                        << QPoint(combCircX + 25 + 00, MDREMuxerDataLabel.y() - 7)
-                                        << QPoint(combCircX + 25 + 10, MDREMuxerDataLabel.y() - 17)
-                                        << QPoint(combCircX + 25 + 20, MDREMuxerDataLabel.y() - 7)
-                                        << QPoint(combCircX + 25 + 15, MDREMuxerDataLabel.y() - 7)
-                                        << QPoint(combCircX + 25 + 15, MDREMuxerDataLabel.y()));
+                                        << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2-5, MDREMuxerDataLabel.y()) //Bottom Left Corner
+                                        << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2-5, MDREMuxerDataLabel.y() - 7) //Arrow Inner Left Edge
+                                        << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2-10, MDREMuxerDataLabel.y() - 7) //Arrow  Outer left Edge
+                                        << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2, MDREMuxerDataLabel.y() - 17) //Arrow Point
+                                        << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2+10, MDREMuxerDataLabel.y() - 7) //Arrow Outer Right Edge
+                                        << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2+5, MDREMuxerDataLabel.y() - 7) //Arrow Inner Right Edge
+                                        << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2+5, MDREMuxerDataLabel.y())); //Bottom Right Corner
 
 
 
