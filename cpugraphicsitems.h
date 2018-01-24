@@ -205,6 +205,7 @@ private:
     void repaintMDROSelect(QPainter *painter);
     void repaintMDRESelect(QPainter *painter);
     void repaintMDRECk(QPainter *painter);
+    void repaintEOMuxOutpusBus(QPainter *painter);
 
     void repaintALUSelectTwoByteModel(QPainter *painter);
 
