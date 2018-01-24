@@ -240,13 +240,14 @@ const QPolygon CMuxBus = QPolygon(QVector<QPoint>() << QPoint(290,374)
 enum ALUPolyNumbers
 {
     ALUUpperLeftLine_LeftPoint = 314,
-    ALUUpperLeftLine_RightPoint=366
+    ALUUpperLeftLine_RightPoint=366,
+    ALUBottomBound=394,
 };
 const QPolygon ALUPoly = QPolygon(QVector<QPoint>() << QPoint(ALUUpperLeftLine_LeftPoint,342)
                                   << QPoint(ALUUpperLeftLine_RightPoint,342) << QPoint(370,353)
                                   << QPoint(390,353) << QPoint(394,342)
-                                  << QPoint(447,342) << QPoint(421,394)
-                                  << QPoint(340,394));
+                                  << QPoint(447,342) << QPoint(421,ALUBottomBound)
+                                  << QPoint(340,ALUBottomBound));
 
 // the two shapes that make up the arrow out to the right of the MDR
 const QRect MDRBusOutRect = QRect(244, 258, 36, 10);

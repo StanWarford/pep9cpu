@@ -2681,15 +2681,15 @@ void CpuGraphicsItems::repaintMemWriteTwoByteModel(QPainter *painter)
                        color == Qt::gray ? arrowLeftGray : arrowLeft);
 
     // draw line from memWrite to MDRO out:
-    painter->drawEllipse(QPoint(TwoByteShapes::DataBus.right()+25,
+    painter->drawEllipse(QPoint(TwoByteShapes::DataBus.right()+20,
                                 TwoByteShapes::MemWriteSelect.y1()),
                          2, 2);
-    painter->drawLine(TwoByteShapes::DataBus.right()+25,719, TwoByteShapes::DataBus.right()+25,345); //611+8
+    painter->drawLine(TwoByteShapes::DataBus.right()+20,719, TwoByteShapes::DataBus.right()+20,345); //611+8
     // memWrite line from the label to the bus:
-    painter->drawLine(TwoByteShapes::DataBus.right()+25,333, TwoByteShapes::DataBus.right()+25,280); //268+12
-    painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+22,271), //96-3 //268+12-9
+    painter->drawLine(TwoByteShapes::DataBus.right()+20,333, TwoByteShapes::DataBus.right()+20,280); //268+12
+    painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+17,271), //96-3 //268+12-9
                        color == Qt::gray ? arrowUpGray : arrowUp);
-    painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+22,371), //96-3 //268+12-9
+    painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+17,371), //96-3 //268+12-9
                        color == Qt::gray ? arrowUpGray : arrowUp);
 
     // repaint the MDR-to-main-bus line, based on if MemWrite is set or not
@@ -2799,6 +2799,12 @@ void CpuGraphicsItems::repaintMDRESelect(QPainter *painter)
     painter->drawLines(TwoByteShapes::MDREMuxSelect._lines);
     painter->drawImage(TwoByteShapes::MDREMuxSelect._arrowheads.first(),
                        MDREColor == Qt::gray ? arrowLeftGray : arrowLeft);
+    if(MDREIsHigh){
+        MDREMuxerDataLabel->setPalette(QPalette(combCircuitGreen));
+    }
+    else{
+        MDREMuxerDataLabel->setPalette(QPalette(Qt::white));
+    }
 }
 
 void CpuGraphicsItems::repaintMDRMuxOutputBuses(QPainter *painter)
@@ -2807,11 +2813,12 @@ void CpuGraphicsItems::repaintMDRMuxOutputBuses(QPainter *painter)
     QColor colorMDRE = Qt::white,colorMDRO=Qt::white;
     // Depending on which input is selected on the MDRMuxes, the color might need to change.
     // For now red seems to be the most logical color to use all the time.
-    if(MDRECk->isChecked()){
-        colorMDRE=combCircuitRed;
+    QString MDREText =MDREMuxTristateLabel->text(), MDROText=MDROMuxTristateLabel->text();
+    if(MDRECk->isChecked()&&(MDREText=="1"||MDREText=="0")){
+        colorMDRE=combCircuitGreen.lighter(120);
     }
-    if(MDROCk->isChecked()){
-        colorMDRO=combCircuitRed;
+    if(MDROCk->isChecked()&&(MDROText=="1"||MDROText=="0")){
+        colorMDRO=combCircuitGreen.lighter(120);
     }
     painter->setPen(Qt::black);
     painter->setBrush(colorMDRE);
