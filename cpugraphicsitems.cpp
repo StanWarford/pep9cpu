@@ -1262,6 +1262,7 @@ void CpuGraphicsItems::paint(QPainter *painter,
         repaintMDROCk(painter);
         repaintMDRECk(painter);
         repaintEOMuxSelect(painter);
+        repaintEOMuxOutpusBus(painter);
         repaintMDROSelect(painter);
         repaintMDRESelect(painter);
         repaintMARMUXToMARBuses(painter);
@@ -1806,10 +1807,21 @@ void CpuGraphicsItems::repaintSBitOut(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    // line from S bit to CSMux
-    painter->drawLines(OneByteShapes::SBitToCSMux._lines);
-    // arrow:
-    painter->drawImage(OneByteShapes::SBitToCSMux._arrowheads.first(), arrowUp);
+    switch(Pep::cpuFeatures)
+    {
+    case Enu::OneByteDataBus:
+        // line from S bit to CSMux
+        painter->drawLines(OneByteShapes::SBitToCSMux._lines);
+        // arrow:
+        painter->drawImage(OneByteShapes::SBitToCSMux._arrowheads.first(), arrowUp);
+        break;
+    case Enu::TwoByteDataBus:
+        // line from S bit to CSMux
+        painter->drawLines(TwoByteShapes::SBitToCSMux._lines);
+        // arrow:
+        painter->drawImage(TwoByteShapes::SBitToCSMux._arrowheads.first(), arrowUp);
+        break;
+    }
 }
 
 void CpuGraphicsItems::repaintCBitOut(QPainter *painter)
@@ -2442,12 +2454,12 @@ void CpuGraphicsItems::repaintMARCkTwoByteModel(QPainter *painter)
     // MARCk
     painter->drawLines(TwoByteShapes::MARCk._lines);
 
-    painter->drawEllipse(QPoint(235-40,177), 2, 2);
 
-    painter->drawImage(QPoint(232-40,155),
-                       color == Qt::gray ? arrowUpGray : arrowUp);
-    painter->drawImage(QPoint(232-40,191),
-                       color == Qt::gray ? arrowDownGray : arrowDown);
+    painter->drawEllipse(QPoint(TwoByteShapes::MARCk._lines.last().x1(),177), 2, 2);
+    painter->drawImage(TwoByteShapes::MARCk._arrowheads[0],
+            color == Qt::gray ? arrowUpGray : arrowUp);
+    painter->drawImage(TwoByteShapes::MARCk._arrowheads[1],
+            color == Qt::gray ? arrowDownGray : arrowDown);
 }
 
 
@@ -2488,6 +2500,14 @@ void CpuGraphicsItems::repaintMDRECk(QPainter *painter)
 //        break;
 //    }
 
+}
+
+void CpuGraphicsItems::repaintEOMuxOutpusBus(QPainter *painter)
+{
+    QColor color = Qt::white;
+    painter->setPen(Qt::black);
+    painter->setBrush(color);
+    painter->drawPolygon(TwoByteShapes::EOMuxOutputBus);
 }
 
 void CpuGraphicsItems::repaintALUSelectTwoByteModel(QPainter *painter)
