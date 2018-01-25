@@ -73,7 +73,7 @@ enum CommonPositions {
     ctrlInputX = 550 + controlOffsetX,
     interfaceRegsX = 175,               // x-center of MARB, MARA, ...
     combCircX = interfaceRegsX - iRegXOffset-20, //Combinational circuits need to be moved further left to fit.
-    combCircY = 132, //Memory Combinational circuits start at this height
+    combCircY = 132, //Memory Combinational circuits start at this height. Usually 132
     statusBitsX = 526,//476,
 
 };
@@ -378,29 +378,28 @@ const QPolygon AddrArrow                    = OneByteShapes::AddrArrow;
 //const QPolygon DataToMDRMuxBus;
 const QPolygon DataToMDROMuxBus = QPolygon(QVector<QPoint>()
                                            // foot:
-                                           << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2+5, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+18) //Point between vertical right leg and lower horizontal leg
                                            << QPoint(80,  MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+18) //Lower left corner on bus
                                            << QPoint(80,  MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+8) //Upper left corner on bus
-                                           << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2-5, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+8) //Point between vertical left leg and upper horizontal leg
+                                           << QPoint(MDROMuxerDataLabel.x()+5, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+8) //Point between vertical left leg and upper horizontal leg
                                            // arrowhead:
-                                           << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2-5, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow inner left edge
-                                           << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2-10, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow outer left edge
-                                           << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2, MDROMuxerDataLabel.bottom()+arrowHOffset) //arrow midpoint
-                                           << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2+10, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow right outer edge
-                                           << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2+5, MDROMuxerDataLabel.bottom()+(arrowHDepth-5))); //arrow inner left edge
+                                           << QPoint(MDROMuxerDataLabel.x()+5, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow inner left edge
+                                           << QPoint(MDROMuxerDataLabel.x()+0, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow outer left edge
+                                           << QPoint(MDROMuxerDataLabel.x()+10, MDROMuxerDataLabel.bottom()+arrowHOffset) //arrow midpoint
+                                           << QPoint(MDROMuxerDataLabel.x()+20, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow right outer edge
+                                           << QPoint(MDROMuxerDataLabel.x()+15, MDROMuxerDataLabel.bottom()+(arrowHDepth-5))); //arrow inner left edge
 
 const QPolygon DataToMDREMuxBus = QPolygon(QVector<QPoint>()
                                            // foot:
-                                           << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2+5, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+18) //Point between vertical right leg and lower horizontal leg
+                                           << QPoint(MDREMuxerDataLabel.x()+15, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+18) //Point between vertical right leg and lower horizontal leg
                                            << QPoint(80,  MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+18) //Lower left corner on bus
                                            << QPoint(80,  MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+8) //Upper left corner on bus
-                                           << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2-5, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+8) //Point between vertical left leg and upper horizontal leg
+                                           << QPoint(MDREMuxerDataLabel.x()+5, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+8) //Point between vertical left leg and upper horizontal leg
                                            // arrowhead:
-                                           << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2-5, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow inner left edge
-                                           << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2-10, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow outer left edge
-                                           << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2, MDREMuxerDataLabel.bottom()+arrowHOffset) //arrow midpoint
-                                           << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2+10, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow right outer edge
-                                           << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2+5, MDREMuxerDataLabel.bottom()+(arrowHDepth-5))); //arrow inner left edge
+                                           << QPoint(MDREMuxerDataLabel.x()+5, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow inner left edge
+                                           << QPoint(MDREMuxerDataLabel.x()+0, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow outer left edge
+                                           << QPoint(MDREMuxerDataLabel.x()+10, MDREMuxerDataLabel.bottom()+arrowHOffset) //arrow midpoint
+                                           << QPoint(MDREMuxerDataLabel.x()+20, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow right outer edge
+                                           << QPoint(MDREMuxerDataLabel.x()+15, MDREMuxerDataLabel.bottom()+(arrowHDepth-5))); //arrow inner left edge
 //const QPolygon MDRToDataBus;
 const QPolygon MDROToDataBus = QPolygon(QVector<QPoint>()  << QPoint(MDROLabel.x(), 258)
                                         << QPoint(DataBus.x()+DataBus.width()+13, 258)
