@@ -1585,7 +1585,7 @@ void CpuGraphicsItems::repaintCMuxSelect(QPainter *painter)
         break;
     case Enu::TwoByteDataBus:
         painter->drawLines(TwoByteShapes::CMuxSelect._lines);
-        painter->drawImage(QPoint(257,362),
+        painter->drawImage(TwoByteShapes::CMuxSelect._arrowheads.first(),
                            color == Qt::gray ? arrowDownGray : arrowDown);
         break;
     default:
@@ -2040,9 +2040,9 @@ void CpuGraphicsItems::repaintAndZSelect(QPainter *painter)
 
         break;
     case Enu::TwoByteDataBus:
-        painter->drawLine(TwoByteShapes::AndZMuxLabel.right(),552,
-                          TwoByteShapes::zBitLabel.left() - 2,552);
-        painter->drawImage(QPoint(465,549),
+        //The arrow is ~10 pixels long, and another 3 are needed for it to fit comfortably next to the box
+        //The arrow is 8 pixels high, align the the center of the arrow with the middle of the box.
+        painter->drawImage(QPoint(TwoByteShapes::zBitLabel.x()-13,TwoByteShapes::AndZMuxLabel.y()+TwoByteShapes::AndZMuxLabel.height()/2-4),
                            color == Qt::gray ? arrowRightGray : arrowRight);
 
         break;

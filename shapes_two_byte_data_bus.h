@@ -62,7 +62,7 @@ enum Shapes {
     incrementerOffset = 10,
 
     aluSelOff = 57,
-    aluOffsetY = 100,
+    aluOffsetY = 130,
     selLineOff = 15,
 
 };
@@ -73,8 +73,9 @@ enum CommonPositions {
     ctrlInputX = 550 + controlOffsetX,
     interfaceRegsX = 175,               // x-center of MARB, MARA, ...
     combCircX = interfaceRegsX - iRegXOffset-20, //Combinational circuits need to be moved further left to fit.
-    combCircY = 132, //Memory Combinational circuits start at this height
+    combCircY = 132, //Memory Combinational circuits start at this height. Usually 132
     statusBitsX = 526,//476,
+    BottomOfAlu=OneByteShapes::ALUBottomBound+aluOffsetY, //Y coordinate of the bottom of the ALU
 
 };
 
@@ -92,6 +93,9 @@ enum CommonOffsets{
     ANDZYOffsetFromALU=123,     //Bottom of ALU and top of ANDZ
     ZCkYOffsetFromALU=150,      //Bottom of ALU and top of ZCk
     NCkYOffsetFromALU=192,      //Bottom of ALU and top of NCk
+    MemReadYOffsetFromALU=237,  //Bottom of ALU to the MemReadLine
+    MemWriteYOffsetFromALU=217, //Bottom of ALU to the MemWriteLine
+    ALULabelYOffsetFromALU=-25, //Bottom of ALU to top of the ALULineEdit
 
   };
 
@@ -232,54 +236,55 @@ const Arrow EOMuxSelect             = Arrow(QVector<QPoint>() << QPoint(EOMuxerD
                                             << QLine(350, EOMuxTristateLabel.y()+9,
                                                      ctrlInputX - 7, EOMuxTristateLabel.y()+9));
 
-// CMux and its control
-const QRect cMuxerLabel             = OneByteShapes::cMuxerLabel.translated(controlOffsetX, aluOffsetY);
-const QRect cMuxTristateLabel       = QRect(ctrlInputX, cMuxerLabel.y()-20, labelTriW, labelTriH);
-const QRect cMuxLabel               = QRect(ctrlLabelX, cMuxTristateLabel.y(), labelW, labelH);
-const Arrow CMuxSelect              = OneByteShapes::CMuxSelect;
 
 // ALU and its control
-const QRect ALULineEdit             = QRect(ctrlInputX,  468, 26,     lineEditH);
-const QRect ALULabel                = QRect(ctrlLabelX,  470, 31,     labelH);
+const QRect ALULineEdit             = QRect(ctrlInputX, BottomOfAlu+ALULabelYOffsetFromALU, 26,     lineEditH);
+const QRect ALULabel                = QRect(ctrlLabelX,  BottomOfAlu+ALULabelYOffsetFromALU, 31,     labelH);
 const QRect ALUFunctionLabel        = OneByteShapes::ALUFunctionLabel.translated(controlOffsetX,
                                                                                  aluOffsetY);
+// CMux and its control
+const QRect cMuxerLabel             = OneByteShapes::cMuxerLabel.translated(controlOffsetX, aluOffsetY);
+const QRect cMuxTristateLabel       = QRect(ctrlInputX, ALULineEdit.y()-labelTriH, labelTriW, labelTriH);
+const QRect cMuxLabel               = QRect(ctrlLabelX, cMuxTristateLabel.y(), labelW, labelH);
+const Arrow CMuxSelect              = OneByteShapes::CMuxSelect.translated(controlOffsetX, aluOffsetY);
+
 // CSMux and its control
-const QRect CSMuxLabel              = QRect(ctrlLabelX,  OneByteShapes::ALUBottomBound+aluOffsetY+5, labelW, labelH);
-const QRect CSMuxerDataLabel        = QRect(statusBitsX+19-69, OneByteShapes::ALUBottomBound+aluOffsetY+5, dataLabelW, dataLabelH);
-const QRect CSMuxTristateLabel      = QRect(ctrlInputX,  OneByteShapes::ALUBottomBound+aluOffsetY+5, 25,     21);
+const QRect CSMuxLabel              = QRect(ctrlLabelX,  BottomOfAlu+5, labelW, labelH);
+const QRect CSMuxerDataLabel        = QRect(statusBitsX+19-69, BottomOfAlu+5, dataLabelW, dataLabelH);
+const QRect CSMuxTristateLabel      = QRect(ctrlInputX,  BottomOfAlu+5, 25,     21);
 
 // Status bit S, SCk and its control
-const QRect SCkCheckBox             = QRect(ctrlInputX,  OneByteShapes::ALUBottomBound+aluOffsetY+SCKYOffsetFromALU, checkW, checkH);
-const QRect sBitLabel               = QRect(statusBitsX, OneByteShapes::ALUBottomBound+aluOffsetY+SCKYOffsetFromALU, 19,     dataLabelH);
+const QRect SCkCheckBox             = QRect(ctrlInputX,  BottomOfAlu+SCKYOffsetFromALU, checkW, checkH);
+const QRect sBitLabel               = QRect(statusBitsX, BottomOfAlu+SCKYOffsetFromALU, 19,     dataLabelH);
 
 // Status bit C, CCk and its control
-const QRect CCkCheckBox             = QRect(ctrlInputX,  OneByteShapes::ALUBottomBound+aluOffsetY+CCkYOffsetFromALU, checkW, checkH);
-const QRect cBitLabel               = QRect(statusBitsX, OneByteShapes::ALUBottomBound+aluOffsetY+CCkYOffsetFromALU -1, 19,     dataLabelH);
+const QRect CCkCheckBox             = QRect(ctrlInputX,  BottomOfAlu+CCkYOffsetFromALU, checkW, checkH);
+const QRect cBitLabel               = QRect(statusBitsX, BottomOfAlu+CCkYOffsetFromALU -1, 19,     dataLabelH);
 
 // Status bit V, VCk and its control
-const QRect VCkCheckBox             = QRect(ctrlInputX,  OneByteShapes::ALUBottomBound+aluOffsetY+VCkYOffsetFromALU, checkW, checkH);
-const QRect vBitLabel               = QRect(statusBitsX, OneByteShapes::ALUBottomBound+aluOffsetY+VCkYOffsetFromALU, 19,     dataLabelH);
+const QRect VCkCheckBox             = QRect(ctrlInputX,  BottomOfAlu+VCkYOffsetFromALU, checkW, checkH);
+const QRect vBitLabel               = QRect(statusBitsX, BottomOfAlu+VCkYOffsetFromALU, 19,     dataLabelH);
 
 // AndZ and its control
-const QRect AndZLabel               = QRect(ctrlLabelX,  OneByteShapes::ALUBottomBound+aluOffsetY+ANDZYOffsetFromALU, 45,     20);
-const QRect AndZTristateLabel       = QRect(ctrlInputX, OneByteShapes::ALUBottomBound+aluOffsetY+ANDZYOffsetFromALU, labelTriW,labelTriH);
-const QRect AndZMuxLabel            = QRect(416 + controlOffsetX, OneByteShapes::ALUBottomBound+aluOffsetY+ANDZYOffsetFromALU+27, 41,21);
+const QRect AndZLabel               = QRect(ctrlLabelX,  BottomOfAlu+ANDZYOffsetFromALU, 45,     20);
+const QRect AndZTristateLabel       = QRect(ctrlInputX, BottomOfAlu+ANDZYOffsetFromALU, labelTriW,labelTriH);
+const QRect AndZMuxLabel            = QRect(416 + controlOffsetX, BottomOfAlu+ANDZYOffsetFromALU+27, 41,21);
 
 // Status bit Z, ZCk and its control
-const QRect ZCkCheckBox             = QRect(ctrlInputX, OneByteShapes::ALUBottomBound+aluOffsetY+ZCkYOffsetFromALU, 60, 20);
-const QRect zBitLabel               = QRect(statusBitsX, OneByteShapes::ALUBottomBound+aluOffsetY+ZCkYOffsetFromALU, 19, dataLabelH);
+const QRect ZCkCheckBox             = QRect(ctrlInputX, BottomOfAlu+ZCkYOffsetFromALU, 60, 20);
+const QRect zBitLabel               = QRect(statusBitsX, BottomOfAlu+ZCkYOffsetFromALU, 19, dataLabelH);
 
 // Status bit N, NCk and its control
-const QRect NCkCheckBox             = QRect(ctrlInputX, OneByteShapes::ALUBottomBound+aluOffsetY+NCkYOffsetFromALU, checkW, checkH);
-const QRect nBitLabel               = QRect(statusBitsX, OneByteShapes::ALUBottomBound+aluOffsetY+NCkYOffsetFromALU, 19, dataLabelH);
+const QRect NCkCheckBox             = QRect(ctrlInputX, BottomOfAlu+NCkYOffsetFromALU, checkW, checkH);
+const QRect nBitLabel               = QRect(statusBitsX, BottomOfAlu+NCkYOffsetFromALU, 19, dataLabelH);
 
 // MemWrite and its control
-const QRect MemWriteLabel           = QRect(ctrlLabelX, 711, check2W, check2H);
-const QRect MemWriteTristateLabel   = QRect(ctrlInputX, 711, labelTriW, labelTriH);
+const QRect MemWriteLabel           = QRect(ctrlLabelX, BottomOfAlu+MemWriteYOffsetFromALU, check2W, check2H);
+const QRect MemWriteTristateLabel   = QRect(ctrlInputX, BottomOfAlu+MemWriteYOffsetFromALU, labelTriW, labelTriH);
 
 // MemRead and its control
-const QRect MemReadLabel            = QRect(ctrlLabelX, 731, check2W, check2H);
-const QRect MemReadTristateLabel    = QRect(ctrlInputX, 731, labelTriW, labelTriH);
+const QRect MemReadLabel            = QRect(ctrlLabelX, BottomOfAlu+MemReadYOffsetFromALU, check2W, check2H);
+const QRect MemReadTristateLabel    = QRect(ctrlInputX, BottomOfAlu+MemReadYOffsetFromALU, labelTriW, labelTriH);
 
 //const Arrow MDRCk                   = OneByteShapes::MDRCk;
 const QPolygon CMuxBus                = OneByteShapes::CMuxBus.translated(controlOffsetX, aluOffsetY);
@@ -378,29 +383,29 @@ const QPolygon AddrArrow                    = OneByteShapes::AddrArrow;
 //const QPolygon DataToMDRMuxBus;
 const QPolygon DataToMDROMuxBus = QPolygon(QVector<QPoint>()
                                            // foot:
-                                           << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2+5, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+18) //Point between vertical right leg and lower horizontal leg
+                                           << QPoint(MDROMuxerDataLabel.x()+15, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+18) //Point between vertical right leg and lower horizontal leg
                                            << QPoint(80,  MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+18) //Lower left corner on bus
                                            << QPoint(80,  MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+8) //Upper left corner on bus
-                                           << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2-5, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+8) //Point between vertical left leg and upper horizontal leg
+                                           << QPoint(MDROMuxerDataLabel.x()+5, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+8) //Point between vertical left leg and upper horizontal leg
                                            // arrowhead:
-                                           << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2-5, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow inner left edge
-                                           << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2-10, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow outer left edge
-                                           << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2, MDROMuxerDataLabel.bottom()+arrowHOffset) //arrow midpoint
-                                           << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2+10, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow right outer edge
-                                           << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2+5, MDROMuxerDataLabel.bottom()+(arrowHDepth-5))); //arrow inner left edge
+                                           << QPoint(MDROMuxerDataLabel.x()+5, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow inner left edge
+                                           << QPoint(MDROMuxerDataLabel.x()+0, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow outer left edge
+                                           << QPoint(MDROMuxerDataLabel.x()+10, MDROMuxerDataLabel.bottom()+arrowHOffset) //arrow midpoint
+                                           << QPoint(MDROMuxerDataLabel.x()+20, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow right outer edge
+                                           << QPoint(MDROMuxerDataLabel.x()+15, MDROMuxerDataLabel.bottom()+(arrowHDepth-5))); //arrow inner left edge
 
 const QPolygon DataToMDREMuxBus = QPolygon(QVector<QPoint>()
                                            // foot:
-                                           << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2+5, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+18) //Point between vertical right leg and lower horizontal leg
+                                           << QPoint(MDREMuxerDataLabel.x()+15, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+18) //Point between vertical right leg and lower horizontal leg
                                            << QPoint(80,  MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+18) //Lower left corner on bus
                                            << QPoint(80,  MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+8) //Upper left corner on bus
-                                           << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2-5, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+8) //Point between vertical left leg and upper horizontal leg
+                                           << QPoint(MDREMuxerDataLabel.x()+5, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+8) //Point between vertical left leg and upper horizontal leg
                                            // arrowhead:
-                                           << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2-5, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow inner left edge
-                                           << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2-10, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow outer left edge
-                                           << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2, MDREMuxerDataLabel.bottom()+arrowHOffset) //arrow midpoint
-                                           << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2+10, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow right outer edge
-                                           << QPoint(MDREMuxerDataLabel.x()+MDREMuxerDataLabel.width()/2+5, MDREMuxerDataLabel.bottom()+(arrowHDepth-5))); //arrow inner left edge
+                                           << QPoint(MDREMuxerDataLabel.x()+5, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow inner left edge
+                                           << QPoint(MDREMuxerDataLabel.x()+0, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow outer left edge
+                                           << QPoint(MDREMuxerDataLabel.x()+10, MDREMuxerDataLabel.bottom()+arrowHOffset) //arrow midpoint
+                                           << QPoint(MDREMuxerDataLabel.x()+20, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow right outer edge
+                                           << QPoint(MDREMuxerDataLabel.x()+15, MDREMuxerDataLabel.bottom()+(arrowHDepth-5))); //arrow inner left edge
 //const QPolygon MDRToDataBus;
 const QPolygon MDROToDataBus = QPolygon(QVector<QPoint>()  << QPoint(MDROLabel.x(), 258)
                                         << QPoint(DataBus.x()+DataBus.width()+13, 258)
