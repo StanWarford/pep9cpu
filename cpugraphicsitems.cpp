@@ -2630,7 +2630,7 @@ void CpuGraphicsItems::repaintMemReadTwoByteModel(QPainter *painter)
 
     painter->setBrush(combCircuitRed);
     // Data bus:
-//painter->drawRect(TwoByteShapes::DataBus);
+    painter->drawRect(TwoByteShapes::DataBus);
 
     // Mem Data Bus
     poly.clear();
@@ -2744,6 +2744,7 @@ void CpuGraphicsItems::repaintMemWriteTwoByteModel(QPainter *painter)
     else {
         color = Qt::white;
     }
+    painter->setPen(Qt::black);
     painter->setBrush(color);
 
     // Main Data bus:
