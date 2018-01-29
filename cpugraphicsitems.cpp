@@ -2687,9 +2687,13 @@ void CpuGraphicsItems::repaintMemWriteTwoByteModel(QPainter *painter)
     painter->drawLine(TwoByteShapes::DataBus.right()+20,719, TwoByteShapes::DataBus.right()+20,345); //611+8
     // memWrite line from the label to the bus:
     painter->drawLine(TwoByteShapes::DataBus.right()+20,333, TwoByteShapes::DataBus.right()+20,280); //268+12
-    painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+17,271), //96-3 //268+12-9
+    painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+17, //96-3
+                              //The bottom of the bus is 5 pixels below the label's midpoint, and add 3 pixels for visual comfort.
+                              TwoByteShapes::MDROLabel.y()+TwoByteShapes::MDROLabel.height()/2+5+3),
                        color == Qt::gray ? arrowUpGray : arrowUp);
-    painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+17,371), //96-3 //268+12-9
+    painter->drawImage(QPoint(TwoByteShapes::DataBus.right()+17,//96-3
+                              //The bottom of the bus is 5 pixels below the label's midpoint, and add 3 pixels for visual comfort.
+                              TwoByteShapes::MDRELabel.y()+TwoByteShapes::MDRELabel.height()/2+5+3),
                        color == Qt::gray ? arrowUpGray : arrowUp);
 
     // repaint the MDR-to-main-bus line, based on if MemWrite is set or not

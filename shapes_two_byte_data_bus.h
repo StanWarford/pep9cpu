@@ -62,7 +62,7 @@ enum Shapes {
     incrementerOffset = 10,
 
     aluSelOff = 57,
-    aluOffsetY = 130,
+    aluOffsetY = 156,
     selLineOff = 15,
 
 };
@@ -73,7 +73,7 @@ enum CommonPositions {
     ctrlInputX = 550 + controlOffsetX,
     interfaceRegsX = 175,               // x-center of MARB, MARA, ...
     combCircX = interfaceRegsX - iRegXOffset-20, //Combinational circuits need to be moved further left to fit.
-    combCircY = 132, //Memory Combinational circuits start at this height. Usually 132
+    combCircY = 142, //Memory Combinational circuits start at this height. Originally 132
     statusBitsX = 526,//476,
     BottomOfAlu=OneByteShapes::ALUBottomBound+aluOffsetY, //Y coordinate of the bottom of the ALU
 
@@ -96,6 +96,7 @@ enum CommonOffsets{
     MemReadYOffsetFromALU=237,  //Bottom of ALU to the MemReadLine
     MemWriteYOffsetFromALU=217, //Bottom of ALU to the MemWriteLine
     ALULabelYOffsetFromALU=-25, //Bottom of ALU to top of the ALULineEdit
+    EOMuxOffsetFromMDREMux=10,  //Bottom of MDREMux to top of EOMux
 
   };
 
@@ -225,7 +226,7 @@ const Arrow MDREMuxSelect           = Arrow(QVector<QPoint>()
                                                     MDREMuxerDataLabel.right()+5,MDREMuxTristateLabel.y()+MDREMuxTristateLabel.height()/2));
 // EOMux and its control
 const QRect EOMuxerDataLabel        = QRect(MARMuxerDataLabel.x()+MARMuxerDataLabel.width()/2-dataLabelW/2, //Center EOMux horizontally on MARMux
-                                            MDRELabel.bottom()-20, dataLabelW, dataLabelH); //Temporary Y value, until the ALU is moved down.
+                                            MDREMuxerDataLabel.y()+EOMuxOffsetFromMDREMux, dataLabelW, dataLabelH);
 const QRect EOMuxTristateLabel      = QRect(ctrlInputX, EOMuxerDataLabel.y(), labelTriW, labelTriH);
 const QRect EOMuxLabel              = QRect(ctrlLabelX, EOMuxTristateLabel.y(), labelW, labelH);
 const Arrow EOMuxSelect             = Arrow(QVector<QPoint>() << QPoint(EOMuxerDataLabel.right()+4,
@@ -292,23 +293,27 @@ const QPolygon ALUPoly                = OneByteShapes::ALUPoly.translated(contro
 const QRect MDRBusOutRect             = OneByteShapes::MDRBusOutRect;
 const QPolygon MDRBusOutArrow         = OneByteShapes::MDRBusOutArrow;
 const QPolygon MARBus = QPolygon(QVector<QPoint>()
-                                 << QPoint(combCircX + 30,151)
-                                 << QPoint(combCircX + 30,167)
+                                 //Top Foot
+                                 << QPoint(MARBLabel.x()+MARBLabel.width()/2-5,MARBLabel.bottom()+1) //Top Left Corner
+                                 << QPoint(MARBLabel.x()+MARBLabel.width()/2-5,(MARBLabel.bottom()+MARALabel.y())/2-10) //Point Between top right corner and inner top Point.
                                  // arrow:
-                                 << QPoint(AddrBus.x()+AddrBus.width()+arrowHDepth,167)
-                                 << QPoint(AddrBus.x()+AddrBus.width()+arrowHDepth,162)
-                                 << QPoint(AddrBus.x()+AddrBus.width()+arrowHOffset,177)
-                                 << QPoint(AddrBus.x()+AddrBus.width()+arrowHDepth,192)
-                                 << QPoint(AddrBus.x()+AddrBus.width()+arrowHDepth,187)
-                                 << QPoint(combCircX + 30,187)
-                                 << QPoint(combCircX + 30,202)
-                                 << QPoint(combCircX + 30 + 10,202)
+                                 << QPoint(AddrBus.right()+arrowHDepth,(MARBLabel.bottom()+MARALabel.y())/2-10) //Arrow Inner Top Point
+                                 << QPoint(AddrBus.right()+arrowHDepth,(MARBLabel.bottom()+MARALabel.y())/2-15) //Arrow Outer Top Point
+                                 << QPoint(AddrBus.right()+arrowHOffset,(MARBLabel.bottom()+MARALabel.y())/2+1) //Arrow Middle Point
+                                 << QPoint(AddrBus.right()+arrowHDepth,(MARBLabel.bottom()+MARALabel.y())/2+16) //Arrow Outer bottom Point
+                                 << QPoint(AddrBus.right()+arrowHDepth,(MARBLabel.bottom()+MARALabel.y())/2+10) //Arrow Inner Bottom Point
+                                 //Bottom Foot
+                                 << QPoint(MARALabel.x()+MARBLabel.width()/2-5,(MARBLabel.bottom()+MARALabel.y())/2+10) //Point between bottom right corner and bottom inner point
+                                 << QPoint(MARALabel.x()+MARBLabel.width()/2-5,MARALabel.y()) //Bottom left Corner
+                                 << QPoint(MARALabel.x()+MARBLabel.width()/2+5,MARALabel.y()) //Bottom Right Corner
+                                 //Black Line
+                                 << QPoint(MARBLabel.x()+MARBLabel.width()/2+5,(MARBLabel.bottom()+MARALabel.y())/2) //Black line right point
+                                 << QPoint(AddrBus.right()+arrowHDepth,(MARBLabel.bottom()+MARALabel.y())/2) //Black line left point
+                                 << QPoint(MARBLabel.x()+MARBLabel.width()/2+5,(MARBLabel.bottom()+MARALabel.y())/2) //Black line right point
+                                 //Top Foot
+                                 << QPoint(MARBLabel.x()+MARBLabel.width()/2+5,MARBLabel.bottom()+1)); //Top Right Corner
                                  // black line in the middle:
-                                 << QPoint(combCircX + 30 + 10,151)
-                                 << QPoint(combCircX + 30 + 10,177)
-                                 << QPoint(TwoByteShapes::AddrBus.right()+arrowHDepth,177)
-                                 << QPoint(combCircX + 30 + 10,177)
-                                 << QPoint(combCircX + 30 + 10,151));
+
 const QPolygon NZVCDataPath = OneByteShapes::NZVCDataPath.translated(controlOffsetX, aluOffsetY);
 
 // AMux, its controls, selection lines, and output.
@@ -407,21 +412,23 @@ const QPolygon DataToMDREMuxBus = QPolygon(QVector<QPoint>()
                                            << QPoint(MDREMuxerDataLabel.x()+20, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //arrow right outer edge
                                            << QPoint(MDREMuxerDataLabel.x()+15, MDREMuxerDataLabel.bottom()+(arrowHDepth-5))); //arrow inner left edge
 //const QPolygon MDRToDataBus;
-const QPolygon MDROToDataBus = QPolygon(QVector<QPoint>()  << QPoint(MDROLabel.x(), 258)
-                                        << QPoint(DataBus.x()+DataBus.width()+13, 258)
-                                        << QPoint(DataBus.x()+DataBus.width()+13, 253)
-                                        << QPoint(DataBus.x()+DataBus.width()+3, 263)
-                                        << QPoint(DataBus.x()+DataBus.width()+13, 273)
-                                        << QPoint(DataBus.x()+DataBus.width()+13, 268)
-                                        << QPoint(MDROLabel.x(), 268));
+const QPolygon MDROToDataBus = QPolygon(QVector<QPoint>()
+                                        << QPoint(MDROLabel.x(), MDROLabel.y()+MDROLabel.height()/2-5)                      //Top Right Corner
+                                        << QPoint(DataBus.x()+DataBus.width()+13, MDROLabel.y()+MDROLabel.height()/2-5)     //Arrow Inner upper point
+                                        << QPoint(DataBus.x()+DataBus.width()+13, MDROLabel.y()+MDROLabel.height()/2-10)    //Arrow Outer Upper point
+                                        << QPoint(DataBus.x()+DataBus.width()+3, MDROLabel.y()+MDROLabel.height()/2)        //Arrow middle
+                                        << QPoint(DataBus.x()+DataBus.width()+13, MDROLabel.y()+MDROLabel.height()/2+10)    //Arrow Outer Lower Point
+                                        << QPoint(DataBus.x()+DataBus.width()+13, MDROLabel.y()+MDROLabel.height()/2+5)     //Arrow Inner Lower Point
+                                        << QPoint(MDROLabel.x(), MDROLabel.y()+MDROLabel.height()/2+5));                    //Bottom Right Corner
 
-const QPolygon MDREToDataBus = QPolygon(QVector<QPoint>()  << QPoint(MDROLabel.x(), 358)
-                                        << QPoint(DataBus.x()+DataBus.width()+13, 358)
-                                        << QPoint(DataBus.x()+DataBus.width()+13, 353)
-                                        << QPoint(DataBus.x()+DataBus.width()+3, 363)
-                                        << QPoint(DataBus.x()+DataBus.width()+13, 373)
-                                        << QPoint(DataBus.x()+DataBus.width()+13, 368)
-                                        << QPoint(MDROLabel.x(), 368));
+const QPolygon MDREToDataBus = QPolygon(QVector<QPoint>()
+                                        << QPoint(MDRELabel.x(), MDRELabel.y()+MDRELabel.height()/2-5)                      //Top Right Corner
+                                        << QPoint(DataBus.x()+DataBus.width()+13, MDRELabel.y()+MDRELabel.height()/2-5)     //Arrow Inner upper point
+                                        << QPoint(DataBus.x()+DataBus.width()+13, MDRELabel.y()+MDRELabel.height()/2-10)    //Arrow Outer Upper point
+                                        << QPoint(DataBus.x()+DataBus.width()+3, MDRELabel.y()+MDRELabel.height()/2)        //Arrow middle
+                                        << QPoint(DataBus.x()+DataBus.width()+13, MDRELabel.y()+MDRELabel.height()/2+10)    //Arrow Outer Lower Point
+                                        << QPoint(DataBus.x()+DataBus.width()+13, MDRELabel.y()+MDRELabel.height()/2+5)     //Arrow Inner Lower Point
+                                        << QPoint(MDRELabel.x(), MDRELabel.y()+MDRELabel.height()/2+5));                    //Bottom Right Corner
 
 //const QPolygon MDRMuxOutBus;
 const QPolygon MDROMuxOutBus = QPolygon(QVector<QPoint>()
