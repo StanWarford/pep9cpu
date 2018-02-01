@@ -194,7 +194,9 @@ private:
 
     void repaintMemReadOneByteModel(QPainter *painter);
     void repaintMemWriteOneByteModel(QPainter *painter);
-
+    void repaintABusOneByteModel(QPainter *painter);
+    void repaintBBusOneByteModel(QPainter *painter);
+    void repaintCBusOneByteModel(QPainter *painter);
     // two byte specific repainting methods
     void repaintMARMuxSelect(QPainter *painter);
     void repaintMARCkTwoByteModel(QPainter *painter);
@@ -215,6 +217,9 @@ private:
     void repaintMARMUXToMARBuses(QPainter *painter);
 
     void repaintMDRMuxOutputBuses(QPainter *painter);
+    void repaintABusTwoByteModel(QPainter *painter);
+    void repaintBBusTwoByteModel(QPainter *painter);
+    void repaintCBusTwoByteModel(QPainter *painter);
 
 };
 

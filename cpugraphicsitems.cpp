@@ -1219,6 +1219,17 @@ void CpuGraphicsItems::paint(QPainter *painter,
 
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
+
+        //Paint the buses in the correct order for the One Byte Bus
+        /*
+         * In the one byte bus, the buses must be drawn in the folling order C, B, A.
+         * The B bus overlaps with the A bus, and the C bus overlaps with the B bus.
+         * So, this rendering order prevents graphical issues.
+         */
+        repaintCBusOneByteModel(painter);
+        repaintBBusOneByteModel(painter);
+        repaintABusOneByteModel(painter);
+
         // alu select line text
         painter->drawText(OneByteShapes::ctrlInputX - 23, ALULineEdit->y() + 5, "4");
 
@@ -1267,6 +1278,13 @@ void CpuGraphicsItems::paint(QPainter *painter,
         repaintMDRESelect(painter);
         repaintMARMUXToMARBuses(painter);
         repaintMDRMuxOutputBuses(painter);
+        //Every select line above ALU firt first
+        //repaintMDREvenBus()
+        //repaintMDROddBus()
+        //repaintEOMuxBus()
+        //repaintB()
+        //repaintA()
+        //repaintC()
 
         break;
     default:
@@ -1372,15 +1390,6 @@ void CpuGraphicsItems::repaintBSelect(QPainter *painter)
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
         painter->drawLines(OneByteShapes::BSelect._lines);
-
-        color = ok ? combCircuitRed : Qt::white;
-        painter->setPen(QPen(QBrush(Qt::black), 1));
-        painter->setBrush(color);
-
-        // BBus
-        painter->drawPolygon(OneByteShapes::BBus1);
-        painter->drawPolygon(OneByteShapes::BBus2);
-        painter->drawRect(OneByteShapes::BBusRect);
         break;
     case Enu::TwoByteDataBus:
         painter->drawLines(TwoByteShapes::BSelect._lines);
@@ -1403,10 +1412,9 @@ void CpuGraphicsItems::repaintBSelect(QPainter *painter)
 void CpuGraphicsItems::repaintASelect(QPainter *painter)
 {
     bool ok;
-    QColor color;
 
     aLineEdit->text().toInt(&ok, 10);
-
+    QColor color;
     color = ok ? Qt::black : Qt::gray;
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
@@ -1419,15 +1427,6 @@ void CpuGraphicsItems::repaintASelect(QPainter *painter)
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
         painter->drawLines(OneByteShapes::ASelect._lines);
-
-        color = ok ? combCircuitRed : Qt::white;
-
-        painter->setPen(QPen(QBrush(Qt::black), 1));
-        painter->setBrush(color);
-        // ABus
-        painter->drawPolygon(OneByteShapes::ABus1);
-        painter->drawPolygon(OneByteShapes::ABus2);
-
         break;
     case Enu::TwoByteDataBus:
         painter->drawLines(TwoByteShapes::ASelect._lines);
@@ -1617,7 +1616,6 @@ void CpuGraphicsItems::repaintCMuxSelect(QPainter *painter)
     // CMuxBus (output)
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
-        painter->drawPolygon(OneByteShapes::CBus);
         break;
     case Enu::TwoByteDataBus:
         painter->drawPolygon(TwoByteShapes::CBus);
@@ -2435,6 +2433,62 @@ void CpuGraphicsItems::repaintMemWriteOneByteModel(QPainter *painter)
     // right arrow from Bus to MDRMux:
     painter->drawPolygon(OneByteShapes::DataToMDRMuxBus);
 
+}
+
+void CpuGraphicsItems::repaintABusOneByteModel(QPainter *painter)
+{
+    bool ok = aLineEdit->text().toInt(&ok, 10);;
+    QColor color;
+    color = ok ? Qt::black : Qt::gray;
+    painter->setPen(QPen(QBrush(color), 1));
+    painter->setBrush(color);
+
+    color = ok ? combCircuitRed : Qt::white;
+
+    painter->setPen(QPen(QBrush(Qt::black), 1));
+    painter->setBrush(color);
+    // ABus
+    painter->drawPolygon(OneByteShapes::ABus1);
+    painter->drawPolygon(OneByteShapes::ABus2);
+}
+
+void CpuGraphicsItems::repaintBBusOneByteModel(QPainter *painter)
+{
+    bool ok = bLineEdit->text().toInt(&ok, 10);;
+    QColor color;
+    color = ok ? Qt::black : Qt::gray;
+    painter->setPen(QPen(QBrush(color), 1));
+    painter->setBrush(color);
+
+    color = ok ? combCircuitRed : Qt::white;
+
+    painter->setPen(QPen(QBrush(Qt::black), 1));
+    painter->setBrush(color);
+    // ABus
+    painter->drawPolygon(OneByteShapes::BBus1);
+    painter->drawPolygon(OneByteShapes::BBus2);
+    painter->drawPolygon(OneByteShapes::BBusRect);
+}
+
+void CpuGraphicsItems::repaintCBusOneByteModel(QPainter *painter)
+{ QColor color;
+    if (cMuxTristateLabel->text() == "0") {
+        color = combCircuitYellow;
+    }
+    else if (cMuxTristateLabel->text() == "1") {
+        if (!aluHasCorrectOutput() || ALULineEdit->text() == "15") {
+            color = Qt::white;
+        }
+        else {
+            color = combCircuitBlue;
+        }
+    }
+    else {
+        color = Qt::white;
+    }
+    painter->setPen(QPen(QBrush(Qt::black), 1));
+    painter->setBrush(color);
+    painter->drawPolygon(OneByteShapes::CBus);
 }
 
 
