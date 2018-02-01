@@ -76,6 +76,8 @@ enum CommonPositions {
     combCircY = 142, //Memory Combinational circuits start at this height. Originally 132
     statusBitsX = 526,//476,
     BottomOfAlu=OneByteShapes::ALUBottomBound+aluOffsetY, //Y coordinate of the bottom of the ALU
+    ALUUpperRightLineMidpoint=(OneByteShapes::ALUUpperRightLine_LeftPoint+OneByteShapes::ALUUpperRightLine_RightPoint)/2+controlOffsetX,
+    BBusRightArrowTipX=ctrlInputX,
 
 };
 
@@ -96,7 +98,7 @@ enum CommonOffsets{
     MemReadYOffsetFromALU=237,  //Bottom of ALU to the MemReadLine
     MemWriteYOffsetFromALU=217, //Bottom of ALU to the MemWriteLine
     ALULabelYOffsetFromALU=-25, //Bottom of ALU to top of the ALULineEdit
-    EOMuxOffsetFromMDREMux=10,  //Bottom of MDREMux to top of EOMux
+    EOMuxOffsetFromMDREMux=0,  //Bottom of MDREMux to top of EOMux
 
   };
 
@@ -378,12 +380,76 @@ const QRect m2RegLabel                      = OneByteShapes::m2RegLabel;
 const QRect m3RegLabel                      = OneByteShapes::m3RegLabel;
 const QRect m4RegLabel                      = OneByteShapes::m4RegLabel;
 const QRect m5RegLabel                      = OneByteShapes::m5RegLabel;
-const QPolygon BBus1;
-const QRect BBusRect;
-const QPolygon BBus2;
-const QPolygon ABus1;
-const QPolygon ABus2;
-const QPolygon CBus;
+const QPolygon ABus = QPolygon(QVector<QPoint>()
+                               << QPoint(aMuxerDataLabel.right()-15,RegBank.bottom()+1) //Top left corner of register foot
+                               << QPoint(aMuxerDataLabel.right()-5,RegBank.bottom()+1) //Top right corner of register foot;
+                               << QPoint(aMuxerDataLabel.right()-5,aMuxerDataLabel.y()-(arrowHDepth-5)) //AMux Arrow Right Inner point
+                               << QPoint(aMuxerDataLabel.right()-0,aMuxerDataLabel.y()-(arrowHDepth-5)) //AMux Arrow Right Outer point
+                               << QPoint(aMuxerDataLabel.right()-10,aMuxerDataLabel.y()-arrowHOffset) //AMux Arrow Middle point
+                               << QPoint(aMuxerDataLabel.right()-20,aMuxerDataLabel.y()-(arrowHDepth-5)) //AMux Arrow Left Outer point
+                               << QPoint(aMuxerDataLabel.right()-15,aMuxerDataLabel.y()-(arrowHDepth-5)) //AMux Arrow Left Inner point
+                               << QPoint(aMuxerDataLabel.right()-15,MARMuxerDataLabel.bottom()-5) //Pivot between AMUX arrow left point and MARMux Inner Bottom Edge
+                               << QPoint(MARMuxerDataLabel.right()+(arrowHDepth-5),MARMuxerDataLabel.bottom()-5) //MARMux Arrow Bottom Inner point
+                               << QPoint(MARMuxerDataLabel.right()+(arrowHDepth-5),MARMuxerDataLabel.bottom()-0) //MARMux Arrow Bottom Outer point
+                               << QPoint(MARMuxerDataLabel.right()+(arrowHOffset),MARMuxerDataLabel.bottom()-10) //MARMux Arrow Middle point
+                               << QPoint(MARMuxerDataLabel.right()+(arrowHDepth-5),MARMuxerDataLabel.bottom()-20) //MARMux Arrow Top Outer point
+                               << QPoint(MARMuxerDataLabel.right()+(arrowHDepth-5),MARMuxerDataLabel.bottom()-15) //MARMux Arrow Top Inner point
+                               << QPoint(aMuxerDataLabel.right()-15,MARMuxerDataLabel.bottom()-15) //Pivot between MARMux arrow top and register top left foot
+                               );
+const QPolygon BBus = QPolygon(QVector<QPoint>()
+                              << QPoint(ALUUpperRightLineMidpoint-5,RegBank.bottom()+1) //Top left corner of register foot
+                              << QPoint(ALUUpperRightLineMidpoint+5,RegBank.bottom()+1) //Top right corner of register foot
+                              << QPoint(ALUUpperRightLineMidpoint+5,MARMuxerDataLabel.y()+5) //Pivot between register foor and right output
+                              << QPoint(BBusRightArrowTipX-(arrowHDepth-5), MARMuxerDataLabel.y()+5) //Right Out Arrow Top Inner point
+                              << QPoint(BBusRightArrowTipX-(arrowHDepth-5),MARMuxerDataLabel.y()+0) //Right Out Arrow Top Outer point
+                              << QPoint(BBusRightArrowTipX-(arrowHOffset),MARMuxerDataLabel.y()+10) //Right Out Arrow Middle point
+                              << QPoint(BBusRightArrowTipX-(arrowHDepth-5),MARMuxerDataLabel.y()+20) //Right Out Arrow Botton Outer point
+                              << QPoint(BBusRightArrowTipX-(arrowHDepth-5),MARMuxerDataLabel.y()+15) //Right Out Arrow Bottom Inner point
+                              << QPoint(ALUUpperRightLineMidpoint+5,MARMuxerDataLabel.y()+15) //Pivot between right out arrow and alu arrow
+                              << QPoint(ALUUpperRightLineMidpoint+5,ALUPoly.boundingRect().y()-(arrowHDepth-5)) //ALU Arrow Right Inner point
+                              << QPoint(ALUUpperRightLineMidpoint+10,ALUPoly.boundingRect().y()-(arrowHDepth-5)) //ALU Arrow Right Outer point
+                              << QPoint(ALUUpperRightLineMidpoint+0,ALUPoly.boundingRect().y()-(arrowHOffset)) //ALU Arrow Middle point
+                              << QPoint(ALUUpperRightLineMidpoint-10,ALUPoly.boundingRect().y()-(arrowHDepth-5)) //ALU Arrow Left Outer point
+                              << QPoint(ALUUpperRightLineMidpoint-5,ALUPoly.boundingRect().y()-(arrowHDepth-5)) //ALU Arrow Left Inner point
+                              << QPoint(ALUUpperRightLineMidpoint-5,MARMuxerDataLabel.y()+15) //Pivot between ALU arrow and MARMux Arrow
+                              << QPoint(MARMuxerDataLabel.right()+(arrowHDepth-5),MARMuxerDataLabel.y()+15) //MARMux Arrow Bottom Inner point
+                              << QPoint(MARMuxerDataLabel.right()+(arrowHDepth-5),MARMuxerDataLabel.y()+20) //MARMux Arrow Bottom Outer point
+                              << QPoint(MARMuxerDataLabel.right()+(arrowHOffset),MARMuxerDataLabel.y()+10) //MARMux Arrow Middle point
+                              << QPoint(MARMuxerDataLabel.right()+(arrowHDepth-5),MARMuxerDataLabel.y()+0) //MARMux Arrow Top Outer point
+                              << QPoint(MARMuxerDataLabel.right()+(arrowHDepth-5),MARMuxerDataLabel.y()+5) //MARMux Arrow Top Inner point
+                              << QPoint(ALUUpperRightLineMidpoint-5,MARMuxerDataLabel.y()+5) //Pivot between MARMux and register foot
+                               );
+const QPolygon CBus = QPolygon(QVector<QPoint>()
+                               <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2+5,cMuxerLabel.y()) //CMux Right foot
+                               <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2-5,cMuxerLabel.y()) //CMux Left foot
+                               //Branch off to MDREven
+                               <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2-5,MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+20) //Pivot between CMux foot and MDRE lower Leg
+                               <<QPoint(MDREMuxerDataLabel.right()-15,MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+20) //Pivot between MDRE lower leg and MDRE left arrow
+                               <<QPoint(MDREMuxerDataLabel.right()-15,MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //MDREMux Arrow Left Inner Point
+                               <<QPoint(MDREMuxerDataLabel.right()-20,MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //MDREMux Arrow Left Outer Point
+                               <<QPoint(MDREMuxerDataLabel.right()-10,MDREMuxerDataLabel.bottom()+(arrowHOffset)) //MDREMux Arrow Middle Point
+                               <<QPoint(MDREMuxerDataLabel.right()-0,MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //MDREMux Arrow Right Outer Point
+                               <<QPoint(MDREMuxerDataLabel.right()-5,MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) //MDREMux Arrow Right Inner Point
+                               <<QPoint(MDREMuxerDataLabel.right()-5,MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+10) //Pivot between MDRE right arrow and MDRE upper leg
+                               <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2-5,MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+10) //Pivot between MDRE upper leg and leg upwards
+                               //Resume path to register bank
+                               //Branch off to MDROdd
+                               <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2-5,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+20) //Pivot between CMux foot and MDRE lower Leg
+                               <<QPoint(MDROMuxerDataLabel.right()-15,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+20) //Pivot between MDRE lower leg and MDRE left arrow
+                               <<QPoint(MDROMuxerDataLabel.right()-15,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) //MDREMux Arrow Left Inner Point
+                               <<QPoint(MDROMuxerDataLabel.right()-20,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) //MDREMux Arrow Left Outer Point
+                               <<QPoint(MDROMuxerDataLabel.right()-10,MDROMuxerDataLabel.bottom()+(arrowHOffset)) //MDREMux Arrow Middle Point
+                               <<QPoint(MDROMuxerDataLabel.right()-0,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) //MDREMux Arrow Right Outer Point
+                               <<QPoint(MDROMuxerDataLabel.right()-5,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) //MDREMux Arrow Right Inner Point
+                               <<QPoint(MDROMuxerDataLabel.right()-5,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+10) //Pivot between MDRE right arrow and MDRE upper leg
+                               <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2-5,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+10) //Pivot between MDRE upper leg and leg upwards
+                               //Resume path to register bank
+                               <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2-5,RegBank.bottom()+(arrowHDepth-5))//Register Arrow Left Inner Point
+                               <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2-10,RegBank.bottom()+(arrowHDepth-5))//Register Arrow Left Outer Point
+                               <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2+0,RegBank.bottom()+(arrowHOffset))//Register Arrow Middle Point
+                               <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2+10,RegBank.bottom()+(arrowHDepth-5))//Register Arrow Right Outer Point
+                               <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2+5,RegBank.bottom()+(arrowHDepth-5))//Register Arrow Right Inner Point
+                               );
 const QPolygon AddrArrow                    = OneByteShapes::AddrArrow;
 //const QPolygon DataToMDRMuxBus;
 const QPolygon DataToMDROMuxBus = QPolygon(QVector<QPoint>()

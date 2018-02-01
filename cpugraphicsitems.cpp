@@ -1281,9 +1281,9 @@ void CpuGraphicsItems::paint(QPainter *painter,
         repaintMDREToEOMuxBus(painter);
         repaintMDROToEOMuxBus(painter);
         repaintEOMuxOutpusBus(painter);
-        //repaintB()
-        //repaintA()
-        //repaintC()
+        repaintABusTwoByteModel(painter);
+        repaintBBusTwoByteModel(painter);
+        repaintCBusTwoByteModel(painter);
 
         break;
     default:
@@ -1392,15 +1392,6 @@ void CpuGraphicsItems::repaintBSelect(QPainter *painter)
         break;
     case Enu::TwoByteDataBus:
         painter->drawLines(TwoByteShapes::BSelect._lines);
-
-        color = ok ? combCircuitRed : Qt::white;
-        painter->setPen(QPen(QBrush(Qt::black), 1));
-        painter->setBrush(color);
-
-        // BBus
-        painter->drawPolygon(TwoByteShapes::BBus1);
-        painter->drawPolygon(TwoByteShapes::BBus2);
-        painter->drawRect(TwoByteShapes::BBusRect);
         break;
     default:
         break;
@@ -1429,15 +1420,6 @@ void CpuGraphicsItems::repaintASelect(QPainter *painter)
         break;
     case Enu::TwoByteDataBus:
         painter->drawLines(TwoByteShapes::ASelect._lines);
-
-        color = ok ? combCircuitRed : Qt::white;
-
-        painter->setPen(QPen(QBrush(Qt::black), 1));
-        painter->setBrush(color);
-        // ABus
-        painter->drawPolygon(TwoByteShapes::ABus1);
-        painter->drawPolygon(TwoByteShapes::ABus2);
-
         break;
     default:
         break;
@@ -2914,5 +2896,42 @@ void CpuGraphicsItems::repaintMDROToEOMuxBus(QPainter *painter){
     painter->setBrush(color);
     painter->drawPolygon(TwoByteShapes::MDROToEOMuxBus);
 }
+void CpuGraphicsItems::repaintABusTwoByteModel(QPainter *painter)
+{
+    bool ok;
+    aLineEdit->text().toInt(&ok, 10);
+    QColor color;
+    color = ok ? combCircuitRed : Qt::white;
+    painter->setPen(QPen(QBrush(Qt::black), 1));
+    painter->setBrush(color);
+
+    // ABus
+    painter->drawPolygon(TwoByteShapes::ABus);
+}
+void CpuGraphicsItems::repaintBBusTwoByteModel(QPainter *painter)
+{
+    bool ok;
+    bLineEdit->text().toInt(&ok, 10);
+    QColor color;
+    color = ok ? combCircuitRed : Qt::white;
+    painter->setPen(QPen(QBrush(Qt::black), 1));
+    painter->setBrush(color);
+
+    // BBus
+    painter->drawPolygon(TwoByteShapes::BBus);
+}
+void CpuGraphicsItems::repaintCBusTwoByteModel(QPainter *painter)
+{
+    bool ok;
+    cLineEdit->text().toInt(&ok, 10);
+    QColor color;
+    color = ok ? combCircuitRed : Qt::white;
+    painter->setPen(QPen(QBrush(Qt::black), 1));
+    painter->setBrush(color);
+
+    // CBus
+    painter->drawPolygon(TwoByteShapes::CBus);
+}
+
 
 
