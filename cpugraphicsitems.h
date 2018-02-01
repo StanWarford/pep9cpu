@@ -217,6 +217,8 @@ private:
     void repaintMARMUXToMARBuses(QPainter *painter);
 
     void repaintMDRMuxOutputBuses(QPainter *painter);
+    void repaintMDREToEOMuxBus(QPainter *painter);
+    void repaintMDROToEOMuxBus(QPainter *painter);
     void repaintABusTwoByteModel(QPainter *painter);
     void repaintBBusTwoByteModel(QPainter *painter);
     void repaintCBusTwoByteModel(QPainter *painter);

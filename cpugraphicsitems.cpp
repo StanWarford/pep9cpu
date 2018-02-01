@@ -1273,15 +1273,14 @@ void CpuGraphicsItems::paint(QPainter *painter,
         repaintMDROCk(painter);
         repaintMDRECk(painter);
         repaintEOMuxSelect(painter);
-        repaintEOMuxOutpusBus(painter);
         repaintMDROSelect(painter);
         repaintMDRESelect(painter);
         repaintMARMUXToMARBuses(painter);
         repaintMDRMuxOutputBuses(painter);
         //Every select line above ALU firt first
-        //repaintMDREvenBus()
-        //repaintMDROddBus()
-        //repaintEOMuxBus()
+        repaintMDREToEOMuxBus(painter);
+        repaintMDROToEOMuxBus(painter);
+        repaintEOMuxOutpusBus(painter);
         //repaintB()
         //repaintA()
         //repaintC()
@@ -2902,4 +2901,18 @@ void CpuGraphicsItems::repaintMDRMuxOutputBuses(QPainter *painter)
 
 
 }
+void CpuGraphicsItems::repaintMDREToEOMuxBus(QPainter *painter){
+    QColor color = Qt::white;
+    painter->setPen(Qt::black);
+    painter->setBrush(color);
+    painter->drawPolygon(TwoByteShapes::MDREToEOMuxBus);
+}
+
+void CpuGraphicsItems::repaintMDROToEOMuxBus(QPainter *painter){
+    QColor color=Qt::white;
+    painter->setPen(Qt::black);
+    painter->setBrush(color);
+    painter->drawPolygon(TwoByteShapes::MDROToEOMuxBus);
+}
+
 

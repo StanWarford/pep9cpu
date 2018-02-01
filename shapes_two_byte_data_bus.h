@@ -62,7 +62,7 @@ enum Shapes {
     incrementerOffset = 10,
 
     aluSelOff = 57,
-    aluOffsetY = 156,
+    aluOffsetY = 160,
     selLineOff = 15,
 
 };
@@ -429,7 +429,38 @@ const QPolygon MDREToDataBus = QPolygon(QVector<QPoint>()
                                         << QPoint(DataBus.x()+DataBus.width()+13, MDRELabel.y()+MDRELabel.height()/2+10)    //Arrow Outer Lower Point
                                         << QPoint(DataBus.x()+DataBus.width()+13, MDRELabel.y()+MDRELabel.height()/2+5)     //Arrow Inner Lower Point
                                         << QPoint(MDRELabel.x(), MDRELabel.y()+MDRELabel.height()/2+5));                    //Bottom Right Corner
-
+const QPolygon MDREToEOMuxBus = QPolygon(QVector<QPoint>()
+                                         << QPoint(MDRELabel.right()+1,MDRELabel.y()+MDRELabel.height()/2 - 5) //MDRE Top Point
+                                         << QPoint(MDRELabel.right()+1,MDRELabel.y()+MDRELabel.height()/2 + 5) //MDRE Bottom Point
+                                         << QPoint(EOMuxerDataLabel.x()+5,MDRELabel.y()+MDRELabel.height()/2 + 5) //Pivot between MDRE bottom and EOMux bottom
+                                         << QPoint(EOMuxerDataLabel.x()+5,EOMuxerDataLabel.y()-(arrowHDepth-5)) //EOMux Arrow Inner Left Edge
+                                         << QPoint(EOMuxerDataLabel.x()+0,EOMuxerDataLabel.y()-(arrowHDepth-5)) //EOMux Arrow Outer Left Edge
+                                         << QPoint(EOMuxerDataLabel.x()+10,EOMuxerDataLabel.y()-(arrowHOffset)) //EOMux Arrow Midpoint
+                                         << QPoint(EOMuxerDataLabel.x()+20,EOMuxerDataLabel.y()-(arrowHDepth-5)) //EOMux Arrow Outer Right Edge
+                                         << QPoint(EOMuxerDataLabel.x()+15,EOMuxerDataLabel.y()-(arrowHDepth-5)) //EOMux Arrow Inner Right Edge
+                                         << QPoint(EOMuxerDataLabel.x()+15,MARMuxerDataLabel.bottom()+(arrowHDepth-5)) //MARMux Arrow Inner Right Edge
+                                         << QPoint(EOMuxerDataLabel.x()+20,MARMuxerDataLabel.bottom()+(arrowHDepth-5)) //MARMux Arrow Outer Right Edge
+                                         << QPoint(EOMuxerDataLabel.x()+10,MARMuxerDataLabel.bottom()+(arrowHOffset)) //MARMux Arrow Midpoint
+                                         << QPoint(EOMuxerDataLabel.x()+0,MARMuxerDataLabel.bottom()+(arrowHDepth-5)) //MARMux Arrow Outer Left Edge
+                                         << QPoint(EOMuxerDataLabel.x()+5,MARMuxerDataLabel.bottom()+(arrowHDepth-5)) //MARMux Arrow Inner Left Edge
+                                         << QPoint(EOMuxerDataLabel.x()+5,MDRELabel.y()+MDRELabel.height()/2 -5) //Pivot between MARMux bottom and MDRE top
+                                         );
+const QPolygon MDROToEOMuxBus = QPolygon(QVector<QPoint>()
+                                         << QPoint(MDROLabel.right()+1,MDROLabel.y()+MDROLabel.height()/2 - 5) //MDRE Top Point
+                                         << QPoint(MDROLabel.right()+1,MDROLabel.y()+MDROLabel.height()/2 + 5) //MDRE Bottom Point
+                                         << QPoint(EOMuxerDataLabel.right()-15,MDROLabel.y()+MDROLabel.height()/2 + 5) //Pivot between MDRE bottom and EOMux bottom
+                                         << QPoint(EOMuxerDataLabel.right()-15,EOMuxerDataLabel.y()-(arrowHDepth-5)) //EOMux Arrow Inner Left Edge
+                                         << QPoint(EOMuxerDataLabel.right()-20,EOMuxerDataLabel.y()-(arrowHDepth-5)) //EOMux Arrow Outer Left Edge
+                                         << QPoint(EOMuxerDataLabel.right()-10,EOMuxerDataLabel.y()-(arrowHOffset)) //EOMux Arrow Midpoint
+                                         << QPoint(EOMuxerDataLabel.right()-0,EOMuxerDataLabel.y()-(arrowHDepth-5)) //EOMux Arrow Outer Right Edge
+                                         << QPoint(EOMuxerDataLabel.right()-5,EOMuxerDataLabel.y()-(arrowHDepth-5)) //EOMux Arrow Inner Right Edge
+                                         << QPoint(EOMuxerDataLabel.right()-5,MARMuxerDataLabel.bottom()+(arrowHDepth-5)) //MARMux Arrow Inner Right Edge
+                                         << QPoint(EOMuxerDataLabel.right()+0,MARMuxerDataLabel.bottom()+(arrowHDepth-5)) //MARMux Arrow Outer Right Edge
+                                         << QPoint(EOMuxerDataLabel.right()-10,MARMuxerDataLabel.bottom()+(arrowHOffset)) //MARMux Arrow Midpoint
+                                         << QPoint(EOMuxerDataLabel.right()-20,MARMuxerDataLabel.bottom()+(arrowHDepth-5)) //MARMux Arrow Outer Left Edge
+                                         << QPoint(EOMuxerDataLabel.right()-15,MARMuxerDataLabel.bottom()+(arrowHDepth-5)) //MARMux Arrow Inner Left Edge
+                                         << QPoint(EOMuxerDataLabel.right()-15,MDROLabel.y()+MDROLabel.height()/2 -5) //Pivot between MARMux bottom and MDRE top
+                                         );
 //const QPolygon MDRMuxOutBus;
 const QPolygon MDROMuxOutBus = QPolygon(QVector<QPoint>()
                                         << QPoint(MDROMuxerDataLabel.x()+MDROMuxerDataLabel.width()/2-5, MDROMuxerDataLabel.y()) //Bottom Left Corner
