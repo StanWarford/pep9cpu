@@ -1214,7 +1214,7 @@ void CpuGraphicsItems::paint(QPainter *painter,
     repaintBSelect(painter);
     repaintASelect(painter);
     repaintMARCk(painter);
-
+    repaintAMuxSelect(painter); // Needs to be painted before buses
     painter->setPen(Qt::black);
 
     switch (Pep::cpuFeatures) {
@@ -1290,7 +1290,6 @@ void CpuGraphicsItems::paint(QPainter *painter,
         break;
     }
 
-    repaintAMuxSelect(painter);
 
     repaintCMuxSelect(painter);
 
