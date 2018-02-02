@@ -241,12 +241,15 @@ enum ALUPolyNumbers
 {
     ALUUpperLeftLine_LeftPoint = 314,
     ALUUpperLeftLine_RightPoint=366,
+    ALUUpperRightLine_LeftPoint=394,
+    ALUUpperRightLine_RightPoint=447,
+    ALUTopBound=342,
     ALUBottomBound=394,
 };
-const QPolygon ALUPoly = QPolygon(QVector<QPoint>() << QPoint(ALUUpperLeftLine_LeftPoint,342)
-                                  << QPoint(ALUUpperLeftLine_RightPoint,342) << QPoint(370,353)
-                                  << QPoint(390,353) << QPoint(394,342)
-                                  << QPoint(447,342) << QPoint(421,ALUBottomBound)
+const QPolygon ALUPoly = QPolygon(QVector<QPoint>() << QPoint(ALUUpperLeftLine_LeftPoint,ALUTopBound)
+                                  << QPoint(ALUUpperLeftLine_RightPoint,ALUTopBound) << QPoint(370,353)
+                                  << QPoint(390,353) << QPoint(ALUUpperRightLine_LeftPoint,ALUTopBound)
+                                  << QPoint(ALUUpperRightLine_RightPoint,ALUTopBound) << QPoint(421,ALUBottomBound)
                                   << QPoint(340,ALUBottomBound));
 
 // the two shapes that make up the arrow out to the right of the MDR

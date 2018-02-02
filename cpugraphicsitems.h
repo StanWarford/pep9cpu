@@ -201,9 +201,7 @@ private:
     void repaintMARMuxSelect(QPainter *painter);
     void repaintMARCkTwoByteModel(QPainter *painter);
 
-    //Currently does nothing (1/21/18)
     void repaintMDROCk(QPainter *painter);
-    //MDROSelect actually repaints MDROCk
     void repaintMDROSelect(QPainter *painter);
     void repaintMDRESelect(QPainter *painter);
     void repaintMDRECk(QPainter *painter);
@@ -217,6 +215,8 @@ private:
     void repaintMARMUXToMARBuses(QPainter *painter);
 
     void repaintMDRMuxOutputBuses(QPainter *painter);
+    void repaintMDREToEOMuxBus(QPainter *painter);
+    void repaintMDROToEOMuxBus(QPainter *painter);
     void repaintABusTwoByteModel(QPainter *painter);
     void repaintBBusTwoByteModel(QPainter *painter);
     void repaintCBusTwoByteModel(QPainter *painter);
