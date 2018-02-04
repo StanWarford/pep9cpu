@@ -47,7 +47,7 @@ HelpDialog::HelpDialog(QWidget *parent) :
     ui->verticalLayout->insertWidget(0, microcodeEditor);
 
     leftHighlighter = new PepHighlighter(microcodeEditor->document());
-
+    leftHighlighter->forceAllFeatures(true);
     ui->helpTreeWidget->setFont(QFont(Pep::labelFont, Pep::labelFontSize));
 
     microcodeEditor->setFont(QFont(Pep::codeFont, Pep::codeFontSize));
