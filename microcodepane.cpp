@@ -284,7 +284,7 @@ void MicrocodePane::setFilename(QString fileName)
 
 void MicrocodePane::onCPUFeatureChange()
 {
-    initCPUModelState();
+    highlighter->rehighlight();
 }
 
 void MicrocodePane::setLabelToModified(bool modified)
