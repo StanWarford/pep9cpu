@@ -1465,8 +1465,19 @@ void CpuGraphicsItems::repaintAMuxSelect(QPainter *painter)
     if (ok) {
         switch (aMux) {
         case (0):
-            color = combCircuitYellow;
-            aMuxerDataLabel->setPalette(QPalette(combCircuitYellow.lighter(120)));
+            if(Pep::cpuFeatures==Enu::TwoByteDataBus){
+                if(EOMuxTristateLabel->text()=="0"){
+                    color=combCircuitGreen;
+                }
+                else{
+                    color=combCircuitYellow;
+                }
+            }
+            else
+            {
+                color=combCircuitYellow;
+            }
+            aMuxerDataLabel->setPalette(QPalette(color.lighter(120)));
             break;
         case (1):
             if (aLineEdit->text() == "") { // ABus.state == UNDEFINED
@@ -2515,7 +2526,7 @@ void CpuGraphicsItems::repaintEOMuxOutpusBus(QPainter *painter)
         color=combCircuitYellow;
     }
     else if(EOMuxTristateLabel->text()=="0"){
-        color=combCircuitYellow;
+        color=combCircuitGreen;
     }
     painter->setPen(Qt::black);
     painter->setBrush(color);
@@ -2792,16 +2803,19 @@ void CpuGraphicsItems::repaintMARMUXToMARBuses(QPainter *painter)
 {
     //Needs conditional painting based on the state of the bus.
     bool marckIsHigh = MARCk->isChecked();
-    QColor color;
-    if(marckIsHigh){
-        color=combCircuitRed;
+    QColor colorTop=Qt::white,colorBottom=Qt::white;
+    if(marckIsHigh && MARMuxTristateLabel->text()=="0"){
+        colorTop= combCircuitYellow;
+        colorBottom = combCircuitGreen;
     }
-    else{
-        color=Qt::white;
+    else if(marckIsHigh && MARMuxTristateLabel->text()=="1")
+    {
+        colorTop = colorBottom = combCircuitRed;
     }
     painter->setPen(QPen(QBrush(Qt::black), 1));
-    painter->setBrush(color);
+    painter->setBrush(colorBottom);
     painter->drawPolygon(TwoByteShapes::MARMuxToMARABus);
+    painter->setBrush(colorTop);
     painter->drawPolygon(TwoByteShapes::MARMuxToMARBBus);
 }
 
@@ -2868,7 +2882,7 @@ void CpuGraphicsItems::repaintMDRMuxOutputBuses(QPainter *painter)
 void CpuGraphicsItems::repaintMDREToEOMuxBus(QPainter *painter){
     QColor color = Qt::white;
     if(MARMuxTristateLabel->text()=="0"||EOMuxTristateLabel->text()=="1"||EOMuxTristateLabel->text()=="0"){
-        color=Qt::blue;
+        color=combCircuitGreen;
     }
     painter->setPen(Qt::black);
     painter->setBrush(color);
@@ -2878,7 +2892,7 @@ void CpuGraphicsItems::repaintMDREToEOMuxBus(QPainter *painter){
 void CpuGraphicsItems::repaintMDROToEOMuxBus(QPainter *painter){
     QColor color=Qt::white;
     if(MARMuxTristateLabel->text()=="0"||EOMuxTristateLabel->text()=="1"||EOMuxTristateLabel->text()=="0"){
-        color=Qt::blue;
+        color=combCircuitYellow;
     }
     painter->setPen(Qt::black);
     painter->setBrush(color);
