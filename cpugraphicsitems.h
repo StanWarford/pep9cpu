@@ -157,6 +157,8 @@ private:
     QImage arrowUpGray;
     QImage arrowDownGray;
 
+    // Try to draw as many free-floating strings in one centralized function as possible. Both 1 & 2 byte models.
+    void drawDiagramFreeText(QPainter *painter);
     void repaintLoadCk(QPainter *painter);
     void repaintCSelect(QPainter *painter);
     void repaintBSelect(QPainter *painter);

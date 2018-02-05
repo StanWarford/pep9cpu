@@ -1192,23 +1192,9 @@ void CpuGraphicsItems::paint(QPainter *painter,
 {
     painter->setRenderHint(QPainter::Antialiasing, false);
     painter->setPen(Qt::black);
+    drawDiagramFreeText(painter);
 
     // c,b,a select line text
-    painter->drawText(528,92, "5");
-    painter->drawText(528,70, "5");
-    painter->drawText(528,48, "5");
-
-
-    painter->drawText(372,132, "ABus");
-    painter->drawText(433,132, "BBus");
-    painter->drawText(300,132, "CBus");
-
-    painter->drawText(34,132, "System");
-    painter->drawText(44,147, "Bus");
-
-    painter->drawText(7, 320, "Addr");
-    painter->drawText(7, 395, "Data");
-
     repaintLoadCk(painter);
     repaintCSelect(painter);
     repaintBSelect(painter);
@@ -1230,45 +1216,11 @@ void CpuGraphicsItems::paint(QPainter *painter,
         repaintBBusOneByteModel(painter);
         repaintABusOneByteModel(painter);
 
-        // alu select line text
-        painter->drawText(OneByteShapes::ctrlInputX - 23, ALULineEdit->y() + 5, "4");
-
-        painter->drawText(368,388, "ALU");
-
-        // NZVC data path text
-        painter->drawText(314,531, "0");
-        painter->drawText(314,541, "0");
-        painter->drawText(314,551, "0");
-        painter->drawText(314,561, "0");
-
-        painter->drawText(OneByteShapes::MARALabel.x() - 37, OneByteShapes::MARALabel.y() + 13, "MARA");
-        painter->drawText(OneByteShapes::MARBLabel.x() - 37, OneByteShapes::MARBLabel.y() + 13, "MARB");
-
         repaintMDRMuxSelect(painter);
 
         repaintMDRCk(painter);
-
         break;
     case Enu::TwoByteDataBus:
-        // alu select line text
-        painter->drawText(TwoByteShapes::ctrlInputX - 23, ALULineEdit->y() + 5, "4");
-
-        painter->drawText(368 + TwoByteShapes::controlOffsetX,
-                          388 + TwoByteShapes::aluOffsetY, "ALU");
-
-        // NZVC data path text
-        painter->drawText(314 + TwoByteShapes::controlOffsetX,
-                          531 + TwoByteShapes::aluOffsetY, "0");
-        painter->drawText(314 + TwoByteShapes::controlOffsetX,
-                          541 + TwoByteShapes::aluOffsetY, "0");
-        painter->drawText(314 + TwoByteShapes::controlOffsetX,
-                          551 + TwoByteShapes::aluOffsetY, "0");
-        painter->drawText(314 + TwoByteShapes::controlOffsetX,
-                          561 + TwoByteShapes::aluOffsetY, "0");
-
-        painter->drawText(TwoByteShapes::MARALabel.x() - 37, TwoByteShapes::MARALabel.y() + 13, "MARA");
-        painter->drawText(TwoByteShapes::MARBLabel.x() - 37, TwoByteShapes::MARBLabel.y() + 13, "MARB");
-
         repaintMDROCk(painter);
         repaintMDRECk(painter);
         repaintEOMuxSelect(painter);
@@ -1311,6 +1263,67 @@ void CpuGraphicsItems::paint(QPainter *painter,
     repaintAndZSelect(painter);
     repaintALUSelect(painter);
 
+}
+
+void CpuGraphicsItems::drawDiagramFreeText(QPainter *painter)
+{
+    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->setPen(Qt::black);
+    painter->drawText(7, 320, "Addr");
+    painter->drawText(7, 395, "Data");
+    painter->drawText(528,92, "5");
+    painter->drawText(528,70, "5");
+    painter->drawText(528,48, "5");
+    painter->save();
+    painter->rotate(-90);
+    auto font= painter->font();
+    font.setPointSize(font.pointSize()*1.3);
+    painter->setFont(font);
+    painter->drawText(-260,35, "System Bus");
+    painter->restore();
+    switch(Pep::cpuFeatures)
+    {
+    case Enu::CPUType::OneByteDataBus:
+        painter->drawText(372,132, "ABus");
+        painter->drawText(433,132, "BBus");
+        painter->drawText(300,132, "CBus");
+        // alu select line text
+        painter->drawText(OneByteShapes::ctrlInputX - 23, ALULineEdit->y() + 5, "4");
+
+        painter->drawText(368,388, "ALU");
+
+        // NZVC data path text
+        painter->drawText(314,531, "0");
+        painter->drawText(314,541, "0");
+        painter->drawText(314,551, "0");
+        painter->drawText(314,561, "0");
+
+        painter->drawText(OneByteShapes::MARALabel.x() - 37, OneByteShapes::MARALabel.y() + 13, "MARA");
+        painter->drawText(OneByteShapes::MARBLabel.x() - 37, OneByteShapes::MARBLabel.y() + 13, "MARB");
+
+        break;
+    case Enu::CPUType::TwoByteDataBus:
+        painter->drawText(427,132, "ABus");
+        painter->drawText(483,132, "BBus");
+        painter->drawText(350,132, "CBus");
+        // alu select line text
+        painter->drawText(TwoByteShapes::ctrlInputX - 23, ALULineEdit->y() + 5, "4");
+        painter->drawText(368 + TwoByteShapes::controlOffsetX,
+                          388 + TwoByteShapes::aluOffsetY, "ALU");
+
+        // NZVC data path text
+        painter->drawText(314 + TwoByteShapes::controlOffsetX,
+                          531 + TwoByteShapes::aluOffsetY, "0");
+        painter->drawText(314 + TwoByteShapes::controlOffsetX,
+                          541 + TwoByteShapes::aluOffsetY, "0");
+        painter->drawText(314 + TwoByteShapes::controlOffsetX,
+                          551 + TwoByteShapes::aluOffsetY, "0");
+        painter->drawText(314 + TwoByteShapes::controlOffsetX,
+                          561 + TwoByteShapes::aluOffsetY, "0");
+        painter->drawText(TwoByteShapes::MARALabel.x() - 37, TwoByteShapes::MARALabel.y() + 13, "MARA");
+        painter->drawText(TwoByteShapes::MARBLabel.x() - 37, TwoByteShapes::MARBLabel.y() + 13, "MARB");
+        break;
+    }
 }
 
 void CpuGraphicsItems::repaintLoadCk(QPainter *painter)
