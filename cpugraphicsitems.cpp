@@ -1192,23 +1192,9 @@ void CpuGraphicsItems::paint(QPainter *painter,
 {
     painter->setRenderHint(QPainter::Antialiasing, false);
     painter->setPen(Qt::black);
+    drawDiagramFreeText(painter);
 
     // c,b,a select line text
-    painter->drawText(528,92, "5");
-    painter->drawText(528,70, "5");
-    painter->drawText(528,48, "5");
-
-
-    painter->drawText(372,132, "ABus");
-    painter->drawText(433,132, "BBus");
-    painter->drawText(300,132, "CBus");
-
-    painter->drawText(34,132, "System");
-    painter->drawText(44,147, "Bus");
-
-    painter->drawText(7, 320, "Addr");
-    painter->drawText(7, 395, "Data");
-
     repaintLoadCk(painter);
     repaintCSelect(painter);
     repaintBSelect(painter);
@@ -1230,45 +1216,11 @@ void CpuGraphicsItems::paint(QPainter *painter,
         repaintBBusOneByteModel(painter);
         repaintABusOneByteModel(painter);
 
-        // alu select line text
-        painter->drawText(OneByteShapes::ctrlInputX - 23, ALULineEdit->y() + 5, "4");
-
-        painter->drawText(368,388, "ALU");
-
-        // NZVC data path text
-        painter->drawText(314,531, "0");
-        painter->drawText(314,541, "0");
-        painter->drawText(314,551, "0");
-        painter->drawText(314,561, "0");
-
-        painter->drawText(OneByteShapes::MARALabel.x() - 37, OneByteShapes::MARALabel.y() + 13, "MARA");
-        painter->drawText(OneByteShapes::MARBLabel.x() - 37, OneByteShapes::MARBLabel.y() + 13, "MARB");
-
         repaintMDRMuxSelect(painter);
 
         repaintMDRCk(painter);
-
         break;
     case Enu::TwoByteDataBus:
-        // alu select line text
-        painter->drawText(TwoByteShapes::ctrlInputX - 23, ALULineEdit->y() + 5, "4");
-
-        painter->drawText(368 + TwoByteShapes::controlOffsetX,
-                          388 + TwoByteShapes::aluOffsetY, "ALU");
-
-        // NZVC data path text
-        painter->drawText(314 + TwoByteShapes::controlOffsetX,
-                          531 + TwoByteShapes::aluOffsetY, "0");
-        painter->drawText(314 + TwoByteShapes::controlOffsetX,
-                          541 + TwoByteShapes::aluOffsetY, "0");
-        painter->drawText(314 + TwoByteShapes::controlOffsetX,
-                          551 + TwoByteShapes::aluOffsetY, "0");
-        painter->drawText(314 + TwoByteShapes::controlOffsetX,
-                          561 + TwoByteShapes::aluOffsetY, "0");
-
-        painter->drawText(TwoByteShapes::MARALabel.x() - 37, TwoByteShapes::MARALabel.y() + 13, "MARA");
-        painter->drawText(TwoByteShapes::MARBLabel.x() - 37, TwoByteShapes::MARBLabel.y() + 13, "MARB");
-
         repaintMDROCk(painter);
         repaintMDRECk(painter);
         repaintEOMuxSelect(painter);
@@ -1311,6 +1263,67 @@ void CpuGraphicsItems::paint(QPainter *painter,
     repaintAndZSelect(painter);
     repaintALUSelect(painter);
 
+}
+
+void CpuGraphicsItems::drawDiagramFreeText(QPainter *painter)
+{
+    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->setPen(Qt::black);
+    painter->drawText(7, 320, "Addr");
+    painter->drawText(7, 395, "Data");
+    painter->drawText(528,92, "5");
+    painter->drawText(528,70, "5");
+    painter->drawText(528,48, "5");
+    painter->save();
+    painter->rotate(-90);
+    auto font= painter->font();
+    font.setPointSize(font.pointSize()*1.3);
+    painter->setFont(font);
+    painter->drawText(-260,35, "System Bus");
+    painter->restore();
+    switch(Pep::cpuFeatures)
+    {
+    case Enu::CPUType::OneByteDataBus:
+        painter->drawText(372,132, "ABus");
+        painter->drawText(433,132, "BBus");
+        painter->drawText(300,132, "CBus");
+        // alu select line text
+        painter->drawText(OneByteShapes::ctrlInputX - 23, ALULineEdit->y() + 5, "4");
+
+        painter->drawText(368,388, "ALU");
+
+        // NZVC data path text
+        painter->drawText(314,531, "0");
+        painter->drawText(314,541, "0");
+        painter->drawText(314,551, "0");
+        painter->drawText(314,561, "0");
+
+        painter->drawText(OneByteShapes::MARALabel.x() - 37, OneByteShapes::MARALabel.y() + 13, "MARA");
+        painter->drawText(OneByteShapes::MARBLabel.x() - 37, OneByteShapes::MARBLabel.y() + 13, "MARB");
+
+        break;
+    case Enu::CPUType::TwoByteDataBus:
+        painter->drawText(427,132, "ABus");
+        painter->drawText(483,132, "BBus");
+        painter->drawText(350,132, "CBus");
+        // alu select line text
+        painter->drawText(TwoByteShapes::ctrlInputX - 23, ALULineEdit->y() + 5, "4");
+        painter->drawText(368 + TwoByteShapes::controlOffsetX,
+                          388 + TwoByteShapes::aluOffsetY, "ALU");
+
+        // NZVC data path text
+        painter->drawText(314 + TwoByteShapes::controlOffsetX,
+                          531 + TwoByteShapes::aluOffsetY, "0");
+        painter->drawText(314 + TwoByteShapes::controlOffsetX,
+                          541 + TwoByteShapes::aluOffsetY, "0");
+        painter->drawText(314 + TwoByteShapes::controlOffsetX,
+                          551 + TwoByteShapes::aluOffsetY, "0");
+        painter->drawText(314 + TwoByteShapes::controlOffsetX,
+                          561 + TwoByteShapes::aluOffsetY, "0");
+        painter->drawText(TwoByteShapes::MARALabel.x() - 37, TwoByteShapes::MARALabel.y() + 13, "MARA");
+        painter->drawText(TwoByteShapes::MARBLabel.x() - 37, TwoByteShapes::MARBLabel.y() + 13, "MARB");
+        break;
+    }
 }
 
 void CpuGraphicsItems::repaintLoadCk(QPainter *painter)
@@ -1465,8 +1478,19 @@ void CpuGraphicsItems::repaintAMuxSelect(QPainter *painter)
     if (ok) {
         switch (aMux) {
         case (0):
-            color = combCircuitYellow;
-            aMuxerDataLabel->setPalette(QPalette(combCircuitYellow.lighter(120)));
+            if(Pep::cpuFeatures==Enu::TwoByteDataBus){
+                if(EOMuxTristateLabel->text()=="0"){
+                    color=combCircuitGreen;
+                }
+                else{
+                    color=combCircuitYellow;
+                }
+            }
+            else
+            {
+                color=combCircuitYellow.lighter(120);
+            }
+            aMuxerDataLabel->setPalette(QPalette(color));
             break;
         case (1):
             if (aLineEdit->text() == "") { // ABus.state == UNDEFINED
@@ -1627,7 +1651,7 @@ void CpuGraphicsItems::repaintCCk(QPainter *painter)
 {
     QColor color;
 
-    color = MDROCk->isChecked() ? Qt::black : Qt::gray;
+    color = CCkCheckBox->isChecked() ? Qt::black : Qt::gray;
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
@@ -2515,7 +2539,7 @@ void CpuGraphicsItems::repaintEOMuxOutpusBus(QPainter *painter)
         color=combCircuitYellow;
     }
     else if(EOMuxTristateLabel->text()=="0"){
-        color=combCircuitYellow;
+        color=combCircuitGreen;
     }
     painter->setPen(Qt::black);
     painter->setBrush(color);
@@ -2792,16 +2816,19 @@ void CpuGraphicsItems::repaintMARMUXToMARBuses(QPainter *painter)
 {
     //Needs conditional painting based on the state of the bus.
     bool marckIsHigh = MARCk->isChecked();
-    QColor color;
-    if(marckIsHigh){
-        color=combCircuitRed;
+    QColor colorTop=Qt::white,colorBottom=Qt::white;
+    if(marckIsHigh && MARMuxTristateLabel->text()=="0"){
+        colorTop= combCircuitYellow;
+        colorBottom = combCircuitGreen;
     }
-    else{
-        color=Qt::white;
+    else if(marckIsHigh && MARMuxTristateLabel->text()=="1")
+    {
+        colorTop = colorBottom = combCircuitRed;
     }
     painter->setPen(QPen(QBrush(Qt::black), 1));
-    painter->setBrush(color);
+    painter->setBrush(colorBottom);
     painter->drawPolygon(TwoByteShapes::MARMuxToMARABus);
+    painter->setBrush(colorTop);
     painter->drawPolygon(TwoByteShapes::MARMuxToMARBBus);
 }
 
@@ -2816,8 +2843,20 @@ void CpuGraphicsItems::repaintMDRESelect(QPainter *painter)
     painter->drawLines(TwoByteShapes::MDREMuxSelect._lines);
     painter->drawImage(TwoByteShapes::MDREMuxSelect._arrowheads.first(),
                        MDREColor == Qt::gray ? arrowLeftGray : arrowLeft);
-    if(MDREIsHigh){
-        MDREMuxerDataLabel->setPalette(QPalette(combCircuitGreen));
+    if(MDREIsHigh&&MDRECk->isChecked()){
+        if(MDREMuxTristateLabel->text()=="0"&&Sim::mainBusState==Enu::MemReadSecondWait){
+            MDREMuxerDataLabel->setPalette(QPalette(combCircuitRed.lighter(120)));
+        }
+        else if(MDREMuxTristateLabel->text()=="1"&&cMuxTristateLabel->text()=="0"){
+            MDREMuxerDataLabel->setPalette(QPalette(combCircuitYellow.lighter(120)));
+        }
+        else if(MDREMuxTristateLabel->text()=="1"&&cMuxTristateLabel->text()=="1"&&aluHasCorrectOutput()){
+            MDREMuxerDataLabel->setPalette(QPalette(combCircuitBlue.lighter(120)));
+        }
+        else{
+            MDREMuxerDataLabel->setPalette(QPalette(Qt::white));
+        }
+
     }
     else{
         MDREMuxerDataLabel->setPalette(QPalette(Qt::white));
@@ -2835,8 +2874,20 @@ void CpuGraphicsItems::repaintMDROSelect(QPainter *painter)
     painter->drawLines(TwoByteShapes::MDROMuxSelect._lines);
     painter->drawImage(TwoByteShapes::MDROMuxSelect._arrowheads.first(),
                        MDROColor == Qt::gray ? arrowLeftGray : arrowLeft);
-    if(MDROIsHigh){
-        MDROMuxerDataLabel->setPalette(QPalette(combCircuitGreen));
+    if(MDROIsHigh&&MDROCk->isChecked()){
+        if(MDROMuxTristateLabel->text()=="0"&&Sim::mainBusState==Enu::MemReadSecondWait){
+            MDROMuxerDataLabel->setPalette(QPalette(combCircuitRed.lighter(120)));
+        }
+        else if(MDROMuxTristateLabel->text()=="1"&&cMuxTristateLabel->text()=="0"){
+            MDROMuxerDataLabel->setPalette(QPalette(combCircuitYellow.lighter(120)));
+        }
+        else if(MDROMuxTristateLabel->text()=="1"&&cMuxTristateLabel->text()=="1"&&aluHasCorrectOutput()){
+            MDROMuxerDataLabel->setPalette(QPalette(combCircuitBlue.lighter(120)));
+        }
+        else{
+            MDROMuxerDataLabel->setPalette(QPalette(Qt::white));
+        }
+
     }
     else{
         MDROMuxerDataLabel->setPalette(QPalette(Qt::white));
@@ -2852,11 +2903,33 @@ void CpuGraphicsItems::repaintMDRMuxOutputBuses(QPainter *painter)
     QString MDREText = MDREMuxTristateLabel->text(), MDROText = MDROMuxTristateLabel->text();
     if(MDRECk->isChecked()&&(MDREText=="1"||MDREText=="0")){
          //If the muxer is enabled, and data can be clocked in to the register, pick an appropriate color
-        colorMDRE = combCircuitGreen.lighter(120);
+        if(MDREMuxTristateLabel->text()=="0"&&Sim::mainBusState==Enu::MemReadSecondWait){
+            colorMDRE=combCircuitRed;
+        }
+        else if(MDREMuxTristateLabel->text()=="1"&&cMuxTristateLabel->text()=="0"){
+            colorMDRE=combCircuitYellow;
+        }
+        else if(MDREMuxTristateLabel->text()=="1"&&cMuxTristateLabel->text()=="1"&&aluHasCorrectOutput()){
+            colorMDRE=combCircuitBlue;
+        }
+        else{
+            colorMDRE = Qt::white;
+        }
     }
     if(MDROCk->isChecked()&&(MDROText=="1"||MDROText=="0")){
          //If the muxer is enabled, and data can be clocked in to the register, pick an appropriate color
-        colorMDRO = combCircuitGreen.lighter(120);
+        if(MDROMuxTristateLabel->text()=="0"&&Sim::mainBusState==Enu::MemReadSecondWait){
+            colorMDRO=combCircuitRed;
+        }
+        else if(MDROMuxTristateLabel->text()=="1"&&cMuxTristateLabel->text()=="0"){
+            colorMDRO=combCircuitYellow;
+        }
+        else if(MDROMuxTristateLabel->text()=="1"&&cMuxTristateLabel->text()=="1"&&aluHasCorrectOutput()){
+            colorMDRO=combCircuitBlue;
+        }
+        else{
+            colorMDRO = Qt::white;
+        }
     }
     painter->setPen(Qt::black);
     painter->setBrush(colorMDRE);
@@ -2868,7 +2941,7 @@ void CpuGraphicsItems::repaintMDRMuxOutputBuses(QPainter *painter)
 void CpuGraphicsItems::repaintMDREToEOMuxBus(QPainter *painter){
     QColor color = Qt::white;
     if(MARMuxTristateLabel->text()=="0"||EOMuxTristateLabel->text()=="1"||EOMuxTristateLabel->text()=="0"){
-        color=Qt::blue;
+        color=combCircuitGreen;
     }
     painter->setPen(Qt::black);
     painter->setBrush(color);
@@ -2878,7 +2951,7 @@ void CpuGraphicsItems::repaintMDREToEOMuxBus(QPainter *painter){
 void CpuGraphicsItems::repaintMDROToEOMuxBus(QPainter *painter){
     QColor color=Qt::white;
     if(MARMuxTristateLabel->text()=="0"||EOMuxTristateLabel->text()=="1"||EOMuxTristateLabel->text()=="0"){
-        color=Qt::blue;
+        color=combCircuitYellow;
     }
     painter->setPen(Qt::black);
     painter->setBrush(color);

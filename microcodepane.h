@@ -88,7 +88,8 @@ public:
     void unCommentSelection();
 
     void setFilename(QString fileName);
-
+public slots:
+    void onCPUFeatureChange();
 protected:
     void changeEvent(QEvent *e);
 

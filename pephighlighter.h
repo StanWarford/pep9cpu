@@ -26,7 +26,7 @@
 
 #include <QHash>
 #include <QTextCharFormat>
-
+#include "enu.h"
 QT_BEGIN_NAMESPACE
 class QTextDocument;
 QT_END_NAMESPACE
@@ -35,18 +35,20 @@ class PepHighlighter : public QSyntaxHighlighter
 {
 public:
     PepHighlighter(QTextDocument *parent = 0);
-
+    void forceAllFeatures(bool features);
 protected:
     void highlightBlock(const QString &text);
 
 private:
+    bool forcedFeatures;
     struct HighlightingRule
     {
         QRegExp pattern;
         QTextCharFormat format;
     };
-    QVector<HighlightingRule> highlightingRules;
-
+    QVector<HighlightingRule> highlightingRulesOne;
+    QVector<HighlightingRule> highlightingRulesTwo;
+    QVector<HighlightingRule> highlightingRulesAll;
     QRegExp commentStartExpression;
     QRegExp commentEndExpression;
 

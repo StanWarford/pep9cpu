@@ -143,6 +143,8 @@ private slots:
     void helpCopyToMicrocodeButtonClicked();
 
     void updateMemAddress(int address);
+signals:
+    void CPUFeaturesChanged();
 };
 
 #endif // MAINWINDOW_H

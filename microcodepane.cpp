@@ -282,6 +282,11 @@ void MicrocodePane::setFilename(QString fileName)
     }
 }
 
+void MicrocodePane::onCPUFeatureChange()
+{
+    highlighter->rehighlight();
+}
+
 void MicrocodePane::setLabelToModified(bool modified)
 {
     QString temp = ui->label->text();

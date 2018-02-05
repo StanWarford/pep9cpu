@@ -97,6 +97,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(cpuPane, SIGNAL(stopSimulation()), this, SLOT(stopSimulation()));
     connect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
 
+    //Connect events that pass on CPU Feature changes
+    connect(this,SIGNAL(CPUFeaturesChanged()),microcodePane,SLOT(onCPUFeatureChange()));
     //Pep::initEnumMnemonMaps();
 
     readSettings();
@@ -524,6 +526,7 @@ void MainWindow::on_actionOne_Byte_Data_Bus_Model_triggered()
     ui->actionTwo_Byte_Data_Bus_Model->setEnabled(true);
     ui->actionOne_Byte_Data_Bus_Model->setText("One-byte Data Bus");
     ui->actionOne_Byte_Data_Bus_Model->setEnabled(false);
+    emit CPUFeaturesChanged();
 
 }
 
@@ -562,6 +565,7 @@ void MainWindow::on_actionTwo_Byte_Data_Bus_Model_triggered()
     ui->actionTwo_Byte_Data_Bus_Model->setEnabled(false);
     ui->actionOne_Byte_Data_Bus_Model->setText("Switch to One-byte Data Bus");
     ui->actionOne_Byte_Data_Bus_Model->setEnabled(true);
+    emit CPUFeaturesChanged();
 
 }
 
