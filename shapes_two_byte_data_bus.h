@@ -62,7 +62,7 @@ enum Shapes {
     incrementerOffset = 10,
 
     aluSelOff = 57,
-    aluOffsetY = 160,
+    aluOffsetY = 190,
     selLineOff = 15,
 
 };
@@ -73,7 +73,7 @@ enum CommonPositions {
     ctrlInputX = 550 + controlOffsetX,
     interfaceRegsX = 175,               // x-center of MARB, MARA, ...
     combCircX = interfaceRegsX - iRegXOffset-20, // Combinational circuits need to be moved further left to fit.
-    combCircY = 152, // Memory Combinational circuits start at this height. Originally 132
+    combCircY = 157, // Memory Combinational circuits start at this height. Originally 132
     statusBitsX = 526,//476,
     BottomOfAlu=OneByteShapes::ALUBottomBound+aluOffsetY, //Y coordinate of the bottom of the ALU
     ALUUpperRightLineMidpoint=(OneByteShapes::ALUUpperRightLine_LeftPoint+OneByteShapes::ALUUpperRightLine_RightPoint)/2+controlOffsetX,
@@ -86,8 +86,8 @@ enum CommonOffsets{
     AMuxYOffsetFromALUPoly=40,  // The number of pixels between AMux and the ALU Polygon
     MARMUXOffestFromMARA=25,    // Number of pixels between MARMux and (MARA, MARB) horizontally.
     MARAOffsetFromMARB=60,      // Number of pixels vertically between MARA and MARB
-    MDREOffsetFromCombY=110,    // Number of pixels vertically between MDRO register and the combCircY origin.
-    MDRORegOffsetFromMDREMux=42,// Number of pixels vertically between MDROMux and MDREMux
+    MDREOffsetFromCombY=115,    // Number of pixels vertically between MDRO register and the combCircY origin.
+    MDRORegOffsetFromMDREMux=52,// Number of pixels vertically between MDROMux and MDREMux
     MDRRegOffsetFromMDRMux=20,  // Number of pixels between the bottom of MDRO,MDRE registers and the top of MDROMux, MDREMux
     SCKYOffsetFromALU=43,       // Number of pixel between bottom of ALU and top of SCk controls
     CCkYOffsetFromALU=70,       // Bottom of ALU and top of CCk
@@ -98,7 +98,7 @@ enum CommonOffsets{
     MemReadYOffsetFromALU=237,  // Bottom of ALU to the MemReadLine
     MemWriteYOffsetFromALU=217, // Bottom of ALU to the MemWriteLine
     ALULabelYOffsetFromALU=-25, // Bottom of ALU to top of the ALULineEdit
-    EOMuxOffsetFromMDREMux=0,   // Top of MDREMux to top of EOMux
+    EOMuxOffsetFromMDREMux=10,   // Top of MDREMux to top of EOMux
     CBusToMDREMuxLength=60,     // Number of pixels between the branch of C bus and MDREMux
 
   };
@@ -220,20 +220,20 @@ const Arrow MDROMuxSelect           = Arrow(QVector<QPoint>()
 
 // MDREven, MDRECk and its control
 const QRect MDRELabel               = QRect(combCircX, MDROMuxerDataLabel.bottom()+MDRORegOffsetFromMDREMux, dataLabelW, dataLabelH);
-const QRect MDRECkCheckbox          = QRect(ctrlInputX, MDRELabel.y()-30, checkW+10, checkH);
+const QRect MDRECkCheckbox          = QRect(ctrlInputX, MDRELabel.y()-40, checkW+10, checkH);
 const Arrow MDREck                  = Arrow(QVector<QPoint>()
                                             <<QPoint(MDRELabel.x()+MDRELabel.width()/2-3, MDRELabel.y()-12),
                                             QVector<QLine>()
                                             // Horizontal line from MDRECk to midpoint of MDREven
-                                            << QLine(MDRECkCheckbox.x(),MDROMuxerDataLabel.bottom()+20,
-                                                     MDRELabel.x()+MDRELabel.width()/2,MDROMuxerDataLabel.bottom()+20)
+                                            << QLine(MDRECkCheckbox.x(),MDRECkCheckbox.y()+MDRECkCheckbox.height()/2,
+                                                     MDRELabel.x()+MDRELabel.width()/2,MDRECkCheckbox.y()+MDRECkCheckbox.height()/2)
                                             // Vertical line connecting arrowhead and horizontal line segment
-                                            << QLine(MDRELabel.x()+MDRELabel.width()/2,MDROMuxerDataLabel.bottom()+20,
+                                            << QLine(MDRELabel.x()+MDRELabel.width()/2,MDRECkCheckbox.y()+MDRECkCheckbox.height()/2,
                                                      MDRELabel.x()+MDRELabel.width()/2,MDRELabel.y()-12));
 
 // MDREMux and its control
 const QRect MDREMuxerDataLabel      = QRect(combCircX,MDRELabel.bottom()+MDRRegOffsetFromMDRMux, dataLabelW, dataLabelH);
-const QRect MDREMuxTristateLabel    = QRect(ctrlInputX, MDREMuxerDataLabel.y()-30, labelTriW, labelTriH);
+const QRect MDREMuxTristateLabel    = QRect(ctrlInputX, MDREMuxerDataLabel.y()-25, labelTriW, labelTriH);
 const QRect MDREMuxLabel            = QRect(ctrlLabelX, MDREMuxTristateLabel.y(), labelW+20, labelH);
 const Arrow MDREMuxSelect           = Arrow(QVector<QPoint>()
                                             << QPoint(MDREMuxerDataLabel.right()+5,MDREMuxerDataLabel.y()+MDREMuxerDataLabel.height()/2-3),
@@ -451,15 +451,15 @@ const QPolygon CBus = QPolygon(QVector<QPoint>()
                                <<QPoint(MDREMuxerDataLabel.right()-5,MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+CBusToMDREMuxLength-10) // Pivot between MDRE right arrow and MDRE upper leg
                                <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2-5,MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+CBusToMDREMuxLength-10) // Pivot between MDRE upper leg and leg upwards
                                // Branch off to MDROdd
-                               <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2-5,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+20) // Pivot between CMux foot and MDRE lower Leg
-                               <<QPoint(MDROMuxerDataLabel.right()-15,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+20) // Pivot between MDRE lower leg and MDRE left arrow
+                               <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2-5,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+20+5) // Pivot between CMux foot and MDRE lower Leg
+                               <<QPoint(MDROMuxerDataLabel.right()-15,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+20+5) // Pivot between MDRE lower leg and MDRE left arrow
                                <<QPoint(MDROMuxerDataLabel.right()-15,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) // MDREMux Arrow Left Inner Point
                                <<QPoint(MDROMuxerDataLabel.right()-20,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) // MDREMux Arrow Left Outer Point
                                <<QPoint(MDROMuxerDataLabel.right()-10,MDROMuxerDataLabel.bottom()+(arrowHOffset)) // MDREMux Arrow Middle Point
                                <<QPoint(MDROMuxerDataLabel.right()-0,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) // MDREMux Arrow Right Outer Point
                                <<QPoint(MDROMuxerDataLabel.right()-5,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)) // MDREMux Arrow Right Inner Point
-                               <<QPoint(MDROMuxerDataLabel.right()-5,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+10) // Pivot between MDRE right arrow and MDRE upper leg
-                               <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2-5,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+10) // Pivot between MDRE upper leg and leg upwards
+                               <<QPoint(MDROMuxerDataLabel.right()-5,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+10+5) // Pivot between MDRE right arrow and MDRE upper leg
+                               <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2-5,MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+10+5) // Pivot between MDRE upper leg and leg upwards
                                // Resume path to register bank's arrow
                                <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2-5,RegBank.bottom()+(arrowHDepth-5))// Register Arrow Left Inner Point
                                <<QPoint(cMuxerLabel.x()+cMuxerLabel.width()/2-10,RegBank.bottom()+(arrowHDepth-5))// Register Arrow Left Outer Point
@@ -471,10 +471,10 @@ const QPolygon AddrArrow                    = OneByteShapes::AddrArrow;
 //const QPolygon DataToMDRMuxBus;
 const QPolygon DataToMDROMuxBus = QPolygon(QVector<QPoint>()
                                            // Foot:
-                                           << QPoint(MDROMuxerDataLabel.x()+15, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+18) // Point between vertical right leg and lower horizontal leg
-                                           << QPoint(80,  MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+18) // DataBus Foot Bottom point
-                                           << QPoint(80,  MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+8) // DataBus Foot Top point
-                                           << QPoint(MDROMuxerDataLabel.x()+5, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+8) // Point between vertical left leg and upper horizontal leg
+                                           << QPoint(MDROMuxerDataLabel.x()+15, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+18+5) // Point between vertical right leg and lower horizontal leg
+                                           << QPoint(80,  MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+18+5) // DataBus Foot Bottom point
+                                           << QPoint(80,  MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+8+5) // DataBus Foot Top point
+                                           << QPoint(MDROMuxerDataLabel.x()+5, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+8+5) // Point between vertical left leg and upper horizontal leg
                                            // Arrowhead:
                                            << QPoint(MDROMuxerDataLabel.x()+5, MDROMuxerDataLabel.bottom()+arrowHDepth-5) // Arrow Left Inner point
                                            << QPoint(MDROMuxerDataLabel.x()+0, MDROMuxerDataLabel.bottom()+arrowHDepth-5) // Arrow Left Outer point
