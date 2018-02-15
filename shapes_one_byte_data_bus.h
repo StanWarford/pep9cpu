@@ -96,7 +96,7 @@ enum RegPos {
     Row2Y     = 38,
     Row3Y     = 66,
     Row4Y     = 93,
-    Col1X     = 52,
+    Col1X     = 56,
     Col2X     = 179,//184,
     Col3X     = 316,//311,
     Col4X     = 440,
