@@ -178,6 +178,7 @@ private:
     void repaintVCk(QPainter *painter);
     void repaintZCk(QPainter *painter);
     void repaintNCk(QPainter *painter);
+    void repaintMemCommon(QPainter *painter);
     void repaintMemRead(QPainter *painter);
     void repaintMemWrite(QPainter *painter);
     void repaintSBitOut(QPainter *painter);
@@ -215,6 +216,7 @@ private:
 
     void repaintALUSelectTwoByteModel(QPainter *painter);
 
+    void repaintMemCommonTwoByte(QPainter *painter);
     void repaintMemReadTwoByteModel(QPainter *painter);
     void repaintMemWriteTwoByteModel(QPainter *painter);
 

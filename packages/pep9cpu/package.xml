@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>Pep 9 CPU</DisplayName>
+    <Description>This is the Pep9 CPU!</Description>
+    <Version>0.1.0-1</Version>
+    <ReleaseDate>2010-09-21</ReleaseDate>
+    <Licenses>
+        <License name="GNU GENERAL PUBLIC LICENSE" file="License.txt" />
+    </Licenses>
+    <!--<Default>script</Default>
+    <Script>installscript.qs</Script>
+    <UserInterfaces>
+        <UserInterface>page.ui</UserInterface>
+    </UserInterfaces>-->
+</Package>

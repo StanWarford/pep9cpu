@@ -1,3 +1,5 @@
 *.pro.user
 *.pro.user.*
 *.autosave
+Packages/pep9cpu/data*
+config/icon.icns

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>Pep 9 CPU</Name>
+    <Version>1.0.0</Version>
+    <Title>Pep 9 CPU Installer</Title>
+    <Publisher>Pepperdine University</Publisher>
+    <StartMenuDir>Super App</StartMenuDir>
+    <TargetDir>@HomeDir@/InstallationDirectory</TargetDir>
+    <InstallerWindowIcon>Pep9cpu-icon.png</InstallerWindowIcon>
+    <InstallerApplicationIcon>icon</InstallerApplicationIcon>
+</Installer>
