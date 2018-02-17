@@ -98,7 +98,9 @@ DISTFILES += \
     config/config.xml \
     package/package.xml \
     packages/package.xml \
-    packages/pep9cpu/meta/package.xml
+    packages/pep9cpu/meta/package.xml \
+    packages/pep9cpu/package.xml \
+    packages/pep9cpu/License.txt
 #0.     Clean install directory if it exists
 #1.     Create install directory tree if it doesn't exist
 #2.     Copy static files to install directory
@@ -107,12 +109,8 @@ DISTFILES += \
 #5.     Run package creator
 
 #Step 0
-macx:exists($$OUT_PWD/Installer){
-    system(rm -rf $$OUT_PWD/Installer)
-}
-win32:exists($$OUT_PWD/Installer){
-    #No clue what to put here
-}
+values = $${QMAKE_DEL_TREE} $$clean_path($$OUT_PWD/Installer)
+system($$copy.values)
 #Step 1
 copy.values = $${QMAKE_MKDIR} $$OUT_PWD/Installer; \
     $${QMAKE_MKDIR} $$OUT_PWD/Installer/packages; \
@@ -145,11 +143,14 @@ QMAKE_EXTRA_TARGETS += first copydata
 INSTALLER = installer
 INPUT = $$OUT_PWD/Installer/config/config.xml $$OUT_PWD/Installer/packages
 example.input = INPUT
-example.output = $$OUT_PWD/Installer/PEP9CPUInstaller
-example.commands = /Users/matthewmcraven/qt/tools/Qtinstallerframework/3.0/bin/binarycreator -c $$OUT_PWD/Installer/config/config.xml -p $$OUT_PWD/Installer/packages Installer/PEP9CPUInstaller
-example.CONFIG += target_predeps no_link combine
-#example.commands = $$[QT_INSTALL_LIBS]/../../../tools/Qtinstallerframework/3.0/bin/binarycreator -c $$PWD/config/config.xml -p $$PWD/packages fuckingInstall
-example.depends = $(first)
+example.output = $$OUT_PWD/Installer
+#example.commands = /Users/matthewmcraven/qt/tools/Qtinstallerframework/3.0/bin/binarycreator -c $$OUT_PWD/Installer/config/config.xml -p $$OUT_PWD/Installer/packages Installer/PEP9CPUInstaller
+example.CONFIG += target_postlink no_link combine
+example.commands = $$[QT_INSTALL_LIBS]/../../../tools/Qtinstallerframework/3.0/bin/binarycreator -c $$OUT_PWD/Installer/config/config.xml -p $$OUT_PWD/Installer/packages Installer/PEP9CPUInstaller
+first.depends += $(first) example
+export(first.depends)
+export(example.commands)
+QMAKE_EXTRA_TARGETS += first example
 QMAKE_EXTRA_COMPILERS += example
 
 
