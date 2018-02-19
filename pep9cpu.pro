@@ -95,12 +95,16 @@ RESOURCES += pep9cpuresources.qrc \
     helpresources.qrc
 
 DISTFILES += \
-    config/config.xml \
     package/package.xml \
     packages/package.xml \
     packages/pep9cpu/meta/package.xml \
     packages/pep9cpu/package.xml \
-    packages/pep9cpu/License.txt
+    packages/pep9cpu/License.txt \
+    packages/pep9cpu/installscript.qs \
+    packages/pep9cpu/control.qs \
+    config/control.qs \
+    config/configmac.xml \
+    config/configwin32.xml
 #0.     Clean install directory if it exists
 #1.     Create install directory tree if it doesn't exist
 #2.     Copy static files to install directory
@@ -109,26 +113,45 @@ DISTFILES += \
 #5.     Run package creator
 
 #Step 0
-values = $${QMAKE_DEL_TREE} $$clean_path($$OUT_PWD/Installer)
-system($$copy.values)
+message(Remove |true debug statement from following line)
+!debug|true{#Remove |true
+copy.commands += $${QMAKE_DEL_TREE} $$clean_path($$OUT_PWD/Installer);
+#system($$copy.values)
 #Step 1
-copy.values = $${QMAKE_MKDIR} $$OUT_PWD/Installer; \
+copy.commands += $${QMAKE_MKDIR} $$OUT_PWD/Installer; \
+    $${QMAKE_MKDIR} $$OUT_PWD/Repository; \
     $${QMAKE_MKDIR} $$OUT_PWD/Installer/packages; \
     $${QMAKE_MKDIR} $$OUT_PWD/Installer/packages/pep9cpu; \
     $${QMAKE_MKDIR} $$OUT_PWD/Installer/packages/pep9cpu/meta; \
     $${QMAKE_MKDIR} $$OUT_PWD/Installer/packages/pep9cpu/data; \
     $${QMAKE_MKDIR} $$OUT_PWD/Installer/config;
-system($$copy.values)
-
+#system($$copy.values)
+#Export the version specific config file
+repodir
+macx{
+    repodir = $$OUT_PWD/Repository/mac
+    copy.commands += $${QMAKE_MKDIR} $$OUT_PWD/Repository/mac;
+    copy.commands += $${QMAKE_COPY_DIR} $$PWD/config/configmac.xml $$OUT_PWD/Installer/config/config.xml;
+}
+win32{
+    copy.commands += $${QMAKE_MKDIR} $$OUT_PWD/Repository/win32;
+    copy.commands += $${QMAKE_COPY_DIR} $$PWD/config/configwin32.xml $$OUT_PWD/Installer/config/config.xml;
+}
+else{
+}
 #Step 2
-copy.values =   $${QMAKE_COPY_DIR} $$PWD/images/icon.icns $$OUT_PWD/Installer/config; \
-    $${QMAKE_COPY_DIR} $$PWD/config/config.xml $$OUT_PWD/Installer/config; \
-    $${QMAKE_COPY_DIR} $$PWD/config/config.xml $$OUT_PWD/Installer/config; \
+copy.commands +=   $${QMAKE_COPY_DIR} $$PWD/images/icon.icns $$OUT_PWD/Installer/config; \
+    $${QMAKE_COPY_DIR} $$PWD/images/icon.ico $$OUT_PWD/Installer/config; \
+    $${QMAKE_COPY_DIR} $$PWD/images/Pep9cpu-icon.png $$OUT_PWD/Installer/config; \
     $${QMAKE_COPY_DIR} $$PWD/packages/pep9cpu/package.xml $$OUT_PWD/Installer/packages/pep9cpu/meta; \
-    $${QMAKE_COPY_DIR} $$PWD/packages/pep9cpu/License.txt $$OUT_PWD/Installer/packages/pep9cpu/meta;
+    $${QMAKE_COPY_DIR} $$PWD/packages/pep9cpu/License.txt $$OUT_PWD/Installer/packages/pep9cpu/meta; \
+    $${QMAKE_COPY_DIR} $$PWD/packages/pep9cpu/installscript.qs $$OUT_PWD/Installer/packages/pep9cpu/meta; \
+    $${QMAKE_COPY_DIR} $$PWD/config/control.qs $$OUT_PWD/Installer/config;
 
-system($$copy.values)
-
+#system($$copy.values)
+first.depends += $(first) copy
+export(copy.commands)
+QMAKE_EXTRA_TARGETS += first copy
 #Step 3
 #Let the program compile
 #Step 4
@@ -140,17 +163,24 @@ export(copydata.commands)
 QMAKE_EXTRA_TARGETS += first copydata
 
 #Step 5
-INSTALLER = installer
-INPUT = $$OUT_PWD/Installer/config/config.xml $$OUT_PWD/Installer/packages
-example.input = INPUT
-example.output = $$OUT_PWD/Installer
+exists($$[QT_INSTALL_LIBS]/../../../tools/Qtinstallerframework/3.0/bin/binarycreator){
+    INSTALLER = installer
+    INPUT = $$OUT_PWD/Installer/config/config.xml $$OUT_PWD/Installer/packages
+    example.input = INPUT
+    example.output = $$OUT_PWD/Installer
 #example.commands = /Users/matthewmcraven/qt/tools/Qtinstallerframework/3.0/bin/binarycreator -c $$OUT_PWD/Installer/config/config.xml -p $$OUT_PWD/Installer/packages Installer/PEP9CPUInstaller
-example.CONFIG += target_postlink no_link combine
-example.commands = $$[QT_INSTALL_LIBS]/../../../tools/Qtinstallerframework/3.0/bin/binarycreator -c $$OUT_PWD/Installer/config/config.xml -p $$OUT_PWD/Installer/packages Installer/PEP9CPUInstaller
-first.depends += $(first) example
-export(first.depends)
-export(example.commands)
-QMAKE_EXTRA_TARGETS += first example
-QMAKE_EXTRA_COMPILERS += example
-
+    example.CONFIG += target_postlink no_link combine
+    example.commands = $$[QT_INSTALL_LIBS]/../../../tools/Qtinstallerframework/3.0/bin/binarycreator -c $$OUT_PWD/Installer/config/config.xml -p $$OUT_PWD/Installer/packages Installer/PEP9CPUInstaller;
+    example.commands += $$[QT_INSTALL_LIBS]/../../../tools/Qtinstallerframework/3.0/bin/repogen --update-new-components -p $$OUT_PWD/Installer/packages $$repodir;
+    first.depends += $(first) example
+    export(example.commands)
+    QMAKE_EXTRA_TARGETS += first example
+    QMAKE_EXTRA_COMPILERS += example
+}
+else{
+    warning("QT binary creator isn't installed, aborting installer creation")
+}
+}
+##TODO:
+# Only create Installer directory if in release
 

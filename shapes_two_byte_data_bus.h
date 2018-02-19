@@ -78,7 +78,10 @@ enum CommonPositions {
     BottomOfAlu=OneByteShapes::ALUBottomBound+aluOffsetY, //Y coordinate of the bottom of the ALU
     ALUUpperRightLineMidpoint=(OneByteShapes::ALUUpperRightLine_LeftPoint+OneByteShapes::ALUUpperRightLine_RightPoint)/2+controlOffsetX,
     BBusRightArrowTipX=ctrlInputX, // How far the B bus goes in the direction of the control section of the CPU.
-
+    DataArrowMidpointY=380,
+    DataArrowLeftX=3,
+    DataArrowRightX=39,
+    DataArrowDepth=15,
 };
 
 // Enumeration that controls the distance between certain items in the diagram. Hopefully this makes spacing easier to adjust.
@@ -100,6 +103,8 @@ enum CommonOffsets{
     ALULabelYOffsetFromALU=-25, // Bottom of ALU to top of the ALULineEdit
     EOMuxOffsetFromMDREMux=10,   // Top of MDREMux to top of EOMux
     CBusToMDREMuxLength=60,     // Number of pixels between the branch of C bus and MDREMux
+    DataArrowOuterYSpread=15,
+    DataArrowInnerYSpread=10,
 
   };
 

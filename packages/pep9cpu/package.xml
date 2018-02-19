@@ -2,16 +2,14 @@
 <Package>
     <DisplayName>Pep 9 CPU</DisplayName>
     <Description>This is the Pep9 CPU!</Description>
-    <Version>1.0</Version>
-    <ReleaseDate>2018-02-16</ReleaseDate>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2018-02-18</ReleaseDate>
     <Licenses>
         <License name="GNU GENERAL PUBLIC LICENSE" file="License.txt" />
     </Licenses>
-    <Default>true</Default>
     <ForcedInstallation>true</ForcedInstallation>
-    <!--<Default>script</Default>
     <Script>installscript.qs</Script>
-    <UserInterfaces>
+    <!--<UserInterfaces>
         <UserInterface>page.ui</UserInterface>
     </UserInterfaces>-->
 </Package>
