@@ -9,7 +9,4 @@
     </Licenses>
     <ForcedInstallation>true</ForcedInstallation>
     <Script>installscript.qs</Script>
-    <!--<UserInterfaces>
-        <UserInterface>page.ui</UserInterface>
-    </UserInterfaces>-->
 </Package>

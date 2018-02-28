@@ -17,6 +17,5 @@
             <DisplayName>Mac Update Repo</DisplayName>
             <Url>https://raw.githubusercontent.com/Matthew-McRaven/pep9cpudeploy/master/win32</Url>
         </Repository>
-
     </RemoteRepositories>
 </Installer>
