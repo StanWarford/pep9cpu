@@ -108,12 +108,6 @@ DISTFILES += \
     config/control.qs \
     config/configmac.xml \
     config/configwin32.xml
-#0.     Clean install directory if it exists
-#1.     Create install directory tree if it doesn't exist
-#2.     Copy static files to install directory
-#3.     Compile the program
-#4.     Symlink in application
-#5.     Run package creator
 
 #Generic paths that make future parts of the code easier
 QtDir = $$clean_path($$[QT_INSTALL_LIBS]/..)
@@ -128,16 +122,37 @@ QtInstallerBin=$$clean_path($$QtDir/../../tools/Qtinstallerframework/3.0/bin)
     export(dmgMaker.commands)
     QMAKE_EXTRA_TARGETS += first dmgMaker
 }
-
-#Generic setup needed by both Windows and Linux
-!macx{
-
-
-}
-win32{
+else:win32{
+    repoDir=$$OUT_PWD/Repository/win32
+    #Create installer directory structure
+    QMAKE_POST_LINK += $${QMAKE_MKDIR} \"$$OUT_PWD/Installer\" & \
+        $${QMAKE_MKDIR} \"$$OUT_PWD/Installer/packages\" & \
+        $${QMAKE_MKDIR} \"$$OUT_PWD/Installer/packages/pep9cpu\" & \
+        $${QMAKE_MKDIR} \"$$OUT_PWD/Installer/packages/pep9cpu/meta\" & \
+        $${QMAKE_MKDIR} \"$$OUT_PWD/Installer/packages/pep9cpu/data\" & \
+        $${QMAKE_MKDIR} \"$$OUT_PWD/Installer/config\" &
+    #Create a directory for update information
+    !exists($$repoDir){
+        QMAKE_POST_LINK += $${QMAKE_MKDIR} \"$$repoDir\" &
+    }
+    #Copy over files needed to create installer
+    QMAKE_POST_LINK += $${QMAKE_COPY} \"$$shell_path($$PWD\config\configwin32.xml)\" \"$$shell_path($$OUT_PWD/Installer/config/config.xml)\" & \
+        $${QMAKE_COPY} \"$$shell_path($$PWD/images/icon.ico)\" \"$$shell_path($$OUT_PWD/Installer/config)\" & \
+        $${QMAKE_COPY} \"$$shell_path($$PWD/packages/pep9cpu/package.xml)\" \"$$shell_path($$OUT_PWD/Installer/packages/pep9cpu/meta)\" & \
+        $${QMAKE_COPY} \"$$shell_path($$PWD/packages/pep9cpu/License.txt)\" \"$$shell_path($$OUT_PWD/Installer/packages/pep9cpu/meta)\" & \
+        $${QMAKE_COPY} \"$$shell_path($$PWD/packages/pep9cpu/installscript.qs)\" \"$$shell_path($$OUT_PWD/Installer/packages/pep9cpu/meta)\" & \
+        $${QMAKE_COPY} \"$$shell_path($$PWD/config/control.qs)\" \"$$shell_path($$OUT_PWD/Installer/config)\" &
+    #Copy over executable
+    QMAKE_POST_LINK +=  $${QMAKE_COPY} \"$$shell_path($$OUT_PWD/Pep9CPU.exe)\" \"$$shell_path($$OUT_PWD/Installer/packages/pep9cpu/data)\" &
+    #Execute windeployqt to copy over needed binaries
+    #Need to prune extra unneeded libraries, but the first goal is to get a working standalone program
+    QMAKE_POST_LINK += \"$$QtDir/bin/windeployqt\" --no-translations --no-system-d3d-compiler \"$$OUT_PWD/Installer/packages/pep9cpu/data/Pep9CPU.exe\" &
+    #Execute repository creator
+    QMAKE_POST_LINK += \"$$QtInstallerBin/repogen\" --update-new-components -p $$OUT_PWD/Installer/packages $$repoDir &
+    #Create installer
+    QMAKE_POST_LINK += \"$$QtInstallerBin/binarycreator\" -c \"$$OUT_PWD/Installer/config/config.xml\" -p \"$$OUT_PWD/Installer/packages\" \"Installer/PEP9CPUInstaller\" &
 }
 linux{
 }
-##TODO:
-# Only create Installer directory if in release
+
 
