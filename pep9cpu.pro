@@ -4,6 +4,9 @@
 TEMPLATE = app
 TARGET = Pep9CPU
 
+CONFIG -= debug_and_release \
+    debug_and_release_target
+
 QT += webenginewidgets
 QT += widgets
 QT += printsupport
@@ -112,77 +115,28 @@ DISTFILES += \
 #4.     Symlink in application
 #5.     Run package creator
 
-#Step 0
-message(Remove |true debug statement from following line)
-!debug|true{#Remove |true
+#Generic paths that make future parts of the code easier
+QtDir = $$clean_path($$[QT_INSTALL_LIBS]/..)
+QtInstallerBin=$$clean_path($$QtDir/../../tools/Qtinstallerframework/3.0/bin)
 
-copy.commands += $${QMAKE_DEL_TREE} $$clean_path($$OUT_PWD/Installer);
-
-#Step 1
-copy.commands += $${QMAKE_MKDIR} $$OUT_PWD/Installer; \
-    $${QMAKE_MKDIR} $$OUT_PWD/Repository; \
-    $${QMAKE_MKDIR} $$OUT_PWD/Installer/packages; \
-    $${QMAKE_MKDIR} $$OUT_PWD/Installer/packages/pep9cpu; \
-    $${QMAKE_MKDIR} $$OUT_PWD/Installer/packages/pep9cpu/meta; \
-    $${QMAKE_MKDIR} $$OUT_PWD/Installer/packages/pep9cpu/data; \
-    $${QMAKE_MKDIR} $$OUT_PWD/Installer/config;
-
-#Export the operating system specific config file
-repoDir
-macx{
-    repoDir = $$OUT_PWD/Repository/mac
-    copy.commands += $${QMAKE_MKDIR} $$repoDir;
-    copy.commands += $${QMAKE_COPY_DIR} $$PWD/config/configmac.xml $$OUT_PWD/Installer/config/config.xml;
+#All that needs to be done for mac is to run the DMG creator.
+#The DMG creator will only be run in Release mode, not debug.
+!CONFIG(debug,debug|release):macx{
+    dmgMaker.commands += $$QtDir/bin/macdeployqt $$OUT_PWD/Pep9CPU.app -no-plugins -dmg
+    first.depends += $(first) dmgMaker
+    export(first.depends)
+    export(dmgMaker.commands)
+    QMAKE_EXTRA_TARGETS += first dmgMaker
 }
-else:win32{
-    repoDir=$$OUT_PWD/Repository/win32
-    copy.commands += $${QMAKE_MKDIR} $$repoDir;
-    copy.commands += $${QMAKE_COPY_DIR} $$PWD/config/configwin32.xml $$OUT_PWD/Installer/config/config.xml;
-}
-else:linux{
-    error(Linux build tools not yet available)
-    repoDir = $$OUT_PWD/Repository/linux
-    copy.commands += $${QMAKE_MKDIR} $$repoDir;
-    copy.commands += $${QMAKE_COPY_DIR} $$PWD/config/configlinux.xml $$OUT_PWD/Installer/config/config.xml;
-}
-else{
-    message(No binary repository generation is available for this platform)
-}
-#Step 2
-copy.commands +=   $${QMAKE_COPY_DIR} $$PWD/images/icon.icns $$OUT_PWD/Installer/config; \
-    $${QMAKE_COPY_DIR} $$PWD/images/icon.ico $$OUT_PWD/Installer/config; \
-    $${QMAKE_COPY_DIR} $$PWD/images/Pep9cpu-icon.png $$OUT_PWD/Installer/config; \
-    $${QMAKE_COPY_DIR} $$PWD/packages/pep9cpu/package.xml $$OUT_PWD/Installer/packages/pep9cpu/meta; \
-    $${QMAKE_COPY_DIR} $$PWD/packages/pep9cpu/License.txt $$OUT_PWD/Installer/packages/pep9cpu/meta; \
-    $${QMAKE_COPY_DIR} $$PWD/packages/pep9cpu/installscript.qs $$OUT_PWD/Installer/packages/pep9cpu/meta; \
-    $${QMAKE_COPY_DIR} $$PWD/config/control.qs $$OUT_PWD/Installer/config;
 
-first.depends += $(first) copy
-export(copy.commands)
-QMAKE_EXTRA_TARGETS += first copy
+#Generic setup needed by both Windows and Linux
+!macx{
 
-#Step 3
-#Let the program compile
 
-#Step 4
-copydata.commands = $(COPY_DIR) $$OUT_PWD/Pep9CPU.app $$OUT_PWD/Installer/packages/pep9cpu/data
-first.depends += $(first) copydata
-export(first.depends)
-export(copydata.commands)
-QMAKE_EXTRA_TARGETS += first copydata
-
-#Step 5
-QtInstallerBin=$$clean_path($$[QT_INSTALL_LIBS]/../../../tools/Qtinstallerframework/3.0/bin)
-exists($$QtInstallerBin/binarycreator):exists($$QtInstallerBin/repogen){
-    example.commands = $$QtInstallerBin/binarycreator -c $$OUT_PWD/Installer/config/config.xml -p $$OUT_PWD/Installer/packages Installer/PEP9CPUInstaller;
-    example.commands += $$QtInstallerBin/repogen --update-new-components -p $$OUT_PWD/Installer/packages $$repoDir;
-    first.depends += $(first) example
-    export(example.commands)
-    QMAKE_EXTRA_TARGETS += example
 }
-else{
-    warning("QT binary creator isn't installed, aborting installer creation")
+win32{
 }
+linux{
 }
 ##TODO:
 # Only create Installer directory if in release
