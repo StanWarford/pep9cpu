@@ -122,6 +122,7 @@ QtInstallerBin=$$clean_path($$QtDir/../../tools/Qtinstallerframework/3.0/bin)
     export(dmgMaker.commands)
     QMAKE_EXTRA_TARGETS += first dmgMaker
 }
+#
 else:!CONFIG(debug,debug|release):win32{
     repoDir=$$OUT_PWD/Repository/win32
     #Create installer directory structure
@@ -152,7 +153,14 @@ else:!CONFIG(debug,debug|release):win32{
     #Create installer
     QMAKE_POST_LINK += \"$$QtInstallerBin/binarycreator\" -c \"$$OUT_PWD/Installer/config/config.xml\" -p \"$$OUT_PWD/Installer/packages\" \"Installer/PEP9CPUInstaller\" &
 }
-linux{
+#Since there is no native QT deploy tool for Linux, one must be added in the project configuration
+#This condition is to make sure that a tool was provided as an argument to qmake
+else:linux:isEmpty(LINUX_DEPLOY){
+    warning("Attempting a Linux build, but no path to the build tool was provided")
+}
+#Then linuxdeployqt is available, and it should be used to make a working installer for linux.
+else:linux{
+    message("This is where the linux build code will go")
 }
 
 
