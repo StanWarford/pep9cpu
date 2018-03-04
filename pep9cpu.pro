@@ -122,7 +122,7 @@ QtInstallerBin=$$clean_path($$QtDir/../../tools/Qtinstallerframework/3.0/bin)
     export(dmgMaker.commands)
     QMAKE_EXTRA_TARGETS += first dmgMaker
 }
-else:win32{
+else:!CONFIG(debug,debug|release):win32{
     repoDir=$$OUT_PWD/Repository/win32
     #Create installer directory structure
     QMAKE_POST_LINK += $${QMAKE_MKDIR} \"$$OUT_PWD/Installer\" & \
