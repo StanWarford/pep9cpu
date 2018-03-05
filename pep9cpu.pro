@@ -4,6 +4,7 @@
 TEMPLATE = app
 TARGET = Pep9CPU
 
+#Prevent Windows from trying to parse the project three times per build.
 CONFIG -= debug_and_release \
     debug_and_release_target
 
@@ -116,13 +117,35 @@ QtInstallerBin=$$clean_path($$QtDir/../../tools/Qtinstallerframework/3.0/bin)
 #All that needs to be done for mac is to run the DMG creator.
 #The DMG creator will only be run in Release mode, not debug.
 !CONFIG(debug,debug|release):macx{
-    dmgMaker.commands += $$QtDir/bin/macdeployqt $$OUT_PWD/Pep9CPU.app -no-plugins -dmg
-    first.depends += $(first) dmgMaker
-    export(first.depends)
-    export(dmgMaker.commands)
-    QMAKE_EXTRA_TARGETS += first dmgMaker
+#For some reason, the release flag is set in both debug and release.
+#So, the above Config(...) makes it so a disk image is only built in release mode.
+
+#Create necessary directory structure for disk image.
+    QMAKE_POST_LINK += $${QMAKE_MKDIR} $$OUT_PWD/Installer;
+#Copy over the executable and bundle it with its dependencies
+    QMAKE_POST_LINK += $${QMAKE_COPY_DIR} $$OUT_PWD/Pep9CPU.app $$OUT_PWD/Installer;
+    QMAKE_POST_LINK += $$QtDir/bin/macdeployqt $$OUT_PWD/Installer/Pep9CPU.app -no-plugins;
+#Use HDIUtil to make a folder into a read/write image
+    QMAKE_POST_LINK += hdiutil create -volname Pep9CPU -srcfolder $$OUT_PWD/Installer -attach -ov -format UDRW Pep9CPUTemp.dmg;
+#Link from the read/write image to the machine's Applications folder
+    QMAKE_POST_LINK += ln -s /Applications /Volumes/Pep9CPU/Applications;
+#Unmount the image, and create a new compressed, readonly image.
+    QMAKE_POST_LINK += hdiutil detach /Volumes/Pep9CPU;
+    QMAKE_POST_LINK += hdiutil convert -format UDBZ -o Pep9CPU.dmg Pep9CPUTemp.dmg;
+#Remove the temporary read/write image.
+    QMAKE_POST_LINK += $${QMAKE_DEL_FILE} Pep9CPUTemp.dmg;
+#If QMAKE_POST_LINK stops working in a future version, QMAKE provides another way to add custom targets.
+#Use the method described in "Adding Custom Targets" on http://doc.qt.io/qt-5/qmake-advanced-usage.html.
+#Our deployment tool will be called anytime the application is sucessfully linked in release mode.
 }
-#
+
+#Otherwise if the target is windows, but no installer framework exists
+else:!CONFIG(debug,debug|release):win32:!exists(QtInstallerBin/repogen.exe){
+    warning("Aborting installer creations, since QT Installer Framework 3.0 is not installed.")
+    warning("Please run the QT maintence tool and install QT Installer Framework 3.0.")
+}
+
+#Otherwise build the installer for windows as normal.
 else:!CONFIG(debug,debug|release):win32{
     repoDir=$$OUT_PWD/Repository/win32
     #Create installer directory structure
@@ -153,11 +176,13 @@ else:!CONFIG(debug,debug|release):win32{
     #Create installer
     QMAKE_POST_LINK += \"$$QtInstallerBin/binarycreator\" -c \"$$OUT_PWD/Installer/config/config.xml\" -p \"$$OUT_PWD/Installer/packages\" \"Installer/PEP9CPUInstaller\" &
 }
+
 #Since there is no native QT deploy tool for Linux, one must be added in the project configuration
 #This condition is to make sure that a tool was provided as an argument to qmake
 else:linux:isEmpty(LINUX_DEPLOY){
     warning("Attempting a Linux build, but no path to the build tool was provided")
 }
+
 #Then linuxdeployqt is available, and it should be used to make a working installer for linux.
 else:linux{
     message("This is where the linux build code will go")
