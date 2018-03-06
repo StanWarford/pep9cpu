@@ -78,7 +78,10 @@ enum CommonPositions {
     BottomOfAlu=OneByteShapes::ALUBottomBound+aluOffsetY, //Y coordinate of the bottom of the ALU
     ALUUpperRightLineMidpoint=(OneByteShapes::ALUUpperRightLine_LeftPoint+OneByteShapes::ALUUpperRightLine_RightPoint)/2+controlOffsetX,
     BBusRightArrowTipX=ctrlInputX, // How far the B bus goes in the direction of the control section of the CPU.
-
+    DataArrowMidpointY=380,
+    DataArrowLeftX=3,
+    DataArrowRightX=39,
+    DataArrowDepth=15,
 };
 
 // Enumeration that controls the distance between certain items in the diagram. Hopefully this makes spacing easier to adjust.
@@ -100,12 +103,16 @@ enum CommonOffsets{
     ALULabelYOffsetFromALU=-25, // Bottom of ALU to top of the ALULineEdit
     EOMuxOffsetFromMDREMux=10,   // Top of MDREMux to top of EOMux
     CBusToMDREMuxLength=60,     // Number of pixels between the branch of C bus and MDREMux
+    DataArrowOuterYSpread=15,
+    DataArrowInnerYSpread=10,
 
   };
 
 // input/label/control section:
-const QRect AddrBus = QRect(40, 151, 20, 600);
-const QRect DataBus = QRect(AddrBus.x()+AddrBus.width(), AddrBus.top() + 100, 20, 500);
+const QRect AddrBus = QRect(QPoint(40, 151),
+                            QPoint(40+20, BottomOfAlu+MemReadYOffsetFromALU+15));
+const QRect DataBus = QRect(QPoint(AddrBus.x()+AddrBus.width(), AddrBus.top() + 100),
+                            QPoint(AddrBus.x()+AddrBus.width()+20, BottomOfAlu+MemReadYOffsetFromALU+15));
 
 // LoadCk and its control
 const QRect loadCkCheckbox          = QRect(ctrlInputX, 18, check2W,   check2H);
@@ -472,8 +479,8 @@ const QPolygon AddrArrow                    = OneByteShapes::AddrArrow;
 const QPolygon DataToMDROMuxBus = QPolygon(QVector<QPoint>()
                                            // Foot:
                                            << QPoint(MDROMuxerDataLabel.x()+15, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+18+5) // Point between vertical right leg and lower horizontal leg
-                                           << QPoint(80,  MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+18+5) // DataBus Foot Bottom point
-                                           << QPoint(80,  MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+8+5) // DataBus Foot Top point
+                                           << QPoint(80+2,  MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+18+5) // DataBus Foot Bottom point
+                                           << QPoint(80+2,  MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+8+5) // DataBus Foot Top point
                                            << QPoint(MDROMuxerDataLabel.x()+5, MDROMuxerDataLabel.bottom()+(arrowHDepth-5)+8+5) // Point between vertical left leg and upper horizontal leg
                                            // Arrowhead:
                                            << QPoint(MDROMuxerDataLabel.x()+5, MDROMuxerDataLabel.bottom()+arrowHDepth-5) // Arrow Left Inner point
@@ -485,8 +492,8 @@ const QPolygon DataToMDROMuxBus = QPolygon(QVector<QPoint>()
 const QPolygon DataToMDREMuxBus = QPolygon(QVector<QPoint>()
                                            // Foot:
                                            << QPoint(MDREMuxerDataLabel.x()+15, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+18) // Pivot between vertical right leg and lower horizontal leg
-                                           << QPoint(80,  MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+18) // DataBus Foot Bottom point
-                                           << QPoint(80,  MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+8)  // DataBus Foot Top point
+                                           << QPoint(80+2,  MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+18) // DataBus Foot Bottom point
+                                           << QPoint(80+2,  MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+8)  // DataBus Foot Top point
                                            << QPoint(MDREMuxerDataLabel.x()+5, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)+8)// Pivot between vertical left leg and upper horizontal leg
                                            // Arrowhead:
                                            << QPoint(MDREMuxerDataLabel.x()+5, MDREMuxerDataLabel.bottom()+(arrowHDepth-5)) // Arrow Left Inner point

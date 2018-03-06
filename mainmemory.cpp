@@ -134,7 +134,7 @@ void MainMemory::setMemAddress(int memAddress, int value)
     int lineAddress;
     bool ok;
     for (int i = firstAddress; i < lastAddress; i++) {
-        lineAddress = ui->tableWidget->verticalHeaderItem(i)->text().toInt(&ok,16);
+        lineAddress = ui->tableWidget->verticalHeaderItem(i)->text().toInt((bool*)&lineAddress,16);
         if (lineAddress == memAddress) {
             ui->tableWidget->item(i, 0)->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper().trimmed());
         }
