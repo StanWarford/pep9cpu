@@ -11,6 +11,7 @@ CONFIG -= debug_and_release \
 QT += webenginewidgets
 QT += widgets
 QT += printsupport
+QT += concurrent
 
 # Mac icon/plist
 ICON = images/icon.icns
@@ -43,7 +44,8 @@ SOURCES += main.cpp \
     specification.cpp \
     byteconverterinstr.cpp \
     aboutpep.cpp \
-    cpugraphicsitems.cpp
+    cpugraphicsitems.cpp \
+    updatechecker.cpp
 HEADERS += mainwindow.h \
     byteconverterhex.h \
     byteconverterdec.h \
@@ -69,7 +71,8 @@ HEADERS += mainwindow.h \
     aboutpep.h \
     cpugraphicsitems.h \
     shapes_one_byte_data_bus.h \
-    shapes_two_byte_data_bus.h
+    shapes_two_byte_data_bus.h \
+    updatechecker.h
 FORMS += mainwindow.ui \
     byteconverterhex.ui \
     byteconverterdec.ui \
@@ -107,8 +110,8 @@ DISTFILES += \
     packages/pep9cpu/installscript.qs \
     packages/pep9cpu/control.qs \
     config/control.qs \
-    config/configmac.xml \
-    config/configwin32.xml
+    config/configwin32.xml \
+    config/configlinux.xml
 
 #Generic paths that make future parts of the code easier
 QtDir = $$clean_path($$[QT_INSTALL_LIBS]/..)
@@ -117,26 +120,26 @@ QtInstallerBin=$$clean_path($$QtDir/../../tools/Qtinstallerframework/3.0/bin)
 #All that needs to be done for mac is to run the DMG creator.
 #The DMG creator will only be run in Release mode, not debug.
 !CONFIG(debug,debug|release):macx{
-#For some reason, the release flag is set in both debug and release.
-#So, the above Config(...) makes it so a disk image is only built in release mode.
+    #For some reason, the release flag is set in both debug and release.
+    #So, the above Config(...) makes it so a disk image is only built in release mode.
 
-#Create necessary directory structure for disk image.
+    #Create necessary directory structure for disk image.
     QMAKE_POST_LINK += $${QMAKE_MKDIR} $$OUT_PWD/Installer;
-#Copy over the executable and bundle it with its dependencies
+    #Copy over the executable and bundle it with its dependencies
     QMAKE_POST_LINK += $${QMAKE_COPY_DIR} $$OUT_PWD/Pep9CPU.app $$OUT_PWD/Installer;
     QMAKE_POST_LINK += $$QtDir/bin/macdeployqt $$OUT_PWD/Installer/Pep9CPU.app -no-plugins;
-#Use HDIUtil to make a folder into a read/write image
+    #Use HDIUtil to make a folder into a read/write image
     QMAKE_POST_LINK += hdiutil create -volname Pep9CPU -srcfolder $$OUT_PWD/Installer -attach -ov -format UDRW Pep9CPUTemp.dmg;
-#Link from the read/write image to the machine's Applications folder
+    #Link from the read/write image to the machine's Applications folder
     QMAKE_POST_LINK += ln -s /Applications /Volumes/Pep9CPU/Applications;
-#Unmount the image, and create a new compressed, readonly image.
+    #Unmount the image, and create a new compressed, readonly image.
     QMAKE_POST_LINK += hdiutil detach /Volumes/Pep9CPU;
     QMAKE_POST_LINK += hdiutil convert -format UDBZ -o Pep9CPU.dmg Pep9CPUTemp.dmg;
-#Remove the temporary read/write image.
+    #Remove the temporary read/write image.
     QMAKE_POST_LINK += $${QMAKE_DEL_FILE} Pep9CPUTemp.dmg;
-#If QMAKE_POST_LINK stops working in a future version, QMAKE provides another way to add custom targets.
-#Use the method described in "Adding Custom Targets" on http://doc.qt.io/qt-5/qmake-advanced-usage.html.
-#Our deployment tool will be called anytime the application is sucessfully linked in release mode.
+    #If QMAKE_POST_LINK stops working in a future version, QMAKE provides another way to add custom targets.
+    #Use the method described in "Adding Custom Targets" on http://doc.qt.io/qt-5/qmake-advanced-usage.html.
+    #Our deployment tool will be called anytime the application is sucessfully linked in release mode.
 }
 
 #Otherwise if the target is windows, but no installer framework exists
@@ -145,7 +148,7 @@ else:!CONFIG(debug,debug|release):win32:!exists(QtInstallerBin/repogen.exe){
     warning("Please run the QT maintence tool and install QT Installer Framework 3.0.")
 }
 
-#Otherwise build the installer for windows as normal.
+    #Otherwise build the installer for windows as normal.
 else:!CONFIG(debug,debug|release):win32{
     repoDir=$$OUT_PWD/Repository/win32
     #Create installer directory structure
@@ -162,6 +165,7 @@ else:!CONFIG(debug,debug|release):win32{
     #Copy over files needed to create installer
     QMAKE_POST_LINK += $${QMAKE_COPY} \"$$shell_path($$PWD\config\configwin32.xml)\" \"$$shell_path($$OUT_PWD/Installer/config/config.xml)\" & \
         $${QMAKE_COPY} \"$$shell_path($$PWD/images/icon.ico)\" \"$$shell_path($$OUT_PWD/Installer/config)\" & \
+        $${QMAKE_COPY} \"$$shell_path($$PWD/images/Pep9cpu-icon.png)\" \"$$shell_path($$OUT_PWD/Installer/config)\" & \
         $${QMAKE_COPY} \"$$shell_path($$PWD/packages/pep9cpu/package.xml)\" \"$$shell_path($$OUT_PWD/Installer/packages/pep9cpu/meta)\" & \
         $${QMAKE_COPY} \"$$shell_path($$PWD/packages/pep9cpu/License.txt)\" \"$$shell_path($$OUT_PWD/Installer/packages/pep9cpu/meta)\" & \
         $${QMAKE_COPY} \"$$shell_path($$PWD/packages/pep9cpu/installscript.qs)\" \"$$shell_path($$OUT_PWD/Installer/packages/pep9cpu/meta)\" & \
