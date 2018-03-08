@@ -36,7 +36,7 @@
 #include "sim.h"
 #include "helpdialog.h"
 #include "aboutpep.h"
-
+#include "updatechecker.h"
 #include <QDir>
 
 namespace Ui {
@@ -56,7 +56,7 @@ protected:
 
 private:
     Ui::MainWindow *ui;
-
+    UpdateChecker *updateChecker;
     // Byte converter
     ByteConverterDec *byteConverterDec;
     ByteConverterHex *byteConverterHex;
@@ -89,7 +89,8 @@ private:
     QString curPath;
 
 private slots:
-
+    // Update Check
+    void onUpdateCheck(int val);
     // File
     void on_actionFile_New_triggered();
     void on_actionFile_Open_triggered();
@@ -145,6 +146,7 @@ private slots:
     void updateMemAddress(int address);
 signals:
     void CPUFeaturesChanged();
+    void beginUpdateCheck();
 };
 
 #endif // MAINWINDOW_H

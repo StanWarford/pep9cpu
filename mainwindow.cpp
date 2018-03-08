@@ -31,15 +31,17 @@
 #include <QFileDialog>
 #include <QDesktopServices>
 #include <QUrl>
-
+#include <qtconcurrentrun.h>
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),updateChecker(new UpdateChecker())
 {
     ui->setupUi(this);
-
+    // connect and begin update checker
+    connect(updateChecker,SIGNAL(updateInformation(int)),this,SLOT(onUpdateCheck(int)));
+    auto x = QtConcurrent::run(updateChecker,&UpdateChecker::beginUpdateCheck);
     // initialize the read-only registers to the correct values
     Sim::initMRegs();
 
@@ -287,6 +289,12 @@ void MainWindow::setCurrentFile(const QString &fileName)
 QString MainWindow::strippedName(const QString &fullFileName)
 {
     return QFileInfo(fullFileName).fileName();
+}
+
+void MainWindow::onUpdateCheck(int val)
+{
+    //Dummy to handle update checking code
+    QMessageBox::information(this,"help","me");
 }
 
 // File MainWindow triggers
