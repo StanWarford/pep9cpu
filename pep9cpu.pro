@@ -134,9 +134,11 @@ QtInstallerBin=$$clean_path($$QtDir/../../tools/Qtinstallerframework/3.0/bin)
     QMAKE_POST_LINK += ln -s /Applications /Volumes/Pep9CPU/Applications;
     #Unmount the image, and create a new compressed, readonly image.
     QMAKE_POST_LINK += hdiutil detach /Volumes/Pep9CPU;
-    QMAKE_POST_LINK += hdiutil convert -format UDBZ -o Pep9CPU.dmg Pep9CPUTemp.dmg;
+    QMAKE_POST_LINK += $${QMAKE_COPY} $$OUT_PWD/Pep9CPUTemp.dmg $$OUT_PWD/Pep9CPUTemp2.dmg;
+    QMAKE_POST_LINK += hdiutil convert -format UDBZ -o $$OUT_PWD/Pep9CPU.dmg $$OUT_PWD/Pep9CPUTemp2.dmg;
     #Remove the temporary read/write image.
-    QMAKE_POST_LINK += $${QMAKE_DEL_FILE} Pep9CPUTemp.dmg;
+    QMAKE_POST_LINK += $${QMAKE_DEL_FILE} $$OUT_PWD/Pep9CPUTemp.dmg;
+    QMAKE_POST_LINK += $${QMAKE_DEL_FILE} $$OUT_PWD/Pep9CPUTemp2.dmg;
     #If QMAKE_POST_LINK stops working in a future version, QMAKE provides another way to add custom targets.
     #Use the method described in "Adding Custom Targets" on http://doc.qt.io/qt-5/qmake-advanced-usage.html.
     #Our deployment tool will be called anytime the application is sucessfully linked in release mode.
