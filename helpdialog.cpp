@@ -97,6 +97,9 @@ Enu::CPUType HelpDialog::getExamplesModel()
     else if ((!isHelpSubCat && row == eTWOBYTEBUSPROBLEMS) || parentRow == eTWOBYTEBUSPROBLEMS) {
         return Enu::TwoByteDataBus;
     }
+    else{ //This case should never be reached, but is needed to silence a compiler warning
+        return Enu::OneByteDataBus; //Default to one byte data bus.
+    }
 }
 
 void HelpDialog::changeEvent(QEvent *e)

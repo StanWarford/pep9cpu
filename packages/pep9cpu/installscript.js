@@ -11,7 +11,7 @@ Component.prototype.createOperations = function(){
     if(installer.value("os") == "win"){
         var registryVC2010x86 = installer.execute("reg", new Array("QUERY", "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\VisualStudio\\14.0\\VC\\Runtimes\\x64", "/v", "Installed"))[0];
         if(registryVC2010x86==false){
-            component.addOperation("Execute", "@TargetDir@\\vcredist_x64.exe", "/norestart");
+            component.addOperation("Execute", "@TargetDir@\\vcredist_x64.exe","/install","/passive", "/norestart");
         }
         component.addOperation("CreateShortcut", "@TargetDir@/Pep9CPU.exe", "@StartMenuDir@/Pep9CPU.lnk",
                     "workingDirectory=@TargetDir@","description=Run Pep9CPU");
