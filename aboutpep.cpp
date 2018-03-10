@@ -34,8 +34,9 @@ AboutPep::AboutPep(QWidget *parent) :
     else {
         ui->aboutLabelWin->hide();
     }
-    setMaximumHeight(450);
-    setMinimumHeight(450);
+    setMinimumHeight(1000); // Make the minimum height larger so that the licenses can be displayed
+    setMaximumHeight(1000);
+    this->resize(this->contentsRect().x(),1000);
 }
 
 AboutPep::~AboutPep()

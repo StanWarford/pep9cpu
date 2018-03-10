@@ -144,11 +144,6 @@ QtInstallerBin=$$clean_path($$QtDir/../../tools/Qtinstallerframework/3.0/bin)
     #Our deployment tool will be called anytime the application is sucessfully linked in release mode.
 }
 
-else:win32:!equals($$(VisualStudioVersion),14.0){
-    warning("Project being built on Windows with toolset other than MSVC 14.0.")
-    warning("This could cause issues with installing MSVC redistributable on a target machine.")
-}
-
 #Otherwise if the target is windows, but no installer framework exists
 else:!CONFIG(debug,debug|release):win32:!exists($$QtInstallerBin/repogen.exe){
     warning("Aborting installer creations, since QT Installer Framework 3.0 is not installed.")
