@@ -11,8 +11,8 @@ function Controller() {
         //installer.setDefaultPageVisible(QInstaller.LicenseCheck, false);
     }
 }
-Controller.prototype.IntroductionPageCallback  = function()
-{
+
+Controller.prototype.IntroductionPageCallback  = function(){
     if(installer.isUninstaller()){
     }
     var widget = gui.currentPageWidget();
@@ -24,19 +24,26 @@ Controller.prototype.IntroductionPageCallback  = function()
 
 }
 
-onPackageManagerCoreTypeChanged = function()
-{
+Controller.prototype.LicenseAgreementPageCallback = function(){
+    var widget = gui.currentPageWidget();
+    if (widget != null) {
+        widget.AcceptLicenseRadioButton.checked = true;
+    }
+}
+
+Controller.prototype.FinishedPageCallback = function(){
+    var widget = gui.currentPageWidget();
+    if (widget != null && !installer.isUninstaller()){
+        widget.RunItCheckBox.visible = true;
+        widget.RunItCheckBox.checked = true;
+        widget.RunItCheckBox.text = "Run Pep9CPU";
+    }
+}
+
+onPackageManagerCoreTypeChanged = function(){
 
     var widget = gui.pageById(QInstaller.Introduction);
     if (widget != null) {
         //widget.findChild("PackageManagerRadioButton").visible = false;
-    }
-}
-
-Controller.prototype.LicenseAgreementPageCallback = function()
-{
-    var widget = gui.currentPageWidget();
-    if (widget != null) {
-        widget.AcceptLicenseRadioButton.checked = true;
     }
 }

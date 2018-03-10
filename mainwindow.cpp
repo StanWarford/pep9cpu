@@ -31,7 +31,7 @@
 #include <QFileDialog>
 #include <QDesktopServices>
 #include <QUrl>
-#include <qtconcurrentrun.h>
+#include <QtConcurrent>
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
