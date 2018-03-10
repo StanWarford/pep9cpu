@@ -34,9 +34,9 @@ Controller.prototype.LicenseAgreementPageCallback = function(){
 Controller.prototype.FinishedPageCallback = function(){
     var widget = gui.currentPageWidget();
     if (widget != null && !installer.isUninstaller()){
-        widget.RunItCheckBox.visible = true;
-        widget.RunItCheckBox.checked = true;
-        widget.RunItCheckBox.text = "Run Pep9CPU";
+        //widget.RunItCheckBox.visible = true;
+        //widget.RunItCheckBox.checked = true;
+        //widget.RunItCheckBox.text = "Run Pep9CPU";
     }
 }
 

@@ -8,7 +8,7 @@
     <ProductUrl>http://computersystemsbook.com/5th-edition/pep9/</ProductUrl>
     <TargetDir>@ApplicationsDirX64@/Pep9CPU</TargetDir>
     <Watermark>Pep9cpu-icon.png</Watermark>
-    <ControlScript>control.qs</ControlScript>
+    <ControlScript>control.js</ControlScript>
     <InstallerWindowIcon>icon</InstallerWindowIcon>
     <InstallerApplicationIcon>icon</InstallerApplicationIcon>
     <MaintenanceToolName>Pep9Updater</MaintenanceToolName>
