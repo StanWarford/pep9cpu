@@ -2014,15 +2014,16 @@ void CpuGraphicsItems::repaintAndZSelect(QPainter *painter)
     // lines coming out of tristate label
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
-        painter->drawLines(OneByteShapes::AndZOut._lines);
+        painter->drawLine(OneByteShapes::AndZOut._lines[0]);
+        painter->drawLine(OneByteShapes::AndZOut._lines[1]);
 
         painter->drawImage(OneByteShapes::AndZOut._arrowheads.first(),
                            color == Qt::gray ? arrowDownGray : arrowDown);
 
         break;
     case Enu::TwoByteDataBus:
-        painter->drawLines(TwoByteShapes::AndZOut._lines);
-
+        painter->drawLine(TwoByteShapes::AndZOut._lines[0]);
+        painter->drawLine(TwoByteShapes::AndZOut._lines[1]);
         painter->drawImage(TwoByteShapes::AndZOut._arrowheads.first(),
                            color == Qt::gray ? arrowDownGray : arrowDown);
 
@@ -2032,8 +2033,11 @@ void CpuGraphicsItems::repaintAndZSelect(QPainter *painter)
     }
 
     color = Qt::gray;
-    if (ALULineEdit->text() != "" && AndZTristateLabel->text() != "") {
+    if (aluHasCorrectOutput() && AndZTristateLabel->text() != "") {
         color = Qt::black;
+    }
+    else{
+        color = Qt::gray;
     }
     painter->setPen(color);
     painter->setBrush(color);
@@ -2041,13 +2045,13 @@ void CpuGraphicsItems::repaintAndZSelect(QPainter *painter)
     // AndZ out
     switch (Pep::cpuFeatures) {
     case Enu::OneByteDataBus:
-#pragma message("todo: get rid of magic numbers")
-        painter->drawLine(458,552, 465,552);
-        painter->drawImage(QPoint(465,549),
+        painter->drawLine(OneByteShapes::AndZOut._lines[2]);
+        painter->drawImage(QPoint(OneByteShapes::zBitLabel.x()-13,OneByteShapes::AndZMuxLabel.y()+OneByteShapes::AndZMuxLabel.height()/2-4),
                            color == Qt::gray ? arrowRightGray : arrowRight);
 
         break;
     case Enu::TwoByteDataBus:
+        painter->drawLine(TwoByteShapes::AndZOut._lines[2]);
         //The arrow is ~10 pixels long, and another 3 are needed for it to fit comfortably next to the box
         //The arrow is 8 pixels high, align the the center of the arrow with the middle of the box.
         painter->drawImage(QPoint(TwoByteShapes::zBitLabel.x()-13,TwoByteShapes::AndZMuxLabel.y()+TwoByteShapes::AndZMuxLabel.height()/2-4),
@@ -2221,8 +2225,9 @@ void CpuGraphicsItems::repaintALUSelectOneByteModel(QPainter *painter)
     painter->drawPolygon(OneByteShapes::ALUOutBus);
 
     // Draw status bit lines
-    painter->setPen(aluHasCorrectOutput() ? Qt::black : Qt::gray);
-    painter->setBrush(aluHasCorrectOutput() ? Qt::black : Qt::gray);
+    color = aluHasCorrectOutput() ? Qt::black : Qt::gray;
+    painter->setPen(color);
+    painter->setBrush(color);
 
     painter->drawLines(OneByteShapes::ALUSelectOut._lines);
 
