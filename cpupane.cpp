@@ -1219,7 +1219,7 @@ void CpuPane::on_copyToMicrocodePushButton_clicked() // union of all models
         code.set(Enu::ALU, cpuPaneItems->ALULineEdit->text().toInt());
     }
     if (cpuPaneItems->CSMuxTristateLabel->text() != "") {
-        code.set(Enu::CMux, cpuPaneItems->CSMuxTristateLabel->text().toInt());
+        code.set(Enu::CSMux, cpuPaneItems->CSMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->SCkCheckBox->isChecked()) {
         code.set(Enu::SCk, 1);
