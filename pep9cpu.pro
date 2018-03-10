@@ -143,7 +143,7 @@ QtInstallerBin=$$clean_path($$QtDir/../../tools/Qtinstallerframework/3.0/bin)
 }
 
 #Otherwise if the target is windows, but no installer framework exists
-else:!CONFIG(debug,debug|release):win32:!exists(QtInstallerBin/repogen.exe){
+else:!CONFIG(debug,debug|release):win32:!exists($$QtInstallerBin/repogen.exe){
     warning("Aborting installer creations, since QT Installer Framework 3.0 is not installed.")
     warning("Please run the QT maintence tool and install QT Installer Framework 3.0.")
 }

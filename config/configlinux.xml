@@ -17,6 +17,5 @@
             <DisplayName>Linux Update Repo</DisplayName>
             <Url>https://raw.githubusercontent.com/Matthew-McRaven/pep9cpudeploy/master/linux</Url>
         </Repository>
-
     </RemoteRepositories>
 </Installer>
