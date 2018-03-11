@@ -21,9 +21,26 @@
 
 #include <QtWidgets/QApplication>
 #include "mainwindow.h"
-
+#ifdef WIN32
+#include <string.h>
+#include <qvector.h>
+#endif
 int main(int argc, char *argv[])
 {
+#ifdef WIN32 //Always inject -platform windows:dpiawareness=0 flag to disable hi-dpi support.
+    //Hi-dpi support makes all of the pixel arithmatic break.
+    QApplication::setAttribute(Qt::AA_DisableHighDpiScaling,true);
+    std::vector<char*> new_argv(argv, argv + argc);
+    char* string = new char[10];
+    strncpy(string, "-platform",10);
+    new_argv.push_back(string);
+    string = new char[23];
+    strncpy(string, "windows:dpiawareness=0",23);
+    new_argv.push_back(string);
+    new_argv.push_back(nullptr);
+    argv = &new_argv.data()[0];
+    argc+=2;
+#endif
     QApplication a(argc, argv);
 
     MainWindow w;

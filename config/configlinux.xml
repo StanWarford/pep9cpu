@@ -8,15 +8,14 @@
     <ProductUrl>http://computersystemsbook.com/5th-edition/pep9/</ProductUrl>
     <TargetDir>@HomeDir@/InstallationDirectory</TargetDir>
     <Watermark>Pep9cpu-icon.png</Watermark>
-    <ControlScript>control.qs</ControlScript>
+    <ControlScript>control.js</ControlScript>
     <InstallerWindowIcon>icon</InstallerWindowIcon>
     <InstallerApplicationIcon>icon</InstallerApplicationIcon>
-    <MaintenanceToolName>Pep9Updater</MaintenanceToolName>
+    <MaintenanceToolName>Pep9CPUpdater</MaintenanceToolName>
     <RemoteRepositories>
         <Repository>
             <DisplayName>Linux Update Repo</DisplayName>
             <Url>https://raw.githubusercontent.com/Matthew-McRaven/pep9cpudeploy/master/linux</Url>
         </Repository>
-
     </RemoteRepositories>
 </Installer>
