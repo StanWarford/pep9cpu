@@ -101,6 +101,7 @@ protected slots:
     void on_copyToMicrocodePushButton_clicked();
 
     void ALUTextEdited(QString str);
+    void repaintOnScroll(int distance);
 
 public slots:
     void run();

@@ -29,6 +29,7 @@
 #include <QMessageBox>
 
 #include <QWebEngineView>
+#include <QScrollBar>
 
 #include "tristatelabel.h"
 #include "pep.h"
@@ -191,6 +192,12 @@ void CpuPane::initModel(Enu::CPUType type)
     connect(cpuPaneItems->EOMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->MDRECk, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->MDROCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
+
+    // Handle Windows repainting bug
+    // This might have a performance penalty, so only enable it on the platform that needs it.
+#ifdef WIN32
+    connect(ui->graphicsView->verticalScrollBar(),SIGNAL(actionTriggered(int)),this,SLOT(repaintOnScroll(int)));
+#endif
 
 }
 
@@ -663,7 +670,9 @@ bool CpuPane::step(QString &errorString)
     case Enu::TwoByteDataBus:
         return stepTwoByteDataBus(errorString);
         break;
-    default:
+    default: // This case should never occur, but needed to silence build warning of not all paths return a value.
+        errorString = "During step, CPU was not in one byte mode or two byte mode";
+        return false;
         break;
     }
 }
@@ -1310,6 +1319,11 @@ void CpuPane::ALUTextEdited(QString str)
     }
 }
 
+void CpuPane::repaintOnScroll(int distance)
+{
+    distance = (int)distance; //Ugly fix to get compiler to silence unused variable warning
+    cpuPaneItems->update();
+}
 
 void CpuPane::run()
 {

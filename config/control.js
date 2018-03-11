@@ -36,6 +36,8 @@ onPackageManagerCoreTypeChanged = function(){
     var widget = gui.pageById(QInstaller.Introduction);
     if (widget != null) {
         widget.findChild("PackageManagerRadioButton").visible = false;
-        widget.findChild("UpdaterRadioButton").checked = true;
+        if(widget.findChild("PackageManagerRadioButton").checked==true){
+            widget.findChild("UninstallerRadioButton").checked = true;
+        }
     }
 }
