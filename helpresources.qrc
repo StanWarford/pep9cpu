@@ -127,5 +127,6 @@
         <file>help/figures/prob1236e.pepcpu</file>
         <file>help/figures/prob1236f.pepcpu</file>
         <file>help/beta.html</file>
+        <file>help/images/switchbus.png</file>
     </qresource>
 </RCC>
