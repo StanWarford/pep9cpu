@@ -2,7 +2,7 @@
 <!--Linux version of the config file-->
 <Installer>
     <Name>Pep 9 CPU</Name>
-    <Version>1.0.0</Version>
+    <Version>9.1.0</Version>
     <Title>Pep 9 CPU Installer</Title>
     <Publisher>Pepperdine University</Publisher>
     <ProductUrl>http://computersystemsbook.com/5th-edition/pep9/</ProductUrl>
@@ -11,12 +11,11 @@
     <ControlScript>control.qs</ControlScript>
     <InstallerWindowIcon>icon</InstallerWindowIcon>
     <InstallerApplicationIcon>icon</InstallerApplicationIcon>
-    <MaintenanceToolName>Pep9Updater</MaintenanceToolName>
+    <MaintenanceToolName>Pep9CPUpdater</MaintenanceToolName>
     <RemoteRepositories>
         <Repository>
             <DisplayName>Linux Update Repo</DisplayName>
             <Url>https://raw.githubusercontent.com/Matthew-McRaven/pep9cpudeploy/master/linux</Url>
         </Repository>
-
     </RemoteRepositories>
 </Installer>

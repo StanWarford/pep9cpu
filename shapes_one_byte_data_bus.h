@@ -558,6 +558,7 @@ const QRect getRegRect(int row, int col) {
         x = Col4X;
         break;
     default:
+        x = Col1X;
         break;
     }
 
@@ -575,6 +576,7 @@ const QRect getRegRect(int row, int col) {
         y = Row4Y;
         break;
     default:
+        y = Row1Y;
         break;
     }
 

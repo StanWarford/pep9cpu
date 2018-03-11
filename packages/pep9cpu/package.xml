@@ -8,5 +8,5 @@
         <License name="GNU GENERAL PUBLIC LICENSE" file="License.txt" />
     </Licenses>
     <ForcedInstallation>true</ForcedInstallation>
-    <Script>installscript.qs</Script>
+    <Script>installscript.js</Script>
 </Package>

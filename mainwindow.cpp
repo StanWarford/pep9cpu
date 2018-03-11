@@ -31,7 +31,7 @@
 #include <QFileDialog>
 #include <QDesktopServices>
 #include <QUrl>
-#include <qtconcurrentrun.h>
+#include <QtConcurrent>
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -293,6 +293,7 @@ QString MainWindow::strippedName(const QString &fullFileName)
 
 void MainWindow::onUpdateCheck(int val)
 {
+    val = (int)val; //Ugly way to get rid of unused paramter warning without actually modifying the parameter.
     //Dummy to handle update checking code
     QMessageBox::information(this,"help","me");
 }

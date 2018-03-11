@@ -34,8 +34,9 @@ AboutPep::AboutPep(QWidget *parent) :
     else {
         ui->aboutLabelWin->hide();
     }
-    setMaximumHeight(450);
     setMinimumHeight(450);
+    setMaximumHeight(450);
+    this->resize(this->contentsRect().x(),450);
 }
 
 AboutPep::~AboutPep()

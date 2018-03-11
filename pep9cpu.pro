@@ -107,11 +107,11 @@ DISTFILES += \
     packages/pep9cpu/meta/package.xml \
     packages/pep9cpu/package.xml \
     packages/pep9cpu/License.txt \
-    packages/pep9cpu/installscript.qs \
     packages/pep9cpu/control.qs \
-    config/control.qs \
     config/configwin32.xml \
-    config/configlinux.xml
+    config/configlinux.xml \
+    config/control.js \
+    packages/pep9cpu/installscript.js
 
 #Generic paths that make future parts of the code easier
 QtDir = $$clean_path($$[QT_INSTALL_LIBS]/..)
@@ -145,11 +145,10 @@ QtInstallerBin=$$clean_path($$QtDir/../../tools/Qtinstallerframework/3.0/bin)
 }
 
 #Otherwise if the target is windows, but no installer framework exists
-else:!CONFIG(debug,debug|release):win32:!exists(QtInstallerBin/repogen.exe){
+else:!CONFIG(debug,debug|release):win32:!exists($$QtInstallerBin/repogen.exe){
     warning("Aborting installer creations, since QT Installer Framework 3.0 is not installed.")
     warning("Please run the QT maintence tool and install QT Installer Framework 3.0.")
 }
-
     #Otherwise build the installer for windows as normal.
 else:!CONFIG(debug,debug|release):win32{
     repoDir=$$OUT_PWD/Repository/win32
@@ -170,8 +169,8 @@ else:!CONFIG(debug,debug|release):win32{
         $${QMAKE_COPY} \"$$shell_path($$PWD/images/Pep9cpu-icon.png)\" \"$$shell_path($$OUT_PWD/Installer/config)\" & \
         $${QMAKE_COPY} \"$$shell_path($$PWD/packages/pep9cpu/package.xml)\" \"$$shell_path($$OUT_PWD/Installer/packages/pep9cpu/meta)\" & \
         $${QMAKE_COPY} \"$$shell_path($$PWD/packages/pep9cpu/License.txt)\" \"$$shell_path($$OUT_PWD/Installer/packages/pep9cpu/meta)\" & \
-        $${QMAKE_COPY} \"$$shell_path($$PWD/packages/pep9cpu/installscript.qs)\" \"$$shell_path($$OUT_PWD/Installer/packages/pep9cpu/meta)\" & \
-        $${QMAKE_COPY} \"$$shell_path($$PWD/config/control.qs)\" \"$$shell_path($$OUT_PWD/Installer/config)\" &
+        $${QMAKE_COPY} \"$$shell_path($$PWD/packages/pep9cpu/installscript.js)\" \"$$shell_path($$OUT_PWD/Installer/packages/pep9cpu/meta)\" & \
+        $${QMAKE_COPY} \"$$shell_path($$PWD/config/control.js)\" \"$$shell_path($$OUT_PWD/Installer/config)\" &
     #Copy over executable
     QMAKE_POST_LINK +=  $${QMAKE_COPY} \"$$shell_path($$OUT_PWD/Pep9CPU.exe)\" \"$$shell_path($$OUT_PWD/Installer/packages/pep9cpu/data)\" &
     #Execute windeployqt to copy over needed binaries

@@ -132,7 +132,6 @@ void MainMemory::setMemAddress(int memAddress, int value)
     }
 
     int lineAddress;
-    bool ok;
     for (int i = firstAddress; i < lastAddress; i++) {
         lineAddress = ui->tableWidget->verticalHeaderItem(i)->text().toInt((bool*)&lineAddress,16);
         if (lineAddress == memAddress) {
