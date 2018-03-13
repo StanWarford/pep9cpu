@@ -127,7 +127,7 @@ QtInstallerBin=$$clean_path($$QtDir/../../tools/Qtinstallerframework/3.0/bin)
     QMAKE_POST_LINK += $${QMAKE_MKDIR} $$OUT_PWD/Installer;
     #Copy over the executable and bundle it with its dependencies
     QMAKE_POST_LINK += $${QMAKE_COPY_DIR} $$OUT_PWD/Pep9CPU.app $$OUT_PWD/Installer;
-    QMAKE_POST_LINK += $$QtDir/bin/macdeployqt $$OUT_PWD/Installer/Pep9CPU.app -no-plugins;
+    QMAKE_POST_LINK += $$QtDir/bin/macdeployqt $$OUT_PWD/Installer/Pep9CPU.app;
     #Use HDIUtil to make a folder into a read/write image
     QMAKE_POST_LINK += hdiutil create -volname Pep9CPU -srcfolder $$OUT_PWD/Installer -attach -ov -format UDRW Pep9CPUTemp.dmg;
     #Link from the read/write image to the machine's Applications folder
