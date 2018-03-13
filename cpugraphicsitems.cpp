@@ -1142,15 +1142,13 @@ CpuGraphicsItems::~CpuGraphicsItems()
 
 QRectF CpuGraphicsItems::boundingRect() const
 {
-    return QRectF(0,0, 650, 620);
-
-
-    if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
-        return QRectF(0,0, 650, 620);
+    if (Pep::cpuFeatures == Enu::OneByteDataBus) {
+        return QRectF(0,0, 650, 670);
     }
     else if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
-        return QRectF(0,0, 650, 620);
+        return QRectF(0,0, 650, TwoByteShapes::BottomOfAlu+TwoByteShapes::MemReadYOffsetFromALU+TwoByteShapes::labelTriH+10);
     }
+    return QRectF(0,0, 650, 670);
 }
 
 bool CpuGraphicsItems::aluHasCorrectOutput()
