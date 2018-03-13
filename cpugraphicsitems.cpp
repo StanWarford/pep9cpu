@@ -3019,7 +3019,7 @@ void CpuGraphicsItems::repaintCBusTwoByteModel(QPainter *painter)
     painter->setBrush(color);
 
     // CBus
-    painter->drawPolygon(TwoByteShapes::CBus);
+    //painter->drawPolygon(TwoByteShapes::CBus);
 }
 
 
