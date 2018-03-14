@@ -3,7 +3,7 @@
 # -------------------------------------------------
 TEMPLATE = app
 TARGET = Pep9CPU
-
+PEP9_VERSION = 91
 #Prevent Windows from trying to parse the project three times per build.
 CONFIG -= debug_and_release \
     debug_and_release_target
@@ -116,7 +116,7 @@ DISTFILES += \
 #Generic paths that make future parts of the code easier
 QtDir = $$clean_path($$[QT_INSTALL_LIBS]/..)
 QtInstallerBin=$$clean_path($$QtDir/../../tools/Qtinstallerframework/3.0/bin)
-
+OutputInstallerName=Pep9CPU"$$PEP9_VERSION"
 #All that needs to be done for mac is to run the DMG creator.
 #The DMG creator will only be run in Release mode, not debug.
 !CONFIG(debug,debug|release):macx{
@@ -127,7 +127,7 @@ QtInstallerBin=$$clean_path($$QtDir/../../tools/Qtinstallerframework/3.0/bin)
     QMAKE_POST_LINK += $${QMAKE_MKDIR} $$OUT_PWD/Installer;
     #Copy over the executable and bundle it with its dependencies
     QMAKE_POST_LINK += $${QMAKE_COPY_DIR} $$OUT_PWD/Pep9CPU.app $$OUT_PWD/Installer;
-    QMAKE_POST_LINK += $$QtDir/bin/macdeployqt $$OUT_PWD/Installer/Pep9CPU.app -no-plugins;
+    QMAKE_POST_LINK += $$QtDir/bin/macdeployqt $$OUT_PWD/Installer/Pep9CPU.app;
     #Use HDIUtil to make a folder into a read/write image
     QMAKE_POST_LINK += hdiutil create -volname Pep9CPU -srcfolder $$OUT_PWD/Installer -attach -ov -format UDRW Pep9CPUTemp.dmg;
     #Link from the read/write image to the machine's Applications folder
@@ -135,7 +135,7 @@ QtInstallerBin=$$clean_path($$QtDir/../../tools/Qtinstallerframework/3.0/bin)
     #Unmount the image, and create a new compressed, readonly image.
     QMAKE_POST_LINK += hdiutil detach /Volumes/Pep9CPU;
     QMAKE_POST_LINK += $${QMAKE_COPY} $$OUT_PWD/Pep9CPUTemp.dmg $$OUT_PWD/Pep9CPUTemp2.dmg;
-    QMAKE_POST_LINK += hdiutil convert -format UDBZ -o $$OUT_PWD/Pep9CPU.dmg $$OUT_PWD/Pep9CPUTemp2.dmg;
+    QMAKE_POST_LINK += hdiutil convert -format UDBZ -o $$OUT_PWD/$$OutputInstallerName"Mac.dmg" $$OUT_PWD/Pep9CPUTemp2.dmg;
     #Remove the temporary read/write image.
     QMAKE_POST_LINK += $${QMAKE_DEL_FILE} $$OUT_PWD/Pep9CPUTemp.dmg;
     QMAKE_POST_LINK += $${QMAKE_DEL_FILE} $$OUT_PWD/Pep9CPUTemp2.dmg;
@@ -179,7 +179,8 @@ else:!CONFIG(debug,debug|release):win32{
     #Execute repository creator
     QMAKE_POST_LINK += \"$$QtInstallerBin/repogen\" --update-new-components -p $$OUT_PWD/Installer/packages $$repoDir &
     #Create installer
-    QMAKE_POST_LINK += \"$$QtInstallerBin/binarycreator\" -c \"$$OUT_PWD/Installer/config/config.xml\" -p \"$$OUT_PWD/Installer/packages\" \"Installer/PEP9CPUInstaller\" &
+    QMAKE_POST_LINK += \"$$QtInstallerBin/binarycreator\" -c \"$$OUT_PWD/Installer/config/config.xml\" -p \"$$OUT_PWD/Installer/packages\" \
+ \"$$OUT_PWD/Installer/$$OutputInstallerName"Win"\" &
 }
 
 #Since there is no native QT deploy tool for Linux, one must be added in the project configuration

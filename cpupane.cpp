@@ -58,8 +58,8 @@ CpuPane::CpuPane(CPUType type, QWidget *parent) :
     initModel(type);
 
     ui->spinBox->hide();
+    ui->graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     ui->singleStepPushButton->setEnabled(false);
-
     if (type == Enu::TwoByteDataBus) {
         this->setMaximumWidth(730);
 
@@ -192,12 +192,6 @@ void CpuPane::initModel(Enu::CPUType type)
     connect(cpuPaneItems->EOMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->MDRECk, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->MDROCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
-
-    // Handle Windows repainting bug
-    // This might have a performance penalty, so only enable it on the platform that needs it.
-#ifdef WIN32
-    connect(ui->graphicsView->verticalScrollBar(),SIGNAL(actionTriggered(int)),this,SLOT(repaintOnScroll(int)));
-#endif
 
 }
 
@@ -1317,12 +1311,6 @@ void CpuPane::ALUTextEdited(QString str)
             break;
         }
     }
-}
-
-void CpuPane::repaintOnScroll(int distance)
-{
-    distance = (int)distance; //Ugly fix to get compiler to silence unused variable warning
-    cpuPaneItems->update();
 }
 
 void CpuPane::run()

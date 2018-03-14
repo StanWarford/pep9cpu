@@ -1142,15 +1142,13 @@ CpuGraphicsItems::~CpuGraphicsItems()
 
 QRectF CpuGraphicsItems::boundingRect() const
 {
-    return QRectF(0,0, 650, 620);
-
-
-    if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
-        return QRectF(0,0, 650, 620);
+    if (Pep::cpuFeatures == Enu::OneByteDataBus) {
+        return QRectF(0,0, 650, 670);
     }
     else if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
-        return QRectF(0,0, 650, 620);
+        return QRectF(0,0, 650, TwoByteShapes::BottomOfAlu+TwoByteShapes::MemReadYOffsetFromALU+TwoByteShapes::labelTriH+10);
     }
+    return QRectF(0,0, 650, 670);
 }
 
 bool CpuGraphicsItems::aluHasCorrectOutput()
@@ -3013,15 +3011,6 @@ void CpuGraphicsItems::repaintBBusTwoByteModel(QPainter *painter)
 
 void CpuGraphicsItems::repaintCBusTwoByteModel(QPainter *painter)
 {
-    bool ok;
-    cLineEdit->text().toInt(&ok, 10);
-    QColor color;
-    color = ok ? combCircuitRed : Qt::white;
-    painter->setPen(QPen(QBrush(Qt::black), 1));
-    painter->setBrush(color);
-
-    // CBus
-    painter->drawPolygon(TwoByteShapes::CBus);
 }
 
 
