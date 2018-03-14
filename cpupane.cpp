@@ -57,7 +57,7 @@ CpuPane::CpuPane(CPUType type, QWidget *parent) :
 
     initModel(type);
 
-    ui->spinBox;//->hide();
+    ui->spinBox->hide();
     ui->graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     ui->singleStepPushButton->setEnabled(false);
     if (type == Enu::TwoByteDataBus) {
