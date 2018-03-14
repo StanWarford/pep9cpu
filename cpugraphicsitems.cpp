@@ -1586,39 +1586,7 @@ void CpuGraphicsItems::repaintCMuxSelect(QPainter *painter)
     default:
         break;
     }
-    if (cMuxTristateLabel->text() == "0") {
-        color = combCircuitYellow;
-        cMuxerLabel->setPalette(QPalette(muxCircuitYellow));
-    }
-    else if (cMuxTristateLabel->text() == "1") {
-        if (!aluHasCorrectOutput() || ALULineEdit->text() == "15") {
-            // CBus.state == UNDEFINED or NZVC A
-            qDebug() << "WARNING: CMux select: There is no ALU output";
-            cMuxerLabel->setPalette(QPalette(Qt::white));
-            color = Qt::white;
-        }
-        else {
-            cMuxerLabel->setPalette(muxCircuitBlue);
-            color = combCircuitBlue;
-        }
-    }
-    else {
-        cMuxerLabel->setPalette(QPalette(Qt::white));
-        color = Qt::white;
-    }
-    painter->setPen(QPen(QBrush(Qt::black), 1));
-    painter->setBrush(color);
-
     // CMuxBus (output)
-    switch (Pep::cpuFeatures) {
-    case Enu::OneByteDataBus:
-        break;
-    case Enu::TwoByteDataBus:
-        painter->drawPolygon(TwoByteShapes::CBus);
-        break;
-    default:
-        break;
-    }
 }
 
 void CpuGraphicsItems::repaintSCk(QPainter *painter)
@@ -3011,6 +2979,30 @@ void CpuGraphicsItems::repaintBBusTwoByteModel(QPainter *painter)
 
 void CpuGraphicsItems::repaintCBusTwoByteModel(QPainter *painter)
 {
+    QColor color;
+    if (cMuxTristateLabel->text() == "0") {
+        color = combCircuitYellow;
+        cMuxerLabel->setPalette(QPalette(muxCircuitYellow));
+    }
+    else if (cMuxTristateLabel->text() == "1") {
+        if (!aluHasCorrectOutput() || ALULineEdit->text() == "15") {
+            // CBus.state == UNDEFINED or NZVC A
+            qDebug() << "WARNING: CMux select: There is no ALU output";
+            cMuxerLabel->setPalette(QPalette(Qt::white));
+            color = Qt::white;
+        }
+        else {
+            cMuxerLabel->setPalette(muxCircuitBlue);
+            color = combCircuitBlue;
+        }
+    }
+    else {
+        cMuxerLabel->setPalette(QPalette(Qt::white));
+        color = Qt::white;
+    }
+    painter->setPen(QPen(QBrush(Qt::black), 1));
+    painter->setBrush(color);
+    painter->drawPolygon(TwoByteShapes::CBus);
 }
 
 
