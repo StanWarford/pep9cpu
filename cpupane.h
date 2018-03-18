@@ -104,6 +104,7 @@ protected slots:
 
 public slots:
     void run();
+    void repaintOnScroll(int distance);
 
 signals:
     void updateSimulation();
