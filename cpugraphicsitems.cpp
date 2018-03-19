@@ -2435,19 +2435,26 @@ void CpuGraphicsItems::repaintBBusOneByteModel(QPainter *painter)
 }
 
 void CpuGraphicsItems::repaintCBusOneByteModel(QPainter *painter)
-{ QColor color;
+{
+    QColor color;
     if (cMuxTristateLabel->text() == "0") {
         color = combCircuitYellow;
+        cMuxerLabel->setPalette(QPalette(muxCircuitYellow));
     }
     else if (cMuxTristateLabel->text() == "1") {
         if (!aluHasCorrectOutput() || ALULineEdit->text() == "15") {
+            // CBus.state == UNDEFINED or NZVC A
+            qDebug() << "WARNING: CMux select: There is no ALU output";
+            cMuxerLabel->setPalette(QPalette(Qt::white));
             color = Qt::white;
         }
         else {
+            cMuxerLabel->setPalette(muxCircuitBlue);
             color = combCircuitBlue;
         }
     }
     else {
+        cMuxerLabel->setPalette(QPalette(Qt::white));
         color = Qt::white;
     }
     painter->setPen(QPen(QBrush(Qt::black), 1));
