@@ -22,8 +22,7 @@
 #define CODE_H
 
 #include <QString>
-#include <QTextEdit>
-
+#include <QMap>
 #include "enu.h"
 #include "specification.h"
 #include "mainmemory.h"
@@ -56,33 +55,10 @@ public:
     QString getSourceCode();
     bool has(Enu::EMnemonic field);
     void set(Enu::EMnemonic field, int value);
+    int get(Enu::EMnemonic field) const;
     bool inRange(Enu::EMnemonic field, int value);
 private:
-    int cLoadCk;
-    int cC;
-    int cB;
-    int cA;
-    int cMARMux; // Two-byte model only
-    int cMARCk;
-    int cMDRCk; // One-byte model only
-    int cMDROCk; // Two-byte model only
-    int cMDRECk; // Two-byte model only
-    int cAMux;
-    int cMDRMux; // One-byte model only
-    int cMDROMux; // Two-byte model only
-    int cMDREMux; // Two-byte model only
-    int cEOMux; // Two-byte model only
-    int cCMux;
-    int cALU;
-    int cCSMux;
-    int cSCk;
-    int cCCk;
-    int cVCk;
-    int cAndZ;
-    int cZCk;
-    int cNCk;
-    int cMemWrite;
-    int cMemRead;
+    QMap<Enu::EMnemonic,int> mnemonicMap;
     QString cComment;
 };
 

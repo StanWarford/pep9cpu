@@ -95,7 +95,7 @@ QString Pep::addCycleNumbers(QString codeString) {
 // Machine model state:
 Enu::CPUType Pep::cpuFeatures = OneByteDataBus;
 
-//QMap<Enu::EMnemonic, QString> Pep::decControlToMnemonMap; // unused as of this writing
+QMap<Enu::EMnemonic, QString> Pep::decControlToMnemonMap; // unused as of this writing
 QMap<Enu::EMnemonic, QString> Pep::memControlToMnemonMap;
 QMap<Enu::EMnemonic, QString> Pep::clockControlToMnemonMap;
 QMap<Enu::EMnemonic, QString> Pep::specificationToMnemonMap;
@@ -112,23 +112,23 @@ QMap<QString, Enu::EMnemonic> Pep::mnemonToStatusSpecMap;
 
 void Pep::initEnumMnemonMaps()
 {
-    mnemonToDecControlMap.clear();
-    mnemonToDecControlMap.insert("C", C);
-    mnemonToDecControlMap.insert("B", B);
-    mnemonToDecControlMap.insert("A", A);
-    mnemonToDecControlMap.insert("ANDZ", AndZ);
-    mnemonToDecControlMap.insert("AMUX", AMux);
-    mnemonToDecControlMap.insert("CMUX", CMux);
-    mnemonToDecControlMap.insert("ALU", ALU);
-    mnemonToDecControlMap.insert("CSMUX", CSMux);
+    mnemonToDecControlMap.clear();  decControlToMnemonMap.clear();
+    mnemonToDecControlMap.insert("C", C); decControlToMnemonMap.insert(C,"C");
+    mnemonToDecControlMap.insert("B", B); decControlToMnemonMap.insert(B,"B");
+    mnemonToDecControlMap.insert("A", A); decControlToMnemonMap.insert(A,"A");
+    mnemonToDecControlMap.insert("ANDZ", AndZ); decControlToMnemonMap.insert(AndZ,"ANDZ");
+    mnemonToDecControlMap.insert("AMUX", AMux); decControlToMnemonMap.insert(AMux,"AMUX");
+    mnemonToDecControlMap.insert("CMUX", CMux); decControlToMnemonMap.insert(CMux,"CMUX");
+    mnemonToDecControlMap.insert("ALU", ALU); decControlToMnemonMap.insert(ALU,"ALU");
+    mnemonToDecControlMap.insert("CSMUX", CSMux); decControlToMnemonMap.insert(CSMux,"CSMUX");
     if (Pep::cpuFeatures == OneByteDataBus) {
-        mnemonToDecControlMap.insert("MDRMUX", MDRMux);
+        mnemonToDecControlMap.insert("MDRMUX", MDRMux); decControlToMnemonMap.insert(MDRMux,"MDRMUX");
     }
     else if (Pep::cpuFeatures == TwoByteDataBus){
-        mnemonToDecControlMap.insert("MARMUX", MARMux);
-        mnemonToDecControlMap.insert("MDROMUX", MDROMux);
-        mnemonToDecControlMap.insert("MDREMUX", MDREMux);
-        mnemonToDecControlMap.insert("EOMUX", EOMux);
+        mnemonToDecControlMap.insert("MARMUX", MARMux); decControlToMnemonMap.insert(MARMux,"MARMUX");
+        mnemonToDecControlMap.insert("MDROMUX", MDROMux); decControlToMnemonMap.insert(MDROMux,"MDROMUX");
+        mnemonToDecControlMap.insert("MDREMUX", MDREMux); decControlToMnemonMap.insert(MDREMux,"MDREMUX");
+        mnemonToDecControlMap.insert("EOMUX", EOMux); decControlToMnemonMap.insert(EOMux,"EOMUX");
     }
 
     memControlToMnemonMap.clear();                      mnemonToMemControlMap.clear();

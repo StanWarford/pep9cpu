@@ -20,9 +20,10 @@
 */
 #ifndef ENU_H
 #define ENU_H
-
+#include <QtCore>
 namespace Enu
 {
+    Q_NAMESPACE
     // Instruction mnemonics
     enum EMask // For ALU function 15
     {
@@ -43,11 +44,17 @@ namespace Enu
     };
 
     enum EMnemonic {
-        LoadCk, C, B, A, MARCk, MDRCk, AMux, MARMux, MDRMux, MDROMux, MDREMux, EOMux, CMux,
-        MDROCk, MDRECk, ALU, CSMux, SCk, CCk, VCk, AndZ, ZCk, NCk, MemWrite, MemRead, Pre, Post,
+        MemRead, MemWrite,
+        A,B,EOMux, MARMux,MARA, MARB, AMux, ALU,CSMux, AndZ,
+        CMux, C,
+        MDRMux, MDROMux, MDREMux,MDR, MDRE, MDRO,
+        NCk,ZCk,VCk,CCk,SCk,MARCk,LoadCk,MDRCk, MDROCk, MDRECk,
+        Pre, Post,
         Mem, X, SP, PC, IR, T1, T2, T3, T4, T5, T6, N, Z, V, S,
-        MARA, MARB, MDR, MDRE, MDRO,
     };
+
+Q_ENUM_NS(EMnemonic); //This is a declaration, despite whatever QT Creator says.
+
 
     enum CPUType {
         OneByteDataBus,

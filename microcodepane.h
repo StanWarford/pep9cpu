@@ -32,7 +32,7 @@
 namespace Ui {
     class MicrocodePane;
 }
-
+class MicrocodeProgram;
 class MicrocodePane : public QWidget {
     Q_OBJECT
 public:
@@ -46,7 +46,7 @@ public:
     // Post: If the program assembles correctly, true is returned, and codeList is populated
     // with the code structs. Otherwise false is returned and codeList is partially populated.
 
-    QString codeToString();
+    MicrocodeProgram* getMicrocodeProgram();
 
     void removeErrorMessages();
     // Post: Searces for the string "// ERROR: " on each line and removes the end of the line.

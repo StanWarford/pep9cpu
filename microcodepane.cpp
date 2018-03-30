@@ -24,6 +24,7 @@
 #include "code.h"
 #include "pep.h"
 #include "sim.h"
+#include "microcodeprogram.h"
 
 #include <QGridLayout>
 #include <QDebug>
@@ -103,16 +104,16 @@ bool MicrocodePane::microAssemble()
     return true;
 }
 
-QString MicrocodePane::codeToString() {
-    QString str = "";
+MicrocodeProgram* MicrocodePane::getMicrocodeProgram() {
     Code *code;
+    QVector<Code*> vect;
     // this should automagically generate the appropriate code for the cpu model
     //  since it uses the mnemon maps that get initialized when we switch models
     for (int i = 0; i < Sim::codeList.size(); ++i) {
         code = Sim::codeList.at(i);
-        str.append(code->getObjectCode());
+        vect.push_back(code);
     }
-    return str;
+    return new MicrocodeProgram(vect);
 }
 
 void MicrocodePane::removeErrorMessages()

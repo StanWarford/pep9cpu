@@ -21,14 +21,18 @@
 
 #include "objectcodepane.h"
 #include "ui_objectcodepane.h"
-
+#include "microcodeprogram.h"
 #include "sim.h"
 #include "pep.h"
 #include <QPainter>
 #include <QDebug>
+#include <QTextEdit>
+#include <QTextItem>
+#include <QTableWidget>
+#include <QStringList>
 
 ObjectCodePane::ObjectCodePane(QWidget *parent) :
-    QWidget(parent),
+    QWidget(parent), rowCount(0),
     ui(new Ui::ObjectCodePane)
 {
     ui->setupUi(this);
@@ -36,73 +40,114 @@ ObjectCodePane::ObjectCodePane(QWidget *parent) :
     QFont font(Pep::codeFont);
     font.setPointSize(Pep::codeFontSize);
     font.setStyleHint(QFont::TypeWriter);
-
-    ui->plainTextEdit->setFont(font);
-
-    cpuLabel = NULL;
+    ui->codeTable->setFont(font);
+    ui->codeTable->verticalHeader()->setDefaultSectionSize(15);
+    ui->codeTable->horizontalHeader()->setDefaultSectionSize(20);
+    ui->codeTable->setShowGrid(false);
+    ui->codeTable->setRowCount(0);
     initCPUModelState();
 }
 
 ObjectCodePane::~ObjectCodePane()
 {
     delete ui;
+    delete program;
 }
 
 void ObjectCodePane::initCPUModelState()
 {
-    if (cpuLabel != NULL) {
-        delete cpuLabel;
-    }
 
-    //cpuLabel = new ObjectCodeLabel(this);
-    //ui->verticalLayout->insertWidget(1, cpuLabel);
-    //cpuLabel->setFont(QFont(Pep::codeFont, Pep::codeFontSize));
-    //cpuLabel->setMinimumHeight(QFontMetrics(cpuLabel->font()).averageCharWidth() * 8 + 3); // +3 for padding
-
-    setObjectCode("");
+    setObjectCode();
     clearSimulationView();
+    assignHeaders();
 }
 
-void ObjectCodePane::setObjectCode(QString string)
+void ObjectCodePane::setObjectCode()
 {
-    ui->plainTextEdit->setPlainText(string);
+
+    setObjectCode(new MicrocodeProgram());
+}
+
+void ObjectCodePane::setObjectCode(MicrocodeProgram* program)
+{
+    assignHeaders();
+    if(this->program==nullptr)
+    {
+        delete this->program;
+    }
+    this->program = program;
+    int rowNum=0,colNum=0;
+    ui->codeTable->setRowCount(0);
+    QList<Enu::EMnemonic> list = Pep::memControlToMnemonMap.keys();
+    list.append(Pep::decControlToMnemonMap.keys());
+    list.append(Pep::clockControlToMnemonMap.keys());
+    for(Code* row : program->getObjectCode())
+    {
+        if(!row->isMicrocode())
+        {
+           continue;
+        }
+        colNum=0;
+        ui->codeTable->insertRow(rowNum);
+        for(auto col : list)
+        {
+            auto x = QString::number(((MicroCode*)row)->get(col));
+            if(x!="-1")
+            {
+                auto y =new QTableWidgetItem(x);
+                ui->codeTable->setItem(rowNum,colNum,y);
+            }
+            colNum++;
+        }
+        rowNum++;
+    }
+    ui->codeTable->resizeColumnsToContents();
 }
 
 void ObjectCodePane::highlightCurrentInstruction()
 {
-    QList<QTextEdit::ExtraSelection> extraSelections;
-
-    QTextEdit::ExtraSelection selection;
-
-    selection.format.setBackground(QColor(56, 117, 215)); // dark blue
-    selection.format.setForeground(Qt::white);
-    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-    QTextCursor cursor = QTextCursor(ui->plainTextEdit->document());
-    cursor.setPosition(0);
-    for (int i = 0; i < Sim::microProgramCounter; i++) {
-        cursor.movePosition(QTextCursor::NextBlock);
-    }
-
-    // this chunk moves the cursor down and scrolls the text edit to it:
-    ui->plainTextEdit->setTextCursor(cursor);
-    ui->plainTextEdit->ensureCursorVisible();
-
-    selection.cursor = cursor;
-    selection.cursor.clearSelection();
-    extraSelections.append(selection);
-
-    ui->plainTextEdit->setExtraSelections(extraSelections);
+    ui->codeTable->selectRow(rowCount++);
 }
 
 void ObjectCodePane::clearSimulationView()
 {
-    QList<QTextEdit::ExtraSelection> extraSelections;
-    ui->plainTextEdit->setExtraSelections(extraSelections);
+    ui->codeTable->clearSelection();
+    rowCount=0;
 }
 
 void ObjectCodePane::copy()
 {
-    ui->plainTextEdit->copy();
+    //ui->plainTextEdit->copy();
+}
+
+void ObjectCodePane::assignHeaders()
+{
+    QList<Enu::EMnemonic> list = Pep::memControlToMnemonMap.keys();
+    list.append(Pep::decControlToMnemonMap.keys());
+    list.append(Pep::clockControlToMnemonMap.keys());
+    QMetaEnum num = QMetaEnum::fromType<Enu::EMnemonic>();
+    QList<QString> headers;
+    for(auto x : list)
+    {
+        headers.append(QString(num.valueToKey(x)));
+    }
+    ui->codeTable->setColumnCount(list.size());
+    ui->codeTable->setHorizontalHeaderLabels(headers);
+    for(int x=0;x<list.size();x++)
+    {
+        ui->codeTable->horizontalHeaderItem(x)->setTextAlignment(Qt::AlignVCenter);
+    }
+    ui->codeTable->horizontalHeader()->setVisible(true);
+    ui->codeTable->resizeColumnsToContents();
+}
+
+void ObjectCodePane::onCPUFeatureChange()
+{
+    clearSimulationView();
+    ui->codeTable->setRowCount(0);
+    //Clear the columns
+    ui->codeTable->setColumnCount(0);
+    assignHeaders();
 }
 
 void ObjectCodePane::changeEvent(QEvent *e)
@@ -119,7 +164,7 @@ void ObjectCodePane::changeEvent(QEvent *e)
 
 void ObjectCodePane::highlightOnFocus()
 {
-    if (ui->plainTextEdit->hasFocus()) {
+    if (ui->codeTable->hasFocus()) {
         ui->label->setAutoFillBackground(true);
     }
     else {

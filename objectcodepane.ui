@@ -32,7 +32,16 @@
    <property name="sizeConstraint">
     <enum>QLayout::SetDefaultConstraint</enum>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -110,16 +119,25 @@
     </widget>
    </item>
    <item>
-    <widget class="QPlainTextEdit" name="plainTextEdit">
-     <property name="lineWrapMode">
-      <enum>QPlainTextEdit::NoWrap</enum>
+    <widget class="QTableWidget" name="codeTable">
+     <property name="font">
+      <font>
+       <family>Courier New</family>
+       <pointsize>6</pointsize>
+      </font>
      </property>
-     <property name="readOnly">
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="alternatingRowColors">
       <bool>true</bool>
      </property>
-     <property name="plainText">
-      <string/>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
      </property>
+     <attribute name="horizontalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
     </widget>
    </item>
   </layout>

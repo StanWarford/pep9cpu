@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     microcodePane = new MicrocodePane(ui->codeSplitter);
     delete ui->microcodeFrame;
     objectCodePane = new ObjectCodePane(ui->codeSplitter);
-    objectCodePane->hide();
+    //objectCodePane->hide();
     delete ui->objectCodeFrame;
     cpuPaneOneByteDataBus = new CpuPane(Enu::OneByteDataBus, ui->mainSplitter);
     ui->mainSplitter->insertWidget(1, cpuPaneOneByteDataBus);
@@ -101,6 +101,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Connect events that pass on CPU Feature changes
     connect(this,SIGNAL(CPUFeaturesChanged()),microcodePane,SLOT(onCPUFeatureChange()));
+    connect(this, SIGNAL(CPUFeaturesChanged()),objectCodePane,SLOT(onCPUFeatureChange()));
     //Pep::initEnumMnemonMaps();
 
     readSettings();
@@ -303,7 +304,7 @@ void MainWindow::on_actionFile_New_triggered()
 {
     if (maybeSave()) {
         microcodePane->setMicrocode("");
-        objectCodePane->setObjectCode("");
+        objectCodePane->setObjectCode();
         setCurrentFile("");
     }
 }
@@ -432,7 +433,8 @@ bool MainWindow::on_actionSystem_Start_Debugging_triggered()
     Sim::cycleCount = 0; // this stores the number of cycles in a simulation, reset before assembling
     if (microcodePane->microAssemble()) {
         ui->statusBar->showMessage("MicroAssembly succeeded", 4000);
-        objectCodePane->setObjectCode(microcodePane->codeToString());
+#pragma message "fix me"
+        objectCodePane->setObjectCode(microcodePane->getMicrocodeProgram());
         bool hasUnitPre = false;
         for (int i = 0; i < Sim::codeList.size(); i++) {
             hasUnitPre = hasUnitPre || Sim::codeList.at(i)->hasUnitPre();
@@ -815,7 +817,7 @@ void MainWindow::helpCopyToMicrocodeButtonClicked()
         }
 
         microcodePane->setMicrocode(helpDialog->getExampleText());
-        objectCodePane->setObjectCode("");
+        objectCodePane->setObjectCode();
         helpDialog->hide();
         statusBar()->showMessage("Copied to microcode", 4000);
     }
