@@ -22,15 +22,15 @@
 #define OBJECTCODEPANE_H
 
 #include <QWidget>
-
-#include "objectcodelabel.h"
-
+class MicrocodeProgram;
 namespace Ui {
     class ObjectCodePane;
 }
 
 class ObjectCodePane : public QWidget {
     Q_OBJECT
+    MicrocodeProgram* program;
+    quint32 rowCount;
 public:
     ObjectCodePane(QWidget *parent = 0);
     ~ObjectCodePane();
@@ -39,12 +39,17 @@ public:
 
     void highlightOnFocus();
 
-    void setObjectCode(QString string);
+    void setObjectCode();
+    void setObjectCode(MicrocodeProgram* prog);
 
     void highlightCurrentInstruction();
     void clearSimulationView();
 
     void copy();
+    void assignHeaders();
+
+public slots:
+    void onCPUFeatureChange();
 
 protected:
     void changeEvent(QEvent *e);
@@ -52,7 +57,6 @@ protected:
 private:
     Ui::ObjectCodePane *ui;
 
-    ObjectCodeLabel *cpuLabel;
 };
 
 #endif // OBJECTCODEPANE_H

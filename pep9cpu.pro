@@ -40,12 +40,12 @@ SOURCES += main.cpp \
     code.cpp \
     asm.cpp \
     tristatelabel.cpp \
-    objectcodelabel.cpp \
     specification.cpp \
     byteconverterinstr.cpp \
     aboutpep.cpp \
     cpugraphicsitems.cpp \
-    updatechecker.cpp
+    updatechecker.cpp \
+    microcodeprogram.cpp
 HEADERS += mainwindow.h \
     byteconverterhex.h \
     byteconverterdec.h \
@@ -65,14 +65,14 @@ HEADERS += mainwindow.h \
     code.h \
     asm.h \
     tristatelabel.h \
-    objectcodelabel.h \
     specification.h \
     byteconverterinstr.h \
     aboutpep.h \
     cpugraphicsitems.h \
     shapes_one_byte_data_bus.h \
     shapes_two_byte_data_bus.h \
-    updatechecker.h
+    updatechecker.h \
+    microcodeprogram.h
 FORMS += mainwindow.ui \
     byteconverterhex.ui \
     byteconverterdec.ui \

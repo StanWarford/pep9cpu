@@ -22,71 +22,52 @@
 #include "code.h"
 #include "cpugraphicsitems.h"
 #include "pep.h"
-
-MicroCode::MicroCode()
+#include <QMetaEnum>
+MicroCode::MicroCode():mnemonicMap()
 {
-    // -1 is initialization value, - tested elsewhere
-    // The union of one-byte data bus model and two-byte data bus model.
-    // Elements not in the current model are simply not used.
-
-    cLoadCk = -1;
-    cC = -1;
-    cB = -1;
-    cA = -1;
-    cMARMux = -1; // Two-byte model only
-    cMARCk = -1;
-    cMDRCk = -1; // One-byte model only
-    cMDROCk = -1; // Two-byte model only
-    cMDRECk = -1; // Two-byte model only
-    cAMux = -1;
-    cMDRMux = -1; // One-byte model only
-    cMDROMux = -1; // Two-byte model only
-    cMDREMux = -1; // Two-byte model only
-    cEOMux = -1; // Two-byte model only
-    cCMux = -1;
-    cALU = -1;
-    cCSMux = -1;
-    cSCk = -1;
-    cCCk = -1;
-    cVCk = -1;
-    cAndZ = -1;
-    cZCk = -1;
-    cNCk = -1;
-    cMemWrite = -1;
-    cMemRead = -1;
-    cComment = "";
+    for(auto memLines : Pep::memControlToMnemonMap.keys())
+    {
+        mnemonicMap[memLines]=-1;
+    }
+    for(auto mainCtrlLines : Pep::decControlToMnemonMap.keys())
+    {
+        mnemonicMap[mainCtrlLines]=-1;
+    }
+    for(auto clockLines : Pep::clockControlToMnemonMap.keys())
+    {
+        mnemonicMap[clockLines]=-1;
+    }
 }
 
 bool MicroCode::isMicrocode() { return true; }
 
-#pragma message("In code.cpp, to do when CpuGraphicsItems is completed")
 void MicroCode::setCpuLabels(CpuGraphicsItems *cpuPaneItems)
 {
-    cpuPaneItems->loadCk->setChecked(cLoadCk != -1);
-    cpuPaneItems->cLineEdit->setText(cC == -1 ? "" : QString("%1").arg(cC));
-    cpuPaneItems->bLineEdit->setText(cB == -1 ? "" : QString("%1").arg(cB));
-    cpuPaneItems->aLineEdit->setText(cA == -1 ? "" : QString("%1").arg(cA));
-    cpuPaneItems->MARCk->setChecked(cMARCk != -1);
-    cpuPaneItems->MDRCk->setChecked(cMDRCk != -1);
-    cpuPaneItems->MDRECk->setChecked(cMDRECk != -1);
-    cpuPaneItems->MDROCk->setChecked(cMDROCk != -1);
-    cpuPaneItems->aMuxTristateLabel->setState(cAMux);
-    cpuPaneItems->MDRMuxTristateLabel->setState(cMDRMux);
-    cpuPaneItems->MDREMuxTristateLabel->setState(cMDREMux);
-    cpuPaneItems->MDROMuxTristateLabel->setState(cMDROMux);
-    cpuPaneItems->EOMuxTristateLabel->setState(cEOMux);
-    cpuPaneItems->MARMuxTristateLabel->setState(cMARMux);
-    cpuPaneItems->cMuxTristateLabel->setState(cCMux);
-    cpuPaneItems->ALULineEdit->setText(cALU == -1 ? "" : QString("%1").arg(cALU));
-    cpuPaneItems->CSMuxTristateLabel->setState(cCSMux);
-    cpuPaneItems->SCkCheckBox->setChecked(cSCk != -1);
-    cpuPaneItems->CCkCheckBox->setChecked(cCCk != -1);
-    cpuPaneItems->VCkCheckBox->setChecked(cVCk != -1);
-    cpuPaneItems->AndZTristateLabel->setState(cAndZ);
-    cpuPaneItems->ZCkCheckBox->setChecked(cZCk != -1);
-    cpuPaneItems->NCkCheckBox->setChecked(cNCk != -1);
-    cpuPaneItems->MemReadTristateLabel->setState(cMemRead);
-    cpuPaneItems->MemWriteTristateLabel->setState(cMemWrite);
+    cpuPaneItems->loadCk->setChecked(mnemonicMap[Enu::LoadCk] == 1);
+    cpuPaneItems->cLineEdit->setText(mnemonicMap[Enu::C] == -1 ? "" : QString("%1").arg(mnemonicMap[Enu::C]));
+    cpuPaneItems->bLineEdit->setText(mnemonicMap[Enu::B] == -1 ? "" : QString("%1").arg(mnemonicMap[Enu::B]));
+    cpuPaneItems->aLineEdit->setText(mnemonicMap[Enu::A] == -1 ? "" : QString("%1").arg(mnemonicMap[Enu::A]));
+    cpuPaneItems->MARCk->setChecked(mnemonicMap[Enu::MARCk] == 1);
+    cpuPaneItems->MDRCk->setChecked(mnemonicMap[Enu::MDRCk] == 1);
+    cpuPaneItems->MDRECk->setChecked(mnemonicMap[Enu::MDRECk] == 1);
+    cpuPaneItems->MDROCk->setChecked(mnemonicMap[Enu::MDROCk] == 1);
+    cpuPaneItems->aMuxTristateLabel->setState(mnemonicMap[Enu::AMux]);
+    cpuPaneItems->MDRMuxTristateLabel->setState(mnemonicMap[Enu::MDRMux]);
+    cpuPaneItems->MDREMuxTristateLabel->setState(mnemonicMap[Enu::MDREMux]);
+    cpuPaneItems->MDROMuxTristateLabel->setState(mnemonicMap[Enu::MDROMux]);
+    cpuPaneItems->EOMuxTristateLabel->setState(mnemonicMap[Enu::EOMux]);
+    cpuPaneItems->MARMuxTristateLabel->setState(mnemonicMap[Enu::MARMux]);
+    cpuPaneItems->cMuxTristateLabel->setState(mnemonicMap[Enu::CMux]);
+    cpuPaneItems->ALULineEdit->setText(mnemonicMap[Enu::ALU] == -1 ? "" : QString("%1").arg(mnemonicMap[Enu::ALU]));
+    cpuPaneItems->CSMuxTristateLabel->setState(mnemonicMap[Enu::CSMux]);
+    cpuPaneItems->SCkCheckBox->setChecked(mnemonicMap[Enu::SCk] == 1);
+    cpuPaneItems->CCkCheckBox->setChecked(mnemonicMap[Enu::CCk] == 1);
+    cpuPaneItems->VCkCheckBox->setChecked(mnemonicMap[Enu::VCk] == 1);
+    cpuPaneItems->AndZTristateLabel->setState(mnemonicMap[Enu::AndZ]);
+    cpuPaneItems->ZCkCheckBox->setChecked(mnemonicMap[Enu::ZCk] == 1);
+    cpuPaneItems->NCkCheckBox->setChecked(mnemonicMap[Enu::NCk] == 1);
+    cpuPaneItems->MemReadTristateLabel->setState(mnemonicMap[Enu::MemRead]);
+    cpuPaneItems->MemWriteTristateLabel->setState(mnemonicMap[Enu::MemWrite]);
 }
 
 QString MicroCode::getObjectCode()
@@ -99,50 +80,50 @@ QString MicroCode::getObjectCode()
 
     QString str = "";
     if (Pep::cpuFeatures == Enu::OneByteDataBus) {
-        str.append(cLoadCk == -1 ? "  " : QString("%1").arg(cLoadCk, -2));
-        str.append(cC == -1 ? "   " : QString("%1").arg(cC, -3));
-        str.append(cB == -1 ? "   " : QString("%1").arg(cB, -3));
-        str.append(cA == -1 ? "   " : QString("%1").arg(cA, -3));
-        str.append(cMARCk == -1 ? "  " : QString("%1").arg(cMARCk, -2));
-        str.append(cMDRCk == -1 ? "  " : QString("%1").arg(cMDRCk, -2));
-        str.append(cAMux == -1 ? "  " : QString("%1").arg(cAMux, -2));
-        str.append(cMDRMux == -1 ? "  " : QString("%1").arg(cMDRMux, -2));
-        str.append(cCMux == -1 ? "  " : QString("%1").arg(cCMux, -2));
-        str.append(cALU == -1 ? "   " : QString("%1").arg(cALU, -3));
-        str.append(cCSMux == -1 ? "  " : QString("%1").arg(cCSMux, -2));
-        str.append(cSCk == -1 ? "  " : QString("%1").arg(cSCk, -2));
-        str.append(cCCk == -1 ? "  " : QString("%1").arg(cCCk, -2));
-        str.append(cVCk == -1 ? "  " : QString("%1").arg(cVCk, -2));
-        str.append(cAndZ == -1 ? "  " : QString("%1").arg(cAndZ, -2));
-        str.append(cZCk == -1 ? "  " : QString("%1").arg(cZCk, -2));
-        str.append(cNCk == -1 ? "  " : QString("%1").arg(cNCk, -2));
-        str.append(cMemWrite == -1 ? "  " : QString("%1").arg(cMemWrite, -2));
-        str.append(cMemRead == -1 ? "  " : QString("%1").arg(cMemRead, -2));
+        str.append(mnemonicMap[Enu::LoadCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::LoadCk], -2));
+        str.append(mnemonicMap[Enu::C] == -1 ? "   " : QString("%1").arg(mnemonicMap[Enu::C], -3));
+        str.append(mnemonicMap[Enu::B] == -1 ? "   " : QString("%1").arg(mnemonicMap[Enu::B], -3));
+        str.append(mnemonicMap[Enu::A] == -1 ? "   " : QString("%1").arg(mnemonicMap[Enu::A], -3));
+        str.append(mnemonicMap[Enu::MARCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MARCk], -2));
+        str.append(mnemonicMap[Enu::MDRCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MDRCk], -2));
+        str.append(mnemonicMap[Enu::AMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::AMux], -2));
+        str.append(mnemonicMap[Enu::MDRMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MDRMux], -2));
+        str.append(mnemonicMap[Enu::CMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::CMux], -2));
+        str.append(mnemonicMap[Enu::ALU] == -1 ? "   " : QString("%1").arg(mnemonicMap[Enu::ALU], -3));
+        str.append(mnemonicMap[Enu::CSMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::CSMux], -2));
+        str.append(mnemonicMap[Enu::SCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::SCk], -2));
+        str.append(mnemonicMap[Enu::CCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::CCk], -2));
+        str.append(mnemonicMap[Enu::VCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::VCk], -2));
+        str.append(mnemonicMap[Enu::AndZ] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::AndZ], -2));
+        str.append(mnemonicMap[Enu::ZCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::ZCk], -2));
+        str.append(mnemonicMap[Enu::NCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::NCk], -2));
+        str.append(mnemonicMap[Enu::MemWrite] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MemWrite], -2));
+        str.append(mnemonicMap[Enu::MemRead] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MemRead], -2));
     }
     else if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
-        str.append(cLoadCk == -1 ? "  " : QString("%1").arg(cLoadCk, -2));
-        str.append(cC == -1 ? "   " : QString("%1").arg(cC, -3));
-        str.append(cB == -1 ? "   " : QString("%1").arg(cB, -3));
-        str.append(cA == -1 ? "   " : QString("%1").arg(cA, -3));
-        str.append(cMARMux == -1 ? "  " : QString("%1").arg(cMARMux, -2));
-        str.append(cMARCk == -1 ? "  " : QString("%1").arg(cMARCk, -2));
-        str.append(cMDROCk == -1 ? "  " : QString("%1").arg(cMDROCk, -2));
-        str.append(cMDROMux == -1 ? "  " : QString("%1").arg(cMDROMux, -2));
-        str.append(cMDRECk == -1 ? "  " : QString("%1").arg(cMDRECk, -2));
-        str.append(cMDREMux == -1 ? "  " : QString("%1").arg(cMDREMux, -2));
-        str.append(cEOMux == -1 ? "  " : QString("%1").arg(cEOMux, -2));
-        str.append(cAMux == -1 ? "  " : QString("%1").arg(cAMux, -2));
-        str.append(cCMux == -1 ? "  " : QString("%1").arg(cCMux, -2));
-        str.append(cALU == -1 ? "   " : QString("%1").arg(cALU, -3));
-        str.append(cCSMux == -1 ? "  " : QString("%1").arg(cCSMux, -2));
-        str.append(cSCk == -1 ? "  " : QString("%1").arg(cSCk, -2));
-        str.append(cCCk == -1 ? "  " : QString("%1").arg(cCCk, -2));
-        str.append(cVCk == -1 ? "  " : QString("%1").arg(cVCk, -2));
-        str.append(cAndZ == -1 ? "  " : QString("%1").arg(cAndZ, -2));
-        str.append(cZCk == -1 ? "  " : QString("%1").arg(cZCk, -2));
-        str.append(cNCk == -1 ? "  " : QString("%1").arg(cNCk, -2));
-        str.append(cMemWrite == -1 ? "  " : QString("%1").arg(cMemWrite, -2));
-        str.append(cMemRead == -1 ? "  " : QString("%1").arg(cMemRead, -2));
+        str.append(mnemonicMap[Enu::LoadCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::LoadCk], -2));
+        str.append(mnemonicMap[Enu::C] == -1 ? "   " : QString("%1").arg(mnemonicMap[Enu::C], -3));
+        str.append(mnemonicMap[Enu::B] == -1 ? "   " : QString("%1").arg(mnemonicMap[Enu::B], -3));
+        str.append(mnemonicMap[Enu::A] == -1 ? "   " : QString("%1").arg(mnemonicMap[Enu::A], -3));
+        str.append(mnemonicMap[Enu::MARMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MARMux], -2));
+        str.append(mnemonicMap[Enu::MARCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MARCk], -2));
+        str.append(mnemonicMap[Enu::MDROCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MDROCk], -2));
+        str.append(mnemonicMap[Enu::MDROMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MDROMux], -2));
+        str.append(mnemonicMap[Enu::MDRECk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MDRECk], -2));
+        str.append(mnemonicMap[Enu::MDREMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MDREMux], -2));
+        str.append(mnemonicMap[Enu::EOMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::EOMux], -2));
+        str.append(mnemonicMap[Enu::AMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::AMux], -2));
+        str.append(mnemonicMap[Enu::CMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::CMux], -2));
+        str.append(mnemonicMap[Enu::ALU] == -1 ? "   " : QString("%1").arg(mnemonicMap[Enu::ALU], -3));
+        str.append(mnemonicMap[Enu::CSMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::CSMux], -2));
+        str.append(mnemonicMap[Enu::SCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::SCk], -2));
+        str.append(mnemonicMap[Enu::CCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::CCk], -2));
+        str.append(mnemonicMap[Enu::VCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::VCk], -2));
+        str.append(mnemonicMap[Enu::AndZ] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::AndZ], -2));
+        str.append(mnemonicMap[Enu::ZCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::ZCk], -2));
+        str.append(mnemonicMap[Enu::NCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::NCk], -2));
+        str.append(mnemonicMap[Enu::MemWrite] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MemWrite], -2));
+        str.append(mnemonicMap[Enu::MemRead] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MemRead], -2));
     }
     str.append("\n");
     return str;
@@ -152,28 +133,28 @@ QString MicroCode::getSourceCode()
 {
     QString str = "";
     if (Pep::cpuFeatures == Enu::OneByteDataBus) {
-        if (cMemRead != -1) { str.append("MemRead, "); }
-        if (cMemWrite != -1) { str.append("MemWrite, "); }
-        if (cA != -1) { str.append("A=" + QString("%1").arg(cA) + ", "); }
-        if (cB != -1) { str.append("B=" + QString("%1").arg(cB) + ", "); }
-        if (cAMux != -1) { str.append("AMux=" + QString("%1").arg(cAMux) + ", "); }
-        if (cCSMux  != -1) { str.append("CSMux=" + QString("%1").arg(cCSMux) + ", "); }
-        if (cALU != -1) { str.append("ALU=" + QString("%1").arg(cALU) + ", "); }
-        if (cAndZ != -1) { str.append("AndZ=" + QString("%1").arg(cAndZ) + ", "); }
-        if (cCMux != -1) { str.append("CMux=" + QString("%1").arg(cCMux) + ", "); }
-        if (cMDRMux != -1) { str.append("MDRMux=" + QString("%1").arg(cMDRMux) + ", "); }
-        if (cC != -1) { str.append("C=" + QString("%1").arg(cC) + ", "); }
+        if (mnemonicMap[Enu::MemRead] != -1) { str.append("MemRead, "); }
+        if (mnemonicMap[Enu::MemWrite] != -1) { str.append("MemWrite, "); }
+        if (mnemonicMap[Enu::A] != -1) { str.append("A=" + QString("%1").arg(mnemonicMap[Enu::A]) + ", "); }
+        if (mnemonicMap[Enu::B] != -1) { str.append("B=" + QString("%1").arg(mnemonicMap[Enu::B]) + ", "); }
+        if (mnemonicMap[Enu::AMux] != -1) { str.append("AMux=" + QString("%1").arg(mnemonicMap[Enu::AMux]) + ", "); }
+        if (mnemonicMap[Enu::CSMux]  != -1) { str.append("CSMux=" + QString("%1").arg(mnemonicMap[Enu::CSMux]) + ", "); }
+        if (mnemonicMap[Enu::ALU] != -1) { str.append("ALU=" + QString("%1").arg(mnemonicMap[Enu::ALU]) + ", "); }
+        if (mnemonicMap[Enu::AndZ] != -1) { str.append("AndZ=" + QString("%1").arg(mnemonicMap[Enu::AndZ]) + ", "); }
+        if (mnemonicMap[Enu::CMux] != -1) { str.append("CMux=" + QString("%1").arg(mnemonicMap[Enu::CMux]) + ", "); }
+        if (mnemonicMap[Enu::MDRMux] != -1) { str.append("MDRMux=" + QString("%1").arg(mnemonicMap[Enu::MDRMux]) + ", "); }
+        if (mnemonicMap[Enu::C] != -1) { str.append("C=" + QString("%1").arg(mnemonicMap[Enu::C]) + ", "); }
 
         if (str != "") { str.chop(2); str.append("; "); }
 
-        if (cNCk != -1) { str.append("NCk, "); }
-        if (cZCk != -1) { str.append("ZCk, "); }
-        if (cVCk != -1) { str.append("VCk, "); }
-        if (cCCk != -1) { str.append("CCk, "); }
-        if (cSCk != -1) { str.append("SCk, "); }
-        if (cMARCk != -1) { str.append("MARCk, "); }
-        if (cLoadCk != -1) { str.append("LoadCk, "); }
-        if (cMDRCk != -1) { str.append("MDRCk, "); }
+        if (mnemonicMap[Enu::NCk] != -1) { str.append("NCk, "); }
+        if (mnemonicMap[Enu::ZCk] != -1) { str.append("ZCk, "); }
+        if (mnemonicMap[Enu::VCk] != -1) { str.append("VCk, "); }
+        if (mnemonicMap[Enu::CCk] != -1) { str.append("CCk, "); }
+        if (mnemonicMap[Enu::SCk] != -1) { str.append("SCk, "); }
+        if (mnemonicMap[Enu::MARCk] != -1) { str.append("MARCk, "); }
+        if (mnemonicMap[Enu::LoadCk] != -1) { str.append("LoadCk, "); }
+        if (mnemonicMap[Enu::MDRCk] != -1) { str.append("MDRCk, "); }
 
         if (str.endsWith(", ") || str.endsWith("; ")) { str.chop(2); }
         if (!cComment.isEmpty()) {
@@ -181,32 +162,32 @@ QString MicroCode::getSourceCode()
         }
     }
     else if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
-        if (cMemRead != -1) { str.append("MemRead, "); }
-        if (cMemWrite != -1) { str.append("MemWrite, "); }
-        if (cA != -1) { str.append("A=" + QString("%1").arg(cA) + ", "); }
-        if (cB != -1) { str.append("B=" + QString("%1").arg(cB) + ", "); }
-        if (cMARMux != -1) { str.append("MARMux=" + QString("%1").arg(cMARMux) + ", "); }
-        if (cEOMux != -1) { str.append("EOMux=" + QString("%1").arg(cEOMux) + ", "); }
-        if (cAMux != -1) { str.append("AMux=" + QString("%1").arg(cAMux) + ", "); }
-        if (cCSMux  != -1) { str.append("CSMux=" + QString("%1").arg(cCSMux) + ", "); }
-        if (cALU != -1) { str.append("ALU=" + QString("%1").arg(cALU) + ", "); }
-        if (cAndZ != -1) { str.append("AndZ=" + QString("%1").arg(cAndZ) + ", "); }
-        if (cCMux != -1) { str.append("CMux=" + QString("%1").arg(cCMux) + ", "); }
-        if (cMDREMux != -1) { str.append("MDREMux=" + QString("%1").arg(cMDREMux) + ", "); }
-        if (cMDROMux != -1) { str.append("MDROMux=" + QString("%1").arg(cMDROMux) + ", "); }
-        if (cC != -1) { str.append("C=" + QString("%1").arg(cC) + ", "); }
+        if (mnemonicMap[Enu::MemRead] != -1) { str.append("MemRead, "); }
+        if (mnemonicMap[Enu::MemWrite] != -1) { str.append("MemWrite, "); }
+        if (mnemonicMap[Enu::A] != -1) { str.append("A=" + QString("%1").arg(mnemonicMap[Enu::A]) + ", "); }
+        if (mnemonicMap[Enu::B] != -1) { str.append("B=" + QString("%1").arg(mnemonicMap[Enu::B]) + ", "); }
+        if (mnemonicMap[Enu::MARMux] != -1) { str.append("MARMux=" + QString("%1").arg(mnemonicMap[Enu::MARMux]) + ", "); }
+        if (mnemonicMap[Enu::EOMux] != -1) { str.append("EOMux=" + QString("%1").arg(mnemonicMap[Enu::EOMux]) + ", "); }
+        if (mnemonicMap[Enu::AMux] != -1) { str.append("AMux=" + QString("%1").arg(mnemonicMap[Enu::AMux]) + ", "); }
+        if (mnemonicMap[Enu::CSMux]  != -1) { str.append("CSMux=" + QString("%1").arg(mnemonicMap[Enu::CSMux]) + ", "); }
+        if (mnemonicMap[Enu::ALU] != -1) { str.append("ALU=" + QString("%1").arg(mnemonicMap[Enu::ALU]) + ", "); }
+        if (mnemonicMap[Enu::AndZ] != -1) { str.append("AndZ=" + QString("%1").arg(mnemonicMap[Enu::AndZ]) + ", "); }
+        if (mnemonicMap[Enu::CMux] != -1) { str.append("CMux=" + QString("%1").arg(mnemonicMap[Enu::CMux]) + ", "); }
+        if (mnemonicMap[Enu::MDREMux] != -1) { str.append("MDREMux=" + QString("%1").arg(mnemonicMap[Enu::MDREMux]) + ", "); }
+        if (mnemonicMap[Enu::MDROMux] != -1) { str.append("MDROMux=" + QString("%1").arg(mnemonicMap[Enu::MDROMux]) + ", "); }
+        if (mnemonicMap[Enu::C] != -1) { str.append("C=" + QString("%1").arg(mnemonicMap[Enu::C]) + ", "); }
 
         if (str != "") { str.chop(2); str.append("; "); }
 
-        if (cNCk != -1) { str.append("NCk, "); }
-        if (cZCk != -1) { str.append("ZCk, "); }
-        if (cVCk != -1) { str.append("VCk, "); }
-        if (cCCk != -1) { str.append("CCk, "); }
-        if (cSCk != -1) { str.append("SCk, "); }
-        if (cMARCk != -1) { str.append("MARCk, "); }
-        if (cLoadCk != -1) { str.append("LoadCk, "); }
-        if (cMDRECk != -1) { str.append("MDRECk, "); }
-        if (cMDROCk != -1) { str.append("MDROCk, "); }
+        if (mnemonicMap[Enu::NCk] != -1) { str.append("NCk, "); }
+        if (mnemonicMap[Enu::VCk] != -1) { str.append("ZCk, "); }
+        if (mnemonicMap[Enu::VCk] != -1) { str.append("VCk, "); }
+        if (mnemonicMap[Enu::CCk] != -1) { str.append("CCk, "); }
+        if (mnemonicMap[Enu::SCk] != -1) { str.append("SCk, "); }
+        if (mnemonicMap[Enu::MARCk] != -1) { str.append("MARCk, "); }
+        if (mnemonicMap[Enu::LoadCk] != -1) { str.append("LoadCk, "); }
+        if (mnemonicMap[Enu::MDRECk] != -1) { str.append("MDRECk, "); }
+        if (mnemonicMap[Enu::MDROCk] != -1) { str.append("MDROCk, "); }
 
         if (str.endsWith(", ") || str.endsWith("; ")) { str.chop(2); }
         if (!cComment.isEmpty()) {
@@ -217,114 +198,16 @@ QString MicroCode::getSourceCode()
 }
 
 bool MicroCode::has(Enu::EMnemonic field) {
-    if (Pep::cpuFeatures == Enu::OneByteDataBus) {
-        switch (field) {
-        case Enu::LoadCk: return cLoadCk != -1;
-        case Enu::C: return cC != -1;
-        case Enu::B: return cB != -1;
-        case Enu::A: return cA != -1;
-        case Enu::MARCk: return cMARCk != -1;
-        case Enu::MDRCk: return cMDRCk != -1;
-        case Enu::AMux: return cAMux != -1;
-        case Enu::MDRMux: return cMDRMux != -1;
-        case Enu::CMux: return cCMux != -1;
-        case Enu::ALU: return cALU != -1;
-        case Enu::CSMux: return cCSMux != -1;
-        case Enu::SCk: return cSCk != -1;
-        case Enu::CCk: return cCCk != -1;
-        case Enu::VCk: return cVCk != -1;
-        case Enu::AndZ: return cAndZ != -1;
-        case Enu::ZCk: return cZCk != -1;
-        case Enu::NCk: return cNCk != -1;
-        case Enu::MemWrite: return cMemWrite != -1;
-        case Enu::MemRead: return cMemRead != -1;
-        default: return true;
-        }
-    }
-    else if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
-        switch (field) {
-        case Enu::LoadCk: return cLoadCk != -1;
-        case Enu::C: return cC != -1;
-        case Enu::B: return cB != -1;
-        case Enu::A: return cA != -1;
-        case Enu::MARMux: return cMARMux != -1;
-        case Enu::MARCk: return cMARCk != -1;
-        case Enu::MDROCk: return cMDROCk != -1;
-        case Enu::MDROMux: return cMDROMux != -1;
-        case Enu::MDRECk: return cMDRECk != -1;
-        case Enu::MDREMux: return cMDREMux != -1;
-        case Enu::EOMux: return cEOMux != -1;
-        case Enu::AMux: return cAMux != -1;
-        case Enu::CMux: return cCMux != -1;
-        case Enu::ALU: return cALU != -1;
-        case Enu::CSMux: return cCSMux != -1;
-        case Enu::SCk: return cSCk != -1;
-        case Enu::CCk: return cCCk != -1;
-        case Enu::VCk: return cVCk != -1;
-        case Enu::AndZ: return cAndZ != -1;
-        case Enu::ZCk: return cZCk != -1;
-        case Enu::NCk: return cNCk != -1;
-        case Enu::MemWrite: return cMemWrite != -1;
-        case Enu::MemRead: return cMemRead != -1;
-        default: return true;
-        }
-    }
-    return true; // Suppress compiler warning
+    return mnemonicMap[field]!=-1;
 }
 
 void MicroCode::set(Enu::EMnemonic field, int value) {
-    if (Pep::cpuFeatures == Enu::OneByteDataBus) {
-        switch (field) {
-        case Enu::LoadCk: cLoadCk = value; break;
-        case Enu::C: cC = value; break;
-        case Enu::B: cB = value; break;
-        case Enu::A: cA = value; break;
-        case Enu::MARCk: cMARCk = value; break;
-        case Enu::MDRCk: cMDRCk = value; break;
-        case Enu::AMux: cAMux = value; break;
-        case Enu::MDRMux: cMDRMux = value; break;
-        case Enu::CMux: cCMux = value; break;
-        case Enu::ALU: cALU = value; break;
-        case Enu::CSMux: cCSMux = value; break;
-        case Enu::SCk: cSCk = value; break;
-        case Enu::CCk: cCCk = value; break;
-        case Enu::VCk: cVCk = value; break;
-        case Enu::AndZ: cAndZ = value; break;
-        case Enu::ZCk: cZCk = value; break;
-        case Enu::NCk: cNCk = value; break;
-        case Enu::MemWrite: cMemWrite = value; break;
-        case Enu::MemRead: cMemRead = value; break;
-        default: break;
-        }
-    }
-    else if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
-        switch (field) {
-        case Enu::LoadCk: cLoadCk = value; break;
-        case Enu::C: cC = value; break;
-        case Enu::B: cB = value; break;
-        case Enu::A: cA = value; break;
-        case Enu::MARMux: cMARMux = value; break;
-        case Enu::MARCk: cMARCk = value; break;
-        case Enu::MDROCk: cMDROCk = value; break;
-        case Enu::MDROMux: cMDROMux = value; break;
-        case Enu::MDRECk: cMDRECk = value; break;
-        case Enu::MDREMux: cMDREMux = value; break;
-        case Enu::EOMux: cEOMux = value; break;
-        case Enu::AMux: cAMux = value; break;
-        case Enu::CMux: cCMux = value; break;
-        case Enu::ALU: cALU = value; break;
-        case Enu::CSMux: cCSMux = value; break;
-        case Enu::SCk: cSCk = value; break;
-        case Enu::CCk: cCCk = value; break;
-        case Enu::VCk: cVCk = value; break;
-        case Enu::AndZ: cAndZ = value; break;
-        case Enu::ZCk: cZCk = value; break;
-        case Enu::NCk: cNCk = value; break;
-        case Enu::MemWrite: cMemWrite = value; break;
-        case Enu::MemRead: cMemRead = value; break;
-        default: break;
-        }
-    }
+    mnemonicMap[field]=value;
+}
+
+int MicroCode::get(Enu::EMnemonic field) const
+{
+    return mnemonicMap[field];
 }
 
 // inRange tests the union of the elements in Pep::mnemonToDecControlMap
