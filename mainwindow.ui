@@ -467,7 +467,7 @@
     <string>Format from Object Code</string>
    </property>
    <property name="toolTip">
-    <string>Auto-format Microcode</string>
+    <string>Format From Object Code</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>

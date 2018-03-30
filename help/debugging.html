@@ -53,38 +53,30 @@ in the Source Code pane.
 <p>
 <img src="qrc:/help/images/debugger2.png" alt="debugger2" hspace=10 vspace=10>
 <p>
-The corresponding binary statement is highlighted in the Object Code pane.
-<p>
-<img src="qrc:/help/images/debugger3.png" alt="debugger3" hspace=10 vspace=10>
-<p>
 The values from the unit test preconditions are displayed in the CPU pane.
-In the figure, the program counter (PC) is set to 0x00FF and the NZVC bits are set to 1010.
+In the figure, the program counter (PC) is set to 0x00FF and the shadow carry bit S is set to 0.
 The byte at memory address 0xFF is set to 0xAB, which is not shown in the figure.
 <p>
 <img src="qrc:/help/images/debugger4.png" alt="debugger4" hspace=10 vspace=10>
 <p>
 In the above figure, the control widgets also correspond to the statement that is about to execute.
-In particular, CMux is set to 0, which selects the NZVC bits to go through the multiplexer,
-C is set to 11, which specifies that the the NZVC bits will be stored into register T1,
-and LoadCk is checked, which will clock those values into the register bank.
+In particular, A is set to 6, which puts the most significant byte of PC on the ABus,
+B is set to 7, which puts the least significant byte of PC on the BBus,
+and MARCk is checked, which will clock those values into the memory address register MARA and MARB.
 <p>
 When you click the Clock button, one cycle executes.
 The highlighted line in the source pane is now the statement <i>that will be executed next</i>.
 <p>
 <img src="qrc:/help/images/debugger5.png" alt="debugger5" hspace=10 vspace=10>
 <p>
-The corresponding statement in the object code pane is also highlighted.
-<p>
-<img src="qrc:/help/images/debugger6.png" alt="debugger6" hspace=10 vspace=10>
-<p>
 The CPU pane shows the effect of the statement that was just executed.
-In the figure, T1 now has the value 0x0A, which is correct because A (hex) equals 1010 (bin),
-and the values of the status bits are NZVC = 1010.
+In the figure, MARA now has the value 0x00 and MARB has 0xFF, which is correct because 0x00FF is the content of PC.
 <p>
 <img src="qrc:/help/images/debugger7.png" alt="debugger7" hspace=10 vspace=10>
 <p>
-Clicking Single Step one more time results in the following figure.
-The MemRead signal is set as specified by the MemRead statement in the next microcode line.
+Clicking Single Step two more times results in the following figure.
+The third consecutive MemRead signal is set as specified by the MemRead statement in cycle 4,
+and the content from the data bus is passing through MDRMux and about to be clocked into MDR.
 <p>
 <img src="qrc:/help/images/debugger8.png" alt="debugger8" hspace=10 vspace=10>
 <p>
