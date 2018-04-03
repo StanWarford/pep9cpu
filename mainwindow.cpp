@@ -103,7 +103,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this,SIGNAL(CPUFeaturesChanged()),microcodePane,SLOT(onCPUFeatureChange()));
     connect(this, SIGNAL(CPUFeaturesChanged()),objectCodePane,SLOT(onCPUFeatureChange()));
     //Pep::initEnumMnemonMaps();
-
+    //Connect Simulation events
+    connect(this, SIGNAL(beginSimulation()),this->objectCodePane,SLOT(onBeginSimulation()));
+    connect(this, SIGNAL(endSimulation()),this->objectCodePane,SLOT(onEndSimulation()));
     readSettings();
 
     qApp->installEventFilter(this);
@@ -430,10 +432,10 @@ void MainWindow::on_actionSystem_Run_triggered()
 
 bool MainWindow::on_actionSystem_Start_Debugging_triggered()
 {
+    emit beginSimulation();
     Sim::cycleCount = 0; // this stores the number of cycles in a simulation, reset before assembling
     if (microcodePane->microAssemble()) {
         ui->statusBar->showMessage("MicroAssembly succeeded", 4000);
-#pragma message "fix me"
         objectCodePane->setObjectCode(microcodePane->getMicrocodeProgram());
         bool hasUnitPre = false;
         for (int i = 0; i < Sim::codeList.size(); i++) {
@@ -490,6 +492,7 @@ void MainWindow::on_actionSystem_Stop_Debugging_triggered()
     microcodePane->setReadOnly(false);
 
     cpuPane->stopDebugging();
+    emit endSimulation();
 }
 
 void MainWindow::on_actionSystem_Clear_CPU_triggered()
@@ -780,6 +783,7 @@ void MainWindow::updateSimulation()
 void MainWindow::stopSimulation()
 {
     on_actionSystem_Stop_Debugging_triggered();
+
 }
 
 void MainWindow::simulationFinished()

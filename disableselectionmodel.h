@@ -1,4 +1,4 @@
-// File: rotatedheaderview.h
+// File: disableselectionmodel.h
 /*
     Pep9CPU is a CPU simulator for executing microcode sequences to
     implement instructions in the instruction set of the Pep/9 computer.
@@ -18,23 +18,26 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef ROTATEDHEADERVIEW_H
-#define ROTATEDHEADERVIEW_H
+#ifndef DISABLESELECTIONMODEL_H
+#define DISABLESELECTIONMODEL_H
 
-#include <QHeaderView>
-#include <QWidget>
 #include <QObject>
-class RotatedHeaderView : public QHeaderView
+#include <QItemSelectionModel>
+#include <QAbstractItemModel>
+class DisableSelectionModel : public QItemSelectionModel
 {
+    bool disableSelection;
     Q_OBJECT
 public:
-    RotatedHeaderView(Qt::Orientation orientation, QWidget *parent = Q_NULLPTR);
-    virtual ~RotatedHeaderView() {};
-protected:
-    void paintSection(QPainter* painter,
-                  const QRect& rect,
-                  int logicalIndex) const override;
-   QSize sectionSizeFromContents(int logicalIndex) const override;
+    DisableSelectionModel(QAbstractItemModel *model = Q_NULLPTR);
+    DisableSelectionModel(QAbstractItemModel *model, QObject *parent);
+    virtual ~DisableSelectionModel();
+    void select(const QItemSelection &selection, QItemSelectionModel::SelectionFlags command) override;
+    void select(const QModelIndex &index, SelectionFlags command) override;
+    void forceSelectRow(int row);
+public slots:
+    void onBeginSimulation();
+    void onEndSimulation();
 };
 
-#endif // ROTATEDHEADERVIEW_H
+#endif // DISABLESELECTIONMODEL_H

@@ -33,23 +33,29 @@
 #include <QKeyEvent>
 #include <rotatedheaderview.h>
 ObjectCodePane::ObjectCodePane(QWidget *parent) :
-    QWidget(parent), rowCount(0),inSimulation(false),
+    QWidget(parent), rowCount(0),model(new QStandardItemModel()),inSimulation(false),
     ui(new Ui::ObjectCodePane)
 {
     ui->setupUi(this);
     QFont font(Pep::codeFont);
     font.setPointSize(Pep::codeFontSize);
     font.setStyleHint(QFont::TypeWriter);
-    auto x = new RotatedHeaderView(Qt::Horizontal,ui->codeTable);
-    x->setModel(ui->codeTable->model());
-    ui->codeTable->setHorizontalHeader(x);
+    ui->codeTable->setModel(model);
+    rotatedHeaderView= new RotatedHeaderView(Qt::Horizontal,ui->codeTable);
+    rotatedHeaderView->setModel(ui->codeTable->model());
+    selectionModel= new DisableSelectionModel(ui->codeTable->model());
+    ui->codeTable->setSelectionModel(selectionModel);
+    ui->codeTable->setHorizontalHeader(rotatedHeaderView);
     ui->codeTable->setFont(font);
     ui->codeTable->verticalHeader()->setDefaultSectionSize(15);
     ui->codeTable->horizontalHeader()->setDefaultSectionSize(20);
     ui->codeTable->setShowGrid(false);
-    ui->codeTable->setRowCount(0);
+    model->setRowCount(0);
     initCPUModelState();
-    ui->codeTable->installEventFilter(this);
+    //Connect to disabler
+    connect(this,SIGNAL(beginSimulation()),selectionModel,SLOT(onBeginSimulation()));
+    connect(this,SIGNAL(endSimulation()),selectionModel,SLOT(onEndSimulation()));
+
     //ui->codeTabl
 }
 
@@ -57,6 +63,8 @@ ObjectCodePane::~ObjectCodePane()
 {
     delete ui;
     delete program;
+    delete model;
+    delete rotatedHeaderView;
 }
 
 void ObjectCodePane::initCPUModelState()
@@ -82,7 +90,7 @@ void ObjectCodePane::setObjectCode(MicrocodeProgram* program)
     }
     this->program = program;
     int rowNum=0,colNum=0;
-    ui->codeTable->setRowCount(0);
+    model->setRowCount(0);
     QList<Enu::EMnemonic> list = Pep::memControlToMnemonMap.keys();
     list.append(Pep::decControlToMnemonMap.keys());
     list.append(Pep::clockControlToMnemonMap.keys());
@@ -93,15 +101,15 @@ void ObjectCodePane::setObjectCode(MicrocodeProgram* program)
            continue;
         }
         colNum=0;
-        ui->codeTable->insertRow(rowNum);
+        model->insertRow(rowNum);
         for(auto col : list)
         {
             auto x = QString::number(((MicroCode*)row)->get(col));
             if(x!="-1")
             {
-                auto y =new QTableWidgetItem(x);
+                auto y =new QStandardItem(x);
                 //Ownership of y is taken by the codeTable, so no need to deal with the pointer ourselves
-                ui->codeTable->setItem(rowNum,colNum,y);
+                model->setItem(rowNum,colNum,y);
             }
             colNum++;
         }
@@ -112,7 +120,8 @@ void ObjectCodePane::setObjectCode(MicrocodeProgram* program)
 
 void ObjectCodePane::highlightCurrentInstruction()
 {
-    ui->codeTable->selectRow(rowCount++);
+    selectionModel->forceSelectRow(rowCount++);
+    ui->codeTable->setCurrentIndex(model->index(rowCount,0));
     inSimulation=true;
 }
 
@@ -139,49 +148,33 @@ void ObjectCodePane::assignHeaders()
     {
         headers.append(QString(num.valueToKey(x)));
     }
-    ui->codeTable->setColumnCount(list.size());
-    ui->codeTable->setHorizontalHeaderLabels(headers);
+    model->setColumnCount(list.size());
+    model->setHorizontalHeaderLabels(headers);
     for(int x=0;x<list.size();x++)
     {
-        ui->codeTable->horizontalHeaderItem(x)->setTextAlignment(Qt::AlignVCenter);
+        model->horizontalHeaderItem(x)->setTextAlignment(Qt::AlignVCenter);
     }
     ui->codeTable->horizontalHeader()->setVisible(true);
     ui->codeTable->resizeColumnsToContents();
 }
 
-bool ObjectCodePane::eventFilter(QObject *object, QEvent *event)
-{
-    if(!inSimulation) return false;
-    switch(event->type())
-    {
-    case QEvent::KeyPress:
-    case QEvent::KeyRelease:
-    {
-        QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-        switch(keyEvent->key())
-        {
-        case Qt::UpArrow:
-        case Qt::DownArrow:
-            return true;
-        default:
-            return false;
-        }
-    }
-    case QEvent::MouseButtonDblClick:
-    case QEvent::MouseButtonPress:
-        return true;
-    default:
-        return false;
-    }
-}
-
 void ObjectCodePane::onCPUFeatureChange()
 {
     clearSimulationView();
-    ui->codeTable->setRowCount(0);
+    model->setRowCount(0);
     //Clear the columns
-    ui->codeTable->setColumnCount(0);
+    model->setColumnCount(0);
     assignHeaders();
+}
+
+void ObjectCodePane::onBeginSimulation()
+{
+    emit beginSimulation();
+}
+
+void ObjectCodePane::onEndSimulation()
+{
+    emit endSimulation();
 }
 
 void ObjectCodePane::changeEvent(QEvent *e)
