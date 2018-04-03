@@ -147,6 +147,8 @@ private slots:
 signals:
     void CPUFeaturesChanged();
     void beginUpdateCheck();
+    void beginSimulation();
+    void endSimulation();
 };
 
 #endif // MAINWINDOW_H

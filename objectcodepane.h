@@ -23,7 +23,9 @@
 
 #include <QWidget>
 #include <QStandardItemModel>
+#include "disableselectionmodel.h"
 class MicrocodeProgram;
+class RotatedHeaderView;
 namespace Ui {
     class ObjectCodePane;
 }
@@ -32,6 +34,9 @@ class ObjectCodePane : public QWidget {
     Q_OBJECT
     MicrocodeProgram* program;
     quint32 rowCount;
+    RotatedHeaderView* rotatedHeaderView;
+    DisableSelectionModel* selectionModel;
+    QStandardItemModel* model;
     bool inSimulation;
 public:
     ObjectCodePane(QWidget *parent = 0);
@@ -49,10 +54,13 @@ public:
 
     void copy();
     void assignHeaders();
-    bool eventFilter(QObject *object, QEvent *event) override;
-
+signals:
+    void beginSimulation();
+    void endSimulation();
 public slots:
     void onCPUFeatureChange();
+    void onBeginSimulation();
+    void onEndSimulation();
 
 protected:
     void changeEvent(QEvent *e) override;
