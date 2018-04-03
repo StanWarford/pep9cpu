@@ -22,6 +22,7 @@
 #define OBJECTCODEPANE_H
 
 #include <QWidget>
+#include <QStandardItemModel>
 class MicrocodeProgram;
 namespace Ui {
     class ObjectCodePane;
@@ -31,6 +32,7 @@ class ObjectCodePane : public QWidget {
     Q_OBJECT
     MicrocodeProgram* program;
     quint32 rowCount;
+    bool inSimulation;
 public:
     ObjectCodePane(QWidget *parent = 0);
     ~ObjectCodePane();
@@ -47,12 +49,13 @@ public:
 
     void copy();
     void assignHeaders();
+    bool eventFilter(QObject *object, QEvent *event) override;
 
 public slots:
     void onCPUFeatureChange();
 
 protected:
-    void changeEvent(QEvent *e);
+    void changeEvent(QEvent *e) override;
 
 private:
     Ui::ObjectCodePane *ui;

@@ -45,7 +45,8 @@ SOURCES += main.cpp \
     aboutpep.cpp \
     cpugraphicsitems.cpp \
     updatechecker.cpp \
-    microcodeprogram.cpp
+    microcodeprogram.cpp \
+    rotatedheaderview.cpp
 HEADERS += mainwindow.h \
     byteconverterhex.h \
     byteconverterdec.h \
@@ -72,7 +73,8 @@ HEADERS += mainwindow.h \
     shapes_one_byte_data_bus.h \
     shapes_two_byte_data_bus.h \
     updatechecker.h \
-    microcodeprogram.h
+    microcodeprogram.h \
+    rotatedheaderview.h
 FORMS += mainwindow.ui \
     byteconverterhex.ui \
     byteconverterdec.ui \
