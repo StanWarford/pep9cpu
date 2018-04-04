@@ -106,6 +106,7 @@ private slots:
     void on_actionEdit_Auto_Format_Microcode_triggered();
     void on_actionEdit_Remove_Error_Messages_triggered();
     void on_actionEdit_Font_triggered();
+    void on_actionEdit_Reset_font_to_Default_triggered();
     // System
     void on_actionSystem_Run_triggered();
     bool on_actionSystem_Start_Debugging_triggered();
@@ -149,6 +150,8 @@ signals:
     void beginUpdateCheck();
     void beginSimulation();
     void endSimulation();
+    //If a sub-compnent wants to be notified that fonts should be restored to their default values, connect to this signal.
+    void defaultFonts();
 };
 
 #endif // MAINWINDOW_H

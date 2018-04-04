@@ -107,7 +107,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(beginSimulation()),this->objectCodePane,SLOT(onBeginSimulation()));
     connect(this, SIGNAL(endSimulation()),this->objectCodePane,SLOT(onEndSimulation()));
     readSettings();
-
+    //Connect font change events
+    connect(this,SIGNAL(defaultFonts()),microcodePane,SLOT(onDefaultFonts()));
     qApp->installEventFilter(this);
 
     connect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
@@ -180,12 +181,13 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
 
 void MainWindow::readSettings()
 {
-    QSettings settings("Pep9CPU", "MainWindow");
+    QSettings settings("cslab.pepperdine","PEP9CPU");
     QDesktopWidget *desktop = QApplication::desktop();
     int width = static_cast<int>(desktop->width() * 0.80);
     int height = static_cast<int>(desktop->height() * 0.70);
     int screenWidth = desktop->width();
     int screenHeight = desktop->height();
+    settings.beginGroup("MainWindow");
     QPoint pos = settings.value("pos", QPoint((screenWidth - width) / 2, (screenHeight - height) / 2)).toPoint();
     QSize size = settings.value("size", QSize(width, height)).toSize();
     if (Pep::getSystem() == "Mac") {
@@ -200,14 +202,21 @@ void MainWindow::readSettings()
     resize(size);
     move(pos);
     curPath = settings.value("filePath", QDir::homePath()).toString();
+    settings.endGroup();
+    //Handle reading for all children
+    microcodePane->readSettings(settings);
 }
 
 void MainWindow::writeSettings()
 {
-    QSettings settings("Pep9CPU", "MainWindow");
+    QSettings settings("cslab.pepperdine","PEP9CPU");
+    settings.beginGroup("MainWindow");
     settings.setValue("pos", pos());
     settings.setValue("size", size());
     settings.setValue("filePath", curPath);
+    settings.endGroup();
+    //Handle writing for all children
+    microcodePane->writeSettings(settings);
 }
 
 // Save methods
@@ -420,6 +429,11 @@ void MainWindow::on_actionEdit_Remove_Error_Messages_triggered()
 void MainWindow::on_actionEdit_Font_triggered()
 {
     microcodePane->setFont();
+}
+
+void MainWindow::on_actionEdit_Reset_font_to_Default_triggered()
+{
+    emit defaultFonts();
 }
 
 // System MainWindow triggers

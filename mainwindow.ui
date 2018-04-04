@@ -113,6 +113,7 @@
     <addaction name="actionEdit_Remove_Error_Messages"/>
     <addaction name="separator"/>
     <addaction name="actionEdit_Font"/>
+    <addaction name="actionEdit_Reset_font_to_Default"/>
    </widget>
    <widget class="QMenu" name="menuSystem">
     <property name="title">
@@ -539,10 +540,22 @@
     <string>Ctrl+2</string>
    </property>
   </action>
+  <action name="actionEdit_Reset_font_to_Default">
+   <property name="text">
+    <string>Reset Font to Default</string>
+   </property>
+   <property name="toolTip">
+    <string>Reset Font to Default</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
   <include location="pep9cpuresources.qrc"/>
  </resources>
  <connections/>
+ <slots>
+  <signal>defaultFonts()</signal>
+  <slot>on_actionEdit_Font_Default_triggered()</slot>
+ </slots>
 </ui>
