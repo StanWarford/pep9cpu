@@ -47,7 +47,8 @@ public:
     void clearSimulationView();
 
     void unCommentSelection();
-
+    void readSettings(QSettings& settings);
+    void writeSettings(QSettings& settings);
 protected:
     void resizeEvent(QResizeEvent *event);
 

@@ -88,8 +88,11 @@ public:
     void unCommentSelection();
 
     void setFilename(QString fileName);
+    void readSettings(QSettings &settings);
+    void writeSettings(QSettings &settings);
 public slots:
     void onCPUFeatureChange();
+    void onDefaultFonts();
 protected:
     void changeEvent(QEvent *e);
 

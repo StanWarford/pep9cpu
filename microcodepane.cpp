@@ -283,9 +283,28 @@ void MicrocodePane::setFilename(QString fileName)
     }
 }
 
+void MicrocodePane::readSettings(QSettings &settings)
+{
+    settings.beginGroup("MicrocodePane");
+    editor->readSettings(settings);
+    settings.endGroup();
+}
+
+void MicrocodePane::writeSettings(QSettings &settings)
+{
+    settings.beginGroup("MicrocodePane");
+    editor->writeSettings(settings);
+    settings.endGroup();
+}
+
 void MicrocodePane::onCPUFeatureChange()
 {
     highlighter->rehighlight();
+}
+
+void MicrocodePane::onDefaultFonts()
+{
+    editor->setFont(QFont(Pep::cpuFont,Pep::codeFontSize));
 }
 
 void MicrocodePane::setLabelToModified(bool modified)

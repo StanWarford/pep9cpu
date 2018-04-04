@@ -108,6 +108,7 @@ void ObjectCodePane::setObjectCode(MicrocodeProgram* program)
             if(x!="-1")
             {
                 auto y =new QStandardItem(x);
+                y->setTextAlignment(Qt::AlignCenter);
                 //Ownership of y is taken by the codeTable, so no need to deal with the pointer ourselves
                 model->setItem(rowNum,colNum,y);
             }
