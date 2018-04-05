@@ -23,6 +23,7 @@
 
 #include <QString>
 #include <QMap>
+#include <QColor>
 
 #include "enu.h"
 
@@ -39,7 +40,10 @@ public:
     static const int labelFontSizeSmall;
     static const QString cpuFont;
     static const int cpuFontSize;
-
+    static QMap<QString,QColor> lightStyleInit();
+    static QMap<QString,QColor> darkStyleInit();
+    static const QMap<QString,QColor> lightStyleHighlighting;
+    static const QMap<QString,QColor> darkStyleHighlighting;
     static QString getSystem();
 
     // Function to read text from a resource file
@@ -50,7 +54,7 @@ public:
     static Enu::CPUType cpuFeatures;
 
     // Maps between mnemonic enums and strings
-    static QMap<Enu::EMnemonic, QString> decControlToMnemonMap;  // unused as of this writing
+    static QMap<Enu::EMnemonic, QString> decControlToMnemonMap;
     static QMap<Enu::EMnemonic, QString> memControlToMnemonMap;
     static QMap<Enu::EMnemonic, QString> clockControlToMnemonMap;
     static QMap<Enu::EMnemonic, QString> specificationToMnemonMap;
@@ -67,5 +71,4 @@ public:
     static void initEnumMnemonMaps();
 
 };
-
 #endif // PEP_H

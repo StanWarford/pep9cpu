@@ -61,6 +61,7 @@ public slots:
     void onCPUFeatureChange();
     void onBeginSimulation();
     void onEndSimulation();
+    void onDarkModeChanged(bool);
 
 protected:
     void changeEvent(QEvent *e) override;

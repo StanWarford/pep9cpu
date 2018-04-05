@@ -70,7 +70,7 @@ void MicrocodePane::initCPUModelState()
     if (highlighter != NULL) {
         delete highlighter;
     }
-    highlighter = new PepHighlighter(editor->document());
+    highlighter = new PepHighlighter(Pep::lightStyleHighlighting,editor->document());
 
 }
 
@@ -296,6 +296,20 @@ void MicrocodePane::onCPUFeatureChange()
 void MicrocodePane::onFontChanged(QFont font)
 {
     editor->setFont(font);
+}
+
+void MicrocodePane::onDarkModeChanged(bool darkMode)
+{
+    if(darkMode)
+    {
+        highlighter->rebuildHighlightingRules(Pep::darkStyleHighlighting);
+    }
+    else
+    {
+        highlighter->rebuildHighlightingRules(Pep::lightStyleHighlighting);
+    }
+    highlighter->rehighlight();
+
 }
 
 

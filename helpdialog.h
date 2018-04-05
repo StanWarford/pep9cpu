@@ -141,6 +141,7 @@ private:
 
 public slots:
     void onFontChanged(QFont font);
+    void onDarkModeChanged(bool);
 private slots:
     void onCurrentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*);
 

@@ -7,6 +7,9 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
+PepHighlighter:text:comment {
+    color: #fefefe
+}
 QToolTip {
     border: 1px solid #76797C;
     background-color: #5A7566;
@@ -447,7 +450,7 @@ QPlainTextEdit {
 QHeaderView::section {
     background-color: #76797C;
     color: #eff0f1;
-    padding: 5px;
+    /*padding: 5px;*/
     border: 1px solid #76797C;
 }
 
@@ -499,7 +502,6 @@ QStackedWidget {
 QToolBar {
     border: 1px transparent #393838;
     background: 1px solid #31363b;
-    font-weight: bold;
 }
 
 QToolBar::handle:horizontal {
@@ -1046,14 +1048,14 @@ QPushButton::menu-indicator {
 }
 
 QTableView {
-    border: 1px solid #76797C;
+    /*border: 1px solid #76797C;*/
     gridline-color: #31363b;
     background-color: #232629;
 }
 
 QTableView,
 QHeaderView {
-    border-radius: 0px;
+    /*border-radius: 0px;*/
 }
 
 QTableView::item:pressed,
@@ -1072,8 +1074,8 @@ QListView::item:selected:active {
 
 QHeaderView {
     background-color: #31363b;
-    border: 1px transparent;
-    border-radius: 0px;
+    /*border: 1px transparent;
+    border-radius: 0px;*/
     margin: 0px;
     padding: 0px;
 }
@@ -1081,9 +1083,9 @@ QHeaderView {
 QHeaderView::section {
     background-color: #31363b;
     color: #eff0f1;
-    padding: 5px;
+    /*padding: 5px;
     border: 1px solid #76797C;
-    border-radius: 0px;
+    border-radius: 0px;*/
     text-align: center;
 }
 
@@ -1123,8 +1125,8 @@ QHeaderView::up-arrow {
 
 QTableCornerButton::section {
     background-color: #31363b;
-    border: 1px transparent #76797C;
-    border-radius: 0px;
+    /*border: 1px transparent #76797C;
+    border-radius: 0px;*/
 }
 
 QToolBox {
@@ -1143,7 +1145,6 @@ QToolBox::tab {
 
 QToolBox::tab:selected {
     /* italicize selected tabs */
-    font: italic;
     background-color: #31363b;
     border-color: #3daee9;
 }

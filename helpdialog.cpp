@@ -46,7 +46,7 @@ HelpDialog::HelpDialog(QWidget *parent) :
     microcodeEditor = new MicrocodeEditor(this, false, true);
     ui->verticalLayout->insertWidget(0, microcodeEditor);
 
-    leftHighlighter = new PepHighlighter(microcodeEditor->document());
+    leftHighlighter = new PepHighlighter(Pep::lightStyleHighlighting,microcodeEditor->document());
     leftHighlighter->forceAllFeatures(true);
     ui->helpTreeWidget->setFont(QFont(Pep::labelFont, Pep::labelFontSize));
 
@@ -117,6 +117,19 @@ void HelpDialog::changeEvent(QEvent *e)
 void HelpDialog::onFontChanged(QFont font)
 {
     microcodeEditor->setFont(font);
+}
+
+void HelpDialog::onDarkModeChanged(bool darkMode)
+{
+    if(darkMode)
+    {
+        leftHighlighter->rebuildHighlightingRules(Pep::darkStyleHighlighting);
+    }
+    else
+    {
+        leftHighlighter->rebuildHighlightingRules(Pep::lightStyleHighlighting);
+    }
+    leftHighlighter->rehighlight();
 }
 
 void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {

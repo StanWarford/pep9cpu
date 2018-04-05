@@ -47,8 +47,8 @@ ObjectCodePane::ObjectCodePane(QWidget *parent) :
     ui->codeTable->setSelectionModel(selectionModel);
     ui->codeTable->setHorizontalHeader(rotatedHeaderView);
     ui->codeTable->setFont(font);
-    ui->codeTable->verticalHeader()->setDefaultSectionSize(15);
-    ui->codeTable->horizontalHeader()->setDefaultSectionSize(20);
+    ui->codeTable->verticalHeader()->setDefaultSectionSize(12);
+    ui->codeTable->horizontalHeader()->setDefaultSectionSize(15);
     ui->codeTable->setShowGrid(false);
     model->setRowCount(0);
     initCPUModelState();
@@ -176,6 +176,12 @@ void ObjectCodePane::onBeginSimulation()
 void ObjectCodePane::onEndSimulation()
 {
     emit endSimulation();
+}
+
+void ObjectCodePane::onDarkModeChanged(bool)
+{
+    ui->codeTable->verticalHeader()->setFont(QFont(Pep::codeFont,Pep::codeFontSize));
+    //ui->codeTable->resizeRowsToContents();
 }
 
 void ObjectCodePane::changeEvent(QEvent *e)

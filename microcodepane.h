@@ -91,6 +91,7 @@ public:
 public slots:
     void onCPUFeatureChange();
     void onFontChanged(QFont font);
+    void onDarkModeChanged(bool darkMode);
 protected:
     void changeEvent(QEvent *e);
 

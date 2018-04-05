@@ -1,11 +1,13 @@
 #include "rotatedheaderview.h"
 #include <QPainter>
+#include <math.h>
+#include <QDebug>
+#include "pep.h"
 RotatedHeaderView::RotatedHeaderView(Qt::Orientation orientation, QWidget *parent):QHeaderView(orientation,parent)
 {
 
 }
-#include <math.h>
-#include <QDebug>
+
 void RotatedHeaderView::paintSection(QPainter *painter, const QRect &rect, int logicalIndex) const
 {
     painter->save();
@@ -14,6 +16,7 @@ void RotatedHeaderView::paintSection(QPainter *painter, const QRect &rect, int l
             ny=rect.x()+rect.width()/2-5; //Frankly, I'm not sure why 4 looks the best, but it does
     QRect nRect = QRect(nx,ny,rect.height(),rect.width());
     painter->rotate(angle);
+    painter->setFont(QFont(Pep::codeFont,Pep::codeFontSize));
     painter->drawText(nRect,this->model()->headerData(logicalIndex,Qt::Horizontal).toString());
     painter->restore();
 }

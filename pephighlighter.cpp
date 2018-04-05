@@ -22,17 +22,30 @@
 #include "pephighlighter.h"
 #include "pep.h"
 
-PepHighlighter::PepHighlighter(QTextDocument *parent)
+PepHighlighter::PepHighlighter(QMap<QString, QColor> color,QTextDocument *parent)
     : QSyntaxHighlighter(parent),forcedFeatures(false)
+{
+    rebuildHighlightingRules(color);
+}
+
+void PepHighlighter::forceAllFeatures(bool features)
+{
+    forcedFeatures=features;
+}
+
+void PepHighlighter::rebuildHighlightingRules(QMap<QString, QColor> color)
 {
     HighlightingRule rule;
 
-    numFormat.setForeground(Qt::darkMagenta);
+    highlightingRulesOne.clear();
+    highlightingRulesTwo.clear();
+    highlightingRulesAll.clear();
+    numFormat.setForeground(color["rhs"]);
     rule.pattern = QRegExp("(0x)?[0-9a-fA-F]+(?=(,|;|(\\s)*$|\\]|(\\s)*//))");
     rule.format = numFormat;
     highlightingRulesOne.append(rule);
     highlightingRulesTwo.append(rule);
-    oprndFormat.setForeground(Qt::darkBlue);
+    oprndFormat.setForeground(color["lhs"]);
     oprndFormat.setFontWeight(QFont::Bold);
     QStringList oprndPatterns;
         oprndPatterns << "\\bLoadCk\\b" << "\\bC\\b" << "\\bB\\b"
@@ -83,14 +96,8 @@ PepHighlighter::PepHighlighter(QTextDocument *parent)
     commentStartExpression = QRegExp("//\\sERROR:[\\s]");
     commentEndExpression = QRegExp("$");
 }
-
-void PepHighlighter::forceAllFeatures(bool features)
-{
-    forcedFeatures=features;
-}
 void PepHighlighter::highlightBlock(const QString &text)
 {
-
     QVector<HighlightingRule> highlightingRules;
     if(forcedFeatures){
         highlightingRules=highlightingRulesAll;

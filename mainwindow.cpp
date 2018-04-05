@@ -110,6 +110,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //Connect font change events
     connect(this,SIGNAL(fontChanged(QFont)),microcodePane,SLOT(onFontChanged(QFont)));
     connect(this,SIGNAL(fontChanged(QFont)),helpDialog,SLOT(onFontChanged(QFont)));
+    connect(this,SIGNAL(darkModeChanged(bool)),microcodePane,SLOT(onDarkModeChanged(bool)));
+    connect(this,SIGNAL(darkModeChanged(bool)),helpDialog,SLOT(onDarkModeChanged(bool)));
+    connect(this,SIGNAL(darkModeChanged(bool)),objectCodePane,SLOT(onDarkModeChanged(bool)));
     qApp->installEventFilter(this);
     //Load Style sheets
     QFile f(":qdarkstyle/dark_style.qss");
@@ -629,6 +632,7 @@ void MainWindow::on_actionDark_Mode_triggered()
     {
         this->setStyleSheet(lightStyle);
     }
+    emit darkModeChanged(ui->actionDark_Mode->isChecked());
 }
 
 

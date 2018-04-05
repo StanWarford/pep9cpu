@@ -320,6 +320,7 @@ void MicrocodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
         if (block.isVisible() && bottom >= event->rect().top()) {
             QString number = blockToCycleNumber.at(blockNumber) == -1 ? QString("") : QString::number(blockToCycleNumber.at(blockNumber));
             painter.setPen(QColor(128, 128, 130)); // grey
+            painter.setFont(QFont(Pep::codeFont,Pep::codeFontSize));
             painter.drawText(-1, top, lineNumberArea->width(), fontMetrics().height(), Qt::AlignRight, number);
         }
         block = block.next();

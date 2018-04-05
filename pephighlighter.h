@@ -34,8 +34,9 @@ QT_END_NAMESPACE
 class PepHighlighter : public QSyntaxHighlighter
 {
 public:
-    PepHighlighter(QTextDocument *parent = 0);
+    PepHighlighter(QMap<QString, QColor> color,QTextDocument *parent = 0);
     void forceAllFeatures(bool features);
+    void rebuildHighlightingRules(QMap<QString,QColor> color);
 protected:
     void highlightBlock(const QString &text);
 
@@ -46,12 +47,12 @@ private:
         QRegExp pattern;
         QTextCharFormat format;
     };
+    QMap<QString,QColor> colors;
     QVector<HighlightingRule> highlightingRulesOne;
     QVector<HighlightingRule> highlightingRulesTwo;
     QVector<HighlightingRule> highlightingRulesAll;
     QRegExp commentStartExpression;
     QRegExp commentEndExpression;
-
     QTextCharFormat oprndFormat;
     QTextCharFormat numFormat;
     QTextCharFormat singleLineCommentFormat;
