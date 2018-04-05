@@ -75,8 +75,6 @@ public:
     bool isUndoable();
     bool isRedoable();
 
-    void setFont();
-
     void setReadOnly(bool ro);
 
     bool isModified();
@@ -92,7 +90,7 @@ public:
     void writeSettings(QSettings &settings);
 public slots:
     void onCPUFeatureChange();
-    void onDefaultFonts();
+    void onFontChanged(QFont font);
 protected:
     void changeEvent(QEvent *e);
 

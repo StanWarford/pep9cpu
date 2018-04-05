@@ -114,6 +114,11 @@ void HelpDialog::changeEvent(QEvent *e)
     }
 }
 
+void HelpDialog::onFontChanged(QFont font)
+{
+    microcodeEditor->setFont(font);
+}
+
 void HelpDialog::onCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*) {
     // Is this a subcategory?
     bool isHelpSubCat = ui->helpTreeWidget->currentIndex().parent().isValid();

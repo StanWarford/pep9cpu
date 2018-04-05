@@ -2,7 +2,7 @@
 <Package>
     <DisplayName>Pep 9 CPU</DisplayName>
     <Description>This is the Pep9 CPU!</Description>
-    <Version>9.1.0</Version>
+    <Version>9.2.0</Version>
     <ReleaseDate>2018-02-18</ReleaseDate>
     <Licenses>
         <License name="GNU GENERAL PUBLIC LICENSE" file="License.txt" />

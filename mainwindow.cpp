@@ -33,6 +33,7 @@
 #include <QUrl>
 #include <QtConcurrent>
 #include <QDebug>
+#include <QFontDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -106,13 +107,13 @@ MainWindow::MainWindow(QWidget *parent) :
     //Connect Simulation events
     connect(this, SIGNAL(beginSimulation()),this->objectCodePane,SLOT(onBeginSimulation()));
     connect(this, SIGNAL(endSimulation()),this->objectCodePane,SLOT(onEndSimulation()));
-    readSettings();
     //Connect font change events
-    connect(this,SIGNAL(defaultFonts()),microcodePane,SLOT(onDefaultFonts()));
+    connect(this,SIGNAL(fontChanged(QFont)),microcodePane,SLOT(onFontChanged(QFont)));
+    connect(this,SIGNAL(fontChanged(QFont)),helpDialog,SLOT(onFontChanged(QFont)));
     qApp->installEventFilter(this);
 
     connect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
-
+    readSettings();
     on_actionOne_Byte_Data_Bus_Model_triggered();
 }
 
@@ -199,8 +200,15 @@ void MainWindow::readSettings()
     if (pos.x() > width || pos.x() < 0 || pos.y() > height || pos.y() < 0) {
         pos = QPoint(0, 0);
     }
+    QVariant val = settings.value("font",codeFont);
+    if(val.canConvert<QFont>())
+    {
+        codeFont = qvariant_cast<QFont>(val);
+    }
+    emit fontChanged(codeFont);
     resize(size);
     move(pos);
+
     curPath = settings.value("filePath", QDir::homePath()).toString();
     settings.endGroup();
     //Handle reading for all children
@@ -214,6 +222,7 @@ void MainWindow::writeSettings()
     settings.setValue("pos", pos());
     settings.setValue("size", size());
     settings.setValue("filePath", curPath);
+    settings.setValue("font",codeFont);
     settings.endGroup();
     //Handle writing for all children
     microcodePane->writeSettings(settings);
@@ -428,12 +437,19 @@ void MainWindow::on_actionEdit_Remove_Error_Messages_triggered()
 
 void MainWindow::on_actionEdit_Font_triggered()
 {
-    microcodePane->setFont();
+    bool ok = false ;
+    QFont font  = QFontDialog::getFont(&ok,codeFont, this, "Set Source Code Font");
+    if(ok)
+    {
+        codeFont = font;
+        emit fontChanged(codeFont);
+    }
 }
 
 void MainWindow::on_actionEdit_Reset_font_to_Default_triggered()
 {
-    emit defaultFonts();
+    codeFont = QFont(Pep::codeFont,Pep::codeFontSize);
+    emit fontChanged(codeFont);
 }
 
 // System MainWindow triggers

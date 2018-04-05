@@ -139,6 +139,8 @@ private:
         ePR1236F = 19,
     };
 
+public slots:
+    void onFontChanged(QFont font);
 private slots:
     void onCurrentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*);
 

@@ -56,6 +56,7 @@ protected:
 
 private:
     Ui::MainWindow *ui;
+    QFont codeFont;
     UpdateChecker *updateChecker;
     // Byte converter
     ByteConverterDec *byteConverterDec;
@@ -151,7 +152,7 @@ signals:
     void beginSimulation();
     void endSimulation();
     //If a sub-compnent wants to be notified that fonts should be restored to their default values, connect to this signal.
-    void defaultFonts();
+    void fontChanged(QFont font);
 };
 
 #endif // MAINWINDOW_H
