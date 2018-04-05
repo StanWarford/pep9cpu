@@ -28,7 +28,6 @@
 
 MicrocodeEditor::MicrocodeEditor(QWidget *parent, bool highlightCurrentLine, bool isReadOnly) : QPlainTextEdit(parent)
 {
-    setFont(QFont("Courier"));
 
     highlightCurLine = highlightCurrentLine;
 
@@ -256,21 +255,12 @@ void MicrocodeEditor::unCommentSelection()
 void MicrocodeEditor::readSettings(QSettings &settings)
 {
     settings.beginGroup("MicrocodeEditor");
-    QFont font=QFont(Pep::cpuFont,Pep::codeFontSize); //Pick a default font if the config file is unreadable.
-    QVariant val = settings.value("EditorFont");
-    if(val.canConvert<QFont>())
-    {
-        font= qvariant_cast<QFont>(val);
-    }
-    setFont(font);
     settings.endGroup();
 }
 
 void MicrocodeEditor::writeSettings(QSettings &settings)
 {
     settings.beginGroup("MicrocodeEditor");
-    QVariant var = QVariant(font());
-    settings.setValue("EditorFont",font());
     settings.endGroup();
 }
 

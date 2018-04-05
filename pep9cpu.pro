@@ -3,7 +3,7 @@
 # -------------------------------------------------
 TEMPLATE = app
 TARGET = Pep9CPU
-PEP9_VERSION = 91
+PEP9_VERSION = 92
 #Prevent Windows from trying to parse the project three times per build.
 CONFIG -= debug_and_release \
     debug_and_release_target
