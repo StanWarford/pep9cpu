@@ -111,7 +111,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this,SIGNAL(fontChanged(QFont)),microcodePane,SLOT(onFontChanged(QFont)));
     connect(this,SIGNAL(fontChanged(QFont)),helpDialog,SLOT(onFontChanged(QFont)));
     qApp->installEventFilter(this);
-
+    //Load Style sheets
+    QFile f(":qdarkstyle/dark_style.qss");
+    f.open(QFile::ReadOnly | QFile::Text);
+    QTextStream ts(&f);
+    darkStyle= ts.readAll();
+    lightStyle = this->styleSheet();
     connect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
     readSettings();
     on_actionOne_Byte_Data_Bus_Model_triggered();
@@ -611,6 +616,19 @@ void MainWindow::on_actionTwo_Byte_Data_Bus_Model_triggered()
     ui->actionOne_Byte_Data_Bus_Model->setEnabled(true);
     emit CPUFeaturesChanged();
 
+}
+
+void MainWindow::on_actionDark_Mode_triggered()
+{
+
+    if(ui->actionDark_Mode->isChecked())
+    {
+        this->setStyleSheet(darkStyle);
+    }
+    else
+    {
+        this->setStyleSheet(lightStyle);
+    }
 }
 
 

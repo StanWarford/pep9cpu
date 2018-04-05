@@ -103,7 +103,8 @@ OTHER_FILES += help/images/registeraddresssignals.png \
     help/debugging.html \
     help/cpu.html
 RESOURCES += pep9cpuresources.qrc \
-    helpresources.qrc
+    helpresources.qrc \
+    dark_style.qrc
 
 DISTFILES += \
     package/package.xml \
@@ -115,7 +116,8 @@ DISTFILES += \
     config/configwin32.xml \
     config/configlinux.xml \
     config/control.js \
-    packages/pep9cpu/installscript.js
+    packages/pep9cpu/installscript.js \
+    rc/License.md
 
 #Generic paths that make future parts of the code easier
 QtDir = $$clean_path($$[QT_INSTALL_LIBS]/..)

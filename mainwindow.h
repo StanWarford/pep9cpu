@@ -56,6 +56,8 @@ protected:
 
 private:
     Ui::MainWindow *ui;
+    QString darkStyle;
+    QString lightStyle;
     QFont codeFont;
     UpdateChecker *updateChecker;
     // Byte converter
@@ -116,6 +118,8 @@ private slots:
     void on_actionSystem_Clear_Memory_triggered();
     void on_actionOne_Byte_Data_Bus_Model_triggered();
     void on_actionTwo_Byte_Data_Bus_Model_triggered();
+    // View
+    void on_actionDark_Mode_triggered();
     // Help
     void on_actionHelp_UsingPep9CPU_triggered();
     void on_actionHelp_InteractiveUse_triggered();
