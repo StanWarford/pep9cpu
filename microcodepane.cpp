@@ -29,7 +29,7 @@
 #include <QGridLayout>
 #include <QDebug>
 #include <QFontDialog>
-
+#include "colors.h"
 MicrocodePane::MicrocodePane(QWidget *parent) :
         QWidget(parent),
         ui(new Ui::MicrocodePane)
@@ -70,7 +70,7 @@ void MicrocodePane::initCPUModelState()
     if (highlighter != NULL) {
         delete highlighter;
     }
-    highlighter = new PepHighlighter(Pep::lightStyleHighlighting,editor->document());
+    highlighter = new PepHighlighter(PepColors::lightMode,editor->document());
 
 }
 
@@ -302,11 +302,12 @@ void MicrocodePane::onDarkModeChanged(bool darkMode)
 {
     if(darkMode)
     {
-        highlighter->rebuildHighlightingRules(Pep::darkStyleHighlighting);
+        qDebug()<<&PepColors::darkMode;
+        highlighter->rebuildHighlightingRules(PepColors::darkMode);
     }
     else
     {
-        highlighter->rebuildHighlightingRules(Pep::lightStyleHighlighting);
+        highlighter->rebuildHighlightingRules(PepColors::lightMode);
     }
     highlighter->rehighlight();
 

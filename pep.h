@@ -40,10 +40,6 @@ public:
     static const int labelFontSizeSmall;
     static const QString cpuFont;
     static const int cpuFontSize;
-    static QMap<QString,QColor> lightStyleInit();
-    static QMap<QString,QColor> darkStyleInit();
-    static const QMap<QString,QColor> lightStyleHighlighting;
-    static const QMap<QString,QColor> darkStyleHighlighting;
     static QString getSystem();
 
     // Function to read text from a resource file

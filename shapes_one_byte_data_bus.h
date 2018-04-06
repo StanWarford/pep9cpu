@@ -58,7 +58,6 @@ public:
 
     }
 };
-
 namespace OneByteShapes
 {
 

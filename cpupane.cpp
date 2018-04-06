@@ -47,7 +47,6 @@ CpuPane::CpuPane(CPUType type, QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->spinBox, SIGNAL(valueChanged(int)), this, SLOT(zoomFactorChanged(int)));
-
     cpuPaneItems = NULL;
     scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
@@ -1328,6 +1327,12 @@ void CpuPane::repaintOnScroll(int distance)
 {
     distance = (int)distance; //Ugly fix to get compiler to silence unused variable warning
     cpuPaneItems->update();
+}
+
+void CpuPane::onDarkModeChanged(bool darkMode)
+{
+    cpuPaneItems->onDarkModeChanged(darkMode);
+    ui->graphicsView->invalidateScene();
 }
 
 

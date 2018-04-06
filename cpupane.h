@@ -105,6 +105,7 @@ protected slots:
 public slots:
     void run();
     void repaintOnScroll(int distance);
+    void onDarkModeChanged(bool);
 
 signals:
     void updateSimulation();

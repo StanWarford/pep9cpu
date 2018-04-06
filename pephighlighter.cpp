@@ -22,7 +22,7 @@
 #include "pephighlighter.h"
 #include "pep.h"
 
-PepHighlighter::PepHighlighter(QMap<QString, QColor> color,QTextDocument *parent)
+PepHighlighter::PepHighlighter(PepColors::Colors color,QTextDocument *parent)
     : QSyntaxHighlighter(parent),forcedFeatures(false)
 {
     rebuildHighlightingRules(color);
@@ -33,19 +33,19 @@ void PepHighlighter::forceAllFeatures(bool features)
     forcedFeatures=features;
 }
 
-void PepHighlighter::rebuildHighlightingRules(QMap<QString, QColor> color)
+void PepHighlighter::rebuildHighlightingRules(PepColors::Colors color)
 {
     HighlightingRule rule;
 
     highlightingRulesOne.clear();
     highlightingRulesTwo.clear();
     highlightingRulesAll.clear();
-    numFormat.setForeground(color["rhs"]);
+    numFormat.setForeground(color.rightOfExpression);
     rule.pattern = QRegExp("(0x)?[0-9a-fA-F]+(?=(,|;|(\\s)*$|\\]|(\\s)*//))");
     rule.format = numFormat;
     highlightingRulesOne.append(rule);
     highlightingRulesTwo.append(rule);
-    oprndFormat.setForeground(color["lhs"]);
+    oprndFormat.setForeground(color.leftOfExpression);
     oprndFormat.setFontWeight(QFont::Bold);
     QStringList oprndPatterns;
         oprndPatterns << "\\bLoadCk\\b" << "\\bC\\b" << "\\bB\\b"
@@ -83,7 +83,7 @@ void PepHighlighter::rebuildHighlightingRules(QMap<QString, QColor> color)
         }
 
 
-    singleLineCommentFormat.setForeground(Qt::darkGreen);
+    singleLineCommentFormat.setForeground(color.comment);
     rule.pattern = QRegExp("//.*");
     rule.format = singleLineCommentFormat;
     highlightingRulesOne.append(rule);

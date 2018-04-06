@@ -25,7 +25,7 @@
 #include "pep.h"
 #include <QClipboard>
 #include <QDebug>
-
+#include "colors.h"
 HelpDialog::HelpDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::HelpDialog)
@@ -46,7 +46,8 @@ HelpDialog::HelpDialog(QWidget *parent) :
     microcodeEditor = new MicrocodeEditor(this, false, true);
     ui->verticalLayout->insertWidget(0, microcodeEditor);
 
-    leftHighlighter = new PepHighlighter(Pep::lightStyleHighlighting,microcodeEditor->document());
+    qDebug()<<PepColors::lightMode.comment;
+    leftHighlighter = new PepHighlighter(PepColors::lightMode,microcodeEditor->document());
     leftHighlighter->forceAllFeatures(true);
     ui->helpTreeWidget->setFont(QFont(Pep::labelFont, Pep::labelFontSize));
 
@@ -123,11 +124,11 @@ void HelpDialog::onDarkModeChanged(bool darkMode)
 {
     if(darkMode)
     {
-        leftHighlighter->rebuildHighlightingRules(Pep::darkStyleHighlighting);
+        leftHighlighter->rebuildHighlightingRules(PepColors::darkMode);
     }
     else
     {
-        leftHighlighter->rebuildHighlightingRules(Pep::lightStyleHighlighting);
+        leftHighlighter->rebuildHighlightingRules(PepColors::lightMode);
     }
     leftHighlighter->rehighlight();
 }

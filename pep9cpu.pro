@@ -47,7 +47,8 @@ SOURCES += main.cpp \
     updatechecker.cpp \
     microcodeprogram.cpp \
     rotatedheaderview.cpp \
-    disableselectionmodel.cpp
+    disableselectionmodel.cpp \
+    colors.cpp
 HEADERS += mainwindow.h \
     byteconverterhex.h \
     byteconverterdec.h \
@@ -76,7 +77,8 @@ HEADERS += mainwindow.h \
     updatechecker.h \
     microcodeprogram.h \
     rotatedheaderview.h \
-    disableselectionmodel.h
+    disableselectionmodel.h \
+    colors.h
 FORMS += mainwindow.ui \
     byteconverterhex.ui \
     byteconverterdec.ui \

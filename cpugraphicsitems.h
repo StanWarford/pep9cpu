@@ -28,7 +28,7 @@
 
 #include "enu.h"
 #include "tristatelabel.h"
-
+#include "colors.h"
 class CpuGraphicsItems : public QGraphicsItem
 {
 public:
@@ -137,19 +137,10 @@ public:
     QLabel *MDROLabel;
     QLabel *MDRELabel;
 private:
+    PepColors::Colors colorScheme;
     QGraphicsScene *parentScene;
     QWidget *parent;
     Enu::CPUType model;
-
-    QColor seqCircuitColor;
-    QColor combCircuitRed;
-    QColor muxCircuitRed; // A sightly lighter shade of combCircuitRed that is a better background for text
-    QColor combCircuitBlue;
-    QColor muxCircuitBlue; // A sightly lighter shade of combCircuitBlue that is a better background for text
-    QColor combCircuitYellow;
-    QColor muxCircuitYellow; // A sightly lighter shade of combCircuitYellow that is a better background for text
-    QColor combCircuitGreen;
-    QColor muxCircuitGreen; // A sightly lighter shade of combCircuitGreen that is a better background for text
 
     QImage arrowLeft;
     QImage arrowRight;
@@ -228,6 +219,8 @@ private:
     void repaintABusTwoByteModel(QPainter *painter);
     void repaintBBusTwoByteModel(QPainter *painter);
     void repaintCBusTwoByteModel(QPainter *painter);
+public slots:
+    void onDarkModeChanged(bool);
 
 };
 

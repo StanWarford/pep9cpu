@@ -27,26 +27,7 @@
 #include "pep.h"
 
 using namespace Enu;
-QMap<QString, QColor> Pep::lightStyleInit()
-{
-    QMap<QString,QColor> light;
-    light["comment"]=Qt::darkGreen;
-    light["rhs"]=Qt::darkMagenta;
-    light["lhs"]=Qt::darkBlue;
-    return light;
-}
 
-QMap<QString, QColor> Pep::darkStyleInit()
-{
-    QMap<QString,QColor> dark;
-    dark["comment"]=Qt::green;
-    dark["rhs"]=QColor("lightsteelblue");
-    dark["lhs"]=Qt::red;
-    return dark;
-}
-
-const QMap<QString,QColor> Pep::lightStyleHighlighting = Pep::lightStyleInit();
-const QMap<QString,QColor> Pep::darkStyleHighlighting = Pep::darkStyleInit();
 // Fonts
 const QString Pep::codeFont = getSystem() == "Windows" ? "Courier" : (getSystem() == "Mac" ? "Courier" : "Ubuntu Mono,Courier New");
 const int Pep::codeFontSize = getSystem() == "Windows" ? 9 : (getSystem() == "Mac" ? 11 : 11);
