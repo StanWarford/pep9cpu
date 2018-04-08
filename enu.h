@@ -35,6 +35,7 @@ namespace Enu
     // Instruction mnemonics
     enum EMask // For ALU function 15
     {
+        SMask = 0x10,
         NMask = 0x08,
         ZMask = 0x04,
         VMask = 0x02,
@@ -60,16 +61,26 @@ namespace Enu
         CMux, C,
         MDRMux, MDROMux, MDREMux,MDR, MDRE, MDRO,
     };
+    Q_ENUM_NS(EControlSignals);
     enum EClockSignals{
         NCk,ZCk,VCk,CCk,SCk,MARCk,LoadCk,MDRCk, MDROCk, MDRECk,
     };
+    Q_ENUM_NS(EClockSignals);
     enum EMemoryRegisters
     {
         MEM_MARA,MEM_MARB,MEM_MDR,MEM_MDRO,MEM_MDRE
     };
+    enum EStatusBit
+    {
+        STATUS_N,STATUS_Z,STATUS_V,STATUS_C,STATUS_S
+    };
     enum EALUFunc
     {
-
+        A_func=0,ApB_func=1,ApBpCin_func=2,ApnBp1_func=3,
+        ApnBpCin_func=4,AandB_func=5,nAandB_func=6,AorB_func=7,
+        nAorB_func=8,AxorB_func=9,nA_func=10,ASLA_func=11,
+        ROLA_func=12,ASRA_func=13,RORA_func=14,NZVCA_func=15,
+        UNDEFINED_func=255,
     };
     enum EKeywords {
 

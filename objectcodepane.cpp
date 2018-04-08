@@ -90,10 +90,10 @@ void ObjectCodePane::setObjectCode(MicrocodeProgram* program)
     }
     this->program = program;
     int rowNum=0,colNum=0;
+    QList<Enu::EControlSignals> controls = Pep::memControlToMnemonMap.keys();
+    controls.append(Pep::decControlToMnemonMap.keys());
+    QList<Enu::EClockSignals> clocks = Pep::clockControlToMnemonMap.keys();
     model->setRowCount(0);
-    /*QList<Enu::EMnemonic> list = Pep::memControlToMnemonMap.keys();
-    list.append(Pep::decControlToMnemonMap.keys());
-    list.append(Pep::clockControlToMnemonMap.keys());
     for(Code* row : program->getObjectCode())
     {
         if(!row->isMicrocode())
@@ -102,21 +102,33 @@ void ObjectCodePane::setObjectCode(MicrocodeProgram* program)
         }
         colNum=0;
         model->insertRow(rowNum);
-        for(auto col : list)
+        for(auto col : controls)
         {
-            auto x = QString::number(((MicroCode*)row)->get(col));
-            if(x!="-1")
+            auto x = ((MicroCode*)row)->getControlSignal(col);
+            if(x!=Enu::signalDisabled)
             {
-                auto y =new QStandardItem(x);
+                auto y =new QStandardItem(QString::number(x));
                 y->setTextAlignment(Qt::AlignCenter);
-                //Ownership of y is taken by the codeTable, so no need to deal with the pointer ourselves
                 model->setItem(rowNum,colNum,y);
             }
             colNum++;
         }
+        for(auto col : clocks)
+        {
+            auto x = ((MicroCode*)row)->getClockSignal(col);
+            if(x!=false)
+            {
+                auto y =new QStandardItem(QString::number(x));
+                y->setTextAlignment(Qt::AlignCenter);
+                model->setItem(rowNum,colNum,y);
+            }
+            colNum++;
+        }
+
+
         rowNum++;
     }
-    ui->codeTable->resizeColumnsToContents();*/
+    ui->codeTable->resizeColumnsToContents();
 }
 
 void ObjectCodePane::highlightCurrentInstruction()
@@ -140,23 +152,29 @@ void ObjectCodePane::copy()
 
 void ObjectCodePane::assignHeaders()
 {
-    /*QList<Enu::EMnemonic> list = Pep::memControlToMnemonMap.keys();
-    list.append(Pep::decControlToMnemonMap.keys());
-    list.append(Pep::clockControlToMnemonMap.keys());
-    QMetaEnum num = QMetaEnum::fromType<Enu::EMnemonic>();
+    QList<Enu::EControlSignals> controls = Pep::memControlToMnemonMap.keys();
+    controls.append(Pep::decControlToMnemonMap.keys());
+    QList<Enu::EClockSignals> clocks = Pep::clockControlToMnemonMap.keys();
+    QMetaEnum nControls = QMetaEnum::fromType<Enu::EControlSignals>();
+    QMetaEnum nClocks = QMetaEnum::fromType<Enu::EClockSignals>();
     QList<QString> headers;
-    for(auto x : list)
+    int size=controls.size()+clocks.size();
+    for(auto x : controls)
     {
-        headers.append(QString(num.valueToKey(x)));
+        headers.append(QString(nControls.valueToKey(x)));
     }
-    model->setColumnCount(list.size());
+    for(auto x : clocks)
+    {
+        headers.append(QString(nClocks.valueToKey(x)));
+    }
+    model->setColumnCount(size);
     model->setHorizontalHeaderLabels(headers);
-    for(int x=0;x<list.size();x++)
+    for(int x=0;x<size;x++)
     {
         model->horizontalHeaderItem(x)->setTextAlignment(Qt::AlignVCenter);
     }
     ui->codeTable->horizontalHeader()->setVisible(true);
-    ui->codeTable->resizeColumnsToContents();*/
+    ui->codeTable->resizeColumnsToContents();
 }
 
 void ObjectCodePane::onCPUFeatureChange()

@@ -2,7 +2,74 @@
 CPUDataSection* CPUDataSection::_instance = nullptr;
 CPUControlSection *CPUControlSection::_instance = nullptr;
 CPUTester *CPUTester::_instance = nullptr;
-CPUDataSection::CPUDataSection(QObject *parent): QObject(parent)
+CPUDataSection::CPUDataSection(QObject *parent): QObject(parent),cpuFeatures(Enu::OneByteDataBus),mainBusState(Enu::None),
+    memoryRegisters(6),registerBank(32),memory(0XFFFF),controlSignals(20),clockSignals(10),hadDataError(false),errorMessage("")
+{
+
+}
+
+bool CPUDataSection::aluFnIsUnary() const
+{
+    return controlSignals[Enu::ALU]==0||controlSignals[Enu::ALU]>=10;
+}
+
+quint8 CPUDataSection::getAMuxOutput() const
+{
+    switch(cpuFeatures)
+    {
+    case Enu::OneByteDataBus:
+        break;
+    case Enu::TwoByteDataBus:
+        break;
+    default:
+        break;
+    }
+}
+
+bool CPUDataSection::calculatALUOutput(quint8 &res, quint8 &NZVC) const
+{
+    quint8 carryIn;
+    switch(controlSignals[Enu::ALU])
+    {
+    case Enu::A_func: //A
+        break;
+    case Enu::ApB_func: //A plus B
+        break;
+    case Enu::ApBpCin_func: //A plus B plus Cin
+        break;
+    case Enu::ApnBp1_func: //A plus ~B plus 1
+        break;
+    case Enu::ApnBpCin_func: //A plus ~B plus Cin
+        break;
+    case Enu::AandB_func: //A*B
+        break;
+    case Enu::nAandB_func: //~(A*B)
+        break;
+    case Enu::AorB_func: //A+B
+        break;
+    case Enu::nAorB_func: //~(A+B)
+        break;
+    case Enu::AxorB_func: //A xor B
+        break;
+    case Enu::nA_func: //~A
+        break;
+    case Enu::ASLA_func: //ASL A
+        break;
+    case Enu::ROLA_func: //ROL A
+        break;
+    case Enu::ASRA_func: //ASR A
+        break;
+    case Enu::RORA_func: //ROR a
+        break;
+    case Enu::NZVCA_func: //Move A to NZVC
+        break;
+    default:
+        break;
+
+    }
+}
+
+void CPUDataSection::setMemoryRegister(Enu::EMemoryRegisters, quint8 value)
 {
 
 }
@@ -42,20 +109,35 @@ quint16 CPUDataSection::getRegisterBankWord(quint8 registerNumber) const
 
 }
 
-quint8 CPUDataSection::valueOnABus() const
+bool CPUDataSection::valueOnABus(quint8 &result) const
 {
-    return registerBank[controlSignals[Enu::A]];
+    if(controlSignals[Enu::A]==Enu::signalDisabled) return false;
+    else return result=registerBank[controlSignals[Enu::A]];
 }
 
-quint8 CPUDataSection::valueOnBBus() const
+bool CPUDataSection::valueOnBBus(quint8 &result) const
 {
-    return registerBank[controlSignals[Enu::C]];
+    if(controlSignals[Enu::B]==Enu::signalDisabled) return false;
+    else return result=registerBank[controlSignals[Enu::B]];
 }
 
-quint8 CPUDataSection::valueOnCBus() const
+bool CPUDataSection::valueOnCBus(quint8 &result) const
 {
-#pragma message "todo"
-    //This one actually takes some logic
+    if(controlSignals[Enu::CMux]==0)
+    {
+        result=0;
+        result= (NZVCSbits&~(Enu::SMask)); //Mask out S bit
+        return true;
+    }
+    else if(controlSignals[Enu::CMux]==1)
+    {
+        quint8 temp;
+        return calculatALUOutput(result,temp);
+    }
+    else return false;
+
+
+
 }
 
 Enu::MainBusState CPUDataSection::getMainBusState() const
@@ -63,10 +145,23 @@ Enu::MainBusState CPUDataSection::getMainBusState() const
     return mainBusState;
 }
 
+quint8 CPUDataSection::getMemoryByte(quint16 address) const
+{
+    return memory[address];
+}
+
 MicroCode* CPUDataSection::getMicrocodeFromSignals() const
 {
 #pragma message "todo"
     return nullptr;
+}
+
+void CPUDataSection::initFromPreconditions(QList<UnitPreCode *> list)
+{
+    for(UnitPreCode* a: list)
+    {
+        //Handle preconditions
+    }
 }
 
 bool CPUDataSection::setSignalsFromMicrocode(const MicroCode *line)
@@ -98,6 +193,49 @@ bool CPUDataSection::setSignalsFromMicrocode(const MicroCode *line)
     return ctrlChanged|clockChanged;
 }
 
+void CPUDataSection::setRegisterByte(quint8, quint8 value)
+{
+
+}
+
+void CPUDataSection::setRegisterWord(quint8, quint16 value)
+{
+
+}
+
+void CPUDataSection::setMemoryByte(quint16 address, quint8 value)
+{
+
+}
+
+void CPUDataSection::setMemoryWord(quint16 address, quint16 value)
+{
+
+}
+
+void CPUDataSection::setStatusBit(Enu::EStatusBit statusBit, bool val)
+{
+    switch(statusBit)
+    {
+    case Enu::STATUS_N:
+        //Mask out the original N bit, and then or it with the properly shifted value
+        NZVCSbits=(NZVCSbits&~Enu::NMask)|val*Enu::NMask;
+        break;
+    case Enu::STATUS_Z:
+        NZVCSbits=(NZVCSbits&~Enu::ZMask)|val*Enu::ZMask;
+        break;
+    case Enu::STATUS_V:
+        NZVCSbits=(NZVCSbits&~Enu::VMask)|val*Enu::VMask;
+        break;
+    case Enu::STATUS_C:
+        NZVCSbits=(NZVCSbits&~Enu::CMask)|val*Enu::CMask;
+        break;
+    case Enu::STATUS_S:
+        NZVCSbits=(NZVCSbits&~Enu::SMask)|val*Enu::SMask;
+        break;
+    }
+}
+
 bool CPUDataSection::hadErrorOnStep()
 {
     return hadDataError;
@@ -105,11 +243,12 @@ bool CPUDataSection::hadErrorOnStep()
 
 void CPUDataSection::handleMainBusState() noexcept
 {
+#pragma message "I don't know how the main bus returns to none after ready"
     bool marChanged= false;
-    quint8 a=valueOnABus(),b=valueOnBBus();
-    if(clockSignals[Enu::MARCk])
+    quint8 a,b;
+    if(clockSignals[Enu::MARCk]&&valueOnABus(a)&&valueOnBBus(b))
     {
-        marChanged=!(a==memoryRegisters[Enu::MEM_MARA]&&b==memoryRegisters[Enu::MARB]);
+        marChanged=!(a==memoryRegisters[Enu::MEM_MARA]&&b==memoryRegisters[Enu::MEM_MARB]);
     }
     switch(mainBusState)
     {
@@ -162,13 +301,101 @@ void CPUDataSection::handleMainBusState() noexcept
         break;
 
     }
+    qDebug()<<mainBusState;
 }
 
 void CPUDataSection::stepOneByte() noexcept
 {
-    //TODO
     handleMainBusState();
     if(hadErrorOnStep()) return;
+    Enu::EALUFunc aluFunc = (Enu::EALUFunc) controlSignals[Enu::ALU];
+    quint8 a,b,c,alu,NZVC;
+    bool hasA=valueOnABus(a),hasB=valueOnBBus(b),hasC=valueOnCBus(c),aluOutput=calculatALUOutput(alu,NZVC);
+    //Handle write to memory
+    if(mainBusState == Enu::MemWriteReady)
+    {
+        quint16 address = (memoryRegisters[Enu::MEM_MARA]<<8)+memoryRegisters[Enu::MEM_MARB];
+        setMemoryByte(address,memoryRegisters[Enu::MEM_MDR]);
+    }
+    //MARCk
+    if(clockSignals[Enu::MARCk]&&hasA&&hasB)
+    {
+        setMemoryRegister(Enu::MEM_MARA,a);
+        setMemoryRegister(Enu::MEM_MARB,b);
+    }
+    else
+    {
+        //Handle error
+    }
+    //LoadCk
+    if(clockSignals[Enu::LoadCk])
+    {
+        if(controlSignals[Enu::C]==Enu::signalDisabled)
+        {
+            hadDataError=true;
+            errorMessage = "No destination register specified for LoadCk.";
+        }
+        else setRegisterByte(controlSignals[Enu::C],c);
+    }
+    //MDRCk
+    if(clockSignals[Enu::MDRCk])
+    {
+        switch(controlSignals[Enu::MDRMux])
+        {
+        case 0: //Pick memory
+        {
+            quint16 address = (memoryRegisters[Enu::MEM_MARA]<<8)+memoryRegisters[Enu::MEM_MARB];
+            if(mainBusState!=Enu::MemReadReady){
+                hadDataError=true;
+                errorMessage = "No value from data bus to write to MDR";
+            }
+            else setMemoryRegister(Enu::MEM_MDR,getMemoryByte(address));
+            break;
+        }
+        case 1: //Pick C Bus;
+        {
+            if(!hasC)
+            {
+                hadDataError=true;
+                errorMessage = "No value on C bus to write to MDR";
+            }
+            else setMemoryRegister(Enu::MEM_MDR,c);
+            break;
+        }
+        default:
+            hadDataError=true;
+            errorMessage = "No value to clock into MDR";
+            break;
+        }
+
+    }
+    //NCk
+    if(clockSignals[Enu::NCk])
+    {
+        //And against a instead of ALU output, since ALU output is technically 0
+        if(aluFunc!=Enu::UNDEFINED_func) setStatusBit(Enu::STATUS_N,Enu::NMask & NZVC);
+    }
+    //ZCk
+    if(clockSignals[Enu::ZCk])
+    {
+        if(aluFunc!=Enu::UNDEFINED_func) setStatusBit(Enu::STATUS_Z,Enu::ZMask & NZVC);
+    }
+    //VCk
+    if(clockSignals[Enu::VCk])
+    {
+        if(aluFunc!=Enu::UNDEFINED_func) setStatusBit(Enu::STATUS_V,Enu::VMask & NZVC);
+    }
+    //CCk
+    if(clockSignals[Enu::CCk])
+    {
+        if(aluFunc!=Enu::UNDEFINED_func) setStatusBit(Enu::STATUS_C,Enu::CMask & NZVC);
+    }
+    //SCk
+    if(clockSignals[Enu::SCk])
+    {
+        if(aluFunc!=Enu::UNDEFINED_func) setStatusBit(Enu::STATUS_S,Enu::CMask & NZVC);
+    }
+
 }
 
 void CPUDataSection::stepTwoByte() noexcept
@@ -264,6 +491,11 @@ CPUControlSection::~CPUControlSection()
 
 }
 
+void CPUControlSection::setMicrocodeProgram(MicrocodeProgram *program)
+{
+    this->program=program;
+}
+
 bool CPUControlSection::hadErrorOnStep()
 {
     return hadControlError || data->hadErrorOnStep();
@@ -271,26 +503,27 @@ bool CPUControlSection::hadErrorOnStep()
 
 void CPUControlSection::onSimulationStarted()
 {
-
+#pragma message "todo"
 }
 
 void CPUControlSection::onSimulationFinished()
 {
-
+#pragma message "todo"
 }
 
 void CPUControlSection::onDebuggingStarted()
 {
-
+#pragma message "todo"
 }
 
 void CPUControlSection::onDebuggingFinished()
 {
-
+#pragma message "todo"
 }
 
 void CPUControlSection::onStep(quint8 mode) noexcept
 {
+    qDebug()<<"Was stepped";
     //Do step logic
     const MicroCode* prog = program->getCodeLine(microprogramCounter);
     data->setSignalsFromMicrocode(prog);
@@ -348,6 +581,26 @@ void CPUControlSection::onClearCPU()noexcept
 
 CPUControlSection::CPUControlSection(CPUDataSection * data): QObject(nullptr),data(data),microprogramCounter(0)
 {
+
+}
+
+void CPUControlSection::initCPUStateFromPreconditions()
+{
+    onClearCPU();
+    QList<UnitPreCode*> preCode;
+    if(program == nullptr)
+    {
+        qDebug()<<"Can't init from null program";
+    }
+    for(Code* x : program->getObjectCode())
+    {
+        if(x->hasUnitPre())preCode.append((UnitPreCode*)x);
+    }
+    //Handle any control section logic
+    //None at the moment
+    //Handle data section logic
+    data->initFromPreconditions(preCode);
+
 
 }
 

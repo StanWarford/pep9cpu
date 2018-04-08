@@ -21,6 +21,7 @@
 
 #include "cpupane.h"
 #include "ui_cpupane.h"
+#include "cpustate.h"
 
 #include <QCheckBox>
 #include <QLineEdit>
@@ -39,7 +40,6 @@
 #include <QDebug>
 
 using namespace Enu;
-
 CpuPane::CpuPane(CPUType type, QWidget *parent) :
         QWidget(parent),
         ui(new Ui::CpuPane)
@@ -523,6 +523,8 @@ void CpuPane::clearCpuControlSignals()
 
 void CpuPane::singleStep()
 {
+    CPUControlSection* inst = CPUControlSection::getInstance();
+    inst->onStep(0);
     singleStepButtonPushed();
 }
 

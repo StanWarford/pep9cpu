@@ -25,7 +25,13 @@ const QVector<Code*> MicrocodeProgram::getObjectCode() const
 
 const MicroCode *MicrocodeProgram::getCodeLine(quint16 codeLine) const
 {
-#pragma message "Todo"
+    int microCodeIt=0;
+    for(int it=0;it<objectCode.size();it++)
+    {
+        if(objectCode[it]->isMicrocode()) ++microCodeIt;
+        if(microCodeIt==codeLine+1) return (MicroCode*)objectCode[it];
+    }
+    return nullptr;
     //Return the n'th line of microcode;
 }
 

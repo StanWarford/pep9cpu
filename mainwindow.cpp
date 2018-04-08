@@ -21,7 +21,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include "cpustate.h"
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QSettings>
@@ -476,6 +476,8 @@ bool MainWindow::on_actionSystem_Start_Debugging_triggered()
     if (microcodePane->microAssemble()) {
         ui->statusBar->showMessage("MicroAssembly succeeded", 4000);
         objectCodePane->setObjectCode(microcodePane->getMicrocodeProgram());
+        CPUControlSection* inst = CPUControlSection::getInstance();
+        inst->setMicrocodeProgram(microcodePane->getMicrocodeProgram());
         bool hasUnitPre = false;
         for (int i = 0; i < Sim::codeList.size(); i++) {
             hasUnitPre = hasUnitPre || Sim::codeList.at(i)->hasUnitPre();
@@ -521,7 +523,8 @@ void MainWindow::on_actionSystem_Stop_Debugging_triggered()
 {
     microcodePane->clearSimulationView();
     objectCodePane->clearSimulationView();
-
+    CPUControlSection* inst = CPUControlSection::getInstance();
+    inst->onClearCPU();
     // disable the actions available while we're debugging
     ui->actionSystem_Stop_Debugging->setEnabled(false);
 
@@ -536,6 +539,8 @@ void MainWindow::on_actionSystem_Stop_Debugging_triggered()
 
 void MainWindow::on_actionSystem_Clear_CPU_triggered()
 {
+    CPUControlSection* inst = CPUControlSection::getInstance();
+    inst->onClearCPU();
     cpuPane->clearCpu();
 }
 

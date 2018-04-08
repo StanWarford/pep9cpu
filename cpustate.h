@@ -22,41 +22,56 @@ public:
     quint8 getRegisterBankByte(quint8 registerNumber) const;
     //Will return the even/odd pair ass
     quint16 getRegisterBankWord(quint8 registerNumber) const;
-    quint8 valueOnABus() const;
-    quint8 valueOnBBus() const;
-    quint8 valueOnCBus() const;
+    bool valueOnABus(quint8& result) const;
+    bool valueOnBBus(quint8& result) const;
+    bool valueOnCBus(quint8& result) const;
     Enu::MainBusState getMainBusState() const;
     quint8 getMemoryByte(quint16 address) const;
-    //Uses the same even / odd conventions as Pep9
-    quint16 getMemoryWord(quint16 address) const;
+    quint16 getMemoryWord(quint16 address) const; //Uses the same even / odd conventions as Pep9
     const QVector<quint8> getMemory() const;
     quint8 getControlSignals(Enu::EControlSignals controlSignal) const;
     bool getClockSignals(Enu::EClockSignals) const;
     MicroCode* getMicrocodeFromSignals() const;
+
     /*
      *  Modify CPU state
      */
-     bool setSignalsFromMicrocode(const MicroCode* line);
-     inline bool hadErrorOnStep();
-     inline QString getErrorMessage();
+    void initFromPreconditions(QList<UnitPreCode*> list);
+    bool setSignalsFromMicrocode(const MicroCode* line);
+    inline void setRegisterByte(quint8 register,quint8 value);
+    inline void setRegisterWord(quint8 register,quint16 value);
+    inline void setMemoryByte(quint16 address, quint8 value);
+    inline void setMemoryWord(quint16 address, quint16 value);
+    inline void setStatusBit(Enu::EStatusBit,bool val);
+    inline bool hadErrorOnStep();
+    inline QString getErrorMessage();
 private:
     CPUDataSection(QObject* parent=0);
     static CPUDataSection* _instance;
     Enu::CPUType cpuFeatures;
     Enu::MainBusState mainBusState;
-    //Control Signals and Data
+    //Data registers
     QVector<quint8> memoryRegisters;
     QVector<quint8> registerBank;
     QVector<quint8> memory;
+    quint8 NZVCSbits;
+    //Control Signals
     QVector<quint8> controlSignals;
     QVector<bool> clockSignals;
     //Error handling
     bool hadDataError=false;
     QString errorMessage="";
 
+    bool aluFnIsUnary() const;
+    quint8 getAMuxOutput() const;
+    bool calculatALUOutput(quint8& res,quint8 &NZVC) const;
+    inline void setMemoryRegister(Enu::EMemoryRegisters,quint8 value);
+
+
     void handleMainBusState() noexcept;
     void stepOneByte() noexcept;
     void stepTwoByte() noexcept;
+
     void clearControlSignals() noexcept;
     void clearClockSignals() noexcept;
     void clearRegisters() noexcept;
@@ -70,6 +85,7 @@ public slots:
 signals:
     void CPUFeaturesChanged(Enu::CPUType newFeatures);
     void registerChanged(quint8 register,quint8 oldVal,quint8 newVal);
+    void memoryRegisterChanged(Enu::EMemoryRegisters,quint8 oldVal,quint8 newVal);
     void controlSignalChanged(quint32 ControlSignals);
     void clockSignalsChanged(quint16 clockSignals) ;
     void ramChanged(quint16 address,quint8 oldVal, quint8 newVal);
@@ -87,6 +103,7 @@ class CPUControlSection: public QObject
 public:
     static CPUControlSection* getInstance();
     virtual ~CPUControlSection();
+    void setMicrocodeProgram(MicrocodeProgram* program);
     bool hadErrorOnStep();
     QString getError();
 public slots:
@@ -94,9 +111,9 @@ public slots:
     void onSimulationFinished();
     void onDebuggingStarted();
     void onDebuggingFinished();
-    void onStep(quint8 mode)noexcept;
-    void onClock()noexcept;
-    void onRun()noexcept;
+    void onStep(quint8 mode) noexcept;
+    void onClock() noexcept;
+    void onRun() noexcept;
     void onClearCPU() noexcept; //This event is propogated to the DataSection
 signals:
     void simulationStarted();

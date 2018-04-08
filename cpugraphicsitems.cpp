@@ -2984,7 +2984,7 @@ void CpuGraphicsItems::repaintCBusTwoByteModel(QPainter *painter)
     else if (cMuxTristateLabel->text() == "1") {
         if (!aluHasCorrectOutput() || ALULineEdit->text() == "15") {
             // CBus.state == UNDEFINED or NZVC A
-            qDebug() << "WARNING: CMux select: There is no ALU output";
+            qDebug() << "WARNING!: CMux select: There is no ALU output";
             cMuxerLabel->setPalette(QPalette(PepColors::transparent));
             color = PepColors::transparent;
         }
