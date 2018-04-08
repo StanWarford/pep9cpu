@@ -32,7 +32,7 @@ public:
     virtual void setUnitPre(MainMemory *, CpuPane *) { }
     virtual void setUnitPre(CPUDataSection*) { }
     virtual bool testUnitPost(MainMemory *, CpuPane *, QString &) { return true; }
-    virtual bool testUnitPost(CPUDataSection*,QString&){}
+    virtual bool testUnitPost(CPUDataSection*,QString&){return true;}
     virtual QString getSourceCode() = 0;
 };
 

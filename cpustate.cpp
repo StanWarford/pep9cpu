@@ -29,7 +29,26 @@ bool CPUDataSection::getAMuxOutput(quint8& result) const
         }
         else return false;
     case Enu::TwoByteDataBus:
-#pragma message "TODO: implement AMux for two byte bus"
+        if(controlSignals[Enu::AMux]==0)
+        {
+            if(controlSignals[Enu::EOMux]==0)
+            {
+                result=memoryRegisters[Enu::MEM_MDRE];
+                return true;
+            }
+            else if(controlSignals[Enu::EOMux]==1)
+            {
+                result=memoryRegisters[Enu::MEM_MDRE];
+                return true;
+            }
+            else return false;
+
+        }
+        else if(controlSignals[Enu::AMux]==1)
+        {
+            return valueOnABus(result);
+        }
+        else return false;
         break;
     default:
         break;
@@ -256,7 +275,7 @@ void CPUDataSection::setStatusBitPre(Enu::EStatusBit statusBit, bool val)
 
 void CPUDataSection::setMemoryBytePre(quint16 address, quint8 val)
 {
-    qDebug()<<"Memory word byte "<<QString::number(address,16)<<":"<<val;
+    qDebug()<<"Memory byte "<<address<<":"<<val;
     memory[address]=val;
 }
 
@@ -419,16 +438,20 @@ void CPUDataSection::stepOneByte() noexcept
         quint16 address = (memoryRegisters[Enu::MEM_MARA]<<8)+memoryRegisters[Enu::MEM_MARB];
         setMemoryByte(address,memoryRegisters[Enu::MEM_MDR]);
     }
+
     //MARCk
     if(clockSignals[Enu::MARCk]&&hasA&&hasB)
     {
         setMemoryRegister(Enu::MEM_MARA,a);
         setMemoryRegister(Enu::MEM_MARB,b);
     }
-    else
+    else if(clockSignals[Enu::MARCk]) //Handle error where no data is present
     {
-        //Handle error
+        hadDataError=true;
+        errorMessage="No values on A & B during MARCk";
+
     }
+
     //LoadCk
     if(clockSignals[Enu::LoadCk])
     {
@@ -502,9 +525,147 @@ void CPUDataSection::stepOneByte() noexcept
 
 void CPUDataSection::stepTwoByte() noexcept
 {
-    //TODO
     handleMainBusState();
     if(hadErrorOnStep()) return;
+    Enu::EALUFunc aluFunc = (Enu::EALUFunc) controlSignals[Enu::ALU];
+    quint8 a,b,c,alu,NZVC;
+    bool hasA=valueOnABus(a),hasB=valueOnBBus(b),hasC=valueOnCBus(c),aluOutput=calculatALUOutput(alu,NZVC);
+    //Handle write to memory
+    if(mainBusState == Enu::MemWriteReady)
+    {
+        quint16 address = (memoryRegisters[Enu::MEM_MARA]<<8)+memoryRegisters[Enu::MEM_MARB];
+        address = address-address%2; //Always write to the even byte
+        setMemoryWord(address,memoryRegisters[Enu::MEM_MDRE]*256+memoryRegisters[Enu::MEM_MDRO]);
+    }
+    //MARCk
+    if(clockSignals[Enu::MARCk])
+    {
+        if(controlSignals[Enu::MARMux]==0)
+        {
+            setMemoryRegister(Enu::MEM_MARA,memoryRegisters[Enu::MEM_MDRE]);
+            setMemoryRegister(Enu::MEM_MARB,memoryRegisters[Enu::MEM_MDRO]);
+        }
+        else if(controlSignals[Enu::MARMux]==1&&hasA&&hasB)
+        {
+            setMemoryRegister(Enu::MEM_MARA,a);
+            setMemoryRegister(Enu::MEM_MARB,b);
+        }
+        else
+        {
+            hadDataError=true;
+            errorMessage = "MARMux has no output but MARCk";
+            return;
+        }
+    }
+
+    //LoadCk
+    if(clockSignals[Enu::LoadCk])
+    {
+        if(controlSignals[Enu::C]==Enu::signalDisabled)
+        {
+            hadDataError=true;
+            errorMessage = "No destination register specified for LoadCk.";
+        }
+        else setRegisterByte(controlSignals[Enu::C],c);
+    }
+
+    //MDRECk
+    if(clockSignals[Enu::MDRECk])
+    {
+        switch(controlSignals[Enu::MDREMux])
+        {
+        case 0: //Pick memory
+        {
+            quint16 address = (memoryRegisters[Enu::MEM_MARA]<<8)+memoryRegisters[Enu::MEM_MARB];
+            address=address-address%2; //Must fetch from the even address for the even clock
+            if(mainBusState!=Enu::MemReadReady){
+                hadDataError=true;
+                errorMessage = "No value from data bus to write to MDRE";
+                return;
+            }
+            else setMemoryRegister(Enu::MEM_MDRE,getMemoryByte(address));
+            break;
+        }
+        case 1: //Pick C Bus;
+        {
+            if(!hasC)
+            {
+                hadDataError=true;
+                errorMessage = "No value on C bus to write to MDRE";
+                return;
+            }
+            else setMemoryRegister(Enu::MEM_MDRE,c);
+            break;
+        }
+        default:
+            hadDataError=true;
+            errorMessage = "No value to clock into MDRE";
+            break;
+        }
+
+    }
+    //MDRECk
+    if(clockSignals[Enu::MDROCk])
+    {
+        switch(controlSignals[Enu::MDROMux])
+        {
+        case 0: //Pick memory
+        {
+            quint16 address = (memoryRegisters[Enu::MEM_MARA]<<8)+memoryRegisters[Enu::MEM_MARB];
+            address=(address-address%2)+1; //Must fetch from the odd address for the odd clock
+            if(mainBusState!=Enu::MemReadReady){
+                hadDataError=true;
+                errorMessage = "No value from data bus to write to MDRO";
+                return;
+            }
+            else setMemoryRegister(Enu::MEM_MDRO,getMemoryByte(address));
+            break;
+        }
+        case 1: //Pick C Bus;
+        {
+            if(!hasC)
+            {
+                hadDataError=true;
+                errorMessage = "No value on C bus to write to MDRO";
+                return;
+            }
+            else setMemoryRegister(Enu::MEM_MDRO,c);
+            break;
+        }
+        default:
+            hadDataError=true;
+            errorMessage = "No value to clock into MDRO";
+            break;
+        }
+
+    }
+
+    //NCk
+    if(clockSignals[Enu::NCk])
+    {
+        //And against a instead of ALU output, since ALU output is technically 0
+        if(aluFunc!=Enu::UNDEFINED_func) setStatusBit(Enu::STATUS_N,Enu::NMask & NZVC);
+    }
+    //ZCk
+    if(clockSignals[Enu::ZCk])
+    {
+        if(aluFunc!=Enu::UNDEFINED_func) setStatusBit(Enu::STATUS_Z,Enu::ZMask & NZVC);
+    }
+    //VCk
+    if(clockSignals[Enu::VCk])
+    {
+        if(aluFunc!=Enu::UNDEFINED_func) setStatusBit(Enu::STATUS_V,Enu::VMask & NZVC);
+    }
+    //CCk
+    if(clockSignals[Enu::CCk])
+    {
+        if(aluFunc!=Enu::UNDEFINED_func) setStatusBit(Enu::STATUS_C,Enu::CMask & NZVC);
+    }
+    //SCk
+    if(clockSignals[Enu::SCk])
+    {
+        if(aluFunc!=Enu::UNDEFINED_func) setStatusBit(Enu::STATUS_S,Enu::CMask & NZVC);
+    }
 }
 
 void CPUDataSection::presetStaticRegisters() noexcept
@@ -512,7 +673,7 @@ void CPUDataSection::presetStaticRegisters() noexcept
     registerBank[23]=0x01;
     registerBank[24]=0x02;
     registerBank[25]=0x03;
-    registerBank[26]=0x01;
+    registerBank[26]=0x04;
     registerBank[27]=0x08;
     registerBank[28]=0xF0;
     registerBank[29]=0xF6;
@@ -579,6 +740,11 @@ void CPUDataSection::onClearCPU() noexcept
     clearRegisters();
     clearClockSignals();
     clearControlSignals();
+    clearMemory();
+}
+
+void CPUDataSection::onClearMemory() noexcept
+{
     clearMemory();
 }
 
@@ -667,17 +833,24 @@ void CPUControlSection::onRun()noexcept
         /*
          * Handle address decoding of next instruction
          */
+        if(prog==nullptr)
+        {
+            return;
+        }
         //
         onStep(-1);
         //If there was a logical error on data operation
         if(data->hadErrorOnStep())
         {
             //Pass up the error
+            qDebug()<<"The data section died";
+            qDebug()<<data->errorMessage;
             break;
         }
         //If there was an error on the control flow
         else if(this->hadErrorOnStep())
         {
+            qDebug()<<"The control section died";
             break;
         }
         prog = program->getCodeLine(microprogramCounter);
@@ -692,6 +865,11 @@ void CPUControlSection::onClearCPU()noexcept
     microprogramCounter=0;
     hadControlError=false;
     errorMessage="";
+}
+
+void CPUControlSection::onClearMemory() noexcept
+{
+    data->onClearMemory();
 }
 
 CPUControlSection::CPUControlSection(CPUDataSection * data): QObject(nullptr),data(data),microprogramCounter(0)

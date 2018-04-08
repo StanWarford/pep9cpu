@@ -37,6 +37,7 @@
 #include "helpdialog.h"
 #include "aboutpep.h"
 #include "updatechecker.h"
+#include "cpustate.h"
 #include <QDir>
 
 namespace Ui {
@@ -77,6 +78,8 @@ private:
     HelpDialog *helpDialog;
     AboutPep *aboutPepDialog;
 
+    CPUDataSection* dataSection;
+    CPUControlSection* controlSection;
     void readSettings();
     void writeSettings();
 

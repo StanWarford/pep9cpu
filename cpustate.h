@@ -86,6 +86,7 @@ public slots:
     void onStep() noexcept;
     void onClock() noexcept;
     void onClearCPU()noexcept;
+    void onClearMemory() noexcept;
     void onCPUFeaturesChanged(Enu::CPUType newFeatures) throw(Enu::InvalidCPUMode);
 signals:
     void CPUFeaturesChanged(Enu::CPUType newFeatures);
@@ -121,6 +122,7 @@ public slots:
     void onClock() noexcept;
     void onRun() noexcept;
     void onClearCPU() noexcept; //This event is propogated to the DataSection
+    void onClearMemory() noexcept; //This event is propogated to the DataSection
 signals:
     void simulationStarted();
     void simulationStepped();

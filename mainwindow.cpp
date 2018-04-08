@@ -37,7 +37,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),updateChecker(new UpdateChecker())
+    ui(new Ui::MainWindow),updateChecker(new UpdateChecker()),
+    dataSection(CPUDataSection::getInstance()),controlSection(CPUControlSection::getInstance())
 {
     ui->setupUi(this);
     // connect and begin update checker
@@ -466,6 +467,7 @@ void MainWindow::on_actionSystem_Run_triggered()
 {
     if (on_actionSystem_Start_Debugging_triggered()) {
         cpuPane->run();
+        controlSection->onRun(); //Yay, hooked up!
     }
 }
 
@@ -476,17 +478,18 @@ bool MainWindow::on_actionSystem_Start_Debugging_triggered()
     if (microcodePane->microAssemble()) {
         ui->statusBar->showMessage("MicroAssembly succeeded", 4000);
         objectCodePane->setObjectCode(microcodePane->getMicrocodeProgram());
-        CPUControlSection* inst = CPUControlSection::getInstance();
-        inst->setMicrocodeProgram(microcodePane->getMicrocodeProgram());
-        inst->initCPUStateFromPreconditions();
+        controlSection->setMicrocodeProgram(microcodePane->getMicrocodeProgram());
+
         bool hasUnitPre = false;
         for (int i = 0; i < Sim::codeList.size(); i++) {
             hasUnitPre = hasUnitPre || Sim::codeList.at(i)->hasUnitPre();
         }
         // setup preconditions
         if (hasUnitPre) {
+            controlSection->onClearCPU();
             mainMemory->clearMemory();
             cpuPane->clearCpu();
+            controlSection->initCPUStateFromPreconditions();
             for (int i = 0; i < Sim::codeList.size(); i++) {
                 Sim::codeList.at(i)->setUnitPre(mainMemory, cpuPane);
             }
@@ -517,6 +520,7 @@ bool MainWindow::on_actionSystem_Start_Debugging_triggered()
     microcodePane->setReadOnly(true);
 
     cpuPane->startDebugging();
+    controlSection->onDebuggingStarted();
     return true;
 }
 
@@ -524,8 +528,6 @@ void MainWindow::on_actionSystem_Stop_Debugging_triggered()
 {
     microcodePane->clearSimulationView();
     objectCodePane->clearSimulationView();
-    CPUControlSection* inst = CPUControlSection::getInstance();
-    inst->onClearCPU();
     // disable the actions available while we're debugging
     ui->actionSystem_Stop_Debugging->setEnabled(false);
 
@@ -535,19 +537,20 @@ void MainWindow::on_actionSystem_Stop_Debugging_triggered()
     microcodePane->setReadOnly(false);
 
     cpuPane->stopDebugging();
+    controlSection->onDebuggingFinished();
     emit endSimulation();
 }
 
 void MainWindow::on_actionSystem_Clear_CPU_triggered()
 {
-    CPUControlSection* inst = CPUControlSection::getInstance();
-    inst->onClearCPU();
+    controlSection->onClearCPU();
     cpuPane->clearCpu();
 }
 
 void MainWindow::on_actionSystem_Clear_Memory_triggered()
 {
     mainMemory->clearMemory();
+    controlSection->onClearMemory();
 }
 
 void MainWindow::on_actionOne_Byte_Data_Bus_Model_triggered()
@@ -585,6 +588,9 @@ void MainWindow::on_actionOne_Byte_Data_Bus_Model_triggered()
     ui->actionTwo_Byte_Data_Bus_Model->setEnabled(true);
     ui->actionOne_Byte_Data_Bus_Model->setText("One-byte Data Bus");
     ui->actionOne_Byte_Data_Bus_Model->setEnabled(false);
+
+    dataSection->onCPUFeaturesChanged(Enu::OneByteDataBus);
+    controlSection->onClearCPU();
     emit CPUFeaturesChanged();
 
 }
@@ -624,6 +630,8 @@ void MainWindow::on_actionTwo_Byte_Data_Bus_Model_triggered()
     ui->actionTwo_Byte_Data_Bus_Model->setEnabled(false);
     ui->actionOne_Byte_Data_Bus_Model->setText("Switch to One-byte Data Bus");
     ui->actionOne_Byte_Data_Bus_Model->setEnabled(true);
+    dataSection->onCPUFeaturesChanged(Enu::TwoByteDataBus);
+    controlSection->onClearCPU();
     emit CPUFeaturesChanged();
 
 }
