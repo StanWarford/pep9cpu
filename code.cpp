@@ -23,19 +23,19 @@
 #include "cpugraphicsitems.h"
 #include "pep.h"
 #include <QMetaEnum>
-MicroCode::MicroCode():mnemonicMap()
+MicroCode::MicroCode():clockSignals(10),controlSignals(20)
 {
     for(auto memLines : Pep::memControlToMnemonMap.keys())
     {
-        mnemonicMap[memLines]=-1;
+        controlSignals[memLines]=Enu::signalDisabled;
     }
     for(auto mainCtrlLines : Pep::decControlToMnemonMap.keys())
     {
-        mnemonicMap[mainCtrlLines]=-1;
+        controlSignals[mainCtrlLines]=Enu::signalDisabled;
     }
     for(auto clockLines : Pep::clockControlToMnemonMap.keys())
     {
-        mnemonicMap[clockLines]=-1;
+        clockSignals[clockLines]=0;
     }
 }
 
@@ -43,31 +43,31 @@ bool MicroCode::isMicrocode() { return true; }
 
 void MicroCode::setCpuLabels(CpuGraphicsItems *cpuPaneItems)
 {
-    cpuPaneItems->loadCk->setChecked(mnemonicMap[Enu::LoadCk] == 1);
-    cpuPaneItems->cLineEdit->setText(mnemonicMap[Enu::C] == -1 ? "" : QString("%1").arg(mnemonicMap[Enu::C]));
-    cpuPaneItems->bLineEdit->setText(mnemonicMap[Enu::B] == -1 ? "" : QString("%1").arg(mnemonicMap[Enu::B]));
-    cpuPaneItems->aLineEdit->setText(mnemonicMap[Enu::A] == -1 ? "" : QString("%1").arg(mnemonicMap[Enu::A]));
-    cpuPaneItems->MARCk->setChecked(mnemonicMap[Enu::MARCk] == 1);
-    cpuPaneItems->MDRCk->setChecked(mnemonicMap[Enu::MDRCk] == 1);
-    cpuPaneItems->MDRECk->setChecked(mnemonicMap[Enu::MDRECk] == 1);
-    cpuPaneItems->MDROCk->setChecked(mnemonicMap[Enu::MDROCk] == 1);
-    cpuPaneItems->aMuxTristateLabel->setState(mnemonicMap[Enu::AMux]);
-    cpuPaneItems->MDRMuxTristateLabel->setState(mnemonicMap[Enu::MDRMux]);
-    cpuPaneItems->MDREMuxTristateLabel->setState(mnemonicMap[Enu::MDREMux]);
-    cpuPaneItems->MDROMuxTristateLabel->setState(mnemonicMap[Enu::MDROMux]);
-    cpuPaneItems->EOMuxTristateLabel->setState(mnemonicMap[Enu::EOMux]);
-    cpuPaneItems->MARMuxTristateLabel->setState(mnemonicMap[Enu::MARMux]);
-    cpuPaneItems->cMuxTristateLabel->setState(mnemonicMap[Enu::CMux]);
-    cpuPaneItems->ALULineEdit->setText(mnemonicMap[Enu::ALU] == -1 ? "" : QString("%1").arg(mnemonicMap[Enu::ALU]));
-    cpuPaneItems->CSMuxTristateLabel->setState(mnemonicMap[Enu::CSMux]);
-    cpuPaneItems->SCkCheckBox->setChecked(mnemonicMap[Enu::SCk] == 1);
-    cpuPaneItems->CCkCheckBox->setChecked(mnemonicMap[Enu::CCk] == 1);
-    cpuPaneItems->VCkCheckBox->setChecked(mnemonicMap[Enu::VCk] == 1);
-    cpuPaneItems->AndZTristateLabel->setState(mnemonicMap[Enu::AndZ]);
-    cpuPaneItems->ZCkCheckBox->setChecked(mnemonicMap[Enu::ZCk] == 1);
-    cpuPaneItems->NCkCheckBox->setChecked(mnemonicMap[Enu::NCk] == 1);
-    cpuPaneItems->MemReadTristateLabel->setState(mnemonicMap[Enu::MemRead]);
-    cpuPaneItems->MemWriteTristateLabel->setState(mnemonicMap[Enu::MemWrite]);
+    cpuPaneItems->loadCk->setChecked(clockSignals[Enu::LoadCk] == 1);
+    cpuPaneItems->cLineEdit->setText(controlSignals[Enu::C] == Enu::signalDisabled ? "" : QString("%1").arg(controlSignals[Enu::C]));
+    cpuPaneItems->bLineEdit->setText(controlSignals[Enu::B] == Enu::signalDisabled ? "" : QString("%1").arg(controlSignals[Enu::B]));
+    cpuPaneItems->aLineEdit->setText(controlSignals[Enu::A] == Enu::signalDisabled ? "" : QString("%1").arg(controlSignals[Enu::A]));
+    cpuPaneItems->MARCk->setChecked(clockSignals[Enu::MARCk] == 1);
+    cpuPaneItems->MDRCk->setChecked(clockSignals[Enu::MDRCk] == 1);
+    cpuPaneItems->MDRECk->setChecked(clockSignals[Enu::MDRECk] == 1);
+    cpuPaneItems->MDROCk->setChecked(clockSignals[Enu::MDROCk] == 1);
+    cpuPaneItems->aMuxTristateLabel->setState(controlSignals[Enu::AMux]);
+    cpuPaneItems->MDRMuxTristateLabel->setState(controlSignals[Enu::MDRMux]);
+    cpuPaneItems->MDREMuxTristateLabel->setState(controlSignals[Enu::MDREMux]);
+    cpuPaneItems->MDROMuxTristateLabel->setState(controlSignals[Enu::MDROMux]);
+    cpuPaneItems->EOMuxTristateLabel->setState(controlSignals[Enu::EOMux]);
+    cpuPaneItems->MARMuxTristateLabel->setState(controlSignals[Enu::MARMux]);
+    cpuPaneItems->cMuxTristateLabel->setState(controlSignals[Enu::CMux]);
+    cpuPaneItems->ALULineEdit->setText(controlSignals[Enu::ALU] == Enu::signalDisabled ? "" : QString("%1").arg(controlSignals[Enu::ALU]));
+    cpuPaneItems->CSMuxTristateLabel->setState(controlSignals[Enu::CSMux]);
+    cpuPaneItems->SCkCheckBox->setChecked(clockSignals[Enu::SCk] == 1);
+    cpuPaneItems->CCkCheckBox->setChecked(clockSignals[Enu::CCk] == 1);
+    cpuPaneItems->VCkCheckBox->setChecked(clockSignals[Enu::VCk] == 1);
+    cpuPaneItems->AndZTristateLabel->setState(controlSignals[Enu::AndZ]);
+    cpuPaneItems->ZCkCheckBox->setChecked(clockSignals[Enu::ZCk] == 1);
+    cpuPaneItems->NCkCheckBox->setChecked(clockSignals[Enu::NCk] == 1);
+    cpuPaneItems->MemReadTristateLabel->setState(controlSignals[Enu::MemRead]);
+    cpuPaneItems->MemWriteTristateLabel->setState(controlSignals[Enu::MemWrite]);
 }
 
 QString MicroCode::getObjectCode()
@@ -80,50 +80,50 @@ QString MicroCode::getObjectCode()
 
     QString str = "";
     if (Pep::cpuFeatures == Enu::OneByteDataBus) {
-        str.append(mnemonicMap[Enu::LoadCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::LoadCk], -2));
-        str.append(mnemonicMap[Enu::C] == -1 ? "   " : QString("%1").arg(mnemonicMap[Enu::C], -3));
-        str.append(mnemonicMap[Enu::B] == -1 ? "   " : QString("%1").arg(mnemonicMap[Enu::B], -3));
-        str.append(mnemonicMap[Enu::A] == -1 ? "   " : QString("%1").arg(mnemonicMap[Enu::A], -3));
-        str.append(mnemonicMap[Enu::MARCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MARCk], -2));
-        str.append(mnemonicMap[Enu::MDRCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MDRCk], -2));
-        str.append(mnemonicMap[Enu::AMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::AMux], -2));
-        str.append(mnemonicMap[Enu::MDRMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MDRMux], -2));
-        str.append(mnemonicMap[Enu::CMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::CMux], -2));
-        str.append(mnemonicMap[Enu::ALU] == -1 ? "   " : QString("%1").arg(mnemonicMap[Enu::ALU], -3));
-        str.append(mnemonicMap[Enu::CSMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::CSMux], -2));
-        str.append(mnemonicMap[Enu::SCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::SCk], -2));
-        str.append(mnemonicMap[Enu::CCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::CCk], -2));
-        str.append(mnemonicMap[Enu::VCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::VCk], -2));
-        str.append(mnemonicMap[Enu::AndZ] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::AndZ], -2));
-        str.append(mnemonicMap[Enu::ZCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::ZCk], -2));
-        str.append(mnemonicMap[Enu::NCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::NCk], -2));
-        str.append(mnemonicMap[Enu::MemWrite] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MemWrite], -2));
-        str.append(mnemonicMap[Enu::MemRead] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MemRead], -2));
+        str.append(clockSignals[Enu::LoadCk] == 0? "  " : QString("%1").arg(clockSignals[Enu::LoadCk], -2));
+        str.append(controlSignals[Enu::C] == Enu::signalDisabled ? "   " : QString("%1").arg(controlSignals[Enu::C], -3));
+        str.append(controlSignals[Enu::B] == Enu::signalDisabled ? "   " : QString("%1").arg(controlSignals[Enu::B], -3));
+        str.append(controlSignals[Enu::A] == Enu::signalDisabled ? "   " : QString("%1").arg(controlSignals[Enu::A], -3));
+        str.append(clockSignals[Enu::MARCk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::MARCk], -2));
+        str.append(clockSignals[Enu::MDRCk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::MDRCk], -2));
+        str.append(controlSignals[Enu::AMux] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::AMux], -2));
+        str.append(controlSignals[Enu::MDRMux] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::MDRMux], -2));
+        str.append(controlSignals[Enu::CMux] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::CMux], -2));
+        str.append(controlSignals[Enu::ALU] == Enu::signalDisabled ? "   " : QString("%1").arg(controlSignals[Enu::ALU], -3));
+        str.append(controlSignals[Enu::CSMux] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::CSMux], -2));
+        str.append(clockSignals[Enu::SCk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::SCk], -2));
+        str.append(clockSignals[Enu::CCk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::CCk], -2));
+        str.append(clockSignals[Enu::VCk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::VCk], -2));
+        str.append(controlSignals[Enu::AndZ] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::AndZ], -2));
+        str.append(clockSignals[Enu::ZCk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::ZCk], -2));
+        str.append(clockSignals[Enu::NCk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::NCk], -2));
+        str.append(controlSignals[Enu::MemWrite] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::MemWrite], -2));
+        str.append(controlSignals[Enu::MemRead] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::MemRead], -2));
     }
     else if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
-        str.append(mnemonicMap[Enu::LoadCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::LoadCk], -2));
-        str.append(mnemonicMap[Enu::C] == -1 ? "   " : QString("%1").arg(mnemonicMap[Enu::C], -3));
-        str.append(mnemonicMap[Enu::B] == -1 ? "   " : QString("%1").arg(mnemonicMap[Enu::B], -3));
-        str.append(mnemonicMap[Enu::A] == -1 ? "   " : QString("%1").arg(mnemonicMap[Enu::A], -3));
-        str.append(mnemonicMap[Enu::MARMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MARMux], -2));
-        str.append(mnemonicMap[Enu::MARCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MARCk], -2));
-        str.append(mnemonicMap[Enu::MDROCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MDROCk], -2));
-        str.append(mnemonicMap[Enu::MDROMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MDROMux], -2));
-        str.append(mnemonicMap[Enu::MDRECk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MDRECk], -2));
-        str.append(mnemonicMap[Enu::MDREMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MDREMux], -2));
-        str.append(mnemonicMap[Enu::EOMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::EOMux], -2));
-        str.append(mnemonicMap[Enu::AMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::AMux], -2));
-        str.append(mnemonicMap[Enu::CMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::CMux], -2));
-        str.append(mnemonicMap[Enu::ALU] == -1 ? "   " : QString("%1").arg(mnemonicMap[Enu::ALU], -3));
-        str.append(mnemonicMap[Enu::CSMux] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::CSMux], -2));
-        str.append(mnemonicMap[Enu::SCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::SCk], -2));
-        str.append(mnemonicMap[Enu::CCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::CCk], -2));
-        str.append(mnemonicMap[Enu::VCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::VCk], -2));
-        str.append(mnemonicMap[Enu::AndZ] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::AndZ], -2));
-        str.append(mnemonicMap[Enu::ZCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::ZCk], -2));
-        str.append(mnemonicMap[Enu::NCk] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::NCk], -2));
-        str.append(mnemonicMap[Enu::MemWrite] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MemWrite], -2));
-        str.append(mnemonicMap[Enu::MemRead] == -1 ? "  " : QString("%1").arg(mnemonicMap[Enu::MemRead], -2));
+        str.append(clockSignals[Enu::LoadCk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::LoadCk], -2));
+        str.append(controlSignals[Enu::C] == Enu::signalDisabled ? "   " : QString("%1").arg(controlSignals[Enu::C], -3));
+        str.append(controlSignals[Enu::B] == Enu::signalDisabled ? "   " : QString("%1").arg(controlSignals[Enu::B], -3));
+        str.append(controlSignals[Enu::A] == Enu::signalDisabled ? "   " : QString("%1").arg(controlSignals[Enu::A], -3));
+        str.append(controlSignals[Enu::MARMux] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::MARMux], -2));
+        str.append(clockSignals[Enu::MARCk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::MARCk], -2));
+        str.append(clockSignals[Enu::MDROCk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::MDROCk], -2));
+        str.append(controlSignals[Enu::MDROMux] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::MDROMux], -2));
+        str.append(clockSignals[Enu::MDRECk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::MDRECk], -2));
+        str.append(controlSignals[Enu::MDREMux] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::MDREMux], -2));
+        str.append(controlSignals[Enu::EOMux] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::EOMux], -2));
+        str.append(controlSignals[Enu::AMux] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::AMux], -2));
+        str.append(controlSignals[Enu::CMux] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::CMux], -2));
+        str.append(controlSignals[Enu::ALU] == Enu::signalDisabled ? "   " : QString("%1").arg(controlSignals[Enu::ALU], -3));
+        str.append(controlSignals[Enu::CSMux] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::CSMux], -2));
+        str.append(clockSignals[Enu::SCk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::SCk], -2));
+        str.append(clockSignals[Enu::CCk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::CCk], -2));
+        str.append(clockSignals[Enu::VCk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::VCk], -2));
+        str.append(controlSignals[Enu::AndZ] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::AndZ], -2));
+        str.append(clockSignals[Enu::ZCk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::ZCk], -2));
+        str.append(clockSignals[Enu::NCk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::NCk], -2));
+        str.append(controlSignals[Enu::MemWrite] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::MemWrite], -2));
+        str.append(controlSignals[Enu::MemRead] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::MemRead], -2));
     }
     str.append("\n");
     return str;
@@ -133,28 +133,28 @@ QString MicroCode::getSourceCode()
 {
     QString str = "";
     if (Pep::cpuFeatures == Enu::OneByteDataBus) {
-        if (mnemonicMap[Enu::MemRead] != -1) { str.append("MemRead, "); }
-        if (mnemonicMap[Enu::MemWrite] != -1) { str.append("MemWrite, "); }
-        if (mnemonicMap[Enu::A] != -1) { str.append("A=" + QString("%1").arg(mnemonicMap[Enu::A]) + ", "); }
-        if (mnemonicMap[Enu::B] != -1) { str.append("B=" + QString("%1").arg(mnemonicMap[Enu::B]) + ", "); }
-        if (mnemonicMap[Enu::AMux] != -1) { str.append("AMux=" + QString("%1").arg(mnemonicMap[Enu::AMux]) + ", "); }
-        if (mnemonicMap[Enu::CSMux]  != -1) { str.append("CSMux=" + QString("%1").arg(mnemonicMap[Enu::CSMux]) + ", "); }
-        if (mnemonicMap[Enu::ALU] != -1) { str.append("ALU=" + QString("%1").arg(mnemonicMap[Enu::ALU]) + ", "); }
-        if (mnemonicMap[Enu::AndZ] != -1) { str.append("AndZ=" + QString("%1").arg(mnemonicMap[Enu::AndZ]) + ", "); }
-        if (mnemonicMap[Enu::CMux] != -1) { str.append("CMux=" + QString("%1").arg(mnemonicMap[Enu::CMux]) + ", "); }
-        if (mnemonicMap[Enu::MDRMux] != -1) { str.append("MDRMux=" + QString("%1").arg(mnemonicMap[Enu::MDRMux]) + ", "); }
-        if (mnemonicMap[Enu::C] != -1) { str.append("C=" + QString("%1").arg(mnemonicMap[Enu::C]) + ", "); }
+        if (controlSignals[Enu::MemRead] != Enu::signalDisabled) { str.append("MemRead, "); }
+        if (controlSignals[Enu::MemWrite] != Enu::signalDisabled) { str.append("MemWrite, "); }
+        if (controlSignals[Enu::A] != Enu::signalDisabled) { str.append("A=" + QString("%1").arg(controlSignals[Enu::A]) + ", "); }
+        if (controlSignals[Enu::B] != Enu::signalDisabled) { str.append("B=" + QString("%1").arg(controlSignals[Enu::B]) + ", "); }
+        if (controlSignals[Enu::AMux] != Enu::signalDisabled) { str.append("AMux=" + QString("%1").arg(controlSignals[Enu::AMux]) + ", "); }
+        if (controlSignals[Enu::CSMux]  != Enu::signalDisabled) { str.append("CSMux=" + QString("%1").arg(controlSignals[Enu::CSMux]) + ", "); }
+        if (controlSignals[Enu::ALU] != Enu::signalDisabled) { str.append("ALU=" + QString("%1").arg(controlSignals[Enu::ALU]) + ", "); }
+        if (controlSignals[Enu::AndZ] != Enu::signalDisabled) { str.append("AndZ=" + QString("%1").arg(controlSignals[Enu::AndZ]) + ", "); }
+        if (controlSignals[Enu::CMux] != Enu::signalDisabled) { str.append("CMux=" + QString("%1").arg(controlSignals[Enu::CMux]) + ", "); }
+        if (controlSignals[Enu::MDRMux] != Enu::signalDisabled) { str.append("MDRMux=" + QString("%1").arg(controlSignals[Enu::MDRMux]) + ", "); }
+        if (controlSignals[Enu::C] != Enu::signalDisabled) { str.append("C=" + QString("%1").arg(controlSignals[Enu::C]) + ", "); }
 
         if (str != "") { str.chop(2); str.append("; "); }
 
-        if (mnemonicMap[Enu::NCk] != -1) { str.append("NCk, "); }
-        if (mnemonicMap[Enu::ZCk] != -1) { str.append("ZCk, "); }
-        if (mnemonicMap[Enu::VCk] != -1) { str.append("VCk, "); }
-        if (mnemonicMap[Enu::CCk] != -1) { str.append("CCk, "); }
-        if (mnemonicMap[Enu::SCk] != -1) { str.append("SCk, "); }
-        if (mnemonicMap[Enu::MARCk] != -1) { str.append("MARCk, "); }
-        if (mnemonicMap[Enu::LoadCk] != -1) { str.append("LoadCk, "); }
-        if (mnemonicMap[Enu::MDRCk] != -1) { str.append("MDRCk, "); }
+        if (clockSignals[Enu::NCk] != 0) { str.append("NCk, "); }
+        if (clockSignals[Enu::ZCk] != 0) { str.append("ZCk, "); }
+        if (clockSignals[Enu::VCk] != 0) { str.append("VCk, "); }
+        if (clockSignals[Enu::CCk] != 0) { str.append("CCk, "); }
+        if (clockSignals[Enu::SCk] != 0) { str.append("SCk, "); }
+        if (clockSignals[Enu::MARCk] != 0) { str.append("MARCk, "); }
+        if (clockSignals[Enu::LoadCk] != 0) { str.append("LoadCk, "); }
+        if (clockSignals[Enu::MDRCk] != 0) { str.append("MDRCk, "); }
 
         if (str.endsWith(", ") || str.endsWith("; ")) { str.chop(2); }
         if (!cComment.isEmpty()) {
@@ -162,32 +162,32 @@ QString MicroCode::getSourceCode()
         }
     }
     else if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
-        if (mnemonicMap[Enu::MemRead] != -1) { str.append("MemRead, "); }
-        if (mnemonicMap[Enu::MemWrite] != -1) { str.append("MemWrite, "); }
-        if (mnemonicMap[Enu::A] != -1) { str.append("A=" + QString("%1").arg(mnemonicMap[Enu::A]) + ", "); }
-        if (mnemonicMap[Enu::B] != -1) { str.append("B=" + QString("%1").arg(mnemonicMap[Enu::B]) + ", "); }
-        if (mnemonicMap[Enu::MARMux] != -1) { str.append("MARMux=" + QString("%1").arg(mnemonicMap[Enu::MARMux]) + ", "); }
-        if (mnemonicMap[Enu::EOMux] != -1) { str.append("EOMux=" + QString("%1").arg(mnemonicMap[Enu::EOMux]) + ", "); }
-        if (mnemonicMap[Enu::AMux] != -1) { str.append("AMux=" + QString("%1").arg(mnemonicMap[Enu::AMux]) + ", "); }
-        if (mnemonicMap[Enu::CSMux]  != -1) { str.append("CSMux=" + QString("%1").arg(mnemonicMap[Enu::CSMux]) + ", "); }
-        if (mnemonicMap[Enu::ALU] != -1) { str.append("ALU=" + QString("%1").arg(mnemonicMap[Enu::ALU]) + ", "); }
-        if (mnemonicMap[Enu::AndZ] != -1) { str.append("AndZ=" + QString("%1").arg(mnemonicMap[Enu::AndZ]) + ", "); }
-        if (mnemonicMap[Enu::CMux] != -1) { str.append("CMux=" + QString("%1").arg(mnemonicMap[Enu::CMux]) + ", "); }
-        if (mnemonicMap[Enu::MDREMux] != -1) { str.append("MDREMux=" + QString("%1").arg(mnemonicMap[Enu::MDREMux]) + ", "); }
-        if (mnemonicMap[Enu::MDROMux] != -1) { str.append("MDROMux=" + QString("%1").arg(mnemonicMap[Enu::MDROMux]) + ", "); }
-        if (mnemonicMap[Enu::C] != -1) { str.append("C=" + QString("%1").arg(mnemonicMap[Enu::C]) + ", "); }
+        if (controlSignals[Enu::MemRead] != Enu::signalDisabled) { str.append("MemRead, "); }
+        if (controlSignals[Enu::MemWrite] != Enu::signalDisabled) { str.append("MemWrite, "); }
+        if (controlSignals[Enu::A] != Enu::signalDisabled) { str.append("A=" + QString("%1").arg(controlSignals[Enu::A]) + ", "); }
+        if (controlSignals[Enu::B] != Enu::signalDisabled) { str.append("B=" + QString("%1").arg(controlSignals[Enu::B]) + ", "); }
+        if (controlSignals[Enu::MARMux] != Enu::signalDisabled) { str.append("MARMux=" + QString("%1").arg(controlSignals[Enu::MARMux]) + ", "); }
+        if (controlSignals[Enu::EOMux] != Enu::signalDisabled) { str.append("EOMux=" + QString("%1").arg(controlSignals[Enu::EOMux]) + ", "); }
+        if (controlSignals[Enu::AMux] != Enu::signalDisabled) { str.append("AMux=" + QString("%1").arg(controlSignals[Enu::AMux]) + ", "); }
+        if (controlSignals[Enu::CSMux]  != Enu::signalDisabled) { str.append("CSMux=" + QString("%1").arg(controlSignals[Enu::CSMux]) + ", "); }
+        if (controlSignals[Enu::ALU] != Enu::signalDisabled) { str.append("ALU=" + QString("%1").arg(controlSignals[Enu::ALU]) + ", "); }
+        if (controlSignals[Enu::AndZ] != Enu::signalDisabled) { str.append("AndZ=" + QString("%1").arg(controlSignals[Enu::AndZ]) + ", "); }
+        if (controlSignals[Enu::CMux] != Enu::signalDisabled) { str.append("CMux=" + QString("%1").arg(controlSignals[Enu::CMux]) + ", "); }
+        if (controlSignals[Enu::MDREMux] != Enu::signalDisabled) { str.append("MDREMux=" + QString("%1").arg(controlSignals[Enu::MDREMux]) + ", "); }
+        if (controlSignals[Enu::MDROMux] != Enu::signalDisabled) { str.append("MDROMux=" + QString("%1").arg(controlSignals[Enu::MDROMux]) + ", "); }
+        if (controlSignals[Enu::C] != Enu::signalDisabled) { str.append("C=" + QString("%1").arg(controlSignals[Enu::C]) + ", "); }
 
         if (str != "") { str.chop(2); str.append("; "); }
 
-        if (mnemonicMap[Enu::NCk] != -1) { str.append("NCk, "); }
-        if (mnemonicMap[Enu::VCk] != -1) { str.append("ZCk, "); }
-        if (mnemonicMap[Enu::VCk] != -1) { str.append("VCk, "); }
-        if (mnemonicMap[Enu::CCk] != -1) { str.append("CCk, "); }
-        if (mnemonicMap[Enu::SCk] != -1) { str.append("SCk, "); }
-        if (mnemonicMap[Enu::MARCk] != -1) { str.append("MARCk, "); }
-        if (mnemonicMap[Enu::LoadCk] != -1) { str.append("LoadCk, "); }
-        if (mnemonicMap[Enu::MDRECk] != -1) { str.append("MDRECk, "); }
-        if (mnemonicMap[Enu::MDROCk] != -1) { str.append("MDROCk, "); }
+        if (clockSignals[Enu::NCk] != 0) { str.append("NCk, "); }
+        if (clockSignals[Enu::VCk] != 0) { str.append("ZCk, "); }
+        if (clockSignals[Enu::VCk] != 0) { str.append("VCk, "); }
+        if (clockSignals[Enu::CCk] != 0) { str.append("CCk, "); }
+        if (clockSignals[Enu::SCk] != 0) { str.append("SCk, "); }
+        if (clockSignals[Enu::MARCk] != 0) { str.append("MARCk, "); }
+        if (clockSignals[Enu::LoadCk] != 0) { str.append("LoadCk, "); }
+        if (clockSignals[Enu::MDRECk] != 0) { str.append("MDRECk, "); }
+        if (clockSignals[Enu::MDROCk] != 0) { str.append("MDROCk, "); }
 
         if (str.endsWith(", ") || str.endsWith("; ")) { str.chop(2); }
         if (!cComment.isEmpty()) {
@@ -197,21 +197,38 @@ QString MicroCode::getSourceCode()
     return str;
 }
 
-bool MicroCode::has(Enu::EMnemonic field) {
-    return mnemonicMap[field]!=-1;
-}
-
-void MicroCode::set(Enu::EMnemonic field, int value) {
-    mnemonicMap[field]=value;
-}
-
-int MicroCode::get(Enu::EMnemonic field) const
+bool MicroCode::hasControlSignal(Enu::EControlSignals field) const
 {
-    return mnemonicMap[field];
+    return controlSignals[field]!=Enu::signalDisabled;
 }
 
-// inRange tests the union of the elements in Pep::mnemonToDecControlMap
-bool MicroCode::inRange(Enu::EMnemonic field, int value) {
+bool MicroCode::hasClockSignal(Enu::EClockSignals field) const
+{
+    return clockSignals[field]==true;
+}
+
+void MicroCode::setControlSignal(Enu::EControlSignals field, quint8 value)
+{
+    controlSignals[field]=value;
+}
+
+void MicroCode::setClockSingal(Enu::EClockSignals field, bool value)
+{
+    clockSignals[field]=value;
+}
+
+int MicroCode::getControlSignal(Enu::EControlSignals field) const
+{
+    return controlSignals[field];
+}
+
+bool MicroCode::getClockSignal(Enu::EClockSignals field) const
+{
+    return clockSignals[field];
+}
+
+bool MicroCode::inRange(Enu::EControlSignals field, int value)
+{
     switch (field) {
     case Enu::C: return 0 <= value && value <= 31;
     case Enu::B: return 0 <= value && value <= 31;

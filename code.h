@@ -53,12 +53,19 @@ public:
     void setCpuLabels(CpuGraphicsItems *cpuPaneItems);
     QString getObjectCode();
     QString getSourceCode();
-    bool has(Enu::EMnemonic field);
-    void set(Enu::EMnemonic field, int value);
-    int get(Enu::EMnemonic field) const;
-    bool inRange(Enu::EMnemonic field, int value);
+    bool hasControlSignal(Enu::EControlSignals field) const;
+    bool hasClockSignal(Enu::EClockSignals field) const;
+    void setControlSignal(Enu::EControlSignals field,quint8 value);
+    void setClockSingal(Enu::EClockSignals field,bool value);
+    int getControlSignal(Enu::EControlSignals field) const;
+    bool getClockSignal(Enu::EClockSignals field) const;
+    bool inRange(Enu::EControlSignals field, int value);
 private:
-    QMap<Enu::EMnemonic,int> mnemonicMap;
+    Enu::EBranchFunctions branchFunc = Enu::Unconditional;
+    quint16 trueTargetAddr;
+    quint16 falseTargetAddr;
+    QVector<quint8> controlSignals;
+    QVector<bool> clockSignals;
     QString cComment;
 };
 

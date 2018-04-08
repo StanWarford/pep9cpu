@@ -21,9 +21,17 @@
 #ifndef ENU_H
 #define ENU_H
 #include <QtCore>
+#include <QException>
 namespace Enu
 {
     Q_NAMESPACE
+    static const quint8 maxRegisterNumber = 0;
+    static const quint8 signalDisabled= 255;
+    class InvalidCPUMode : public QException
+    {
+        void raise() const { throw *this; }
+        InvalidCPUMode *clone() const { return new InvalidCPUMode(*this); }
+    };
     // Instruction mnemonics
     enum EMask // For ALU function 15
     {
@@ -42,18 +50,34 @@ namespace Enu
         MemWriteSecondWait,
         MemWriteReady,
     };
-
-    enum EMnemonic {
+    enum EBranchFunctions{
+        Unconditional=0,Stop=15
+    };
+    enum EControlSignals
+    {
         MemRead, MemWrite,
         A,B,EOMux, MARMux,MARA, MARB, AMux, ALU,CSMux, AndZ,
         CMux, C,
         MDRMux, MDROMux, MDREMux,MDR, MDRE, MDRO,
+    };
+    enum EClockSignals{
         NCk,ZCk,VCk,CCk,SCk,MARCk,LoadCk,MDRCk, MDROCk, MDRECk,
-        Pre, Post,
-        Mem, X, SP, PC, IR, T1, T2, T3, T4, T5, T6, N, Z, V, S,
+    };
+    enum EALUFunc
+    {
+
+    };
+    enum EKeywords {
+
+        Pre=255-1, Post=255-2,
+        Mem=255-3, Acc=255-24, X=255-4, SP=255-5, PC=255-6, IR=255-7,
+        T1=255-8, T2=255-9, T3=255-10, T4=255-11, T5=255-12, T6=255-13,
+        N=255-15, Z=255-16, V=255-17,Cbit=255-25, S=255-18,
+        MARAREG=255-19,MARBREG=255-20,
+        MDRREG=255-21,MDREREG=255-22,MDROREG=255-23
     };
 
-Q_ENUM_NS(EMnemonic); //This is a declaration, despite whatever QT Creator says.
+//Q_ENUM_NS(EMnemonic); //This is a declaration, despite whatever QT Creator says.
 
 
     enum CPUType {

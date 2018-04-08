@@ -48,23 +48,23 @@ private:
 
 class RegSpecification: public Specification {
 public:
-    RegSpecification(Enu::EMnemonic registerAddress, int registerValue);
+    RegSpecification(Enu::EKeywords registerAddress, int registerValue);
     void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane);
     bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString);
     QString getSourceCode();
 private:
-    Enu::EMnemonic regAddress;
+    Enu::EKeywords regAddress;
     int regValue;
 };
 
 class StatusBitSpecification: public Specification {
 public:
-    StatusBitSpecification(Enu::EMnemonic statusBitAddress, bool statusBitValue);
+    StatusBitSpecification(Enu::EKeywords statusBitAddress, bool statusBitValue);
     void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane);
     bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString);
     QString getSourceCode();
 private:
-    Enu::EMnemonic nzvcsAddress;
+    Enu::EKeywords nzvcsAddress;
     bool nzvcsValue;
 };
 

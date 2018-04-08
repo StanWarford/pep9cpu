@@ -72,8 +72,8 @@ public:
 
     static void initCPUState();
 
-    static bool testRegPostcondition(Enu::EMnemonic reg, int value);
-    static bool testStatusPostcondition(Enu::EMnemonic bit, bool value);
+    static bool testRegPostcondition(Enu::EKeywords reg, int value);
+    static bool testStatusPostcondition(Enu::EKeywords bit, bool value);
 
     // sim logic:
     static bool getABusOut(quint8& out, QString& errorString, CpuGraphicsItems *cpuPaneItems);

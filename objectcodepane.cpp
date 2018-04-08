@@ -91,7 +91,7 @@ void ObjectCodePane::setObjectCode(MicrocodeProgram* program)
     this->program = program;
     int rowNum=0,colNum=0;
     model->setRowCount(0);
-    QList<Enu::EMnemonic> list = Pep::memControlToMnemonMap.keys();
+    /*QList<Enu::EMnemonic> list = Pep::memControlToMnemonMap.keys();
     list.append(Pep::decControlToMnemonMap.keys());
     list.append(Pep::clockControlToMnemonMap.keys());
     for(Code* row : program->getObjectCode())
@@ -116,7 +116,7 @@ void ObjectCodePane::setObjectCode(MicrocodeProgram* program)
         }
         rowNum++;
     }
-    ui->codeTable->resizeColumnsToContents();
+    ui->codeTable->resizeColumnsToContents();*/
 }
 
 void ObjectCodePane::highlightCurrentInstruction()
@@ -140,7 +140,7 @@ void ObjectCodePane::copy()
 
 void ObjectCodePane::assignHeaders()
 {
-    QList<Enu::EMnemonic> list = Pep::memControlToMnemonMap.keys();
+    /*QList<Enu::EMnemonic> list = Pep::memControlToMnemonMap.keys();
     list.append(Pep::decControlToMnemonMap.keys());
     list.append(Pep::clockControlToMnemonMap.keys());
     QMetaEnum num = QMetaEnum::fromType<Enu::EMnemonic>();
@@ -156,7 +156,7 @@ void ObjectCodePane::assignHeaders()
         model->horizontalHeaderItem(x)->setTextAlignment(Qt::AlignVCenter);
     }
     ui->codeTable->horizontalHeader()->setVisible(true);
-    ui->codeTable->resizeColumnsToContents();
+    ui->codeTable->resizeColumnsToContents();*/
 }
 
 void ObjectCodePane::onCPUFeatureChange()

@@ -1,7 +1,7 @@
 #ifndef MICROCODEPROGRAM_H
 #define MICROCODEPROGRAM_H
 #include "enu.h"
-class Code;
+#include "code.h"
 class MicrocodeProgram
 {
 private:
@@ -11,6 +11,7 @@ public:
     ~MicrocodeProgram();
     MicrocodeProgram(QVector<Code*>objectCode);
     const QVector<Code*> getObjectCode() const;
+    const MicroCode* getCodeLine(quint16 codeLine) const;
 };
 
 #endif // MICROCODEPROGRAM_H

@@ -50,14 +50,14 @@ public:
     void startDebugging();
     void stopDebugging();
 
-    void setRegister(Enu::EMnemonic reg, int value);
+    void setRegister(Enu::EKeywords reg, int value);
     void setRegisterByte(int reg, quint8 value);
-    void setStatusBit(Enu::EMnemonic bit, bool value);
+    void setStatusBit(Enu::EKeywords bit, bool value);
 
-    void setRegPrecondition(Enu::EMnemonic reg, int value);
-    void setStatusPrecondition(Enu::EMnemonic bit, bool value);
-    bool testRegPostcondition(Enu::EMnemonic reg, int value);
-    bool testStatusPostcondition(Enu::EMnemonic bit, bool value);
+    void setRegPrecondition(Enu::EKeywords reg, int value);
+    void setStatusPrecondition(Enu::EKeywords bit, bool value);
+    bool testRegPostcondition(Enu::EKeywords reg, int value);
+    bool testStatusPostcondition(Enu::EKeywords bit, bool value);
 
     void clearCpu();
     void clearCpuControlSignals();

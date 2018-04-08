@@ -170,9 +170,9 @@ void Sim::initCPUState()
 }
 
 // new stuff
-bool Sim::testRegPostcondition(Enu::EMnemonic reg, int value) {
+bool Sim::testRegPostcondition(Enu::EKeywords reg, int value) {
     switch (reg) {
-    case Enu::A:
+    case Enu::Acc:
         return Sim::regBank[0] * 256 + Sim::regBank[1] == value;
     case Enu::X:
         return Sim::regBank[2] * 256 + Sim::regBank[3] == value;
@@ -194,11 +194,11 @@ bool Sim::testRegPostcondition(Enu::EMnemonic reg, int value) {
         return Sim::regBank[18] * 256 + Sim::regBank[19] == value;
     case Enu::T6:
         return Sim::regBank[20] * 256 + Sim::regBank[21] == value;
-    case Enu::MARA:
+    case Enu::MARAREG:
         return Sim::MARA == value;
-    case Enu::MARB:
+    case Enu::MARBREG:
         return Sim::MARB == value;
-    case Enu::MDR:
+    case Enu::MDRREG:
         return Sim::MDR == value;
     default:
         break;
@@ -206,7 +206,7 @@ bool Sim::testRegPostcondition(Enu::EMnemonic reg, int value) {
     return true;
 }
 
-bool Sim::testStatusPostcondition(Enu::EMnemonic bit, bool value) {
+bool Sim::testStatusPostcondition(Enu::EKeywords bit, bool value) {
     switch (bit) {
     case Enu::N:
         return Sim::nBit == value;
@@ -214,7 +214,7 @@ bool Sim::testStatusPostcondition(Enu::EMnemonic bit, bool value) {
         return Sim::zBit == value;
     case Enu::V:
         return Sim::vBit == value;
-    case Enu::C:
+    case Enu::Cbit:
         return Sim::cBit == value;
     case Enu::S:
         return Sim::sBit == value;

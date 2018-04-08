@@ -232,9 +232,9 @@ void CpuPane::stopDebugging()
     ui->copyToMicrocodePushButton->setEnabled(true);
 }
 
-void CpuPane::setRegister(Enu::EMnemonic reg, int value) {
+void CpuPane::setRegister(Enu::EKeywords reg, int value) {
     switch (reg) {
-    case Enu::A:
+    case Enu::Acc:
         Sim::regBank[0] = (value & 65280) / 256;
         Sim::regBank[1] = (value & 255);
         cpuPaneItems->aRegLineEdit->setText("0x" + QString("%1").arg(value, 4, 16, QLatin1Char('0')).toUpper());
@@ -289,23 +289,23 @@ void CpuPane::setRegister(Enu::EMnemonic reg, int value) {
         Sim::regBank[21] = (value & 255);
         cpuPaneItems->t6RegLineEdit->setText("0x" + QString("%1").arg(value, 4, 16, QLatin1Char('0')).toUpper());
         break;
-    case Enu::MARA:
+    case Enu::MARAREG:
         Sim::MARA = value;
         cpuPaneItems->MARALabel->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper());
         break;
-    case Enu::MARB:
+    case Enu::MARBREG:
         Sim::MARB = value;
         cpuPaneItems->MARBLabel->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper());
         break;
-    case Enu::MDR:
+    case Enu::MDRREG:
         Sim::MDR = value;
         cpuPaneItems->MDRLabel->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper());
         break;
-    case Enu::MDRO:
+    case Enu::MDROREG:
         Sim::MDROdd = value;
         cpuPaneItems->MDROLabel->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper());
         break;
-    case Enu::MDRE:
+    case Enu::MDREREG:
         Sim::MDREven = value;
         cpuPaneItems->MDRELabel->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper());
         break;
@@ -412,7 +412,7 @@ void CpuPane::setRegisterByte(int reg, quint8 value) {
     }
 }
 
-void CpuPane::setStatusBit(Enu::EMnemonic bit, bool value)
+void CpuPane::setStatusBit(Enu::EKeywords bit, bool value)
 {
     switch (bit) {
     case Enu::N:
@@ -427,7 +427,7 @@ void CpuPane::setStatusBit(Enu::EMnemonic bit, bool value)
         Sim::vBit = value;
         cpuPaneItems->vBitLabel->setText(QString("%1").arg(value ? 1 : 0));
         break;
-    case Enu::C:
+    case Enu::Cbit:
         Sim::cBit = value;
         cpuPaneItems->cBitLabel->setText(QString("%1").arg(value ? 1 : 0));
         break;
@@ -440,21 +440,21 @@ void CpuPane::setStatusBit(Enu::EMnemonic bit, bool value)
     }
 }
 
-void CpuPane::setRegPrecondition(Enu::EMnemonic reg, int value)
+void CpuPane::setRegPrecondition(Enu::EKeywords reg, int value)
 {
     setRegister(reg, value);
 }
 
-void CpuPane::setStatusPrecondition(Enu::EMnemonic bit, bool value)
+void CpuPane::setStatusPrecondition(Enu::EKeywords bit, bool value)
 {
     setStatusBit(bit, value);
 }
 
-bool CpuPane::testRegPostcondition(Enu::EMnemonic reg, int value) {
+bool CpuPane::testRegPostcondition(Enu::EKeywords reg, int value) {
     return Sim::testRegPostcondition(reg, value);
 }
 
-bool CpuPane::testStatusPostcondition(Enu::EMnemonic bit, bool value) {
+bool CpuPane::testStatusPostcondition(Enu::EKeywords bit, bool value) {
     return Sim::testStatusPostcondition(bit, value);
 }
 
@@ -463,7 +463,7 @@ void CpuPane::clearCpu()
 {
     clearCpuControlSignals();
 
-    setRegister(Enu::A, 0);
+    setRegister(Enu::Acc, 0);
     setRegister(Enu::X, 0);
     setRegister(Enu::SP, 0);
     setRegister(Enu::PC, 0);
@@ -475,16 +475,16 @@ void CpuPane::clearCpu()
     setRegister(Enu::T5, 0);
     setRegister(Enu::T6, 0);
 
-    setRegister(Enu::MARA, 0);
-    setRegister(Enu::MARB, 0);
-    setRegister(Enu::MDR, 0);
+    setRegister(Enu::MARAREG, 0);
+    setRegister(Enu::MARBREG, 0);
+    setRegister(Enu::MDRREG, 0);
 
-    setRegister(Enu::MDRE, 0);
-    setRegister(Enu::MDRO, 0);
+    setRegister(Enu::MDREREG, 0);
+    setRegister(Enu::MDROREG, 0);
 
 
     setStatusBit(Enu::S, false);
-    setStatusBit(Enu::C, false);
+    setStatusBit(Enu::Cbit, false);
     setStatusBit(Enu::V, false);
     setStatusBit(Enu::Z, false);
     setStatusBit(Enu::N, false);
@@ -708,8 +708,8 @@ bool CpuPane::stepOneByteDataBus(QString &errorString)
     if (cpuPaneItems->MARCk->isChecked()) {
         quint8 a, b;
         if (Sim::getABusOut(a, errorString, cpuPaneItems) && Sim::getBBusOut(b, errorString, cpuPaneItems)) {
-            setRegister(Enu::MARA, a);
-            setRegister(Enu::MARB, b);
+            setRegister(Enu::MARAREG, a);
+            setRegister(Enu::MARBREG, b);
         }
         else {
             // error: MARCk is checked but we have incorrect input
@@ -737,7 +737,7 @@ bool CpuPane::stepOneByteDataBus(QString &errorString)
     if (cpuPaneItems->MDRCk->isChecked()) {
         quint8 out = 0;
         if (Sim::getMDRMuxOut(out, errorString, cpuPaneItems)) {
-            setRegister(Enu::MDR, out);
+            setRegister(Enu::MDRREG, out);
             int address = Sim::MARA * 256 + Sim::MARB;
             emit readByte(address);
         }
@@ -757,7 +757,7 @@ bool CpuPane::stepOneByteDataBus(QString &errorString)
             setStatusBit(Enu::V, Enu::VMask & a);
         }
         if (cpuPaneItems->CCkCheckBox->isChecked()) { // CCk
-            setStatusBit(Enu::C, Enu::CMask & a);
+            setStatusBit(Enu::Cbit, Enu::CMask & a);
         }
     }
     else {
@@ -787,7 +787,7 @@ bool CpuPane::stepOneByteDataBus(QString &errorString)
 
         // CCk
         if (cpuPaneItems->CCkCheckBox->isChecked()) {
-            setStatusBit(Enu::C, carry & 0x1);
+            setStatusBit(Enu::Cbit, carry & 0x1);
         }
 
         // SCk
@@ -836,8 +836,8 @@ bool CpuPane::stepTwoByteDataBus(QString &errorString)
     if (cpuPaneItems->MARCk->isChecked()) {
         quint8 a, b;
         if (Sim::getMARMuxOut(a, b, errorString, cpuPaneItems)) {
-            setRegister(Enu::MARA, a);
-            setRegister(Enu::MARB, b);
+            setRegister(Enu::MARAREG, a);
+            setRegister(Enu::MARBREG, b);
         }
         else {
             // error: MARCk is checked but we have incorrect input
@@ -870,7 +870,7 @@ bool CpuPane::stepTwoByteDataBus(QString &errorString)
             qDebug() << "MDRO out: " << QString("0x%1").arg(out, 4, 16, QLatin1Char('0'));
             int address = (Sim::MARA * 256 + Sim::MARB) & 0xFFFE;
             emit readByte(address);
-            setRegister(Enu::MDRO, out);
+            setRegister(Enu::MDROREG, out);
         }
         else {
             return false;
@@ -883,7 +883,7 @@ bool CpuPane::stepTwoByteDataBus(QString &errorString)
         if (Sim::getMDREMuxOut(out, errorString, cpuPaneItems)) {
             int address = (Sim::MARA * 256 + Sim::MARB) & 0xFFFE;
             emit readByte(address);
-            setRegister(Enu::MDRE, out);
+            setRegister(Enu::MDREREG, out);
         }
         else {
             return false;
@@ -901,7 +901,7 @@ bool CpuPane::stepTwoByteDataBus(QString &errorString)
             setStatusBit(Enu::V, Enu::VMask & a);
         }
         if (cpuPaneItems->CCkCheckBox->isChecked()) { // CCk
-            setStatusBit(Enu::C, Enu::CMask & a);
+            setStatusBit(Enu::Cbit, Enu::CMask & a);
         }
     }
     else {
@@ -931,7 +931,7 @@ bool CpuPane::stepTwoByteDataBus(QString &errorString)
 
         // CCk
         if (cpuPaneItems->CCkCheckBox->isChecked()) {
-            setStatusBit(Enu::C, carry & 0x1);
+            setStatusBit(Enu::Cbit, carry & 0x1);
         }
 
         // SCk
@@ -1178,79 +1178,79 @@ void CpuPane::on_copyToMicrocodePushButton_clicked() // union of all models
 {
     MicroCode code;
     if (cpuPaneItems->loadCk->isChecked()) {
-        code.set(Enu::LoadCk, 1);
+        code.setClockSingal(Enu::LoadCk, 1);
     }
     if (cpuPaneItems->cLineEdit->text() != "") {
-        code.set(Enu::C, cpuPaneItems->cLineEdit->text().toInt());
+        code.setControlSignal(Enu::C, cpuPaneItems->cLineEdit->text().toInt());
     }
     if (cpuPaneItems->bLineEdit->text() != "") {
-        code.set(Enu::B, cpuPaneItems->bLineEdit->text().toInt());
+        code.setControlSignal(Enu::B, cpuPaneItems->bLineEdit->text().toInt());
     }
     if (cpuPaneItems->aLineEdit->text() != "") {
-        code.set(Enu::A, cpuPaneItems->aLineEdit->text().toInt());
+        code.setControlSignal(Enu::A, cpuPaneItems->aLineEdit->text().toInt());
     }
     if (cpuPaneItems->MARCk->isChecked()) {
-        code.set(Enu::MARCk, 1);
+        code.setClockSingal(Enu::MARCk, 1);
     }
     if (cpuPaneItems->MARMuxTristateLabel->text() != "") { // 2 byte bus
-        code.set(Enu::MARMux, cpuPaneItems->MARMuxTristateLabel->text().toInt());
+        code.setControlSignal(Enu::MARMux, cpuPaneItems->MARMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->MDRCk->isChecked()) {
-        code.set(Enu::MDRCk, 1);
+        code.setClockSingal(Enu::MDRCk, 1);
     }
     if (cpuPaneItems->aMuxTristateLabel->text() != "") {
-        code.set(Enu::AMux, cpuPaneItems->aMuxTristateLabel->text().toInt());
+        code.setControlSignal(Enu::AMux, cpuPaneItems->aMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->MDRMuxTristateLabel->text() != "") {
-        code.set(Enu::MDRMux, cpuPaneItems->MDRMuxTristateLabel->text().toInt());
+        code.setControlSignal(Enu::MDRMux, cpuPaneItems->MDRMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->MDROCk->isChecked()) { // 2 byte bus
-        code.set(Enu::MDROCk, 1);
+        code.setClockSingal(Enu::MDROCk, 1);
     }
     if (cpuPaneItems->MDROMuxTristateLabel->text() != "") { // 2 byte bus
-        code.set(Enu::MDROMux, cpuPaneItems->MDROMuxTristateLabel->text().toInt());
+        code.setControlSignal(Enu::MDROMux, cpuPaneItems->MDROMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->MDRECk->isChecked()) { // 2 byte bus
-        code.set(Enu::MDRECk, 1);
+        code.setClockSingal(Enu::MDRECk, 1);
     }
     if (cpuPaneItems->MDREMuxTristateLabel->text() != "") { // 2 byte bus
-        code.set(Enu::MDREMux, cpuPaneItems->MDREMuxTristateLabel->text().toInt());
+        code.setControlSignal(Enu::MDREMux, cpuPaneItems->MDREMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->EOMuxTristateLabel->text() != "") { // 2 byte bus
-        code.set(Enu::EOMux, cpuPaneItems->EOMuxTristateLabel->text().toInt());
+        code.setControlSignal(Enu::EOMux, cpuPaneItems->EOMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->cMuxTristateLabel->text() != "") {
-        code.set(Enu::CMux, cpuPaneItems->cMuxTristateLabel->text().toInt());
+        code.setControlSignal(Enu::CMux, cpuPaneItems->cMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->ALULineEdit->text() != "") {
-        code.set(Enu::ALU, cpuPaneItems->ALULineEdit->text().toInt());
+        code.setControlSignal(Enu::ALU, cpuPaneItems->ALULineEdit->text().toInt());
     }
     if (cpuPaneItems->CSMuxTristateLabel->text() != "") {
-        code.set(Enu::CSMux, cpuPaneItems->CSMuxTristateLabel->text().toInt());
+        code.setControlSignal(Enu::CSMux, cpuPaneItems->CSMuxTristateLabel->text().toInt());
     }
     if (cpuPaneItems->SCkCheckBox->isChecked()) {
-        code.set(Enu::SCk, 1);
+        code.setClockSingal(Enu::SCk, 1);
     }
     if (cpuPaneItems->CCkCheckBox->isChecked()) {
-        code.set(Enu::CCk, 1);
+        code.setClockSingal(Enu::CCk, 1);
     }
     if (cpuPaneItems->VCkCheckBox->isChecked()) {
-        code.set(Enu::VCk, 1);
+        code.setClockSingal(Enu::VCk, 1);
     }
     if (cpuPaneItems->AndZTristateLabel->text() != "") {
-        code.set(Enu::AndZ, cpuPaneItems->AndZTristateLabel->text().toInt());
+        code.setControlSignal(Enu::AndZ, cpuPaneItems->AndZTristateLabel->text().toInt());
     }
     if (cpuPaneItems->ZCkCheckBox->isChecked()) {
-        code.set(Enu::ZCk, 1);
+        code.setClockSingal(Enu::ZCk, 1);
     }
     if (cpuPaneItems->NCkCheckBox->isChecked()) {
-        code.set(Enu::NCk, 1);
+        code.setClockSingal(Enu::NCk, 1);
     }
     if (cpuPaneItems->MemReadTristateLabel->text() != "") {
-        code.set(Enu::MemRead, cpuPaneItems->MemReadTristateLabel->text().toInt());
+        code.setControlSignal(Enu::MemRead, cpuPaneItems->MemReadTristateLabel->text().toInt());
     }
     if (cpuPaneItems->MemWriteTristateLabel->text() != "") {
-        code.set(Enu::MemWrite, cpuPaneItems->MemWriteTristateLabel->text().toInt());
+        code.setControlSignal(Enu::MemWrite, cpuPaneItems->MemWriteTristateLabel->text().toInt());
     }
     emit appendMicrocodeLine(code.getSourceCode());
 }
