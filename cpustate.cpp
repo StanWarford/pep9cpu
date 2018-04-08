@@ -195,22 +195,22 @@ bool CPUDataSection::setSignalsFromMicrocode(const MicroCode *line)
 
 void CPUDataSection::setRegisterByte(quint8, quint8 value)
 {
-
+#pragma message "todo"
 }
 
 void CPUDataSection::setRegisterWord(quint8, quint16 value)
 {
-
+#pragma message "todo"
 }
 
 void CPUDataSection::setMemoryByte(quint16 address, quint8 value)
 {
-
+#pragma message "todo"
 }
 
 void CPUDataSection::setMemoryWord(quint16 address, quint16 value)
 {
-
+#pragma message "todo"
 }
 
 void CPUDataSection::setStatusBit(Enu::EStatusBit statusBit, bool val)

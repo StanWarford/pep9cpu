@@ -51,23 +51,23 @@ void MicroCode::setCpuLabels(CpuGraphicsItems *cpuPaneItems)
     cpuPaneItems->MDRCk->setChecked(clockSignals[Enu::MDRCk] == 1);
     cpuPaneItems->MDRECk->setChecked(clockSignals[Enu::MDRECk] == 1);
     cpuPaneItems->MDROCk->setChecked(clockSignals[Enu::MDROCk] == 1);
-    cpuPaneItems->aMuxTristateLabel->setState(controlSignals[Enu::AMux]);
-    cpuPaneItems->MDRMuxTristateLabel->setState(controlSignals[Enu::MDRMux]);
-    cpuPaneItems->MDREMuxTristateLabel->setState(controlSignals[Enu::MDREMux]);
-    cpuPaneItems->MDROMuxTristateLabel->setState(controlSignals[Enu::MDROMux]);
-    cpuPaneItems->EOMuxTristateLabel->setState(controlSignals[Enu::EOMux]);
-    cpuPaneItems->MARMuxTristateLabel->setState(controlSignals[Enu::MARMux]);
-    cpuPaneItems->cMuxTristateLabel->setState(controlSignals[Enu::CMux]);
+    cpuPaneItems->aMuxTristateLabel->setState(controlSignals[Enu::AMux] == Enu::signalDisabled ? -1 : controlSignals[Enu::AMux] );
+    cpuPaneItems->MDRMuxTristateLabel->setState(controlSignals[Enu::MDRMux] == Enu::signalDisabled ? -1 : controlSignals[Enu::MDRMux] );
+    cpuPaneItems->MDREMuxTristateLabel->setState(controlSignals[Enu::MDREMux] == Enu::signalDisabled ? -1 : controlSignals[Enu::MDREMux] );
+    cpuPaneItems->MDROMuxTristateLabel->setState(controlSignals[Enu::MDROMux] == Enu::signalDisabled ? -1 : controlSignals[Enu::MDROMux] );
+    cpuPaneItems->EOMuxTristateLabel->setState(controlSignals[Enu::EOMux] == Enu::signalDisabled ? -1 : controlSignals[Enu::EOMux] );
+    cpuPaneItems->MARMuxTristateLabel->setState(controlSignals[Enu::MARMux] == Enu::signalDisabled ? -1 : controlSignals[Enu::MARMux] );
+    cpuPaneItems->cMuxTristateLabel->setState(controlSignals[Enu::CMux] == Enu::signalDisabled ? -1 : controlSignals[Enu::CMux] );
     cpuPaneItems->ALULineEdit->setText(controlSignals[Enu::ALU] == Enu::signalDisabled ? "" : QString("%1").arg(controlSignals[Enu::ALU]));
-    cpuPaneItems->CSMuxTristateLabel->setState(controlSignals[Enu::CSMux]);
+    cpuPaneItems->CSMuxTristateLabel->setState(controlSignals[Enu::CSMux] == Enu::signalDisabled ? -1 : controlSignals[Enu::CSMux] );
     cpuPaneItems->SCkCheckBox->setChecked(clockSignals[Enu::SCk] == 1);
     cpuPaneItems->CCkCheckBox->setChecked(clockSignals[Enu::CCk] == 1);
     cpuPaneItems->VCkCheckBox->setChecked(clockSignals[Enu::VCk] == 1);
-    cpuPaneItems->AndZTristateLabel->setState(controlSignals[Enu::AndZ]);
+    cpuPaneItems->AndZTristateLabel->setState(controlSignals[Enu::AndZ] == Enu::signalDisabled ? -1 : controlSignals[Enu::AndZ] );
     cpuPaneItems->ZCkCheckBox->setChecked(clockSignals[Enu::ZCk] == 1);
     cpuPaneItems->NCkCheckBox->setChecked(clockSignals[Enu::NCk] == 1);
-    cpuPaneItems->MemReadTristateLabel->setState(controlSignals[Enu::MemRead]);
-    cpuPaneItems->MemWriteTristateLabel->setState(controlSignals[Enu::MemWrite]);
+    cpuPaneItems->MemReadTristateLabel->setState(controlSignals[Enu::MemRead] == Enu::signalDisabled ? -1 : controlSignals[Enu::MemRead] );
+    cpuPaneItems->MemWriteTristateLabel->setState(controlSignals[Enu::MemWrite] == Enu::signalDisabled ? -1 : controlSignals[Enu::MemWrite] );
 }
 
 QString MicroCode::getObjectCode()
