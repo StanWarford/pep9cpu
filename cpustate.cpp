@@ -38,7 +38,7 @@ bool CPUDataSection::getAMuxOutput(quint8& result) const
             }
             else if(controlSignals[Enu::EOMux]==1)
             {
-                result=memoryRegisters[Enu::MEM_MDRE];
+                result=memoryRegisters[Enu::MEM_MDRO];
                 return true;
             }
             else return false;
@@ -89,7 +89,7 @@ bool CPUDataSection::calculatALUOutput(quint8 &res, quint8 &NZVC) const
     case Enu::ApB_func: //A plus B
         res=a+b;
         NZVC|= Enu::CMask*((int)(res<a||res<b)); //Carry out if result is unsigned less than a or b.
-        NZVC|= Enu::NMask*((((a & 0x7f) + (b & 0x7f)) >> 7) & 0x1) ^ (((NZVC&Enu::CMask)/Enu::CMask)*Enu::NMask);
+        NZVC|= Enu::VMask*((((a & 0x7f) + (b & 0x7f)) >> 7) & 0x1) ^ (((NZVC&Enu::CMask)/Enu::CMask)*Enu::NMask);
         break;
     case Enu::ApnBp1_func: //A plus ~B plus 1
         carryIn=1;
@@ -100,7 +100,7 @@ bool CPUDataSection::calculatALUOutput(quint8 &res, quint8 &NZVC) const
     case Enu::ApBpCin_func: //A plus B plus Cin
         res=a+b+(int)carryIn;
         NZVC|= Enu::CMask*((int)(res<a||res<b));
-        NZVC|= Enu::NMask*((((a & 0x7f) + (b & 0x7f)) >> 7) & 0x1) ^ (((NZVC&Enu::CMask)/Enu::CMask)*Enu::NMask);
+        NZVC|= Enu::VMask*((((a & 0x7f) + (b & 0x7f)) >> 7) & 0x1) ^ (((NZVC&Enu::CMask)/Enu::CMask)*Enu::NMask);
         break;
     case Enu::AandB_func: //A*B
         res=a&b;

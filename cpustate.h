@@ -8,6 +8,21 @@
 #include "enu.h"
 #include "code.h"
 #include "microcodeprogram.h"
+/*
+Still left to do:
+    Implement post conditions
+    Implement setting of memory registers from preconditions
+    Split this file into CPUDataSection and CPUControlSection
+    Implement jumps instead of increment in control section
+    Comment The data section
+
+THEN
+    Remove all CPUPane stepping code
+    Remove all state code from Sim
+    Fix format-from microcode
+    Have CPU pane listen to data section, and pass on value changes to CPUGraphicsItems
+
+ */
 class CPUDataSection: public QObject
 {
     Q_OBJECT
