@@ -1,7 +1,8 @@
 #ifndef MICROCODEPROGRAM_H
 #define MICROCODEPROGRAM_H
 #include "enu.h"
-#include "code.h"
+class Code;
+class MicroCode;
 class MicrocodeProgram
 {
 private:

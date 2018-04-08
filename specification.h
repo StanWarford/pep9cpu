@@ -23,13 +23,14 @@
 
 #include "mainmemory.h"
 #include "cpupane.h"
-
+class CPUDataSection; //Forward declaration, as the inclue tree is loopy
 class Specification
 {
 public:
     virtual ~Specification() { }
     Specification();
     virtual void setUnitPre(MainMemory *, CpuPane *) { }
+    virtual void setUnitPre(CPUDataSection*) { }
     virtual bool testUnitPost(MainMemory *, CpuPane *, QString &) { return true; }
     virtual QString getSourceCode() = 0;
 };
@@ -37,9 +38,10 @@ public:
 class MemSpecification: public Specification {    
 public:
     MemSpecification(int memoryAddress, int memoryValue, int numberBytes);
-    void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane);
-    bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString);
-    QString getSourceCode();
+    void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane) override;
+    void setUnitPre(CPUDataSection*) override;
+    bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString) override;
+    QString getSourceCode() override;
 private:
     int memAddress;
     int memValue;
@@ -49,9 +51,10 @@ private:
 class RegSpecification: public Specification {
 public:
     RegSpecification(Enu::EKeywords registerAddress, int registerValue);
-    void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane);
-    bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString);
-    QString getSourceCode();
+    void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane) override;
+    void setUnitPre(CPUDataSection*) override;
+    bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString) override;
+    QString getSourceCode() override;
 private:
     Enu::EKeywords regAddress;
     int regValue;
@@ -60,9 +63,10 @@ private:
 class StatusBitSpecification: public Specification {
 public:
     StatusBitSpecification(Enu::EKeywords statusBitAddress, bool statusBitValue);
-    void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane);
-    bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString);
-    QString getSourceCode();
+    void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane) override;
+    void setUnitPre(CPUDataSection*) override;
+    bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString) override;
+    QString getSourceCode() override;
 private:
     Enu::EKeywords nzvcsAddress;
     bool nzvcsValue;

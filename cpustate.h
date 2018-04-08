@@ -36,13 +36,9 @@ public:
     /*
      *  Modify CPU state
      */
-    void initFromPreconditions(QList<UnitPreCode*> list);
+    //Internally, all set...() methods will call set...Pre() code, but will emit events afterwards
+    void setStatusBitPre(Enu::EStatusBit,bool val);
     bool setSignalsFromMicrocode(const MicroCode* line);
-    inline void setRegisterByte(quint8 register,quint8 value);
-    inline void setRegisterWord(quint8 register,quint16 value);
-    inline void setMemoryByte(quint16 address, quint8 value);
-    inline void setMemoryWord(quint16 address, quint16 value);
-    inline void setStatusBit(Enu::EStatusBit,bool val);
     inline bool hadErrorOnStep();
     inline QString getErrorMessage();
 private:
@@ -66,7 +62,11 @@ private:
     quint8 getAMuxOutput() const;
     bool calculatALUOutput(quint8& res,quint8 &NZVC) const;
     inline void setMemoryRegister(Enu::EMemoryRegisters,quint8 value);
-
+    inline void setRegisterByte(quint8 register,quint8 value);
+    inline void setRegisterWord(quint8 register,quint16 value);
+    inline void setMemoryByte(quint16 address, quint8 value);
+    inline void setMemoryWord(quint16 address, quint16 value);
+    inline void setStatusBit(Enu::EStatusBit,bool val);
 
     void handleMainBusState() noexcept;
     void stepOneByte() noexcept;
@@ -103,6 +103,7 @@ class CPUControlSection: public QObject
 public:
     static CPUControlSection* getInstance();
     virtual ~CPUControlSection();
+    void initCPUStateFromPreconditions();
     void setMicrocodeProgram(MicrocodeProgram* program);
     bool hadErrorOnStep();
     QString getError();
@@ -127,7 +128,6 @@ private:
     bool inSimulation,hadControlError;
     QString errorMessage;
     CPUControlSection(CPUDataSection* dataSection);
-    void initCPUStateFromPreconditions();
 };
 
 class CPUTester: public QObject

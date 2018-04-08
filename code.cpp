@@ -286,6 +286,14 @@ void UnitPreCode::setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane) {
     }
 }
 
+void UnitPreCode::setUnitPre(CPUDataSection *data)
+{
+    for(auto x : unitPreList)
+    {
+        x->setUnitPre(data);
+    }
+}
+
 void UnitPreCode::appendSpecification(Specification *specification) {
     unitPreList.append(specification);
 }

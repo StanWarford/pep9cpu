@@ -156,11 +156,27 @@ MicroCode* CPUDataSection::getMicrocodeFromSignals() const
     return nullptr;
 }
 
-void CPUDataSection::initFromPreconditions(QList<UnitPreCode *> list)
+void CPUDataSection::setStatusBitPre(Enu::EStatusBit statusBit, bool val)
 {
-    for(UnitPreCode* a: list)
+    qDebug()<<statusBit<<","<<val;
+    switch(statusBit)
     {
-        //Handle preconditions
+    case Enu::STATUS_N:
+        //Mask out the original N bit, and then or it with the properly shifted value
+        NZVCSbits=(NZVCSbits&~Enu::NMask)|val*Enu::NMask;
+        break;
+    case Enu::STATUS_Z:
+        NZVCSbits=(NZVCSbits&~Enu::ZMask)|val*Enu::ZMask;
+        break;
+    case Enu::STATUS_V:
+        NZVCSbits=(NZVCSbits&~Enu::VMask)|val*Enu::VMask;
+        break;
+    case Enu::STATUS_C:
+        NZVCSbits=(NZVCSbits&~Enu::CMask)|val*Enu::CMask;
+        break;
+    case Enu::STATUS_S:
+        NZVCSbits=(NZVCSbits&~Enu::SMask)|val*Enu::SMask;
+        break;
     }
 }
 
@@ -215,25 +231,8 @@ void CPUDataSection::setMemoryWord(quint16 address, quint16 value)
 
 void CPUDataSection::setStatusBit(Enu::EStatusBit statusBit, bool val)
 {
-    switch(statusBit)
-    {
-    case Enu::STATUS_N:
-        //Mask out the original N bit, and then or it with the properly shifted value
-        NZVCSbits=(NZVCSbits&~Enu::NMask)|val*Enu::NMask;
-        break;
-    case Enu::STATUS_Z:
-        NZVCSbits=(NZVCSbits&~Enu::ZMask)|val*Enu::ZMask;
-        break;
-    case Enu::STATUS_V:
-        NZVCSbits=(NZVCSbits&~Enu::VMask)|val*Enu::VMask;
-        break;
-    case Enu::STATUS_C:
-        NZVCSbits=(NZVCSbits&~Enu::CMask)|val*Enu::CMask;
-        break;
-    case Enu::STATUS_S:
-        NZVCSbits=(NZVCSbits&~Enu::SMask)|val*Enu::SMask;
-        break;
-    }
+    setStatusBitPre(statusBit,val);
+    //emit statusBitChanged(statusBit);
 }
 
 bool CPUDataSection::hadErrorOnStep()
@@ -596,10 +595,13 @@ void CPUControlSection::initCPUStateFromPreconditions()
     {
         if(x->hasUnitPre())preCode.append((UnitPreCode*)x);
     }
+    for(auto x : preCode)
+    {
+        x->setUnitPre(data);
+    }
     //Handle any control section logic
     //None at the moment
     //Handle data section logic
-    data->initFromPreconditions(preCode);
 
 
 }

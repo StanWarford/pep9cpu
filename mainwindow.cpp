@@ -478,6 +478,7 @@ bool MainWindow::on_actionSystem_Start_Debugging_triggered()
         objectCodePane->setObjectCode(microcodePane->getMicrocodeProgram());
         CPUControlSection* inst = CPUControlSection::getInstance();
         inst->setMicrocodeProgram(microcodePane->getMicrocodeProgram());
+        inst->initCPUStateFromPreconditions();
         bool hasUnitPre = false;
         for (int i = 0; i < Sim::codeList.size(); i++) {
             hasUnitPre = hasUnitPre || Sim::codeList.at(i)->hasUnitPre();

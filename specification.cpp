@@ -20,6 +20,7 @@
 */
 
 #include "specification.h"
+#include "cpustate.h"
 #include <QDebug>
 
 Specification::Specification()
@@ -40,6 +41,11 @@ void MemSpecification::setUnitPre(MainMemory *mainMemory, CpuPane *) {
         mainMemory->setMemPrecondition(memAddress, memValue / 256);
         mainMemory->setMemPrecondition(memAddress + 1, memValue % 256);
     }
+}
+
+void MemSpecification::setUnitPre(CPUDataSection *data)
+{
+    return;
 }
 
 bool MemSpecification::testUnitPost(MainMemory *mainMemory, CpuPane *, QString &errorString) {
@@ -77,6 +83,11 @@ RegSpecification::RegSpecification(Enu::EKeywords registerAddress, int registerV
 
 void RegSpecification::setUnitPre(MainMemory *, CpuPane *cpuPane) {
     cpuPane->setRegPrecondition(regAddress, regValue);
+}
+
+void RegSpecification::setUnitPre(CPUDataSection *)
+{
+
 }
 
 bool RegSpecification::testUnitPost(MainMemory *, CpuPane *cpuPane, QString &errorString) {
@@ -129,6 +140,30 @@ StatusBitSpecification::StatusBitSpecification(Enu::EKeywords statusBitAddress, 
 
 void StatusBitSpecification::setUnitPre(MainMemory *, CpuPane *cpuPane) {
     cpuPane->setStatusPrecondition(nzvcsAddress, nzvcsValue);
+}
+
+void StatusBitSpecification::setUnitPre(CPUDataSection *data)
+{
+    Enu::EStatusBit status;
+    switch(nzvcsAddress)
+    {
+    case Enu::N:
+        status = Enu::STATUS_N;
+        break;
+    case Enu::Z:
+        status = Enu::STATUS_Z;
+        break;
+    case Enu::V:
+        status = Enu::STATUS_V;
+        break;
+    case Enu::Cbit:
+        status = Enu::STATUS_C;
+        break;
+    case Enu::S:
+        status = Enu::STATUS_S;
+        break;
+    }
+    data->setStatusBitPre(status,nzvcsValue);
 }
 
 bool StatusBitSpecification::testUnitPost(MainMemory *, CpuPane *cpuPane, QString &errorString) {

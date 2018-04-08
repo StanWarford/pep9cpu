@@ -27,7 +27,7 @@
 #include "specification.h"
 #include "mainmemory.h"
 #include "cpupane.h"
-
+class CPUDataSection; //Forward declaration to reslove circular dependencies
 // Abstract code class
 class Code
 {
@@ -85,6 +85,7 @@ public:
     QString getSourceCode();
     bool hasUnitPre();
     void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane);
+    void setUnitPre(CPUDataSection* data);
     void appendSpecification(Specification *specification);
     void setComment(QString comment);
 private:

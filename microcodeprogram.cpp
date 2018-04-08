@@ -1,5 +1,5 @@
 #include "microcodeprogram.h"
-
+#include "code.h"
 MicrocodeProgram::MicrocodeProgram():objectCode()
 {
 
