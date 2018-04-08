@@ -86,8 +86,46 @@ void RegSpecification::setUnitPre(MainMemory *, CpuPane *cpuPane) {
     cpuPane->setRegPrecondition(regAddress, regValue);
 }
 
-void RegSpecification::setUnitPre(CPUDataSection *)
+void RegSpecification::setUnitPre(CPUDataSection *data)
 {
+
+    switch(regAddress)
+    {
+    case Enu::Acc:
+        data->setRegisterWordPre(0,regValue);
+        break;
+    case Enu::X:
+        data->setRegisterWordPre(2,regValue);
+        break;
+    case Enu::SP:
+        data->setRegisterWordPre(4,regValue);
+        break;
+    case Enu::PC:
+        data->setRegisterWordPre(6,regValue);
+        break;
+    case Enu::IR:
+        data->setRegisterWordPre(8,regValue/256);
+        data->setRegisterBytePre(10,regValue%256);
+        break;
+    case Enu::T1:
+        data->setRegisterBytePre(11,regValue);
+        break;
+    case Enu::T2:
+        data->setRegisterWordPre(12,regValue);
+        break;
+    case Enu::T3:
+        data->setRegisterWordPre(14,regValue);
+        break;
+    case Enu::T4:
+        data->setRegisterWordPre(16,regValue);
+        break;
+    case Enu::T5:
+        data->setRegisterWordPre(18,regValue);
+        break;
+    case Enu::T6:
+        data->setRegisterWordPre(20,regValue);
+        break;
+    }
 }
 
 bool RegSpecification::testUnitPost(MainMemory *, CpuPane *cpuPane, QString &errorString) {

@@ -5,7 +5,7 @@ CPUTester *CPUTester::_instance = nullptr;
 CPUDataSection::CPUDataSection(QObject *parent): QObject(parent),cpuFeatures(Enu::OneByteDataBus),mainBusState(Enu::None),
     memoryRegisters(6),registerBank(32),memory(0XFFFF),controlSignals(20),clockSignals(10),hadDataError(false),errorMessage("")
 {
-
+    presetStaticRegisters();
 }
 
 bool CPUDataSection::aluFnIsUnary() const
@@ -13,60 +13,129 @@ bool CPUDataSection::aluFnIsUnary() const
     return controlSignals[Enu::ALU]==0||controlSignals[Enu::ALU]>=10;
 }
 
-quint8 CPUDataSection::getAMuxOutput() const
+bool CPUDataSection::getAMuxOutput(quint8& result) const
 {
     switch(cpuFeatures)
     {
     case Enu::OneByteDataBus:
-        break;
+        if(controlSignals[Enu::AMux]==0)
+        {
+            result = memoryRegisters[Enu::MEM_MDR];
+            return true;
+        }
+        else if(controlSignals[Enu::AMux]==1)
+        {
+            return valueOnABus(result);
+        }
+        else return false;
     case Enu::TwoByteDataBus:
+#pragma message "TODO: implement AMux for two byte bus"
         break;
     default:
         break;
     }
 }
 
+bool CPUDataSection::calculateCSMuxOutput(bool &result) const
+{
+    if(controlSignals[Enu::CSMux]==0)
+    {
+        result=NZVCSbits&Enu::CMask;
+        return true;
+    }
+    else if(controlSignals[Enu::CSMux]==1)
+    {
+        result = NZVCSbits&Enu::SMask;
+        return true;
+    }
+    else return false;
+}
+
 bool CPUDataSection::calculatALUOutput(quint8 &res, quint8 &NZVC) const
 {
-    quint8 carryIn;
+    quint8 a,b;
+    bool carryIn;
+    bool hasA=getAMuxOutput(a), hasB=valueOnBBus(b),hasCin=calculateCSMuxOutput(carryIn);
+    if(!((aluFnIsUnary()&&hasA)||(hasA&&hasB)))
+    {
+#pragma message "TODO: Warning when ALU has bad inputs"
+        return false;
+    }
     switch(controlSignals[Enu::ALU])
     {
     case Enu::A_func: //A
+        if(hasA) res=a;
+        else return false;
         break;
     case Enu::ApB_func: //A plus B
-        break;
-    case Enu::ApBpCin_func: //A plus B plus Cin
+        res=a+b;
+        NZVC|= Enu::CMask*(((res &0x1ff)>>8) &0x1);
+        NZVC|= Enu::NMask*((((a & 0x7f) + (b & 0x7f)) >> 7) & 0x1) ^ (NZVC&Enu::CMask);
         break;
     case Enu::ApnBp1_func: //A plus ~B plus 1
-        break;
+        carryIn=1;
+        //Intentional fallthrough
     case Enu::ApnBpCin_func: //A plus ~B plus Cin
+        b=~b;
+        //Intentional fallthrough
+    case Enu::ApBpCin_func: //A plus B plus Cin
+        res=a+b+(int)carryIn;
+        NZVC|= Enu::CMask*(((res &0x1ff)>>8) &0x1);
+        NZVC|= Enu::NMask*((((a & 0x7f) + (b & 0x7f)) >> 7) & 0x1) ^ (NZVC&Enu::CMask);
         break;
     case Enu::AandB_func: //A*B
+        res=a&b;
         break;
     case Enu::nAandB_func: //~(A*B)
+        res=~(a&b);
         break;
     case Enu::AorB_func: //A+B
+        res=a|b;
         break;
     case Enu::nAorB_func: //~(A+B)
+        res=~(a|b);
         break;
     case Enu::AxorB_func: //A xor B
+        res=a^b;
         break;
     case Enu::nA_func: //~A
+        res=~a;
         break;
     case Enu::ASLA_func: //ASL A
+        res=a<<1;
+        NZVC|=Enu::CMask*((a & 0x80) >> 7);
+        NZVC|=Enu::VMask*(((a & 0x40) >> 6) ^ (NZVC&Enu::CMask));
         break;
     case Enu::ROLA_func: //ROL A
+        res=a<<1 | ((int) carryIn);
+        NZVC|=Enu::CMask*((a & 0x80) >> 7);
+        NZVC|=Enu::VMask*(((a & 0x40) >> 6) ^ (NZVC&Enu::CMask));
         break;
     case Enu::ASRA_func: //ASR A
+        res = (a>>1)|(a&0x80);
+        NZVC|=Enu::CMask*(a&1);
         break;
     case Enu::RORA_func: //ROR a
+        res = (a>>1)|((int)carryIn<<7);
+        NZVC|=Enu::CMask*(a&1);
         break;
     case Enu::NZVCA_func: //Move A to NZVC
-        break;
+        res=0;
+        NZVC|=Enu::NMask&a;
+        NZVC|=Enu::ZMask&a;
+        NZVC|=Enu::VMask&a;
+        NZVC|=Enu::CMask&a;
+        return true; //Must return early to avoid NZ calculation
     default:
         break;
 
     }
+    //N bit is always set the same
+    NZVC|=(Enu::NMask*(res>127));
+    //Z bit is always set the same
+    NZVC|=(Enu::ZMask*(res==0));
+    return true;
+
 }
 
 void CPUDataSection::setMemoryRegister(Enu::EMemoryRegisters, quint8 value)
@@ -112,13 +181,15 @@ quint16 CPUDataSection::getRegisterBankWord(quint8 registerNumber) const
 bool CPUDataSection::valueOnABus(quint8 &result) const
 {
     if(controlSignals[Enu::A]==Enu::signalDisabled) return false;
-    else return result=registerBank[controlSignals[Enu::A]];
+    result=registerBank[controlSignals[Enu::A]];
+    return true;
 }
 
 bool CPUDataSection::valueOnBBus(quint8 &result) const
 {
     if(controlSignals[Enu::B]==Enu::signalDisabled) return false;
-    else return result=registerBank[controlSignals[Enu::B]];
+    result=registerBank[controlSignals[Enu::B]];
+    return true;
 }
 
 bool CPUDataSection::valueOnCBus(quint8 &result) const
@@ -163,19 +234,19 @@ void CPUDataSection::setStatusBitPre(Enu::EStatusBit statusBit, bool val)
     {
     case Enu::STATUS_N:
         //Mask out the original N bit, and then or it with the properly shifted value
-        NZVCSbits=(NZVCSbits&~Enu::NMask)|val*Enu::NMask;
+        NZVCSbits=(NZVCSbits&~Enu::NMask)|(val?1:0)*Enu::NMask;
         break;
     case Enu::STATUS_Z:
-        NZVCSbits=(NZVCSbits&~Enu::ZMask)|val*Enu::ZMask;
+        NZVCSbits=(NZVCSbits&~Enu::ZMask)|(val?1:0)*Enu::ZMask;
         break;
     case Enu::STATUS_V:
-        NZVCSbits=(NZVCSbits&~Enu::VMask)|val*Enu::VMask;
+        NZVCSbits=(NZVCSbits&~Enu::VMask)|(val?1:0)*Enu::VMask;
         break;
     case Enu::STATUS_C:
-        NZVCSbits=(NZVCSbits&~Enu::CMask)|val*Enu::CMask;
+        NZVCSbits=(NZVCSbits&~Enu::CMask)|(val?1:0)*Enu::CMask;
         break;
     case Enu::STATUS_S:
-        NZVCSbits=(NZVCSbits&~Enu::SMask)|val*Enu::SMask;
+        NZVCSbits=(NZVCSbits&~Enu::SMask)|(val?1:0)*Enu::SMask;
         break;
     }
 }
@@ -192,6 +263,21 @@ void CPUDataSection::setMemoryWordPre(quint16 address, quint16 val)
     address=address-address%2;
     memory[address]=val/256;
     memory[address+1]=val%256;
+}
+
+void CPUDataSection::setRegisterBytePre(quint8 reg, quint8 val)
+{
+    if(reg>21) return;
+    qDebug()<<reg<<"|"<<val;
+    registerBank[reg]=val;
+}
+
+void CPUDataSection::setRegisterWordPre(quint8 reg, quint16 val)
+{
+   if(reg>21) return;
+   qDebug()<<reg<<"||"<<val;
+   registerBank[reg]=val/256;
+   registerBank[reg+1]=val%256;
 }
 
 bool CPUDataSection::setSignalsFromMicrocode(const MicroCode *line)
@@ -223,14 +309,11 @@ bool CPUDataSection::setSignalsFromMicrocode(const MicroCode *line)
     return ctrlChanged|clockChanged;
 }
 
-void CPUDataSection::setRegisterByte(quint8, quint8 value)
+void CPUDataSection::setRegisterByte(quint8 reg, quint8 value)
 {
-#pragma message "todo"
-}
-
-void CPUDataSection::setRegisterWord(quint8, quint16 value)
-{
-#pragma message "todo"
+    quint8 old = registerBank[reg];
+    setRegisterBytePre(reg,value);
+    emit registerChanged(reg,old,value);
 }
 
 void CPUDataSection::setMemoryByte(quint16 address, quint8 value)
@@ -422,6 +505,19 @@ void CPUDataSection::stepTwoByte() noexcept
     if(hadErrorOnStep()) return;
 }
 
+void CPUDataSection::presetStaticRegisters() noexcept
+{
+    registerBank[23]=0x01;
+    registerBank[24]=0x02;
+    registerBank[25]=0x03;
+    registerBank[26]=0x01;
+    registerBank[27]=0x08;
+    registerBank[28]=0xF0;
+    registerBank[29]=0xF6;
+    registerBank[30]=0xFE;
+    registerBank[31]=0xFF;
+}
+
 void CPUDataSection::clearControlSignals() noexcept
 {
     for(int it=0; it<controlSignals.length();it++)
@@ -444,6 +540,7 @@ void CPUDataSection::clearRegisters() noexcept
     {
         registerBank[it]=0;
     }
+    presetStaticRegisters();
 }
 
 void CPUDataSection::clearMemory() noexcept

@@ -41,7 +41,6 @@ namespace Enu
         VMask = 0x02,
         CMask = 0x01,
     };
-
     enum MainBusState {
         None,
         MemReadFirstWait,
@@ -51,6 +50,7 @@ namespace Enu
         MemWriteSecondWait,
         MemWriteReady,
     };
+    Q_ENUM_NS(MainBusState)
     enum EBranchFunctions{
         Unconditional=0,Stop=15
     };
@@ -61,11 +61,11 @@ namespace Enu
         CMux, C,
         MDRMux, MDROMux, MDREMux,MDR, MDRE, MDRO,
     };
-    Q_ENUM_NS(EControlSignals);
+    Q_ENUM_NS(EControlSignals)
     enum EClockSignals{
         NCk,ZCk,VCk,CCk,SCk,MARCk,LoadCk,MDRCk, MDROCk, MDRECk,
     };
-    Q_ENUM_NS(EClockSignals);
+    Q_ENUM_NS(EClockSignals)
     enum EMemoryRegisters
     {
         MEM_MARA,MEM_MARB,MEM_MDR,MEM_MDRO,MEM_MDRE
@@ -74,6 +74,7 @@ namespace Enu
     {
         STATUS_N,STATUS_Z,STATUS_V,STATUS_C,STATUS_S
     };
+    Q_ENUM_NS(EStatusBit);
     enum EALUFunc
     {
         A_func=0,ApB_func=1,ApBpCin_func=2,ApnBp1_func=3,

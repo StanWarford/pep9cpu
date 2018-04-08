@@ -40,6 +40,8 @@ public:
     void setStatusBitPre(Enu::EStatusBit,bool val);
     void setMemoryBytePre(quint16 address,quint8 val);
     void setMemoryWordPre(quint16 address,quint16 val);
+    void setRegisterBytePre(quint8 reg,quint8 val);
+    void setRegisterWordPre(quint8 reg,quint16 val);
     bool setSignalsFromMicrocode(const MicroCode* line);
     inline bool hadErrorOnStep();
     inline QString getErrorMessage();
@@ -61,11 +63,11 @@ private:
     QString errorMessage="";
 
     bool aluFnIsUnary() const;
-    quint8 getAMuxOutput() const;
+    bool getAMuxOutput(quint8 &result) const;
+    bool calculateCSMuxOutput(bool& result) const;
     bool calculatALUOutput(quint8& res,quint8 &NZVC) const;
     inline void setMemoryRegister(Enu::EMemoryRegisters,quint8 value);
     inline void setRegisterByte(quint8 register,quint8 value);
-    inline void setRegisterWord(quint8 register,quint16 value);
     inline void setMemoryByte(quint16 address, quint8 value);
     inline void setMemoryWord(quint16 address, quint16 value);
     inline void setStatusBit(Enu::EStatusBit,bool val);
@@ -74,6 +76,7 @@ private:
     void stepOneByte() noexcept;
     void stepTwoByte() noexcept;
 
+    void presetStaticRegisters() noexcept;
     void clearControlSignals() noexcept;
     void clearClockSignals() noexcept;
     void clearRegisters() noexcept;
