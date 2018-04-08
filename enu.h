@@ -25,7 +25,7 @@
 namespace Enu
 {
     Q_NAMESPACE
-    static const quint8 maxRegisterNumber = 0;
+    static const quint8 maxRegisterNumber = 31;
     static const quint8 signalDisabled= 255;
     class InvalidCPUMode : public QException
     {
@@ -70,6 +70,7 @@ namespace Enu
     {
         MEM_MARA,MEM_MARB,MEM_MDR,MEM_MDRO,MEM_MDRE
     };
+    Q_ENUM_NS(EMemoryRegisters);
     enum EStatusBit
     {
         STATUS_N,STATUS_Z,STATUS_V,STATUS_C,STATUS_S

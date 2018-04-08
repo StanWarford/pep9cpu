@@ -69,8 +69,8 @@ bool CPUDataSection::calculatALUOutput(quint8 &res, quint8 &NZVC) const
         break;
     case Enu::ApB_func: //A plus B
         res=a+b;
-        NZVC|= Enu::CMask*(((res &0x1ff)>>8) &0x1);
-        NZVC|= Enu::NMask*((((a & 0x7f) + (b & 0x7f)) >> 7) & 0x1) ^ (NZVC&Enu::CMask);
+        NZVC|= Enu::CMask*((int)(res<a||res<b)); //Carry out if result is unsigned less than a or b.
+        NZVC|= Enu::NMask*((((a & 0x7f) + (b & 0x7f)) >> 7) & 0x1) ^ (((NZVC&Enu::CMask)/Enu::CMask)*Enu::NMask);
         break;
     case Enu::ApnBp1_func: //A plus ~B plus 1
         carryIn=1;
@@ -80,8 +80,8 @@ bool CPUDataSection::calculatALUOutput(quint8 &res, quint8 &NZVC) const
         //Intentional fallthrough
     case Enu::ApBpCin_func: //A plus B plus Cin
         res=a+b+(int)carryIn;
-        NZVC|= Enu::CMask*(((res &0x1ff)>>8) &0x1);
-        NZVC|= Enu::NMask*((((a & 0x7f) + (b & 0x7f)) >> 7) & 0x1) ^ (NZVC&Enu::CMask);
+        NZVC|= Enu::CMask*((int)(res<a||res<b));
+        NZVC|= Enu::NMask*((((a & 0x7f) + (b & 0x7f)) >> 7) & 0x1) ^ (((NZVC&Enu::CMask)/Enu::CMask)*Enu::NMask);
         break;
     case Enu::AandB_func: //A*B
         res=a&b;
@@ -104,12 +104,14 @@ bool CPUDataSection::calculatALUOutput(quint8 &res, quint8 &NZVC) const
     case Enu::ASLA_func: //ASL A
         res=a<<1;
         NZVC|=Enu::CMask*((a & 0x80) >> 7);
+        //Probably wrong
         NZVC|=Enu::VMask*(((a & 0x40) >> 6) ^ (NZVC&Enu::CMask));
         break;
     case Enu::ROLA_func: //ROL A
         res=a<<1 | ((int) carryIn);
         NZVC|=Enu::CMask*((a & 0x80) >> 7);
-        NZVC|=Enu::VMask*(((a & 0x40) >> 6) ^ (NZVC&Enu::CMask));
+        //Probably wrong
+        NZVC|=Enu::VMask*(bool)(((a & 0x40) >> 6) ^ (NZVC&Enu::CMask));
         break;
     case Enu::ASRA_func: //ASR A
         res = (a>>1)|(a&0x80);
@@ -138,9 +140,10 @@ bool CPUDataSection::calculatALUOutput(quint8 &res, quint8 &NZVC) const
 
 }
 
-void CPUDataSection::setMemoryRegister(Enu::EMemoryRegisters, quint8 value)
+void CPUDataSection::setMemoryRegister(Enu::EMemoryRegisters reg, quint8 value)
 {
-
+    qDebug()<<"Memory Register"<<reg<<" : "<<value;
+    memoryRegisters[reg]=value;
 }
 
 CPUDataSection* CPUDataSection::getInstance()
@@ -160,7 +163,7 @@ CPUDataSection::~CPUDataSection()
 quint8 CPUDataSection::getRegisterBankByte(quint8 registerNumber) const
 {
     if(registerNumber>Enu::maxRegisterNumber) return 0;
-    else return memory[registerNumber];
+    else return registerBank[registerNumber];
 
 }
 
@@ -181,14 +184,14 @@ quint16 CPUDataSection::getRegisterBankWord(quint8 registerNumber) const
 bool CPUDataSection::valueOnABus(quint8 &result) const
 {
     if(controlSignals[Enu::A]==Enu::signalDisabled) return false;
-    result=registerBank[controlSignals[Enu::A]];
+    result=getRegisterBankByte(controlSignals[Enu::A]);
     return true;
 }
 
 bool CPUDataSection::valueOnBBus(quint8 &result) const
 {
     if(controlSignals[Enu::B]==Enu::signalDisabled) return false;
-    result=registerBank[controlSignals[Enu::B]];
+    result=getRegisterBankByte(controlSignals[Enu::B]);
     return true;
 }
 
@@ -229,7 +232,7 @@ MicroCode* CPUDataSection::getMicrocodeFromSignals() const
 
 void CPUDataSection::setStatusBitPre(Enu::EStatusBit statusBit, bool val)
 {
-    qDebug()<<statusBit<<","<<val;
+    qDebug()<<"Status bit "<<statusBit<<":"<<(quint8)val;
     switch(statusBit)
     {
     case Enu::STATUS_N:
@@ -253,14 +256,13 @@ void CPUDataSection::setStatusBitPre(Enu::EStatusBit statusBit, bool val)
 
 void CPUDataSection::setMemoryBytePre(quint16 address, quint8 val)
 {
-    qDebug()<<address<<"--"<<val;
+    qDebug()<<"Memory word byte "<<QString::number(address,16)<<":"<<val;
     memory[address]=val;
 }
 
 void CPUDataSection::setMemoryWordPre(quint16 address, quint16 val)
 {
-    qDebug()<<address<<"--"<<val;
-    address=address-address%2;
+    qDebug()<<"Memory word written "<<QString::number(address,16)<<":"<<val;
     memory[address]=val/256;
     memory[address+1]=val%256;
 }
@@ -268,7 +270,7 @@ void CPUDataSection::setMemoryWordPre(quint16 address, quint16 val)
 void CPUDataSection::setRegisterBytePre(quint8 reg, quint8 val)
 {
     if(reg>21) return;
-    qDebug()<<reg<<"|"<<val;
+    qDebug()<<"Register set "<<reg<<":"<<val;
     registerBank[reg]=val;
 }
 
@@ -356,44 +358,44 @@ void CPUDataSection::handleMainBusState() noexcept
         //One cannot change MAR contents and initiate a R/W on same cycle
         if(!marChanged)
         {
-            if(clockSignals[Enu::MemRead]) mainBusState = Enu::MemReadFirstWait;
-            else if(clockSignals[Enu::MemWrite]) mainBusState = Enu::MemWriteFirstWait;
+            if(controlSignals[Enu::MemRead]==1) mainBusState = Enu::MemReadFirstWait;
+            else if(controlSignals[Enu::MemWrite]==1) mainBusState = Enu::MemWriteFirstWait;
         }
         break;
     case Enu::MemReadFirstWait:
-        if(!marChanged&&clockSignals[Enu::MemRead]) mainBusState = Enu::MemReadSecondWait;
-        else if(marChanged&&clockSignals[Enu::MemRead]); //Initiating a new read brings us back to first wait
-        else if(clockSignals[Enu::MemWrite]) mainBusState = Enu::MemWriteFirstWait; //Switch from read to write.
+        if(!marChanged&&controlSignals[Enu::MemRead]==1) mainBusState = Enu::MemReadSecondWait;
+        else if(marChanged&&controlSignals[Enu::MemRead]==1); //Initiating a new read brings us back to first wait
+        else if(controlSignals[Enu::MemWrite]==1) mainBusState = Enu::MemWriteFirstWait; //Switch from read to write.
         else mainBusState = Enu::None; //If neither are check, bus goes back to doing nothing
         break;
     case Enu::MemReadSecondWait:
-        if(!marChanged&&clockSignals[Enu::MemRead]) mainBusState = Enu::MemReadReady;
-        else if(marChanged&&clockSignals[Enu::MemRead])mainBusState = Enu::MemReadFirstWait;
-        else if(clockSignals[Enu::MemWrite]) mainBusState = Enu::MemWriteFirstWait;
+        if(!marChanged&&controlSignals[Enu::MemRead]==1) mainBusState = Enu::MemReadReady;
+        else if(marChanged&&controlSignals[Enu::MemRead]==1)mainBusState = Enu::MemReadFirstWait;
+        else if(controlSignals[Enu::MemWrite]==1) mainBusState = Enu::MemWriteFirstWait;
         else mainBusState = Enu::None; //If neither are check, bus goes back to doing nothing
         break;
     case Enu::MemReadReady:
-        if(!marChanged&&clockSignals[Enu::MemRead]); //Do nothing, we are already ready
-        else if(marChanged&&clockSignals[Enu::MemRead])mainBusState = Enu::MemReadFirstWait;
-        else if(clockSignals[Enu::MemWrite]) mainBusState = Enu::MemWriteFirstWait;
+        if(!marChanged&&controlSignals[Enu::MemRead]==1); //Do nothing, we are already ready
+        else if(marChanged&&controlSignals[Enu::MemRead]==1)mainBusState = Enu::MemReadFirstWait;
+        else if(controlSignals[Enu::MemWrite]==1) mainBusState = Enu::MemWriteFirstWait;
         else mainBusState = Enu::None; //If neither are check, bus goes back to doing nothing
         break;
     case Enu::MemWriteFirstWait:
-        if(!marChanged&&clockSignals[Enu::MemWrite]) mainBusState = Enu::MemWriteSecondWait;
-        else if(marChanged&&clockSignals[Enu::MemWrite]); //Initiating a new write brings us back to first wait
-        else if(clockSignals[Enu::MemRead]) mainBusState = Enu::MemReadFirstWait; //Switch from write to read.
+        if(!marChanged&&controlSignals[Enu::MemWrite]==1) mainBusState = Enu::MemWriteSecondWait;
+        else if(marChanged&&controlSignals[Enu::MemWrite]==1); //Initiating a new write brings us back to first wait
+        else if(controlSignals[Enu::MemRead]==1) mainBusState = Enu::MemReadFirstWait; //Switch from write to read.
         else mainBusState = Enu::None; //If neither are check, bus goes back to doing nothing
         break;
     case Enu::MemWriteSecondWait:
-        if(!marChanged&&clockSignals[Enu::MemWrite]) mainBusState = Enu::MemWriteReady;
-        else if(marChanged&&clockSignals[Enu::MemWrite])mainBusState = Enu::MemWriteFirstWait; //Initiating a new write brings us back to first wait
-        else if(clockSignals[Enu::MemRead]) mainBusState = Enu::MemReadFirstWait; //Switch from write to read.
+        if(!marChanged&&controlSignals[Enu::MemWrite]==1) mainBusState = Enu::MemWriteReady;
+        else if(marChanged&&controlSignals[Enu::MemWrite]==1)mainBusState = Enu::MemWriteFirstWait; //Initiating a new write brings us back to first wait
+        else if(controlSignals[Enu::MemRead]==1) mainBusState = Enu::MemReadFirstWait; //Switch from write to read.
         else mainBusState = Enu::None; //If neither are check, bus goes back to doing nothing
         break;
     case Enu::MemWriteReady:
-        if(!marChanged&&clockSignals[Enu::MemWrite]); //Do nothing, MemWrite is already ready
-        else if(marChanged&&clockSignals[Enu::MemWrite])mainBusState = Enu::MemWriteFirstWait; //Initiating a new write brings us back to first wait
-        else if(clockSignals[Enu::MemRead]) mainBusState = Enu::MemReadFirstWait; //Switch from write to read.
+        if(!marChanged&&controlSignals[Enu::MemWrite]==1); //Do nothing, MemWrite is already ready
+        else if(marChanged&&controlSignals[Enu::MemWrite]==1)mainBusState = Enu::MemWriteFirstWait; //Initiating a new write brings us back to first wait
+        else if(controlSignals[Enu::MemRead]==1) mainBusState = Enu::MemReadFirstWait; //Switch from write to read.
         else mainBusState = Enu::None; //If neither are check, bus goes back to doing nothing
         break;
     default:
@@ -637,7 +639,6 @@ void CPUControlSection::onDebuggingFinished()
 
 void CPUControlSection::onStep(quint8 mode) noexcept
 {
-    qDebug()<<"Was stepped";
     //Do step logic
     const MicroCode* prog = program->getCodeLine(microprogramCounter);
     data->setSignalsFromMicrocode(prog);

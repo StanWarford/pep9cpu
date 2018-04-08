@@ -32,6 +32,7 @@ public:
     virtual void setUnitPre(MainMemory *, CpuPane *) { }
     virtual void setUnitPre(CPUDataSection*) { }
     virtual bool testUnitPost(MainMemory *, CpuPane *, QString &) { return true; }
+    virtual bool testUnitPost(CPUDataSection*,QString&){}
     virtual QString getSourceCode() = 0;
 };
 
@@ -41,6 +42,7 @@ public:
     void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane) override;
     void setUnitPre(CPUDataSection*) override;
     bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString) override;
+    bool testUnitPost(CPUDataSection *data,QString &errString) override;
     QString getSourceCode() override;
 private:
     int memAddress;
@@ -54,6 +56,7 @@ public:
     void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane) override;
     void setUnitPre(CPUDataSection*) override;
     bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString) override;
+    bool testUnitPost(CPUDataSection *data,QString &errString) override;
     QString getSourceCode() override;
 private:
     Enu::EKeywords regAddress;
@@ -66,6 +69,7 @@ public:
     void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane) override;
     void setUnitPre(CPUDataSection*) override;
     bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString) override;
+    bool testUnitPost(CPUDataSection *data,QString &errString) override;
     QString getSourceCode() override;
 private:
     Enu::EKeywords nzvcsAddress;

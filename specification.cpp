@@ -68,6 +68,11 @@ bool MemSpecification::testUnitPost(MainMemory *mainMemory, CpuPane *, QString &
     }
 }
 
+bool MemSpecification::testUnitPost(CPUDataSection *data, QString &errString)
+{
+
+}
+
 QString MemSpecification::getSourceCode() {
     return "Mem[0x"
             + QString("%1").arg(memAddress, 4, 16, QLatin1Char('0')).toUpper()
@@ -151,6 +156,11 @@ bool RegSpecification::testUnitPost(MainMemory *, CpuPane *cpuPane, QString &err
     }
 }
 
+bool RegSpecification::testUnitPost(CPUDataSection *data, QString &errString)
+{
+
+}
+
 QString RegSpecification::getSourceCode() {
     switch (regAddress) {
     case Enu::Acc: return "A=0x" + QString("%1").arg(regValue, 4, 16, QLatin1Char('0')).toUpper();
@@ -216,6 +226,11 @@ bool StatusBitSpecification::testUnitPost(MainMemory *, CpuPane *cpuPane, QStrin
     case Enu::S: errorString = "// ERROR: Unit test failed for status bit S."; return false;
     default: return false;
     }
+}
+
+bool StatusBitSpecification::testUnitPost(CPUDataSection *data, QString &errString)
+{
+
 }
 
 QString StatusBitSpecification::getSourceCode() {
