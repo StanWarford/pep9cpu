@@ -70,7 +70,8 @@ public slots:
 signals:
     void CPUFeaturesChanged(Enu::CPUType newFeatures);
     void registerChanged(quint8 register,quint8 oldVal,quint8 newVal);
-    void controlSignalChanged(quint64 ControlSignals);
+    void controlSignalChanged(quint32 ControlSignals);
+    void clockSignalsChanged(quint16 clockSignals) ;
     void ramChanged(quint16 address,quint8 oldVal, quint8 newVal);
 
 };

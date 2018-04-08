@@ -71,8 +71,31 @@ MicroCode* CPUDataSection::getMicrocodeFromSignals() const
 
 bool CPUDataSection::setSignalsFromMicrocode(const MicroCode *line)
 {
-    #pragma message "todo"
-    return true;
+    quint32 ctrlChanged=0;
+    quint16 clockChanged=0;
+    quint8 sig;
+    for(int it=0;it<controlSignals.length();it++)
+    {
+        sig=line->getControlSignal((Enu::EControlSignals)it);
+        if(controlSignals[it]!=sig)
+        {
+            ctrlChanged=(ctrlChanged<<1)+1;
+            controlSignals[it]=sig;
+        }
+    }
+    emit controlSignalChanged(ctrlChanged);
+    bool val;
+    for(int it=0;it<clockSignals.length();it++)
+    {
+        val=line->getClockSignal((Enu::EClockSignals)it);
+        if(clockSignals[it]!=val)
+        {
+            clockChanged=(clockChanged<<1)+1;
+            clockSignals[it]=val;
+        }
+    }
+    emit clockSignalsChanged(clockChanged);
+    return ctrlChanged|clockChanged;
 }
 
 bool CPUDataSection::hadErrorOnStep()
@@ -271,7 +294,7 @@ void CPUControlSection::onStep(quint8 mode) noexcept
     //Do step logic
     const MicroCode* prog = program->getCodeLine(microprogramCounter);
     data->setSignalsFromMicrocode(prog);
-    microprogramCounter = microprogramCounter++; //prog->branchAddress();
+    microprogramCounter++; //prog->branchAddress();
     data->onStep();
 }
 
