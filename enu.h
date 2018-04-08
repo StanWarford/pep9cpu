@@ -63,6 +63,10 @@ namespace Enu
     enum EClockSignals{
         NCk,ZCk,VCk,CCk,SCk,MARCk,LoadCk,MDRCk, MDROCk, MDRECk,
     };
+    enum EMemoryRegisters
+    {
+        MEM_MARA,MEM_MARB,MEM_MDR,MEM_MDRO,MEM_MDRE
+    };
     enum EALUFunc
     {
 

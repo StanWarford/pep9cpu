@@ -19,9 +19,13 @@ public:
     /*
      *  Access CPU State
      */
-    quint8 getRegisterByte(quint8 registerNumber) const;
+    quint8 getRegisterBankByte(quint8 registerNumber) const;
     //Will return the even/odd pair ass
-    quint16 getRegisterWord(quint8 registerNumber) const;
+    quint16 getRegisterBankWord(quint8 registerNumber) const;
+    quint8 valueOnABus() const;
+    quint8 valueOnBBus() const;
+    quint8 valueOnCBus() const;
+    Enu::MainBusState getMainBusState() const;
     quint8 getMemoryByte(quint16 address) const;
     //Uses the same even / odd conventions as Pep9
     quint16 getMemoryWord(quint16 address) const;
@@ -41,7 +45,8 @@ private:
     Enu::CPUType cpuFeatures;
     Enu::MainBusState mainBusState;
     //Control Signals and Data
-    QVector<quint8> registers;
+    QVector<quint8> memoryRegisters;
+    QVector<quint8> registerBank;
     QVector<quint8> memory;
     QVector<quint8> controlSignals;
     QVector<bool> clockSignals;

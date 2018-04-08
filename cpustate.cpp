@@ -21,14 +21,14 @@ CPUDataSection::~CPUDataSection()
 
 }
 
-quint8 CPUDataSection::getRegisterByte(quint8 registerNumber) const
+quint8 CPUDataSection::getRegisterBankByte(quint8 registerNumber) const
 {
     if(registerNumber>Enu::maxRegisterNumber) return 0;
     else return memory[registerNumber];
 
 }
 
-quint16 CPUDataSection::getRegisterWord(quint8 registerNumber) const
+quint16 CPUDataSection::getRegisterBankWord(quint8 registerNumber) const
 {
     quint16 returnValue;
     registerNumber= registerNumber-registerNumber%2;
@@ -40,6 +40,27 @@ quint16 CPUDataSection::getRegisterWord(quint8 registerNumber) const
     }
     return returnValue;
 
+}
+
+quint8 CPUDataSection::valueOnABus() const
+{
+    return registerBank[controlSignals[Enu::A]];
+}
+
+quint8 CPUDataSection::valueOnBBus() const
+{
+    return registerBank[controlSignals[Enu::C]];
+}
+
+quint8 CPUDataSection::valueOnCBus() const
+{
+#pragma message "todo"
+    //This one actually takes some logic
+}
+
+Enu::MainBusState CPUDataSection::getMainBusState() const
+{
+    return mainBusState;
 }
 
 MicroCode* CPUDataSection::getMicrocodeFromSignals() const
@@ -61,17 +82,77 @@ bool CPUDataSection::hadErrorOnStep()
 
 void CPUDataSection::handleMainBusState() noexcept
 {
+    bool marChanged= false;
+    quint8 a=valueOnABus(),b=valueOnBBus();
+    if(clockSignals[Enu::MARCk])
+    {
+        marChanged=!(a==memoryRegisters[Enu::MEM_MARA]&&b==memoryRegisters[Enu::MARB]);
+    }
+    switch(mainBusState)
+    {
+    case Enu::None:
+        //One cannot change MAR contents and initiate a R/W on same cycle
+        if(!marChanged)
+        {
+            if(clockSignals[Enu::MemRead]) mainBusState = Enu::MemReadFirstWait;
+            else if(clockSignals[Enu::MemWrite]) mainBusState = Enu::MemWriteFirstWait;
+        }
+        break;
+    case Enu::MemReadFirstWait:
+        if(!marChanged&&clockSignals[Enu::MemRead]) mainBusState = Enu::MemReadSecondWait;
+        else if(marChanged&&clockSignals[Enu::MemRead]); //Initiating a new read brings us back to first wait
+        else if(clockSignals[Enu::MemWrite]) mainBusState = Enu::MemWriteFirstWait; //Switch from read to write.
+        else mainBusState = Enu::None; //If neither are check, bus goes back to doing nothing
+        break;
+    case Enu::MemReadSecondWait:
+        if(!marChanged&&clockSignals[Enu::MemRead]) mainBusState = Enu::MemReadReady;
+        else if(marChanged&&clockSignals[Enu::MemRead])mainBusState = Enu::MemReadFirstWait;
+        else if(clockSignals[Enu::MemWrite]) mainBusState = Enu::MemWriteFirstWait;
+        else mainBusState = Enu::None; //If neither are check, bus goes back to doing nothing
+        break;
+    case Enu::MemReadReady:
+        if(!marChanged&&clockSignals[Enu::MemRead]); //Do nothing, we are already ready
+        else if(marChanged&&clockSignals[Enu::MemRead])mainBusState = Enu::MemReadFirstWait;
+        else if(clockSignals[Enu::MemWrite]) mainBusState = Enu::MemWriteFirstWait;
+        else mainBusState = Enu::None; //If neither are check, bus goes back to doing nothing
+        break;
+    case Enu::MemWriteFirstWait:
+        if(!marChanged&&clockSignals[Enu::MemWrite]) mainBusState = Enu::MemWriteSecondWait;
+        else if(marChanged&&clockSignals[Enu::MemWrite]); //Initiating a new write brings us back to first wait
+        else if(clockSignals[Enu::MemRead]) mainBusState = Enu::MemReadFirstWait; //Switch from write to read.
+        else mainBusState = Enu::None; //If neither are check, bus goes back to doing nothing
+        break;
+    case Enu::MemWriteSecondWait:
+        if(!marChanged&&clockSignals[Enu::MemWrite]) mainBusState = Enu::MemWriteReady;
+        else if(marChanged&&clockSignals[Enu::MemWrite])mainBusState = Enu::MemWriteFirstWait; //Initiating a new write brings us back to first wait
+        else if(clockSignals[Enu::MemRead]) mainBusState = Enu::MemReadFirstWait; //Switch from write to read.
+        else mainBusState = Enu::None; //If neither are check, bus goes back to doing nothing
+        break;
+    case Enu::MemWriteReady:
+        if(!marChanged&&clockSignals[Enu::MemWrite]); //Do nothing, MemWrite is already ready
+        else if(marChanged&&clockSignals[Enu::MemWrite])mainBusState = Enu::MemWriteFirstWait; //Initiating a new write brings us back to first wait
+        else if(clockSignals[Enu::MemRead]) mainBusState = Enu::MemReadFirstWait; //Switch from write to read.
+        else mainBusState = Enu::None; //If neither are check, bus goes back to doing nothing
+        break;
+    default:
+        mainBusState=Enu::None;
+        break;
 
+    }
 }
 
 void CPUDataSection::stepOneByte() noexcept
 {
     //TODO
+    handleMainBusState();
+    if(hadErrorOnStep()) return;
 }
 
 void CPUDataSection::stepTwoByte() noexcept
 {
     //TODO
+    handleMainBusState();
+    if(hadErrorOnStep()) return;
 }
 
 void CPUDataSection::clearControlSignals() noexcept
@@ -92,9 +173,9 @@ void CPUDataSection::clearClockSignals() noexcept
 
 void CPUDataSection::clearRegisters() noexcept
 {
-    for(int it=0;it<registers.length();it++)
+    for(int it=0;it<registerBank.length();it++)
     {
-        registers[it]=0;
+        registerBank[it]=0;
     }
 }
 
