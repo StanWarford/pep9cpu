@@ -38,6 +38,8 @@ public:
      */
     //Internally, all set...() methods will call set...Pre() code, but will emit events afterwards
     void setStatusBitPre(Enu::EStatusBit,bool val);
+    void setMemoryBytePre(quint16 address,quint8 val);
+    void setMemoryWordPre(quint16 address,quint16 val);
     bool setSignalsFromMicrocode(const MicroCode* line);
     inline bool hadErrorOnStep();
     inline QString getErrorMessage();

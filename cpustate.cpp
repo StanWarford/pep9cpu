@@ -180,6 +180,20 @@ void CPUDataSection::setStatusBitPre(Enu::EStatusBit statusBit, bool val)
     }
 }
 
+void CPUDataSection::setMemoryBytePre(quint16 address, quint8 val)
+{
+    qDebug()<<address<<"--"<<val;
+    memory[address]=val;
+}
+
+void CPUDataSection::setMemoryWordPre(quint16 address, quint16 val)
+{
+    qDebug()<<address<<"--"<<val;
+    address=address-address%2;
+    memory[address]=val/256;
+    memory[address+1]=val%256;
+}
+
 bool CPUDataSection::setSignalsFromMicrocode(const MicroCode *line)
 {
     quint32 ctrlChanged=0;
@@ -222,11 +236,15 @@ void CPUDataSection::setRegisterWord(quint8, quint16 value)
 void CPUDataSection::setMemoryByte(quint16 address, quint8 value)
 {
 #pragma message "todo"
+    setMemoryBytePre(address,value);
+    //emit memoryChanged(address);
 }
 
 void CPUDataSection::setMemoryWord(quint16 address, quint16 value)
 {
 #pragma message "todo"
+    setMemoryWordPre(address,value);
+    //emit memoryChanged(address);
 }
 
 void CPUDataSection::setStatusBit(Enu::EStatusBit statusBit, bool val)

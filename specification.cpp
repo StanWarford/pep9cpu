@@ -45,7 +45,8 @@ void MemSpecification::setUnitPre(MainMemory *mainMemory, CpuPane *) {
 
 void MemSpecification::setUnitPre(CPUDataSection *data)
 {
-    return;
+    if(numBytes==1) data->setMemoryBytePre(memAddress,(quint8)memValue);
+    else data->setMemoryWordPre(memAddress,(quint16)memValue);
 }
 
 bool MemSpecification::testUnitPost(MainMemory *mainMemory, CpuPane *, QString &errorString) {
@@ -87,7 +88,6 @@ void RegSpecification::setUnitPre(MainMemory *, CpuPane *cpuPane) {
 
 void RegSpecification::setUnitPre(CPUDataSection *)
 {
-
 }
 
 bool RegSpecification::testUnitPost(MainMemory *, CpuPane *cpuPane, QString &errorString) {
