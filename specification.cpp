@@ -130,6 +130,23 @@ void RegSpecification::setUnitPre(CPUDataSection *data)
     case Enu::T6:
         data->setRegisterWordPre(20,regValue);
         break;
+    case Enu::MARAREG:
+        data->setMemoryRegisterPre(Enu::MEM_MARA,(quint8)regValue);
+        break;
+    case Enu::MARBREG:
+        data->setMemoryRegisterPre(Enu::MEM_MARB,(quint8)regValue);
+        break;
+    case Enu::MDRREG:
+        data->setMemoryRegisterPre(Enu::MEM_MDR,(quint8)regValue);
+        break;
+    case Enu::MDREREG:
+        data->setMemoryRegisterPre(Enu::MEM_MDRE,(quint8)regValue);
+        break;
+    case Enu::MDROREG:
+        data->setMemoryRegisterPre(Enu::MEM_MDRO,(quint8)regValue);
+        break;
+    default:
+        break;
     }
 }
 

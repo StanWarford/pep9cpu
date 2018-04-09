@@ -1,13 +1,14 @@
 #include "cpudatasection.h"
 CPUDataSection* CPUDataSection::_instance = nullptr;
 CPUDataSection::CPUDataSection(QObject *parent): QObject(parent),cpuFeatures(Enu::OneByteDataBus),mainBusState(Enu::None),
-    memoryRegisters(6),registerBank(32),memory(0XFFFF+1),controlSignals(20),clockSignals(10),hadDataError(false),errorMessage("")
+    registerBank(32),memoryRegisters(6),memory(0XFFFF+1),controlSignals(20),clockSignals(10),hadDataError(false),errorMessage("")
 {
     presetStaticRegisters();
 }
 
 bool CPUDataSection::aluFnIsUnary() const
 {
+    //The only alu functions that are unary are 0 & 10..15
     return controlSignals[Enu::ALU]==0||controlSignals[Enu::ALU]>=10;
 }
 
@@ -17,32 +18,40 @@ bool CPUDataSection::getAMuxOutput(quint8& result) const
     switch(cpuFeatures)
     {
     case Enu::OneByteDataBus:
+        //For the one byte bus, either the value comes from the MDR register
         if(controlSignals[Enu::AMux]==0)
         {
             result = memoryRegisters[Enu::MEM_MDR];
             return true;
         }
+        //Or it comes from the memory bank
         else if(controlSignals[Enu::AMux]==1)
         {
             return valueOnABus(result);
         }
+        //Otherwise, AMUX is disabled and has no output
         else return false;
     case Enu::TwoByteDataBus:
+        //For the two byte bus, the value either comes from EOMux
         if(controlSignals[Enu::AMux]==0)
         {
+            //Which could come from MDRE when EOMux is 0
             if(controlSignals[Enu::EOMux]==0)
             {
                 result=memoryRegisters[Enu::MEM_MDRE];
                 return true;
             }
+            //Or comes from MDRO if EOMux is 1
             else if(controlSignals[Enu::EOMux]==1)
             {
                 result=memoryRegisters[Enu::MEM_MDRO];
                 return true;
             }
+            //Or has no has no output when EOMux is disabled
             else return false;
 
         }
+        //Or the value of AMux comes from the register bank via A
         else if(controlSignals[Enu::AMux]==1)
         {
             return valueOnABus(result);
@@ -52,42 +61,51 @@ bool CPUDataSection::getAMuxOutput(quint8& result) const
     default:
         break;
     }
+    //If control flow reaches here, it is safe to assume that AMux has no valid output
+    return false;
 }
 
 bool CPUDataSection::calculateCSMuxOutput(bool &result) const
 {
+    //CSMux either outputs C when CS is 0
     if(controlSignals[Enu::CSMux]==0)
     {
         result=NZVCSbits&Enu::CMask;
         return true;
     }
+    //Or outputs S when CS is 1
     else if(controlSignals[Enu::CSMux]==1)
     {
         result = NZVCSbits&Enu::SMask;
         return true;
     }
+    //Otherwise it does not have valid output
     else return false;
 }
 
 bool CPUDataSection::calculatALUOutput(quint8 &res, quint8 &NZVC) const
 {
+    //This function should not set any errors.
+    //Errors will be handled by step(..)
     quint8 a,b;
     bool carryIn;
     bool hasA=getAMuxOutput(a), hasB=valueOnBBus(b),hasCin=calculateCSMuxOutput(carryIn);
     if(!((aluFnIsUnary()&&hasA)||(hasA&&hasB)))
     {
-#pragma message "TODO: Warning when ALU has bad inputs"
+        //The ALU output calculation would not be meaningful given its current function and inputs
         return false;
     }
+
+    //Unless otherwise noted, do not return true (sucessfully) early, or the calculation for the NZ bits will be skipped
     switch(controlSignals[Enu::ALU])
     {
     case Enu::A_func: //A
-        if(hasA) res=a;
-        else return false;
+        res=a;
         break;
     case Enu::ApB_func: //A plus B
         res=a+b;
         NZVC|= Enu::CMask*((int)(res<a||res<b)); //Carry out if result is unsigned less than a or b.
+        //V Bit calculation could be wrong
         NZVC|= Enu::VMask*((((a & 0x7f) + (b & 0x7f)) >> 7) & 0x1) ^ (((NZVC&Enu::CMask)/Enu::CMask)*Enu::NMask);
         break;
     case Enu::ApnBp1_func: //A plus ~B plus 1
@@ -98,7 +116,8 @@ bool CPUDataSection::calculatALUOutput(quint8 &res, quint8 &NZVC) const
         //Intentional fallthrough
     case Enu::ApBpCin_func: //A plus B plus Cin
         res=a+b+(int)carryIn;
-        NZVC|= Enu::CMask*((int)(res<a||res<b));
+        NZVC|= Enu::CMask*((int)(res<a||res<b)); //Carry out if result is unsigned less than a or b.
+        //V Bit calculation could be wrong
         NZVC|= Enu::VMask*((((a & 0x7f) + (b & 0x7f)) >> 7) & 0x1) ^ (((NZVC&Enu::CMask)/Enu::CMask)*Enu::NMask);
         break;
     case Enu::AandB_func: //A*B
@@ -121,20 +140,19 @@ bool CPUDataSection::calculatALUOutput(quint8 &res, quint8 &NZVC) const
         break;
     case Enu::ASLA_func: //ASL A
         res=a<<1;
+        //Probably wrong VC bits
         NZVC|=Enu::CMask*((a & 0x80) >> 7);
-        //Probably wrong
         NZVC|=Enu::VMask*(((a & 0x40) >> 6) ^ (NZVC&Enu::CMask));
         break;
     case Enu::ROLA_func: //ROL A
         res=a<<1 | ((int) carryIn);
+        //Probably wrong VC bits
         NZVC|=Enu::CMask*((a & 0x80) >> 7);
-        //Probably wrong
         NZVC|=Enu::VMask*(bool)(((a & 0x40) >> 6) ^ (NZVC&Enu::CMask));
         break;
     case Enu::ASRA_func: //ASR A
-        res = (a>>1)|(a&0x80);
-        NZVC|=Enu::CMask*(a&1);
-        break;
+        carryIn=true; //RORA and ASRA only differ by whether or not carryIn is guaranteed to be high
+        //Intentional fallthrough
     case Enu::RORA_func: //ROR a
         res = (a>>1)|((int)carryIn<<7);
         NZVC|=Enu::CMask*(a&1);
@@ -146,13 +164,12 @@ bool CPUDataSection::calculatALUOutput(quint8 &res, quint8 &NZVC) const
         NZVC|=Enu::VMask&a;
         NZVC|=Enu::CMask&a;
         return true; //Must return early to avoid NZ calculation
-    default:
-        break;
-
+    default: //If the default has been hit, then an invalid function was selected
+        return false;
     }
-    //N bit is always set the same
+    //Get boolean value for N, then shift to correct place
     NZVC|=(Enu::NMask*(res>127));
-    //Z bit is always set the same
+    //Get boolean value for Z, then shift to correct place
     NZVC|=(Enu::ZMask*(res==0));
     return true;
 
@@ -160,22 +177,28 @@ bool CPUDataSection::calculatALUOutput(quint8 &res, quint8 &NZVC) const
 
 void CPUDataSection::setMemoryRegister(Enu::EMemoryRegisters reg, quint8 value)
 {
+    //Cache old memory value, so it be emitted with signal
+    quint8 old = memoryRegisters[reg];
+    if(old==value) return; //Don't continue if the new value is the old value
     qDebug()<<"Memory Register"<<reg<<" : "<<value;
     memoryRegisters[reg]=value;
+    emit memoryRegisterChanged(reg,old,value);
 }
 
 CPUDataSection* CPUDataSection::getInstance()
 {
+    //If no instance of the CPU data section yet exists, create it
     if(CPUDataSection::_instance==nullptr)
     {
         CPUDataSection::_instance = new CPUDataSection();
     }
+    //Return the signle instance of the data section
     return CPUDataSection::_instance;
 }
 
 CPUDataSection::~CPUDataSection()
 {
-
+    //This code should not be called during the normal lifetime of Pep9CPU
 }
 
 quint8 CPUDataSection::getRegisterBankByte(quint8 registerNumber) const
@@ -188,8 +211,7 @@ quint8 CPUDataSection::getRegisterBankByte(quint8 registerNumber) const
 quint16 CPUDataSection::getRegisterBankWord(quint8 registerNumber) const
 {
     quint16 returnValue;
-    registerNumber= registerNumber-registerNumber%2;
-    if(registerNumber>Enu::maxRegisterNumber) returnValue=0;
+    if(registerNumber+1>Enu::maxRegisterNumber) returnValue=0;
     else
     {
         returnValue = ((quint16)registerBank[registerNumber])<<8;
@@ -217,13 +239,13 @@ bool CPUDataSection::valueOnCBus(quint8 &result) const
 {
     if(controlSignals[Enu::CMux]==0)
     {
-        result=0;
-        result= (NZVCSbits&~(Enu::SMask)); //Mask out S bit
+        //If CMux is 0, then the NZVC bits (minus S) are directly routed to result
+        result = (NZVCSbits&~(Enu::SMask));
         return true;
     }
     else if(controlSignals[Enu::CMux]==1)
     {
-        quint8 temp;
+        quint8 temp; //Discard NZVC bits for this calculation, they are unecessary for calculating C's output
         return calculatALUOutput(result,temp);
     }
     else return false;
@@ -246,8 +268,8 @@ bool CPUDataSection::getStatusBit(Enu::EStatusBit statusBit) const
 {
     switch(statusBit)
     {
+    //Mask out bit of interest, then convert to bool
     case Enu::STATUS_N:
-        //Mask out the original N bit, and then or it with the properly shifted value
         return(NZVCSbits&Enu::NMask);
     case Enu::STATUS_Z:
         return(NZVCSbits&Enu::ZMask);
@@ -271,8 +293,8 @@ void CPUDataSection::setStatusBitPre(Enu::EStatusBit statusBit, bool val)
     qDebug()<<"Status bit "<<statusBit<<":"<<(quint8)val;
     switch(statusBit)
     {
+    //Mask out the original bit, and then or it with the properly shifted bit
     case Enu::STATUS_N:
-        //Mask out the original N bit, and then or it with the properly shifted value
         NZVCSbits=(NZVCSbits&~Enu::NMask)|(val?1:0)*Enu::NMask;
         break;
     case Enu::STATUS_Z:
@@ -305,17 +327,22 @@ void CPUDataSection::setMemoryWordPre(quint16 address, quint16 val)
 
 void CPUDataSection::setRegisterBytePre(quint8 reg, quint8 val)
 {
-    if(reg>21) return;
+    if(reg>21) return; //Don't allow static registers to be written to
     qDebug()<<"Register set "<<reg<<":"<<val;
     registerBank[reg]=val;
 }
 
 void CPUDataSection::setRegisterWordPre(quint8 reg, quint16 val)
 {
-   if(reg>21) return;
+   if(reg>21) return; //Don't allow static registers to be written to
    qDebug()<<reg<<"||"<<val;
    registerBank[reg]=val/256;
    registerBank[reg+1]=val%256;
+}
+
+void CPUDataSection::setMemoryRegisterPre(Enu::EMemoryRegisters reg, quint8 val)
+{
+    memoryRegisters[reg]=val;
 }
 
 bool CPUDataSection::setSignalsFromMicrocode(const MicroCode *line)
@@ -332,7 +359,6 @@ bool CPUDataSection::setSignalsFromMicrocode(const MicroCode *line)
             controlSignals[it]=sig;
         }
     }
-    emit controlSignalChanged(ctrlChanged);
     bool val;
     for(int it=0;it<clockSignals.length();it++)
     {
@@ -343,40 +369,44 @@ bool CPUDataSection::setSignalsFromMicrocode(const MicroCode *line)
             clockSignals[it]=val;
         }
     }
-    emit clockSignalsChanged(clockChanged);
+    if(ctrlChanged||clockChanged) emit controlClockChanged();
     return ctrlChanged|clockChanged;
 }
 
 void CPUDataSection::setRegisterByte(quint8 reg, quint8 value)
 {
+    //Cache old register value
     quint8 old = registerBank[reg];
+    if(old==value) return; //Don't continue if the new value is the old value
     setRegisterBytePre(reg,value);
     emit registerChanged(reg,old,value);
 }
 
 void CPUDataSection::setMemoryByte(quint16 address, quint8 value)
 {
-#pragma message "todo"
+    quint8 old= memory[address];
+    if(old == value)return; //Don't continue if the new value is the old value
     setMemoryBytePre(address,value);
-    //emit memoryChanged(address);
+    emit memoryChanged(address,old,value);
 }
 
 void CPUDataSection::setMemoryWord(quint16 address, quint16 value)
 {
-#pragma message "todo"
+    address&=0xFFFE; //Memory access ignores the lowest order bit
+    quint8 hi=memory[address],lo=memory[address+1]; //Cache old memory values
+    if((((quint16)hi<<8)|lo)==value)return; //Don't continue if the new value is the old value
     setMemoryWordPre(address,value);
-    //emit memoryChanged(address);
+    emit memoryChanged(address,hi,value/256); //Signal that two bytes of memory changed
+    emit memoryChanged(address+1,lo,value%256);
 }
 
 void CPUDataSection::setStatusBit(Enu::EStatusBit statusBit, bool val)
 {
+    quint8 old = NZVCSbits;
     setStatusBitPre(statusBit,val);
-    //emit statusBitChanged(statusBit);
-}
-
-bool CPUDataSection::hadErrorOnStep()
-{
-    return hadDataError;
+    //Check if old is equal to new after attempting to set it, as there isn't a simple test for bit math
+    if(old==val)return; //Prevent signal from being emitted if no value changed
+    emit statusBitChanged(statusBit,val);
 }
 
 void CPUDataSection::handleMainBusState() noexcept
@@ -551,7 +581,7 @@ void CPUDataSection::stepTwoByte() noexcept
     if(mainBusState == Enu::MemWriteReady)
     {
         quint16 address = (memoryRegisters[Enu::MEM_MARA]<<8)+memoryRegisters[Enu::MEM_MARB];
-        address = address-address%2; //Always write to the even byte
+        address&=0xFFFE; //Memory access ignores lowest order bit
         setMemoryWord(address,memoryRegisters[Enu::MEM_MDRE]*256+memoryRegisters[Enu::MEM_MDRO]);
     }
     //MARCk
@@ -594,7 +624,7 @@ void CPUDataSection::stepTwoByte() noexcept
         case 0: //Pick memory
         {
             quint16 address = (memoryRegisters[Enu::MEM_MARA]<<8)+memoryRegisters[Enu::MEM_MARB];
-            address=address-address%2; //Must fetch from the even address for the even clock
+            address&=0xFFFE; //Memory access ignores lowest order bit
             if(mainBusState!=Enu::MemReadReady){
                 hadDataError=true;
                 errorMessage = "No value from data bus to write to MDRE";
@@ -629,7 +659,8 @@ void CPUDataSection::stepTwoByte() noexcept
         case 0: //Pick memory
         {
             quint16 address = (memoryRegisters[Enu::MEM_MARA]<<8)+memoryRegisters[Enu::MEM_MARB];
-            address=(address-address%2)+1; //Must fetch from the odd address for the odd clock
+            address&=0xFFFE; //Memory access ignores lowest order bit
+            address+=1;
             if(mainBusState!=Enu::MemReadReady){
                 hadDataError=true;
                 errorMessage = "No value from data bus to write to MDRO";
@@ -687,6 +718,8 @@ void CPUDataSection::stepTwoByte() noexcept
 
 void CPUDataSection::presetStaticRegisters() noexcept
 {
+    //Pre-assign static registers according to CPU diagram
+    registerBank[22]=0x00;
     registerBank[23]=0x01;
     registerBank[24]=0x02;
     registerBank[25]=0x03;
@@ -700,6 +733,7 @@ void CPUDataSection::presetStaticRegisters() noexcept
 
 void CPUDataSection::clearControlSignals() noexcept
 {
+    //Set all control signals to disabled
     for(int it=0; it<controlSignals.length();it++)
     {
         controlSignals[it]=Enu::signalDisabled;
@@ -708,6 +742,7 @@ void CPUDataSection::clearControlSignals() noexcept
 
 void CPUDataSection::clearClockSignals() noexcept
 {
+    //Set all clock signals to low
     for(int it=0;it<clockSignals.length();it++)
     {
         clockSignals[it]=false;
@@ -716,15 +751,23 @@ void CPUDataSection::clearClockSignals() noexcept
 
 void CPUDataSection::clearRegisters() noexcept
 {
+    //Clear all registers in register bank, then restore the static values
     for(int it=0;it<registerBank.length();it++)
     {
         registerBank[it]=0;
     }
     presetStaticRegisters();
+
+     //Clear all values from memory registers
+    for(int it=0;it<memoryRegisters.length();it++)
+    {
+        memoryRegisters[it]=0;
+    }
 }
 
 void CPUDataSection::clearMemory() noexcept
 {
+    //Set all memory values to 0
     for(int it=0;it<memory.length();it++)
     {
         memory[it]=0;
@@ -739,6 +782,8 @@ void CPUDataSection::clearErrors() noexcept
 
 void CPUDataSection::onStep() noexcept
 {
+    //If the error hasn't been handled by now, clear it
+    clearErrors();
     if(cpuFeatures == Enu::OneByteDataBus) stepOneByte();
     else if(cpuFeatures == Enu::TwoByteDataBus) stepTwoByte();
 }
@@ -752,6 +797,7 @@ void CPUDataSection::onClock() noexcept
 
 void CPUDataSection::onClearCPU() noexcept
 {
+    //Reset evey value associated with the CPU
     mainBusState = Enu::None;
     clearErrors();
     clearRegisters();
@@ -762,11 +808,14 @@ void CPUDataSection::onClearCPU() noexcept
 
 void CPUDataSection::onClearMemory() noexcept
 {
+    //On memory reset, only clear RAM
     clearMemory();
 }
 
 void CPUDataSection::onCPUFeaturesChanged(Enu::CPUType newFeatures) throw(Enu::InvalidCPUMode)
 {
+    //Check that the CPU mode is valid, so that no other code has to check.
+    //It would be better to crash now than to have a strange error pop up on step(...) later
     if(!(newFeatures!=Enu::OneByteDataBus)&&!(newFeatures!=Enu::TwoByteDataBus))
     {
         throw Enu::InvalidCPUMode();

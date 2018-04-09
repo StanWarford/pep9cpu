@@ -22,7 +22,7 @@ public:
     //Access CPU registers
     quint8 getRegisterBankByte(quint8 registerNumber) const;
     quint16 getRegisterBankWord(quint8 registerNumber) const; //Follows even/odd conventions of pep/9
-    quint8 getMemoryRegister(Enu::EMemoryRegisters)const;
+    quint8 getMemoryRegister(Enu::EMemoryRegisters registerNumber)const;
 
     //Access register & Memory Buses
     bool valueOnABus(quint8& result) const;
@@ -51,24 +51,29 @@ public:
     void setMemoryWordPre(quint16 address,quint16 val);
     void setRegisterBytePre(quint8 reg,quint8 val);
     void setRegisterWordPre(quint8 reg,quint16 val);
+    void setMemoryRegisterPre(Enu::EMemoryRegisters,quint8 val);
     bool setSignalsFromMicrocode(const MicroCode* line);
 
     //Return information about errors on the last step
-    inline bool hadErrorOnStep();
-    inline QString getErrorMessage();
+    inline bool hadErrorOnStep(){return hadDataError;}
+    inline QString getErrorMessage(){return errorMessage;}
+
 private:
     CPUDataSection(QObject* parent=0);
     static CPUDataSection* _instance;
     Enu::CPUType cpuFeatures;
     Enu::MainBusState mainBusState;
+
     //Data registers
-    QVector<quint8> memoryRegisters;
     QVector<quint8> registerBank;
+    QVector<quint8> memoryRegisters;
     QVector<quint8> memory;
     quint8 NZVCSbits;
+
     //Control Signals
     QVector<quint8> controlSignals;
     QVector<bool> clockSignals;
+
     //Error handling
     bool hadDataError=false;
     QString errorMessage="";
@@ -84,14 +89,16 @@ private:
     //Return  true if CSMux has an ouput, and set result equal to the output if present
     bool calculateCSMuxOutput(bool& result) const;
     //Return if the ALU has an ouput, and set result & NZVC bits according to the ALU function
-    bool calculatALUOutput(quint8& result,quint8 &NZVC) const;
+    bool calculateALUOutput(quint8& result,quint8 &NZVC) const;
 
+    //Set CPU state and emit appropriate change event
     inline void setMemoryRegister(Enu::EMemoryRegisters,quint8 value);
     inline void setRegisterByte(quint8 register,quint8 value);
     inline void setMemoryByte(quint16 address, quint8 value);
     inline void setMemoryWord(quint16 address, quint16 value);
     inline void setStatusBit(Enu::EStatusBit,bool val);
 
+    //Simulation stepping logic
     void handleMainBusState() noexcept;
     void stepOneByte() noexcept;
     void stepTwoByte() noexcept;
@@ -109,12 +116,12 @@ public slots:
     void onClearMemory() noexcept;
     void onCPUFeaturesChanged(Enu::CPUType newFeatures) throw(Enu::InvalidCPUMode);
 signals:
-    void CPUFeaturesChanged(Enu::CPUType newFeatures);
-    void registerChanged(quint8 register,quint8 oldVal,quint8 newVal);
-    void memoryRegisterChanged(Enu::EMemoryRegisters,quint8 oldVal,quint8 newVal);
-    void controlSignalChanged(quint32 ControlSignals);
-    void clockSignalsChanged(quint16 clockSignals) ;
-    void ramChanged(quint16 address,quint8 oldVal, quint8 newVal);
+    void CPUFeaturesChanged(Enu::CPUType newFeatures); //Thrown whenever onCPUFeaturesChanged(...) is called
+    void registerChanged(quint8 register,quint8 oldVal,quint8 newVal); //Thrown whenever a register in the register bank is changed.
+    void memoryRegisterChanged(Enu::EMemoryRegisters,quint8 oldVal,quint8 newVal); //Thrown whenever a memory register is changed.
+    void statusBitChanged(Enu::EStatusBit status,bool value);
+    void controlClockChanged(); //Thrown whenever a control line or clock line is changed
+    void memoryChanged(quint16 address,quint8 oldVal, quint8 newVal); //Thrown whenever a memory address is changed
 
 };
 

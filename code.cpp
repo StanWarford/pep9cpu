@@ -324,14 +324,17 @@ QString UnitPostCode::getSourceCode() {
 
 bool UnitPostCode::testPostcondition(CPUDataSection *data, QString &err)
 {
+    bool val=true;;
     for(auto x : unitPostList)
     {
-        x->testUnitPost(data,err);
+        val&=x->testUnitPost(data,err);
         if(err!="")
         {
             qDebug()<<err;
+            err="";
         }
     }
+    return val;
 }
 
 bool UnitPostCode::testPostcondition(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString) {

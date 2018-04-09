@@ -14,7 +14,8 @@ Still left to do:
     Implement setting of memory registers from preconditions
     Split this file into CPUDataSection and CPUControlSection
     Implement jumps instead of increment in control section
-    Comment The data section
+    Comment the data section
+    Fix VC bits of data section
 
 THEN
     Remove all CPUPane stepping code
