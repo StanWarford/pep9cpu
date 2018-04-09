@@ -27,7 +27,7 @@
 #include "specification.h"
 #include "mainmemory.h"
 #include "cpupane.h"
-class CPUDataSection; //Forward declaration to reslove circular dependencies
+class CPUDataSection; //Forward declare CPUDataSection to avoid inclusion loops
 // Abstract code class
 class Code
 {
@@ -50,10 +50,10 @@ class MicroCode: public Code
     friend class Asm;
 public:
     MicroCode();
-    bool isMicrocode();
-    void setCpuLabels(CpuGraphicsItems *cpuPaneItems);
-    QString getObjectCode();
-    QString getSourceCode();
+    bool isMicrocode() override;
+    void setCpuLabels(CpuGraphicsItems *cpuPaneItems) override;
+    QString getObjectCode() override;
+    QString getSourceCode() override;
     bool hasControlSignal(Enu::EControlSignals field) const;
     bool hasClockSignal(Enu::EClockSignals field) const;
     void setControlSignal(Enu::EControlSignals field,quint8 value);
@@ -74,7 +74,7 @@ class CommentOnlyCode: public Code
 {
 public:
     CommentOnlyCode(QString comment);
-    QString getSourceCode();
+    QString getSourceCode() override;
 private:
     QString cComment;
 };
@@ -83,9 +83,9 @@ class UnitPreCode: public Code
 {
 public:
     ~UnitPreCode();
-    QString getSourceCode();
-    bool hasUnitPre();
-    void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane);
+    QString getSourceCode() override;
+    bool hasUnitPre() override;
+    void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane) override;
     void setUnitPre(CPUDataSection* data);
     void appendSpecification(Specification *specification);
     void setComment(QString comment);
@@ -98,9 +98,9 @@ class UnitPostCode: public Code
 {
 public:
     ~UnitPostCode();
-    QString getSourceCode();
+    QString getSourceCode() override;
     bool testPostcondition(CPUDataSection *data,QString &err);
-    bool testPostcondition(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString);
+    bool testPostcondition(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString) override;
     void appendSpecification(Specification *specification);
     void setComment(QString comment);
     bool hasUnitPost() override;

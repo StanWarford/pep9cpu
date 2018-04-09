@@ -211,6 +211,7 @@ bool RegSpecification::testUnitPost(CPUDataSection *data, QString &errorString)
     case Enu::T6:
         reg=20;
         break;
+    default: return true; //By default,
     }
     qDebug()<<reg;
     qDebug()<<data->getRegisterBankWord(reg)<<":"<<regValue;
@@ -283,6 +284,8 @@ void StatusBitSpecification::setUnitPre(CPUDataSection *data)
     case Enu::S:
         status = Enu::STATUS_S;
         break;
+    default: //If this case is ever reached, then nzvcsAddress wasn't actually a NZVCS flag
+        return;
     }
     data->setStatusBitPre(status,nzvcsValue);
 }
@@ -321,6 +324,7 @@ bool StatusBitSpecification::testUnitPost(CPUDataSection *data, QString &errorSt
     case Enu::S:
         status = Enu::STATUS_S;
         break;
+    default: return true;
     }
     if(data->getStatusBit(status)==nzvcsValue) return true;
     switch (nzvcsAddress) {

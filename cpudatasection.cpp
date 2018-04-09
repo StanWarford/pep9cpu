@@ -83,7 +83,7 @@ bool CPUDataSection::calculateCSMuxOutput(bool &result) const
     else return false;
 }
 
-bool CPUDataSection::calculatALUOutput(quint8 &res, quint8 &NZVC) const
+bool CPUDataSection::calculateALUOutput(quint8 &res, quint8 &NZVC) const
 {
     //This function should not set any errors.
     //Errors will be handled by step(..)
@@ -246,7 +246,7 @@ bool CPUDataSection::valueOnCBus(quint8 &result) const
     else if(controlSignals[Enu::CMux]==1)
     {
         quint8 temp; //Discard NZVC bits for this calculation, they are unecessary for calculating C's output
-        return calculatALUOutput(result,temp);
+        return calculateALUOutput(result,temp);
     }
     else return false;
 
@@ -478,7 +478,7 @@ void CPUDataSection::stepOneByte() noexcept
     if(hadErrorOnStep()) return;
     Enu::EALUFunc aluFunc = (Enu::EALUFunc) controlSignals[Enu::ALU];
     quint8 a,b,c,alu,NZVC;
-    bool hasA=valueOnABus(a),hasB=valueOnBBus(b),hasC=valueOnCBus(c),aluOutput=calculatALUOutput(alu,NZVC);
+    bool hasA=valueOnABus(a),hasB=valueOnBBus(b),hasC=valueOnCBus(c),aluOutput=calculateALUOutput(alu,NZVC);
     //Handle write to memory
     if(mainBusState == Enu::MemWriteReady)
     {
@@ -576,7 +576,7 @@ void CPUDataSection::stepTwoByte() noexcept
     if(hadErrorOnStep()) return;
     Enu::EALUFunc aluFunc = (Enu::EALUFunc) controlSignals[Enu::ALU];
     quint8 a,b,c,alu,NZVC;
-    bool hasA=valueOnABus(a),hasB=valueOnBBus(b),hasC=valueOnCBus(c),aluOutput=calculatALUOutput(alu,NZVC);
+    bool hasA=valueOnABus(a),hasB=valueOnBBus(b),hasC=valueOnCBus(c),aluOutput=calculateALUOutput(alu,NZVC);
     //Handle write to memory
     if(mainBusState == Enu::MemWriteReady)
     {

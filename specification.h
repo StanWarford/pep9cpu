@@ -23,7 +23,7 @@
 
 #include "mainmemory.h"
 #include "cpupane.h"
-class CPUDataSection; //Forward declaration, as the inclue tree is loopy
+class CPUDataSection; //Forward declare CPUDataSection to avoid inclusion loops
 class Specification
 {
 public:
