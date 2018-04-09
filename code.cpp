@@ -322,6 +322,18 @@ QString UnitPostCode::getSourceCode() {
     return str;
 }
 
+bool UnitPostCode::testPostcondition(CPUDataSection *data, QString &err)
+{
+    for(auto x : unitPostList)
+    {
+        x->testUnitPost(data,err);
+        if(err!="")
+        {
+            qDebug()<<err;
+        }
+    }
+}
+
 bool UnitPostCode::testPostcondition(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString) {
     for (int i = 0; i < unitPostList.size(); i++) {
         if (!unitPostList.at(i)->testUnitPost(mainMemory, cpuPane, errorString)) {
@@ -337,4 +349,9 @@ void UnitPostCode::appendSpecification(Specification *specification) {
 
 void UnitPostCode::setComment(QString comment) {
     cComment = comment;
+}
+
+bool UnitPostCode::hasUnitPost()
+{
+    return true;
 }

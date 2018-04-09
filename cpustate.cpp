@@ -193,8 +193,8 @@ quint16 CPUDataSection::getRegisterBankWord(quint8 registerNumber) const
     if(registerNumber>Enu::maxRegisterNumber) returnValue=0;
     else
     {
-        returnValue = ((quint16)memory[registerNumber])<<16;
-        returnValue+=memory[registerNumber+1];
+        returnValue = ((quint16)registerBank[registerNumber])<<8;
+        returnValue+=registerBank[registerNumber+1];
     }
     return returnValue;
 
@@ -241,6 +241,24 @@ Enu::MainBusState CPUDataSection::getMainBusState() const
 quint8 CPUDataSection::getMemoryByte(quint16 address) const
 {
     return memory[address];
+}
+
+bool CPUDataSection::getStatusBit(Enu::EStatusBit statusBit) const
+{
+    switch(statusBit)
+    {
+    case Enu::STATUS_N:
+        //Mask out the original N bit, and then or it with the properly shifted value
+        return(NZVCSbits&Enu::NMask);
+    case Enu::STATUS_Z:
+        return(NZVCSbits&Enu::ZMask);
+    case Enu::STATUS_V:
+        return(NZVCSbits&Enu::VMask);
+    case Enu::STATUS_C:
+        return(NZVCSbits&Enu::CMask);
+    case Enu::STATUS_S:
+        return(NZVCSbits&Enu::SMask);
+    }
 }
 
 MicroCode* CPUDataSection::getMicrocodeFromSignals() const
@@ -898,6 +916,28 @@ void CPUControlSection::initCPUStateFromPreconditions()
     //Handle data section logic
 
 
+}
+
+bool CPUControlSection::testPost()
+{
+    QList<UnitPreCode*> preCode;
+    if(program == nullptr)
+    {
+        qDebug()<<"Can't init from null program";
+    }
+    for(Code* x : program->getObjectCode())
+    {
+        if(x->hasUnitPost())preCode.append((UnitPreCode*)x);
+    }
+    QString err;
+    bool t=false;
+    for(auto x : preCode)
+    {
+       ((UnitPostCode*) x)->testPostcondition(data,err);
+        if(err!="")t=true;
+    }
+    qDebug()<<"The postcondtions were:"<<!t;
+    return !t;
 }
 
 CPUTester *CPUTester::getInstance()

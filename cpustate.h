@@ -46,6 +46,7 @@ public:
     const QVector<quint8> getMemory() const;
     quint8 getControlSignals(Enu::EControlSignals controlSignal) const;
     bool getClockSignals(Enu::EClockSignals) const;
+    bool getStatusBit(Enu::EStatusBit) const;
     MicroCode* getMicrocodeFromSignals() const;
 
     /*
@@ -125,6 +126,7 @@ public:
     static CPUControlSection* getInstance();
     virtual ~CPUControlSection();
     void initCPUStateFromPreconditions();
+    bool testPost();
     void setMicrocodeProgram(MicrocodeProgram* program);
     bool hadErrorOnStep();
     QString getError();

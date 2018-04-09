@@ -38,6 +38,7 @@ public:
     virtual QString getObjectCode() { return ""; }
     virtual QString getSourceCode() { return ""; }
     virtual bool hasUnitPre() { return false; }
+    virtual bool hasUnitPost(){return false;}
     virtual void setUnitPre(MainMemory *, CpuPane *) { }
     virtual bool testPostcondition(MainMemory *, CpuPane *, QString &) { return true; }
 };
@@ -98,9 +99,11 @@ class UnitPostCode: public Code
 public:
     ~UnitPostCode();
     QString getSourceCode();
+    bool testPostcondition(CPUDataSection *data,QString &err);
     bool testPostcondition(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString);
     void appendSpecification(Specification *specification);
     void setComment(QString comment);
+    bool hasUnitPost() override;
 private:
     QList<Specification *> unitPostList;
     QString cComment;

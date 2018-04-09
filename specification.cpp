@@ -70,7 +70,7 @@ bool MemSpecification::testUnitPost(MainMemory *mainMemory, CpuPane *, QString &
 
 bool MemSpecification::testUnitPost(CPUDataSection *data, QString &errString)
 {
-
+    return true;
 }
 
 QString MemSpecification::getSourceCode() {
@@ -156,9 +156,65 @@ bool RegSpecification::testUnitPost(MainMemory *, CpuPane *cpuPane, QString &err
     }
 }
 
-bool RegSpecification::testUnitPost(CPUDataSection *data, QString &errString)
+bool RegSpecification::testUnitPost(CPUDataSection *data, QString &errorString)
 {
-
+    int reg=0;
+    switch(regAddress)
+    {
+    case Enu::Acc:
+        reg=0;
+        break;
+    case Enu::X:
+        reg=2;
+        break;
+    case Enu::SP:
+        reg=4;
+        break;
+    case Enu::PC:
+        reg=6;
+        break;
+    case Enu::IR:
+        if(data->getRegisterBankWord(8)==regValue/256&&data->getRegisterBankByte(10)==regValue%256) return true;
+        break;
+    case Enu::T1:
+        if(data->getRegisterBankByte(11)==regValue) return true;
+        break;
+    case Enu::T2:
+        reg=12;
+        break;
+    case Enu::T3:
+        reg=14;
+        break;
+    case Enu::T4:
+        reg=16;
+        break;
+    case Enu::T5:
+        reg=18;
+        break;
+    case Enu::T6:
+        reg=20;
+        break;
+    }
+    qDebug()<<reg;
+    qDebug()<<data->getRegisterBankWord(reg)<<":"<<regValue;
+    if(data->getRegisterBankWord(reg)==regValue)return true;
+    switch (regAddress) {
+    case Enu::Acc: errorString = "// ERROR: Unit test failed for register A."; return false;
+    case Enu::X: errorString = "// ERROR: Unit test failed for register X."; return false;
+    case Enu::SP: errorString = "// ERROR: Unit test failed for register SP."; return false;
+    case Enu::PC: errorString = "// ERROR: Unit test failed for register PC."; return false;
+    case Enu::IR: errorString = "// ERROR: Unit test failed for register IR."; return false;
+    case Enu::T1: errorString = "// ERROR: Unit test failed for register T1."; return false;
+    case Enu::T2: errorString = "// ERROR: Unit test failed for register T2."; return false;
+    case Enu::T3: errorString = "// ERROR: Unit test failed for register T3."; return false;
+    case Enu::T4: errorString = "// ERROR: Unit test failed for register T4."; return false;
+    case Enu::T5: errorString = "// ERROR: Unit test failed for register T5."; return false;
+    case Enu::T6: errorString = "// ERROR: Unit test failed for register T6."; return false;
+    case Enu::MARAREG: errorString = "// ERROR: Unit test failed for MARA."; return false;
+    case Enu::MARBREG: errorString = "// ERROR: Unit test failed for MARB."; return false;
+    case Enu::MDRREG: errorString = "// ERROR: Unit test failed for MDR."; return false;
+    default: return false;
+    }
 }
 
 QString RegSpecification::getSourceCode() {
@@ -228,9 +284,36 @@ bool StatusBitSpecification::testUnitPost(MainMemory *, CpuPane *cpuPane, QStrin
     }
 }
 
-bool StatusBitSpecification::testUnitPost(CPUDataSection *data, QString &errString)
+bool StatusBitSpecification::testUnitPost(CPUDataSection *data, QString &errorString)
 {
-
+    Enu::EStatusBit status;
+    switch(nzvcsAddress)
+    {
+    case Enu::N:
+        status = Enu::STATUS_N;
+        break;
+    case Enu::Z:
+        status = Enu::STATUS_Z;
+        break;
+    case Enu::V:
+        status = Enu::STATUS_V;
+        break;
+    case Enu::Cbit:
+        status = Enu::STATUS_C;
+        break;
+    case Enu::S:
+        status = Enu::STATUS_S;
+        break;
+    }
+    if(data->getStatusBit(status)==nzvcsValue) return true;
+    switch (nzvcsAddress) {
+    case Enu::N: errorString = "// ERROR: Unit test failed for status bit N."; return false;
+    case Enu::Z: errorString = "// ERROR: Unit test failed for status bit Z."; return false;
+    case Enu::V: errorString = "// ERROR: Unit test failed for status bit V."; return false;
+    case Enu::Cbit: errorString = "// ERROR: Unit test failed for status bit C."; return false;
+    case Enu::S: errorString = "// ERROR: Unit test failed for status bit S."; return false;
+    default: return false;
+    }
 }
 
 QString StatusBitSpecification::getSourceCode() {

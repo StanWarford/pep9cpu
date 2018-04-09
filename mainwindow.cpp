@@ -866,6 +866,7 @@ void MainWindow::simulationFinished()
             return;
         }
     }
+        controlSection->testPost();
     // feature, not a bug: we will display the "passed unit test" even
     // on the empty case - no postconditions
 
