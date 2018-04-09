@@ -68,9 +68,23 @@ bool MemSpecification::testUnitPost(MainMemory *mainMemory, CpuPane *, QString &
     }
 }
 
-bool MemSpecification::testUnitPost(CPUDataSection *data, QString &errString)
+bool MemSpecification::testUnitPost(CPUDataSection *data, QString &errorString)
 {
-    return true;
+    bool retVal;
+    if(numBytes==1)
+    {
+        retVal=data->getMemoryByte(memAddress)==(quint8)memValue;
+        if(!retVal)errorString= "// ERROR: Unit test failed for byte Mem[0x"+
+                QString("%1").arg(memAddress, 4, 16, QLatin1Char('0')).toUpper() + "].";
+    }
+    else
+    {
+        //Test each individual byte, to avoid memory alignment issues
+        retVal=data->getMemoryByte(memAddress)==memValue/256&&data->getMemoryByte(memAddress+1)==memValue%256;
+        if(!retVal)errorString= "// ERROR: Unit test failed for byte Mem[0x"+
+                QString("%1").arg(memAddress, 4, 16, QLatin1Char('0')).toUpper() + "].";
+    }
+    return retVal;
 }
 
 QString MemSpecification::getSourceCode() {

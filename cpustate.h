@@ -10,7 +10,6 @@
 #include "microcodeprogram.h"
 /*
 Still left to do:
-    Implement post conditions
     Implement setting of memory registers from preconditions
     Split this file into CPUDataSection and CPUControlSection
     Implement jumps instead of increment in control section
