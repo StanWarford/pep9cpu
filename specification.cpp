@@ -22,7 +22,7 @@
 #include "specification.h"
 #include "cpustate.h"
 #include <QDebug>
-
+#include "cpudatasection.h"
 Specification::Specification()
 {
 }

@@ -34,6 +34,7 @@
 #include <QtConcurrent>
 #include <QDebug>
 #include <QFontDialog>
+#include "cpudatasection.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -466,8 +467,8 @@ void MainWindow::on_actionEdit_Reset_font_to_Default_triggered()
 void MainWindow::on_actionSystem_Run_triggered()
 {
     if (on_actionSystem_Start_Debugging_triggered()) {
-        cpuPane->run();
         controlSection->onRun(); //Yay, hooked up!
+        cpuPane->run();
     }
 }
 

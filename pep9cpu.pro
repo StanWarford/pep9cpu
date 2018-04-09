@@ -49,7 +49,8 @@ SOURCES += main.cpp \
     rotatedheaderview.cpp \
     disableselectionmodel.cpp \
     colors.cpp \
-    cpustate.cpp
+    cpustate.cpp \
+    cpudatasection.cpp
 HEADERS += mainwindow.h \
     byteconverterhex.h \
     byteconverterdec.h \
@@ -80,7 +81,8 @@ HEADERS += mainwindow.h \
     rotatedheaderview.h \
     disableselectionmodel.h \
     colors.h \
-    cpustate.h
+    cpustate.h \
+    cpudatasection.h
 FORMS += mainwindow.ui \
     byteconverterhex.ui \
     byteconverterdec.ui \
