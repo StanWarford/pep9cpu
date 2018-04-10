@@ -1,4 +1,4 @@
-#include "cpustate.h"
+#include "cpucontrolsection.h"
 #include "cpudatasection.h"
 CPUControlSection *CPUControlSection::_instance = nullptr;
 CPUTester *CPUTester::_instance = nullptr;

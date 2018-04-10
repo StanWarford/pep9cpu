@@ -37,7 +37,7 @@
 #include "helpdialog.h"
 #include "aboutpep.h"
 #include "updatechecker.h"
-#include "cpustate.h"
+#include "cpucontrolsection.h"
 #include <QDir>
 
 namespace Ui {

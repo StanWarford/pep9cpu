@@ -21,7 +21,7 @@
 
 #include "cpupane.h"
 #include "ui_cpupane.h"
-#include "cpustate.h"
+#include "cpucontrolsection.h"
 
 #include <QCheckBox>
 #include <QLineEdit>

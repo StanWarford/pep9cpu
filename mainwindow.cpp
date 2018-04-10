@@ -21,7 +21,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "cpustate.h"
+#include "cpucontrolsection.h"
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QSettings>

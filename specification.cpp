@@ -20,7 +20,7 @@
 */
 
 #include "specification.h"
-#include "cpustate.h"
+#include "cpucontrolsection.h"
 #include <QDebug>
 #include "cpudatasection.h"
 Specification::Specification()
