@@ -21,6 +21,7 @@ CPUControlSection::~CPUControlSection()
 void CPUControlSection::setMicrocodeProgram(MicrocodeProgram *program)
 {
     this->program=program;
+    microprogramCounter=0;
 }
 
 bool CPUControlSection::hadErrorOnStep()
@@ -126,6 +127,7 @@ void CPUControlSection::initCPUStateFromPreconditions()
 {
     onClearCPU();
     QList<UnitPreCode*> preCode;
+    microprogramCounter=0;
     if(program == nullptr)
     {
         qDebug()<<"Can't init from null program";
