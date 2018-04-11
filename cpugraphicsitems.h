@@ -139,7 +139,8 @@ public:
     QLabel *MDRELabel;
 private:
     CPUDataSection* dataSection;
-    PepColors::Colors colorScheme;
+    bool darkMode=false;
+    const PepColors::Colors *colorScheme;
     QGraphicsScene *parentScene;
     QWidget *parent;
     Enu::CPUType model;
@@ -156,6 +157,7 @@ private:
 
     // Try to draw as many free-floating strings in one centralized function as possible. Both 1 & 2 byte models.
     void drawDiagramFreeText(QPainter *painter);
+    void drawLabels();
     void repaintLoadCk(QPainter *painter);
     void repaintCSelect(QPainter *painter);
     void repaintBSelect(QPainter *painter);

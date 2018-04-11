@@ -118,7 +118,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this,SIGNAL(darkModeChanged(bool)),microcodePane,SLOT(onDarkModeChanged(bool)));
     connect(this,SIGNAL(darkModeChanged(bool)),helpDialog,SLOT(onDarkModeChanged(bool)));
     connect(this,SIGNAL(darkModeChanged(bool)),objectCodePane,SLOT(onDarkModeChanged(bool)));
-    connect(this,SIGNAL(darkModeChanged(bool)),cpuPane,SLOT(onDarkModeChanged(bool)));
+    connect(this,SIGNAL(darkModeChanged(bool)),cpuPaneTwoByteDataBus,SLOT(onDarkModeChanged(bool)));
+    connect(this,SIGNAL(darkModeChanged(bool)),cpuPaneOneByteDataBus,SLOT(onDarkModeChanged(bool)));
     qApp->installEventFilter(this);
     //Load Style sheets
     QFile f(":qdarkstyle/dark_style.qss");
@@ -828,6 +829,7 @@ void MainWindow::stopSimulation()
     on_actionSystem_Stop_Debugging_triggered();
 
 }
+
 void MainWindow::simulationFinished()
 {
     QString errorString;
