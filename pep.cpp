@@ -23,7 +23,7 @@
 #include <QDebug>
 #include <QString>
 #include <QStringList>
-
+#include "cpudatasection.h"
 #include "pep.h"
 
 using namespace Enu;
@@ -92,10 +92,7 @@ QString Pep::addCycleNumbers(QString codeString) {
     return microcodeList.join("\n");
 }
 
-// Machine model state:
-Enu::CPUType Pep::cpuFeatures = OneByteDataBus;
-
-QMap<Enu::EControlSignals, QString> Pep::decControlToMnemonMap; // unused as of this writing
+QMap<Enu::EControlSignals, QString> Pep::decControlToMnemonMap;
 QMap<Enu::EControlSignals, QString> Pep::memControlToMnemonMap;
 QMap<Enu::EClockSignals, QString> Pep::clockControlToMnemonMap;
 QMap<Enu::EKeywords, QString> Pep::specificationToMnemonMap;
@@ -112,6 +109,7 @@ QMap<QString, Enu::EKeywords> Pep::mnemonToStatusSpecMap;
 
 void Pep::initEnumMnemonMaps()
 {
+    CPUDataSection* tempRef = CPUDataSection::getInstance();
     mnemonToDecControlMap.clear();  decControlToMnemonMap.clear();
     mnemonToDecControlMap.insert("C", C); decControlToMnemonMap.insert(C,"C");
     mnemonToDecControlMap.insert("B", B); decControlToMnemonMap.insert(B,"B");
@@ -121,10 +119,10 @@ void Pep::initEnumMnemonMaps()
     mnemonToDecControlMap.insert("CMUX", CMux); decControlToMnemonMap.insert(CMux,"CMUX");
     mnemonToDecControlMap.insert("ALU", ALU); decControlToMnemonMap.insert(ALU,"ALU");
     mnemonToDecControlMap.insert("CSMUX", CSMux); decControlToMnemonMap.insert(CSMux,"CSMUX");
-    if (Pep::cpuFeatures == OneByteDataBus) {
+    if (tempRef->getCPUFeatures() == OneByteDataBus) {
         mnemonToDecControlMap.insert("MDRMUX", MDRMux); decControlToMnemonMap.insert(MDRMux,"MDRMUX");
     }
-    else if (Pep::cpuFeatures == TwoByteDataBus){
+    else if (tempRef->getCPUFeatures() == TwoByteDataBus){
         mnemonToDecControlMap.insert("MARMUX", MARMux); decControlToMnemonMap.insert(MARMux,"MARMUX");
         mnemonToDecControlMap.insert("MDROMUX", MDROMux); decControlToMnemonMap.insert(MDROMux,"MDROMUX");
         mnemonToDecControlMap.insert("MDREMUX", MDREMux); decControlToMnemonMap.insert(MDREMux,"MDREMUX");
@@ -143,10 +141,10 @@ void Pep::initEnumMnemonMaps()
     clockControlToMnemonMap.insert(VCk, "VCk");         mnemonToClockControlMap.insert("VCK", VCk);
     clockControlToMnemonMap.insert(ZCk, "ZCk");         mnemonToClockControlMap.insert("ZCK", ZCk);
     clockControlToMnemonMap.insert(NCk, "NCk");         mnemonToClockControlMap.insert("NCK", NCk);
-    if (Pep::cpuFeatures == OneByteDataBus) {
+    if (tempRef->getCPUFeatures() == OneByteDataBus) {
         clockControlToMnemonMap.insert(MDRCk, "MDRCk");     mnemonToClockControlMap.insert("MDRCK", MDRCk);
     }
-    else if (Pep::cpuFeatures == TwoByteDataBus){
+    else if (tempRef->getCPUFeatures() == TwoByteDataBus){
         clockControlToMnemonMap.insert(MDROCk, "MDROCk");     mnemonToClockControlMap.insert("MDROCK", MDROCk);
         clockControlToMnemonMap.insert(MDRECk, "MDRECk");     mnemonToClockControlMap.insert("MDRECK", MDRECk);
     }

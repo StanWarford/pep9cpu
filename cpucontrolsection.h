@@ -6,12 +6,10 @@
 #include <QException>
 #include <QString>
 #include "enu.h"
-#include "code.h"
-#include "microcodeprogram.h"
+
 /*
 Still left to do:
     Implement setting of memory registers from preconditions
-    Split this file into CPUDataSection and CPUControlSection
     Implement jumps instead of increment in control section
 
 THEN
@@ -27,6 +25,9 @@ THEN
  * To trigger execution, a onSumulationStarted/onDebuggingStarted is called.
  * This will typically be done by some button on the main window.
  */
+class MicroCode;
+class MicrocodeProgram;
+class CPUDataSection;
 class CPUControlSection: public QObject
 {
     Q_OBJECT
@@ -36,8 +37,12 @@ public:
     void initCPUStateFromPreconditions();
     bool testPost();
     void setMicrocodeProgram(MicrocodeProgram* program);
-    bool hadErrorOnStep();
-    QString getError();
+    int getLineNumber() const;
+    const MicrocodeProgram* getProgram() const;
+    const MicroCode* getCurrentMicrocodeLine() const;
+    bool executionFinished() const;
+    bool hadErrorOnStep() const;
+    QString getErrorMessage() const;
 public slots:
     void onSimulationStarted();
     void onSimulationFinished();
@@ -48,6 +53,7 @@ public slots:
     void onRun() noexcept;
     void onClearCPU() noexcept; //This event is propogated to the DataSection
     void onClearMemory() noexcept; //This event is propogated to the DataSection
+    void onCPUFeaturesChanged(Enu::CPUType) noexcept;
 signals:
     void simulationStarted();
     void simulationStepped();

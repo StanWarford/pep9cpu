@@ -28,6 +28,7 @@ namespace Ui {
     class MainMemory;
 }
 
+class CPUDataSection;
 class MainMemory : public QWidget {
     Q_OBJECT
 public:
@@ -59,7 +60,7 @@ public:
 public slots:
     // Highlights the label based on the label window color saved in the UI file
     void highlightOnFocus();
-
+    void onMemoryValueChanged(quint16 address, quint8 oldVal, quint8 newVal);
     // Returns if the table has focus
     bool hasFocus();
 
@@ -91,7 +92,7 @@ private:
     int	highlightedIndex;
     int	currentMemoryOffset;
     char mem[0x10000];
-
+    CPUDataSection* dataSection;
     enum { CELL_COUNT = 30};
 
     int oldRowCount;

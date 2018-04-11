@@ -44,9 +44,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     // connect and begin update checker
     connect(updateChecker,SIGNAL(updateInformation(int)),this,SLOT(onUpdateCheck(int)));
-    auto x = QtConcurrent::run(updateChecker,&UpdateChecker::beginUpdateCheck);
-    // initialize the read-only registers to the correct values
-    Sim::initMRegs();
+    auto x = QtConcurrent::run(updateChecker,&UpdateChecker::beginUpdateCheck);\
+
+    //Connect Models to necessary components
+    connect(this,SIGNAL(CPUFeaturesChanged(Enu::CPUType)),controlSection,SLOT(onCPUFeaturesChanged(Enu::CPUType)));
+    connect(this,SIGNAL(CPUFeaturesChanged(Enu::CPUType)),dataSection,SLOT(onCPUFeaturesChanged(Enu::CPUType)));
 
     mainMemory = new MainMemory(ui->mainSplitter);
     delete ui->memoryFrame;
@@ -103,8 +105,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
 
     //Connect events that pass on CPU Feature changes
-    connect(this,SIGNAL(CPUFeaturesChanged()),microcodePane,SLOT(onCPUFeatureChange()));
-    connect(this, SIGNAL(CPUFeaturesChanged()),objectCodePane,SLOT(onCPUFeatureChange()));
+    connect(this,SIGNAL(CPUFeaturesChanged(Enu::CPUType)),microcodePane,SLOT(onCPUFeatureChange()));
+    connect(this, SIGNAL(CPUFeaturesChanged(Enu::CPUType)),objectCodePane,SLOT(onCPUFeatureChange()));
     //Pep::initEnumMnemonMaps();
     //Connect Simulation events
     connect(this, SIGNAL(beginSimulation()),this->objectCodePane,SLOT(onBeginSimulation()));
@@ -435,9 +437,8 @@ void MainWindow::on_actionEdit_UnComment_Line_triggered()
 void MainWindow::on_actionEdit_Auto_Format_Microcode_triggered()
 {
 #pragma message("todo: fix bug with formatting from previous run")
-    Sim::setMicrocodeSourceList();
-    if (!Sim::microcodeSourceList.isEmpty()) {
-        microcodePane->setMicrocode(Sim::microcodeSourceList.join("\n"));
+    if (microcodePane->microAssemble()) {
+        microcodePane->setMicrocode(microcodePane->getMicrocode());
     }
 }
 
@@ -467,7 +468,6 @@ void MainWindow::on_actionEdit_Reset_font_to_Default_triggered()
 void MainWindow::on_actionSystem_Run_triggered()
 {
     if (on_actionSystem_Start_Debugging_triggered()) {
-        controlSection->onRun(); //Yay, hooked up!
         cpuPane->run();
     }
 }
@@ -475,25 +475,19 @@ void MainWindow::on_actionSystem_Run_triggered()
 bool MainWindow::on_actionSystem_Start_Debugging_triggered()
 {
     emit beginSimulation();
-    Sim::cycleCount = 0; // this stores the number of cycles in a simulation, reset before assembling
+    MicrocodeProgram* prog;
     if (microcodePane->microAssemble()) {
         ui->statusBar->showMessage("MicroAssembly succeeded", 4000);
         objectCodePane->setObjectCode(microcodePane->getMicrocodeProgram());
         controlSection->setMicrocodeProgram(microcodePane->getMicrocodeProgram());
-
-        bool hasUnitPre = false;
-        for (int i = 0; i < Sim::codeList.size(); i++) {
-            hasUnitPre = hasUnitPre || Sim::codeList.at(i)->hasUnitPre();
-        }
+        prog = microcodePane->getMicrocodeProgram();
+        bool hasUnitPre = prog->hasUnitPre();
         // setup preconditions
         if (hasUnitPre) {
             controlSection->onClearCPU();
             mainMemory->clearMemory();
             cpuPane->clearCpu();
             controlSection->initCPUStateFromPreconditions();
-            for (int i = 0; i < Sim::codeList.size(); i++) {
-                Sim::codeList.at(i)->setUnitPre(mainMemory, cpuPane);
-            }
         }
     }
     else {
@@ -502,12 +496,7 @@ bool MainWindow::on_actionSystem_Start_Debugging_triggered()
     }
 
     // prevent simulation from starting if there's nothing to simulate
-    bool hasMicrocode = false;
-    for (int i = 0; i < Sim::codeList.size(); i++) {
-        if (Sim::codeList.at(i)->isMicrocode()) {
-            hasMicrocode = true;
-        }
-    }
+    bool hasMicrocode = prog->hasMicrocode(); //The compiler might warn here, but the only way to get here is if microassembly succeded, and thus there is a valid program
     if (!hasMicrocode) {
         return false;
     }
@@ -521,7 +510,6 @@ bool MainWindow::on_actionSystem_Start_Debugging_triggered()
     microcodePane->setReadOnly(true);
 
     cpuPane->startDebugging();
-    controlSection->onDebuggingStarted();
     return true;
 }
 
@@ -538,7 +526,6 @@ void MainWindow::on_actionSystem_Stop_Debugging_triggered()
     microcodePane->setReadOnly(false);
 
     cpuPane->stopDebugging();
-    controlSection->onDebuggingFinished();
     emit endSimulation();
 }
 
@@ -556,12 +543,10 @@ void MainWindow::on_actionSystem_Clear_Memory_triggered()
 
 void MainWindow::on_actionOne_Byte_Data_Bus_Model_triggered()
 {
-    Pep::cpuFeatures = Enu::OneByteDataBus;
+    //While the data section will eventually change due to this event,
+    //it needs to be changed synchronously in order to allow enum maps to work
+    dataSection->onCPUFeaturesChanged(Enu::OneByteDataBus);
     Pep::initEnumMnemonMaps();
-    Sim::initMRegs();
-    Sim::clearMemory();
-    Sim::initNZVCS();
-    Sim::initCPUState();
 
     objectCodePane->clearSimulationView();
     mainMemory->clearMemory();
@@ -582,28 +567,21 @@ void MainWindow::on_actionOne_Byte_Data_Bus_Model_triggered()
     connect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
     connect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
 
-    cpuPane->clearCpu();
-    cpuPane->clearCpuControlSignals();
-
     ui->actionTwo_Byte_Data_Bus_Model->setText("Switch to Two-byte Data Bus");
     ui->actionTwo_Byte_Data_Bus_Model->setEnabled(true);
     ui->actionOne_Byte_Data_Bus_Model->setText("One-byte Data Bus");
     ui->actionOne_Byte_Data_Bus_Model->setEnabled(false);
 
-    dataSection->onCPUFeaturesChanged(Enu::OneByteDataBus);
-    controlSection->onClearCPU();
-    emit CPUFeaturesChanged();
+    emit CPUFeaturesChanged(Enu::OneByteDataBus);
 
 }
 
 void MainWindow::on_actionTwo_Byte_Data_Bus_Model_triggered()
 {
-    Pep::cpuFeatures = Enu::TwoByteDataBus;
+    //While the data section will eventually change due to this event,
+    //it needs to be changed synchronously in order to allow enum maps to work
+    dataSection->onCPUFeaturesChanged(Enu::TwoByteDataBus);
     Pep::initEnumMnemonMaps();
-    Sim::initMRegs();
-    Sim::clearMemory();
-    Sim::initNZVCS();
-    Sim::initCPUState();
 
     objectCodePane->clearSimulationView();
     mainMemory->clearMemory();
@@ -624,16 +602,11 @@ void MainWindow::on_actionTwo_Byte_Data_Bus_Model_triggered()
     connect(cpuPane, SIGNAL(writeByte(int)), this, SLOT(updateMemAddress(int)));
     connect(cpuPane, SIGNAL(appendMicrocodeLine(QString)), this, SLOT(appendMicrocodeLine(QString)));
 
-    cpuPane->clearCpu();
-    cpuPane->clearCpuControlSignals();
-
     ui->actionTwo_Byte_Data_Bus_Model->setText("Two-byte Data Bus");
     ui->actionTwo_Byte_Data_Bus_Model->setEnabled(false);
     ui->actionOne_Byte_Data_Bus_Model->setText("Switch to One-byte Data Bus");
     ui->actionOne_Byte_Data_Bus_Model->setEnabled(true);
-    dataSection->onCPUFeaturesChanged(Enu::TwoByteDataBus);
-    controlSection->onClearCPU();
-    emit CPUFeaturesChanged();
+    emit CPUFeaturesChanged(Enu::TwoByteDataBus);
 
 }
 
@@ -860,13 +833,15 @@ void MainWindow::simulationFinished()
 
     on_actionSystem_Stop_Debugging_triggered();
 
-    for (int i = 0; i < Sim::codeList.size(); i++) {
+#pragma message "Fix main window test post conditions"
+
+    /*for (int i = 0; i < Sim::codeList.size(); i++) {
         if (!Sim::codeList.at(i)->testPostcondition(mainMemory, cpuPane, errorString)) {
             microcodePane->appendMessageInSourceCodePaneAt(-1, errorString);
             QMessageBox::warning(this, "Pep9CPU", "Failed unit test");
             return;
         }
-    }
+    }*/
         controlSection->testPost();
     // feature, not a bug: we will display the "passed unit test" even
     // on the empty case - no postconditions
@@ -898,7 +873,7 @@ void MainWindow::helpCopyToMicrocodeButtonClicked()
 
 void MainWindow::updateMemAddress(int address)
 {
-    mainMemory->setMemAddress(address, Sim::readByte(address));
+    mainMemory->setMemAddress(address, dataSection->getMemoryByte(address));
     mainMemory->showMemEdited(address);
 }
 

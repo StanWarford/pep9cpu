@@ -33,7 +33,6 @@
 #include "microcodepane.h"
 #include "objectcodepane.h"
 #include "pep.h"
-#include "sim.h"
 #include "helpdialog.h"
 #include "aboutpep.h"
 #include "updatechecker.h"
@@ -154,7 +153,7 @@ private slots:
 
     void updateMemAddress(int address);
 signals:
-    void CPUFeaturesChanged();
+    void CPUFeaturesChanged(Enu::CPUType);
     void beginUpdateCheck();
     void beginSimulation();
     void endSimulation();

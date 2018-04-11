@@ -22,7 +22,6 @@
 #include "objectcodepane.h"
 #include "ui_objectcodepane.h"
 #include "microcodeprogram.h"
-#include "sim.h"
 #include "pep.h"
 #include <QPainter>
 #include <QDebug>
@@ -32,6 +31,7 @@
 #include <QStringList>
 #include <QKeyEvent>
 #include <rotatedheaderview.h>
+#include "code.h"
 ObjectCodePane::ObjectCodePane(QWidget *parent) :
     QWidget(parent), rowCount(0),model(new QStandardItemModel()),inSimulation(false),
     ui(new Ui::ObjectCodePane)

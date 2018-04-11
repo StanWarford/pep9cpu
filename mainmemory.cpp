@@ -22,15 +22,14 @@
 #include "mainmemory.h"
 #include "ui_mainmemory.h"
 #include "pep.h"
-#include "sim.h"
 
 #include <QScrollBar>
 #include <QResizeEvent>
-
+#include "cpudatasection.h"
 #include <QDebug>
 
 MainMemory::MainMemory(QWidget *parent) :
-    QWidget(parent),
+    QWidget(parent),dataSection(CPUDataSection::getInstance()),
     ui(new Ui::MainMemory)
 {
     ui->setupUi(this);
@@ -48,7 +47,7 @@ MainMemory::MainMemory(QWidget *parent) :
     ui->tableWidget->setVerticalHeaderLabels(rows);
 
     int address = 0x0000;
-    ui->tableWidget->setItem(0, 0, new QTableWidgetItem("0x" + QString("%1").arg(Sim::readByte(address), 2, 16).toUpper().trimmed()));
+    ui->tableWidget->setItem(0, 0, new QTableWidgetItem("0x" + QString("%1").arg(dataSection->getMemoryByte(address), 2, 16).toUpper().trimmed()));
 
     refreshMemory();
 
@@ -58,7 +57,7 @@ MainMemory::MainMemory(QWidget *parent) :
     connect(ui->verticalScrollBar, SIGNAL(actionTriggered(int)), this, SLOT(sliderMoved(int)));
     connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
     connect(ui->lineEdit, SIGNAL(textChanged(QString)), this, SLOT(scrollToChanged(QString)));
-
+    connect(dataSection,&CPUDataSection::memoryChanged,this,&MainMemory::onMemoryValueChanged);
     ui->scrollToLabel->setFont(QFont(ui->scrollToLabel->font().family(), ui->scrollToLabel->font().pointSize()));
     ui->lineEdit->setFont(QFont(ui->lineEdit->font().family(), ui->lineEdit->font().pointSize()));
 
@@ -104,7 +103,7 @@ void MainMemory::refreshMemory()
         address = ui->tableWidget->verticalHeaderItem(i)->text().toInt(&ok, 16);
         if (ok) {
             ui->tableWidget->item(i, 0)->setText("0x" +
-                                                 QString("%1").arg(Sim::readByte(address), 2, 16, QLatin1Char('0')).toUpper());
+                                                 QString("%1").arg(dataSection->getMemoryByte(address), 2, 16, QLatin1Char('0')).toUpper());
         }
     }
 
@@ -131,26 +130,9 @@ void MainMemory::setMemAddress(int memAddress, int value)
         return;
     }
 
-    int lineAddress;
-    for (int i = firstAddress; i < lastAddress; i++) {
-        lineAddress = ui->tableWidget->verticalHeaderItem(i)->text().toInt((bool*)&lineAddress,16);
-        if (lineAddress == memAddress) {
-            ui->tableWidget->item(i, 0)->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper().trimmed());
-        }
-    }
+    ui->tableWidget->item(memAddress, 0)->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper().trimmed());
 
     connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
-}
-
-void MainMemory::setMemPrecondition(int memAddress, int value)
-{
-    Sim::writeByte(memAddress, value);
-    setMemAddress(memAddress, value);
-}
-
-bool MainMemory::testMemPostcondition(int memAddress, int value)
-{
-    return Sim::readByte(memAddress) == value;
 }
 
 void MainMemory::clearMemory()
@@ -158,7 +140,7 @@ void MainMemory::clearMemory()
     for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
         ui->tableWidget->item(i, 0)->setText("0x00");
     }
-    Sim::clearMemory();
+    // CPU Data section clears its own memory
 }
 
 void MainMemory::showMemEdited(int address)
@@ -172,7 +154,8 @@ void MainMemory::hightlightModifiedBytes()
 {
     // disconnect this signal so that modifying the text of the column next to it doesn't fire this signal; reconnect at the end
     disconnect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
-
+#pragma message "TODO: Fix memory highlighting code"
+    /*
     if (Sim::modifiedBytes.isEmpty()) {
         // clear all highlighted cells
         for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
@@ -191,7 +174,7 @@ void MainMemory::hightlightModifiedBytes()
         else {
             ui->tableWidget->itemAt(0, i)->setBackgroundColor(Qt::white);
         }
-    }
+    }*/
 
     connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
 }
@@ -226,6 +209,11 @@ void MainMemory::highlightOnFocus()
     }
 }
 
+void MainMemory::onMemoryValueChanged(quint16 address, quint8 oldVal, quint8 newVal)
+{
+    setMemAddress(address,newVal);
+}
+
 bool MainMemory::hasFocus()
 {
     return ui->tableWidget->hasFocus();
@@ -256,13 +244,13 @@ void MainMemory::cellDataChanged(QTableWidgetItem *item)
     data = data % 256;
 
     if (contents.contains(rx) && dataOk && addrConvOk) {
-        Sim::writeByte(address, data);
-        qDebug() << "Sim::Mem[" << address << "]: " << Sim::readByte(address);
+        dataSection->setMemoryBytePre(address,(quint8)data);
+        qDebug() << "Sim::Mem[" << address << "]: " << data;
         ui->tableWidget->item(row, 0)->setText("0x" + QString("%1").arg(data, 2, 16, QLatin1Char('0')).toUpper().trimmed());
     }
     else if (addrConvOk && !dataOk) {
         qDebug() << "Conversion from text to int failed. data = " << item->text();
-        data = Sim::readByte(address);
+        data = dataSection->getMemoryByte(address);
         ui->tableWidget->item(row, 0)->setText("0x" + QString("%1").arg(data, 2, 16, QLatin1Char('0')).toUpper().trimmed());
     }
     else if (addrConvOk) { // we have problems, the labels are incorrectly formatted
@@ -338,7 +326,7 @@ void MainMemory::resizeEvent(QResizeEvent *)
         for (int row = oldRowCount; row < newRowCount; row++) {
             address = ui->tableWidget->verticalHeaderItem(row)->text().toInt(&addrConvOk, 16);
             if (addrConvOk) {
-                ui->tableWidget->setItem(row, 0, new QTableWidgetItem("0x" + QString("%1").arg(Sim::readByte(address), 2, 16).toUpper().trimmed()));
+                ui->tableWidget->setItem(row, 0, new QTableWidgetItem("0x" + QString("%1").arg(dataSection->getMemoryByte(address), 2, 16).toUpper().trimmed()));
                 //ui->tableWidget->itemAt(row, 0)->setFont(QFont(Pep::codeFont, Pep::codeFontSize));
             }
             else { // malformed address labels

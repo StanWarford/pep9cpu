@@ -22,7 +22,7 @@
 #include "cpupane.h"
 #include "ui_cpupane.h"
 #include "cpucontrolsection.h"
-
+#include "cpudatasection.h"
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QGraphicsItem>
@@ -35,17 +35,20 @@
 #include "tristatelabel.h"
 #include "pep.h"
 #include "code.h"
-#include "sim.h"
 
 #include <QDebug>
 
 using namespace Enu;
 CpuPane::CpuPane(CPUType type, QWidget *parent) :
         QWidget(parent),
+        controlSection(CPUControlSection::getInstance()),dataSection(CPUDataSection::getInstance()),
         ui(new Ui::CpuPane)
 {
     ui->setupUi(this);
-
+    connect(this,&CpuPane::simulationFinished,controlSection,&CPUControlSection::onSimulationFinished);
+    connect(this,&CpuPane::registerChanged,dataSection,&CPUDataSection::setRegisterBytePre);
+    connect(dataSection,&CPUDataSection::statusBitChanged,this,&CpuPane::onStatusBitChanged);
+    connect(dataSection,&CPUDataSection::memoryRegisterChanged,this,&CpuPane::onMemoryRegisterChanged);
     connect(ui->spinBox, SIGNAL(valueChanged(int)), this, SLOT(zoomFactorChanged(int)));
     cpuPaneItems = NULL;
     scene = new QGraphicsScene(this);
@@ -112,6 +115,8 @@ void CpuPane::initModel(Enu::CPUType type)
     connect(cpuPaneItems->aLineEdit, SIGNAL(textChanged(QString)), scene, SLOT(invalidate()));
     connect(cpuPaneItems->MARCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->MDRCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->MARCk,&QCheckBox::clicked,this,&CpuPane::onClockChanged);
+    connect(cpuPaneItems->MDRCk,&QCheckBox::clicked,this,&CpuPane::onClockChanged);
 
     connect(cpuPaneItems->aMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
     connect(cpuPaneItems->aMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
@@ -130,12 +135,16 @@ void CpuPane::initModel(Enu::CPUType type)
     connect(cpuPaneItems->SCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->CCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->VCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->ZCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->NCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->SCkCheckBox, &QCheckBox::clicked, this, &CpuPane::onClockChanged);
+    connect(cpuPaneItems->CCkCheckBox, &QCheckBox::clicked, this, &CpuPane::onClockChanged);
+    connect(cpuPaneItems->VCkCheckBox, &QCheckBox::clicked, this, &CpuPane::onClockChanged);
+    connect(cpuPaneItems->ZCkCheckBox, &QCheckBox::clicked, this, &CpuPane::onClockChanged);
+    connect(cpuPaneItems->NCkCheckBox, &QCheckBox::clicked, this, &CpuPane::onClockChanged);
 
     connect(cpuPaneItems->AndZTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
     connect(cpuPaneItems->AndZTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
-
-    connect(cpuPaneItems->ZCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
-    connect(cpuPaneItems->NCkCheckBox, SIGNAL(clicked()), scene, SLOT(invalidate()));
 
     connect(cpuPaneItems->MemReadTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
     connect(cpuPaneItems->MemReadTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
@@ -178,7 +187,7 @@ void CpuPane::initModel(Enu::CPUType type)
     connect(cpuPaneItems->t5RegLineEdit, SIGNAL(editingFinished()), this, SLOT(regTextFinishedEditing()));
     connect(cpuPaneItems->t6RegLineEdit, SIGNAL(editingFinished()), this, SLOT(regTextFinishedEditing()));
 
-    connect(cpuPaneItems->ALULineEdit, SIGNAL(textChanged(QString)), this, SLOT(ALUTextEdited(QString)));
+    connect(cpuPaneItems->ALULineEdit, &QLineEdit::textChanged, this, &CpuPane::ALUTextEdited);
 
     // 2 byte bus signals
     connect(cpuPaneItems->MARMuxTristateLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
@@ -191,6 +200,8 @@ void CpuPane::initModel(Enu::CPUType type)
     connect(cpuPaneItems->EOMuxTristateLabel, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->MDRECk, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->MDROCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->MDRECk, &QCheckBox::clicked,this,&CpuPane::onClockChanged);
+    connect(cpuPaneItems->MDROCk, &QCheckBox::clicked,this,&CpuPane::onClockChanged);
 
     // Handle Windows repainting bug
     // This might have a performance penalty, so only enable it on the platform that needs it.
@@ -203,22 +214,11 @@ void CpuPane::startDebugging()
 {
     ui->resumePushButton->setEnabled(true);
     ui->singleStepPushButton->setEnabled(true);
-
+    initRegisters();
+    controlSection->onDebuggingStarted();
     ui->clockPushButton->setEnabled(false);
     ui->copyToMicrocodePushButton->setEnabled(false);
-
-    // reinitialize these to zero for this simulation
-    Sim::microProgramCounter = 0;
-    Sim::microCodeCurrentLine = 0;
-
-    // Clear memread/write state from previous simulations
-    Sim::mainBusState = Enu::None;
-
-    Code *code = Sim::codeList.at(Sim::microCodeCurrentLine);
-    while (!Sim::atEndOfSim() && !code->isMicrocode()) {
-        Sim::microCodeCurrentLine++;
-        code = Sim::codeList.at(Sim::microCodeCurrentLine);
-    }
+    const MicroCode *code = controlSection->getCurrentMicrocodeLine();
     code->setCpuLabels(cpuPaneItems);
     emit updateSimulation();
 }
@@ -227,7 +227,7 @@ void CpuPane::stopDebugging()
 {
     ui->resumePushButton->setEnabled(false);
     ui->singleStepPushButton->setEnabled(false);
-
+    controlSection->onDebuggingFinished();
     ui->clockPushButton->setEnabled(true);
     ui->copyToMicrocodePushButton->setEnabled(true);
 }
@@ -235,78 +235,51 @@ void CpuPane::stopDebugging()
 void CpuPane::setRegister(Enu::EKeywords reg, int value) {
     switch (reg) {
     case Enu::Acc:
-        Sim::regBank[0] = (value & 65280) / 256;
-        Sim::regBank[1] = (value & 255);
         cpuPaneItems->aRegLineEdit->setText("0x" + QString("%1").arg(value, 4, 16, QLatin1Char('0')).toUpper());
         break;
     case Enu::X:
-        Sim::regBank[2] = (value & 65280) / 256;
-        Sim::regBank[3] = (value & 255);
         cpuPaneItems->xRegLineEdit->setText("0x" + QString("%1").arg(value, 4, 16, QLatin1Char('0')).toUpper());
         break;
     case Enu::SP:
-        Sim::regBank[4] = (value & 65280) / 256;
-        Sim::regBank[5] = (value & 255);
         cpuPaneItems->spRegLineEdit->setText("0x" + QString("%1").arg(value, 4, 16, QLatin1Char('0')).toUpper());
         break;
     case Enu::PC:
-        Sim::regBank[6] = (value & 65280) / 256;
-        Sim::regBank[7] = (value & 255);
         cpuPaneItems->pcRegLineEdit->setText("0x" + QString("%1").arg(value, 4, 16, QLatin1Char('0')).toUpper());
         break;
     case Enu::IR:
-        Sim::regBank[8] = (value & 0xFF0000) / 65536;
-        Sim::regBank[9] = (value & 65280) / 256;
-        Sim::regBank[10] = (value & 255);
         cpuPaneItems->irRegLineEdit->setText("0x" + QString("%1").arg(value, 6, 16, QLatin1Char('0')).toUpper());
         break;
     case Enu::T1:
-        Sim::regBank[11] = (value & 255);
         cpuPaneItems->t1RegLineEdit->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper());
         break;
     case Enu::T2:
-        Sim::regBank[12] = (value & 65280) / 256;
-        Sim::regBank[13] = (value & 255);
         cpuPaneItems->t2RegLineEdit->setText("0x" + QString("%1").arg(value, 4, 16, QLatin1Char('0')).toUpper());
         break;
     case Enu::T3:
-        Sim::regBank[14] = (value & 65280) / 256;
-        Sim::regBank[15] = (value & 255);
         cpuPaneItems->t3RegLineEdit->setText("0x" + QString("%1").arg(value, 4, 16, QLatin1Char('0')).toUpper());
         break;
     case Enu::T4:
-        Sim::regBank[16] = (value & 65280) / 256;
-        Sim::regBank[17] = (value & 255);
         cpuPaneItems->t4RegLineEdit->setText("0x" + QString("%1").arg(value, 4, 16, QLatin1Char('0')).toUpper());
         break;
     case Enu::T5:
-        Sim::regBank[18] = (value & 65280) / 256;
-        Sim::regBank[19] = (value & 255);
         cpuPaneItems->t5RegLineEdit->setText("0x" + QString("%1").arg(value, 4, 16, QLatin1Char('0')).toUpper());
         break;
     case Enu::T6:
-        Sim::regBank[20] = (value & 65280) / 256;
-        Sim::regBank[21] = (value & 255);
         cpuPaneItems->t6RegLineEdit->setText("0x" + QString("%1").arg(value, 4, 16, QLatin1Char('0')).toUpper());
         break;
     case Enu::MARAREG:
-        Sim::MARA = value;
         cpuPaneItems->MARALabel->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper());
         break;
     case Enu::MARBREG:
-        Sim::MARB = value;
         cpuPaneItems->MARBLabel->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper());
         break;
     case Enu::MDRREG:
-        Sim::MDR = value;
         cpuPaneItems->MDRLabel->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper());
         break;
     case Enu::MDROREG:
-        Sim::MDROdd = value;
         cpuPaneItems->MDROLabel->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper());
         break;
     case Enu::MDREREG:
-        Sim::MDREven = value;
         cpuPaneItems->MDRELabel->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper());
         break;
     default:
@@ -315,96 +288,74 @@ void CpuPane::setRegister(Enu::EKeywords reg, int value) {
     }
 }
 
-void CpuPane::setRegisterByte(int reg, quint8 value) {
+void CpuPane::setRegisterByte(quint8 reg, quint8 value) {
     QLatin1Char ch = QLatin1Char('0');
     switch (reg) {
     case 0:
-        Sim::regBank[0] = value;
-        cpuPaneItems->aRegLineEdit->setText("0x" + QString("%1").arg(value * 256 + Sim::regBank[1], 4, 16, ch).toUpper());
+        cpuPaneItems->aRegLineEdit->setText("0x" + QString("%1").arg(value * 256 + dataSection->getRegisterBankByte(1), 4, 16, ch).toUpper());
         break;
     case 1:
-        Sim::regBank[1] = value;
-        cpuPaneItems->aRegLineEdit->setText("0x" + QString("%1").arg(Sim::regBank[0] * 256 + value, 4, 16, ch).toUpper());
+        cpuPaneItems->aRegLineEdit->setText("0x" + QString("%1").arg(dataSection->getRegisterBankByte(0) * 256 + value, 4, 16, ch).toUpper());
         break;
     case 2:
-        Sim::regBank[2] = value;
-        cpuPaneItems->xRegLineEdit->setText("0x" + QString("%1").arg(value * 256 + Sim::regBank[3], 4, 16, ch).toUpper());
+        cpuPaneItems->xRegLineEdit->setText("0x" + QString("%1").arg(value * 256 + dataSection->getRegisterBankByte(3), 4, 16, ch).toUpper());
         break;
     case 3:
-        Sim::regBank[3] = value;
-        cpuPaneItems->xRegLineEdit->setText("0x" + QString("%1").arg(Sim::regBank[2] * 256 + value, 4, 16, ch).toUpper());
+        cpuPaneItems->xRegLineEdit->setText("0x" + QString("%1").arg(dataSection->getRegisterBankByte(2) * 256 + value, 4, 16, ch).toUpper());
         break;
     case 4:
-        Sim::regBank[4] = value;
-        cpuPaneItems->spRegLineEdit->setText("0x" + QString("%1").arg(value * 256 + Sim::regBank[5], 4, 16, ch).toUpper());
+        cpuPaneItems->spRegLineEdit->setText("0x" + QString("%1").arg(value * 256 + dataSection->getRegisterBankByte(5), 4, 16, ch).toUpper());
         break;
     case 5:
-        Sim::regBank[5] = value;
-        cpuPaneItems->spRegLineEdit->setText("0x" + QString("%1").arg(Sim::regBank[4] * 256 + value, 4, 16, ch).toUpper());
+        cpuPaneItems->spRegLineEdit->setText("0x" + QString("%1").arg(dataSection->getRegisterBankByte(4) * 256 + value, 4, 16, ch).toUpper());
         break;
     case 6:
-        Sim::regBank[6] = value;
-        cpuPaneItems->pcRegLineEdit->setText("0x" + QString("%1").arg(value * 256 + Sim::regBank[7], 4, 16, ch).toUpper());
+        cpuPaneItems->pcRegLineEdit->setText("0x" + QString("%1").arg(value * 256 + dataSection->getRegisterBankByte(7), 4, 16, ch).toUpper());
         break;
     case 7:
-        Sim::regBank[7] = value;
-        cpuPaneItems->pcRegLineEdit->setText("0x" + QString("%1").arg(Sim::regBank[6] * 256 + value, 4, 16, ch).toUpper());
+        cpuPaneItems->pcRegLineEdit->setText("0x" + QString("%1").arg(dataSection->getRegisterBankByte(6) * 256 + value, 4, 16, ch).toUpper());
         break;
     case 8:
-        Sim::regBank[8] = value;
-        cpuPaneItems->irRegLineEdit->setText("0x" + QString("%1").arg(value * 65536 + Sim::regBank[9] * 256 + Sim::regBank[10], 6, 16, ch).toUpper());
+        cpuPaneItems->irRegLineEdit->setText("0x" + QString("%1").arg(value * 65536 + dataSection->getRegisterBankByte(9) * 256 + dataSection->getRegisterBankByte(10), 6, 16, ch).toUpper());
         break;
     case 9:
-        Sim::regBank[9] = value;
-        cpuPaneItems->irRegLineEdit->setText("0x" + QString("%1").arg(Sim::regBank[8] * 65536 + value * 256 + Sim::regBank[10], 6, 16, ch).toUpper());
+        cpuPaneItems->irRegLineEdit->setText("0x" + QString("%1").arg(dataSection->getRegisterBankByte(8) * 65536 + value * 256 + dataSection->getRegisterBankByte(10), 6, 16, ch).toUpper());
         break;
     case 10:
-        Sim::regBank[10] = value;
-        cpuPaneItems->irRegLineEdit->setText("0x" + QString("%1").arg(Sim::regBank[8] * 65536 + Sim::regBank[9] * 256 + value, 6, 16, ch).toUpper());
+        cpuPaneItems->irRegLineEdit->setText("0x" + QString("%1").arg(dataSection->getRegisterBankByte(8) * 65536 + dataSection->getRegisterBankByte(9) * 256 + value, 6, 16, ch).toUpper());
         break;
     case 11:
-        Sim::regBank[11] = value;
         cpuPaneItems->t1RegLineEdit->setText("0x" + QString("%1").arg(value, 2, 16, ch).toUpper());
         break;
     case 12:
-        Sim::regBank[12] = value;
-        cpuPaneItems->t2RegLineEdit->setText("0x" + QString("%1").arg(value * 256 + Sim::regBank[13], 4, 16, ch).toUpper());
+        cpuPaneItems->t2RegLineEdit->setText("0x" + QString("%1").arg(value * 256 + dataSection->getRegisterBankByte(13), 4, 16, ch).toUpper());
         break;
     case 13:
-        Sim::regBank[13] = value;
-        cpuPaneItems->t2RegLineEdit->setText("0x" + QString("%1").arg(Sim::regBank[12] * 256 + value, 4, 16, ch).toUpper());
+        cpuPaneItems->t2RegLineEdit->setText("0x" + QString("%1").arg(dataSection->getRegisterBankByte(12) * 256 + value, 4, 16, ch).toUpper());
         break;
     case 14:
-        Sim::regBank[14] = value;
-        cpuPaneItems->t3RegLineEdit->setText("0x" + QString("%1").arg(value * 256 + Sim::regBank[15], 4, 16, ch).toUpper());
+        cpuPaneItems->t3RegLineEdit->setText("0x" + QString("%1").arg(value * 256 + dataSection->getRegisterBankByte(15), 4, 16, ch).toUpper());
         break;
     case 15:
-        Sim::regBank[15] = value;
-        cpuPaneItems->t3RegLineEdit->setText("0x" + QString("%1").arg(Sim::regBank[14] * 256 + value, 4, 16, ch).toUpper());
+        cpuPaneItems->t3RegLineEdit->setText("0x" + QString("%1").arg(dataSection->getRegisterBankByte(14) * 256 + value, 4, 16, ch).toUpper());
         break;
     case 16:
-        Sim::regBank[16] = value;
-        cpuPaneItems->t4RegLineEdit->setText("0x" + QString("%1").arg(value * 256 + Sim::regBank[17], 4, 16, ch).toUpper());
+        cpuPaneItems->t4RegLineEdit->setText("0x" + QString("%1").arg(value * 256 + dataSection->getRegisterBankByte(17), 4, 16, ch).toUpper());
         break;
     case 17:
-        Sim::regBank[17] = value;
-        cpuPaneItems->t4RegLineEdit->setText("0x" + QString("%1").arg(Sim::regBank[16] * 256 + value, 4, 16, ch).toUpper());
+        cpuPaneItems->t4RegLineEdit->setText("0x" + QString("%1").arg(dataSection->getRegisterBankByte(16) * 256 + value, 4, 16, ch).toUpper());
         break;
     case 18:
-        Sim::regBank[18] = value;
-        cpuPaneItems->t5RegLineEdit->setText("0x" + QString("%1").arg(value * 256 + Sim::regBank[19], 4, 16, ch).toUpper());
+        cpuPaneItems->t5RegLineEdit->setText("0x" + QString("%1").arg(value * 256 + dataSection->getRegisterBankByte(19), 4, 16, ch).toUpper());
         break;
     case 19:
-        Sim::regBank[19] = value;
-        cpuPaneItems->t5RegLineEdit->setText("0x" + QString("%1").arg(Sim::regBank[18] * 256 + value, 4, 16, ch).toUpper());
+        cpuPaneItems->t5RegLineEdit->setText("0x" + QString("%1").arg(dataSection->getRegisterBankByte(18) * 256 + value, 4, 16, ch).toUpper());
         break;
     case 20:
-        Sim::regBank[20] = value;
-        cpuPaneItems->t6RegLineEdit->setText("0x" + QString("%1").arg(value * 256 + Sim::regBank[21], 4, 16, ch).toUpper());
+        cpuPaneItems->t6RegLineEdit->setText("0x" + QString("%1").arg(value * 256 + dataSection->getRegisterBankByte(21), 4, 16, ch).toUpper());
         break;
     case 21:
-        Sim::regBank[21] = value;
-        cpuPaneItems->t6RegLineEdit->setText("0x" + QString("%1").arg(Sim::regBank[20] * 256 + value, 4, 16, ch).toUpper());
+        cpuPaneItems->t6RegLineEdit->setText("0x" + QString("%1").arg(dataSection->getRegisterBankByte(20) * 256 + value, 4, 16, ch).toUpper());
         break;
     default:
         // the remainder of the array is 'read only' in our simulated CPU, or outside the bounds
@@ -412,27 +363,38 @@ void CpuPane::setRegisterByte(int reg, quint8 value) {
     }
 }
 
+void CpuPane::initRegisters()
+{
+    //Set register bank
+    for(int it=0;it<22;it++)
+    {
+        setRegisterByte(it,dataSection->getRegisterBankByte(it));
+    }
+
+    //Set status bits
+    setStatusBit(Enu::N,dataSection->getStatusBit(Enu::STATUS_N));
+    setStatusBit(Enu::Z,dataSection->getStatusBit(Enu::STATUS_Z));
+    setStatusBit(Enu::V,dataSection->getStatusBit(Enu::STATUS_V));
+    setStatusBit(Enu::Cbit,dataSection->getStatusBit(Enu::STATUS_C));
+    setStatusBit(Enu::S,dataSection->getStatusBit(Enu::STATUS_S));
+}
+
 void CpuPane::setStatusBit(Enu::EKeywords bit, bool value)
 {
     switch (bit) {
     case Enu::N:
-        Sim::nBit = value;
         cpuPaneItems->nBitLabel->setText(QString("%1").arg(value ? 1 : 0));
         break;
     case Enu::Z:
-        Sim::zBit = value;
         cpuPaneItems->zBitLabel->setText(QString("%1").arg(value ? 1 : 0));
         break;
     case Enu::V:
-        Sim::vBit = value;
         cpuPaneItems->vBitLabel->setText(QString("%1").arg(value ? 1 : 0));
         break;
     case Enu::Cbit:
-        Sim::cBit = value;
         cpuPaneItems->cBitLabel->setText(QString("%1").arg(value ? 1 : 0));
         break;
     case Enu::S:
-        Sim::sBit = value;
         cpuPaneItems->sBitLabel->setText(QString("%1").arg(value ? 1 : 0));
         break;
     default:
@@ -451,18 +413,19 @@ void CpuPane::setStatusPrecondition(Enu::EKeywords bit, bool value)
 }
 
 bool CpuPane::testRegPostcondition(Enu::EKeywords reg, int value) {
-    return Sim::testRegPostcondition(reg, value);
+#pragma message "Remove postcondition code from CPU pane"
+    return true;
 }
 
 bool CpuPane::testStatusPostcondition(Enu::EKeywords bit, bool value) {
-    return Sim::testStatusPostcondition(bit, value);
+#pragma message "Remove postcondition code from CPU pane"
+    return true;
 }
-
 
 void CpuPane::clearCpu()
 {
     clearCpuControlSignals();
-
+    controlSection->onClearCPU();
     setRegister(Enu::Acc, 0);
     setRegister(Enu::X, 0);
     setRegister(Enu::SP, 0);
@@ -523,8 +486,6 @@ void CpuPane::clearCpuControlSignals()
 
 void CpuPane::singleStep()
 {
-    CPUControlSection* inst = CPUControlSection::getInstance();
-    inst->onStep(0);
     singleStepButtonPushed();
 }
 
@@ -543,406 +504,6 @@ void CpuPane::changeEvent(QEvent *e)
     default:
         break;
     }
-}
-
-void CpuPane::updateMainBusState()
-{
-    bool marChanged = false;
-    if (cpuPaneItems->MARCk->isChecked()) {
-        quint8 a, b;
-        QString errorString; // temporary, any errors here will be caught in the MARCk section of step()
-        if (Sim::getABusOut(a, errorString, cpuPaneItems) && Sim::getBBusOut(b, errorString, cpuPaneItems)) {
-            marChanged = (a != Sim::MARA) || (b != Sim::MARB);
-        }
-        else {
-            // error: MARCk is checked but we have incorrect input.
-            // This will be caught in step() under the MARCk section
-        }
-    }
-
-    switch (Sim::mainBusState) {
-    case Enu::None:
-        if (!marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (1st)
-            Sim::mainBusState = Enu::MemReadFirstWait;
-        }
-        else if (!marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (1st)
-            Sim::mainBusState = Enu::MemWriteFirstWait;
-        }
-        //else: mainBusState = None, but it already is.
-        break;
-    case Enu::MemReadFirstWait:
-        if (!marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (2nd with unchanged MAR)
-            Sim::mainBusState = Enu::MemReadSecondWait;
-        }
-        else if (marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead
-            // do nothing, already MemReadfirstWait - need another MemRead because the MAR changed
-            qDebug() << "MAR changed - don't read yet";
-        }
-        else if (cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (after a single MemRead)
-            Sim::mainBusState = Enu::MemWriteFirstWait;
-        }
-        else {
-            Sim::mainBusState = Enu::None;
-        }
-        break;
-    case Enu::MemReadSecondWait:
-        if (!marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (3rd with unchanged MAR)
-            Sim::mainBusState = Enu::MemReadReady;
-        }
-        else if (marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead
-            Sim::mainBusState = Enu::MemWriteFirstWait;
-        }
-        else if (cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (after 2 MemReads)
-            Sim::mainBusState = Enu::MemWriteFirstWait;
-        }
-        else {
-            Sim::mainBusState = Enu::None;
-        }
-        break;
-    case Enu::MemReadReady:
-        if (!marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead again (more than 3 in a row)
-            // do nothing, already MemReadReady
-        }
-        else if (marChanged && cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead
-            Sim::mainBusState = Enu::MemReadFirstWait; // Go back to MemReadFirstWait because the MAR changed
-        }
-        else if (cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (after 3+ MemReads)
-            Sim::mainBusState = Enu::MemWriteFirstWait;
-        }
-        else {
-            Sim::mainBusState = Enu::None;
-        }
-        break;
-    case Enu::MemWriteFirstWait:
-        if (cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (after a MemWrite)
-            Sim::mainBusState = Enu::MemReadFirstWait;
-        }
-        else if (!marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (2nd in a row)
-            Sim::mainBusState = Enu::MemWriteSecondWait;
-        }
-        else if (marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (with changed MAR)
-            // Do nothing, MAR changed, still MemWriteSecondWait
-        }
-        else {
-            Sim::mainBusState = Enu::None;
-        }
-        break;
-    case Enu::MemWriteSecondWait:
-        if (cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (after 2 MemWrites)
-            Sim::mainBusState = Enu::MemReadFirstWait;
-        }
-        else if (!marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (2nd in a row)
-            Sim::mainBusState = Enu::MemWriteReady;
-        }
-        else if (marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (with changed MAR)
-            Sim::mainBusState = Enu::MemWriteFirstWait;
-        }
-        else {
-            Sim::mainBusState = Enu::None;
-        }
-        break;
-    case Enu::MemWriteReady:
-        if (cpuPaneItems->MemReadTristateLabel->text() == "1") { // MemRead (after 3+ MemWrites)
-            Sim::mainBusState = Enu::MemReadFirstWait;
-        }
-        else if (!marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (after 3+ in a row)
-            // do nothing, already MemWriteReady
-        }
-        else if (marChanged && cpuPaneItems->MemWriteTristateLabel->text() == "1") { // MemWrite (with changed MAR)
-            Sim::mainBusState = Enu::MemWriteFirstWait;
-        }
-        else {
-            Sim::mainBusState = Enu::None;
-        }
-        break;
-    default:
-        Sim::mainBusState = Enu::None; // Just in case the Sim::mBS is malformed somehow
-        break;
-    }
-}
-
-bool CpuPane::step(QString &errorString)
-{
-    switch (Pep::cpuFeatures) {
-    case Enu::OneByteDataBus:
-        return stepOneByteDataBus(errorString);
-        break;
-    case Enu::TwoByteDataBus:
-        return stepTwoByteDataBus(errorString);
-        break;
-    default: // This case should never occur, but needed to silence build warning of not all paths return a value.
-        errorString = "During step, CPU was not in one byte mode or two byte mode";
-        return false;
-        break;
-    }
-}
-
-bool CpuPane::stepOneByteDataBus(QString &errorString)
-{
-    // Clear modified bytes for simulation view:
-    Sim::modifiedBytes.clear();
-
-    // Update Bus State
-    // FSM that sets Sim::mainBusState to Enu::BusState - 5 possible states
-    updateMainBusState();
-
-    // Status bit calculations
-    int aluFn = cpuPaneItems->ALULineEdit->text().toInt();
-    int carry;
-    int overflow;
-    quint8 result, a, b;
-
-    QString errtemp;
-    Sim::getALUOut(result, a, b, carry, overflow, errtemp, cpuPaneItems); // ignore boolean returned - error would have been handled earlier
-
-    if (Sim::mainBusState == Enu::MemReadReady) {
-        // we are performing a 2nd consecutive MemRead
-        // do nothing - the memread is performed in the getMDRMuxOut fn
-    }
-    else if (Sim::mainBusState == Enu::MemWriteReady) {
-        // we are performing a 2nd consecutive MemWrite
-        int address = Sim::MARA * 256 + Sim::MARB;
-        Sim::writeByte(address, Sim::MDR);
-        emit writeByte(address);
-    }
-
-    // MARCk
-    if (cpuPaneItems->MARCk->isChecked()) {
-        quint8 a, b;
-        if (Sim::getABusOut(a, errorString, cpuPaneItems) && Sim::getBBusOut(b, errorString, cpuPaneItems)) {
-            setRegister(Enu::MARAREG, a);
-            setRegister(Enu::MARBREG, b);
-        }
-        else {
-            // error: MARCk is checked but we have incorrect input
-            return false;
-        }
-    }
-
-    // LoadCk
-    if (cpuPaneItems->loadCk->isChecked()) {
-        int cDest = cpuPaneItems->cLineEdit->text().toInt();
-        quint8 out;
-        if (cpuPaneItems->cLineEdit->text() == "") {
-            errorString.append("No destination register specified for LoadCk.");
-            return false;
-        }
-        if (Sim::getCMuxOut(out, errorString, cpuPaneItems)) {
-            setRegisterByte(cDest, out);
-        }
-        else {
-            return false;
-        }
-    }
-
-    // MDRCk
-    if (cpuPaneItems->MDRCk->isChecked()) {
-        quint8 out = 0;
-        if (Sim::getMDRMuxOut(out, errorString, cpuPaneItems)) {
-            setRegister(Enu::MDRREG, out);
-            int address = Sim::MARA * 256 + Sim::MARB;
-            emit readByte(address);
-        }
-        else {
-            return false;
-        }
-    }
-
-    if (aluFn == 15) {
-        if (cpuPaneItems->NCkCheckBox->isChecked()) { // NCk
-            setStatusBit(Enu::N, Enu::NMask & a);
-        }
-        if (cpuPaneItems->ZCkCheckBox->isChecked()) { // ZCk
-            setStatusBit(Enu::Z, Enu::ZMask & a);
-        }
-        if (cpuPaneItems->VCkCheckBox->isChecked()) { // VCk
-            setStatusBit(Enu::V, Enu::VMask & a);
-        }
-        if (cpuPaneItems->CCkCheckBox->isChecked()) { // CCk
-            setStatusBit(Enu::Cbit, Enu::CMask & a);
-        }
-    }
-    else {
-        // NCk
-        if (cpuPaneItems->NCkCheckBox->isChecked()) {
-            setStatusBit(Enu::N, result > 127);
-        }
-
-        // ZCk
-        if (cpuPaneItems->ZCkCheckBox->isChecked()) {
-            if (cpuPaneItems->AndZTristateLabel->text() == ""){
-                errorString.append("ZCk without AndZ.");
-                return false;
-            }
-            if (cpuPaneItems->AndZTristateLabel->text() == "0") { // zOut from ALU goes straight through
-                setStatusBit(Enu::Z, result == 0);
-            }
-            else if (cpuPaneItems->AndZTristateLabel->text() == "1") { // zOut && zCurr
-                setStatusBit(Enu::Z, result == 0 && Sim::zBit);
-            }
-        }
-
-        // VCk
-        if (cpuPaneItems->VCkCheckBox->isChecked()) {
-            setStatusBit(Enu::V, overflow & 0x1);
-        }
-
-        // CCk
-        if (cpuPaneItems->CCkCheckBox->isChecked()) {
-            setStatusBit(Enu::Cbit, carry & 0x1);
-        }
-
-        // SCk
-        if (cpuPaneItems->SCkCheckBox->isChecked()) {
-            setStatusBit(Enu::S, carry & 0x1);
-        }
-    }
-
-    return true;
-}
-
-bool CpuPane::stepTwoByteDataBus(QString &errorString)
-{
-    // Clear modified bytes for simulation view:
-    Sim::modifiedBytes.clear();
-
-    // Update Bus State
-    // FSM that sets Sim::mainBusState to Enu::BusState - 5 possible states
-    updateMainBusState();
-
-    // Status bit calculations
-    int aluFn = cpuPaneItems->ALULineEdit->text().toInt();
-    int carry;
-    int overflow;
-    quint8 result, a, b;
-
-    QString errtemp;
-    // ignore boolean returned - error would have been handled earlier
-    Sim::getALUOut(result, a, b, carry, overflow, errtemp, cpuPaneItems);
-
-    if (Sim::mainBusState == Enu::MemReadReady) {
-        // we are performing a 3rd consecutive MemRead
-        // do nothing - the memread is performed in the getMDRMuxOut fn
-    }
-    else if (Sim::mainBusState == Enu::MemWriteReady) {
-        // we are performing a 3rd consecutive MemWrite
-        int address = (Sim::MARA * 256 + Sim::MARB) & 0xFFFE;;
-        //Sim::writeByte(address, Sim::MDR);
-        Sim::writeByte(address, Sim::MDREven);
-        Sim::writeByte(address + 1, Sim::MDROdd);
-        emit writeByte(address);
-        emit writeByte(address + 1);
-    }
-
-    // MARCk
-    if (cpuPaneItems->MARCk->isChecked()) {
-        quint8 a, b;
-        if (Sim::getMARMuxOut(a, b, errorString, cpuPaneItems)) {
-            setRegister(Enu::MARAREG, a);
-            setRegister(Enu::MARBREG, b);
-        }
-        else {
-            // error: MARCk is checked but we have incorrect input
-            return false;
-        }
-    }
-
-    // LoadCk
-    if (cpuPaneItems->loadCk->isChecked()) {
-        int cDest = cpuPaneItems->cLineEdit->text().toInt();
-        quint8 out;
-        if (cpuPaneItems->cLineEdit->text() == "") {
-            errorString.append("No destination register specified for LoadCk.");
-            return false;
-        }
-        if (Sim::getCMuxOut(out, errorString, cpuPaneItems)) {
-            qDebug() << "Writing " << QString("0x%1").arg(out, 4, 16, QLatin1Char('0'))
-                     << " to register " << cDest;
-            setRegisterByte(cDest, out);
-        }
-        else {
-            return false;
-        }
-    }
-
-    // MDROCk
-    if (cpuPaneItems->MDROCk->isChecked()) {
-        quint8 out = 0;
-        if (Sim::getMDROMuxOut(out, errorString, cpuPaneItems)) {
-            qDebug() << "MDRO out: " << QString("0x%1").arg(out, 4, 16, QLatin1Char('0'));
-            int address = (Sim::MARA * 256 + Sim::MARB) & 0xFFFE;
-            emit readByte(address);
-            setRegister(Enu::MDROREG, out);
-        }
-        else {
-            return false;
-        }
-    }
-
-    // MDRECk
-    if (cpuPaneItems->MDRECk->isChecked()) {
-        quint8 out = 0;
-        if (Sim::getMDREMuxOut(out, errorString, cpuPaneItems)) {
-            int address = (Sim::MARA * 256 + Sim::MARB) & 0xFFFE;
-            emit readByte(address);
-            setRegister(Enu::MDREREG, out);
-        }
-        else {
-            return false;
-        }
-    }
-
-    if (aluFn == 15) {
-        if (cpuPaneItems->NCkCheckBox->isChecked()) { // NCk
-            setStatusBit(Enu::N, Enu::NMask & a);
-        }
-        if (cpuPaneItems->ZCkCheckBox->isChecked()) { // ZCk
-            setStatusBit(Enu::Z, Enu::ZMask & a);
-        }
-        if (cpuPaneItems->VCkCheckBox->isChecked()) { // VCk
-            setStatusBit(Enu::V, Enu::VMask & a);
-        }
-        if (cpuPaneItems->CCkCheckBox->isChecked()) { // CCk
-            setStatusBit(Enu::Cbit, Enu::CMask & a);
-        }
-    }
-    else {
-        // NCk
-        if (cpuPaneItems->NCkCheckBox->isChecked()) {
-            setStatusBit(Enu::N, result > 127);
-        }
-
-        // ZCk
-        if (cpuPaneItems->ZCkCheckBox->isChecked()) {
-            if (cpuPaneItems->AndZTristateLabel->text() == ""){
-                errorString.append("ZCk without AndZ.");
-                return false;
-            }
-            if (cpuPaneItems->AndZTristateLabel->text() == "0") { // zOut from ALU goes straight through
-                setStatusBit(Enu::Z, result == 0);
-            }
-            else if (cpuPaneItems->AndZTristateLabel->text() == "1") { // zOut && zCurr
-                setStatusBit(Enu::Z, result == 0 && Sim::zBit);
-            }
-        }
-
-        // VCk
-        if (cpuPaneItems->VCkCheckBox->isChecked()) {
-            setStatusBit(Enu::V, overflow & 0x1);
-        }
-
-        // CCk
-        if (cpuPaneItems->CCkCheckBox->isChecked()) {
-            setStatusBit(Enu::Cbit, carry & 0x1);
-        }
-
-        // SCk
-        if (cpuPaneItems->SCkCheckBox->isChecked()) {
-            setStatusBit(Enu::S, carry & 0x1);
-        }
-    }
-
-    return true;
 }
 
 void CpuPane::regTextEdited(QString str)
@@ -982,48 +543,49 @@ void CpuPane::regTextEdited(QString str)
     }
 
     if (lineEdit == cpuPaneItems->aRegLineEdit) {
-        Sim::regBank[0] = (regValue & 0xFF00) / 256;
-        Sim::regBank[1] = regValue & 0xFF;
+        emit registerChanged(0,(quint8)((regValue)/256));
+        emit registerChanged(1,(quint8)(regValue)%256);
     }
     else if (lineEdit == cpuPaneItems->xRegLineEdit) {
-        Sim::regBank[2] = (regValue & 0xFF00) / 256;
-        Sim::regBank[3] = regValue & 0xFF;
+        emit registerChanged(2,(quint8)((regValue)/256));
+        emit registerChanged(3,(quint8)(regValue)%256);
     }
     else if (lineEdit == cpuPaneItems->spRegLineEdit) {
-        Sim::regBank[4] = (regValue & 0xFF00) / 256;
-        Sim::regBank[5] = regValue & 0xFF;
+        emit registerChanged(4,(quint8)((regValue)/256));
+        emit registerChanged(5,(quint8)(regValue)%256);
     }
     else if (lineEdit == cpuPaneItems->pcRegLineEdit) {
-        Sim::regBank[6] = (regValue & 0xFF00) / 256;
-        Sim::regBank[7] = regValue & 0xFF;
+        emit registerChanged(6,(quint8)((regValue)/256));
+        emit registerChanged(7,(quint8)(regValue)%256);
     }
     else if (lineEdit == cpuPaneItems->irRegLineEdit) {
-        Sim::regBank[8] = (regValue & 0xFF0000) / 65536;
-        Sim::regBank[9] = (regValue & 0xFF00) / 256;
-        Sim::regBank[10] = regValue & 0xFF;
+        emit registerChanged(8,(quint8)((regValue)/65536));
+        emit registerChanged(9,(quint8)((regValue)/256));
+        emit registerChanged(10,(quint8)(regValue)%256);
+
     }
     else if (lineEdit == cpuPaneItems->t1RegLineEdit) {
-        Sim::regBank[11] = regValue & 0xFF;
+        emit registerChanged(11,(quint8)(regValue)%256);
     }
     else if (lineEdit == cpuPaneItems->t2RegLineEdit) {
-        Sim::regBank[12] = (regValue & 0xFF00) / 256;
-        Sim::regBank[13] = regValue & 0xFF;
+        emit registerChanged(12,(quint8)((regValue)/256));
+        emit registerChanged(3,(quint8)(regValue)%256);
     }
     else if (lineEdit == cpuPaneItems->t3RegLineEdit) {
-        Sim::regBank[14] = (regValue & 0xFF00) / 256;
-        Sim::regBank[15] = regValue & 0xFF;
+        emit registerChanged(14,(quint8)((regValue)/256));
+        emit registerChanged(15,(quint8)(regValue)%256);
     }
     else if (lineEdit == cpuPaneItems->t4RegLineEdit) {
-        Sim::regBank[16] = (regValue & 0xFF00) / 256;
-        Sim::regBank[17] = regValue & 0xFF;
+        emit registerChanged(16,(quint8)((regValue)/256));
+        emit registerChanged(17,(quint8)(regValue)%256);
     }
     else if (lineEdit == cpuPaneItems->t5RegLineEdit) {
-        Sim::regBank[18] = (regValue & 0xFF00) / 256;
-        Sim::regBank[19] = regValue & 0xFF;
+        emit registerChanged(18,(quint8)((regValue)/256));
+        emit registerChanged(19,(quint8)(regValue)%256);
     }
     else if (lineEdit == cpuPaneItems->t6RegLineEdit) {
-        Sim::regBank[20] = (regValue & 0xFF00) / 256;
-        Sim::regBank[21] = regValue & 0xFF;
+        emit registerChanged(20,(quint8)((regValue)/256));
+        emit registerChanged(21,(quint8)(regValue)%256);
     }
 }
 
@@ -1066,20 +628,21 @@ void CpuPane::labelClicked()
     TristateLabel *label = qobject_cast<TristateLabel *>(sender());
     label->toggle();
 
-    Sim::nBit = cpuPaneItems->nBitLabel->text().toInt() == 0 ? false : true;
-    Sim::zBit = cpuPaneItems->zBitLabel->text().toInt() == 0 ? false : true;
-    Sim::vBit = cpuPaneItems->vBitLabel->text().toInt() == 0 ? false : true;
-    Sim::cBit = cpuPaneItems->cBitLabel->text().toInt() == 0 ? false : true;
-    Sim::sBit = cpuPaneItems->sBitLabel->text().toInt() == 0 ? false : true;
+    emit statusBitChanged(Enu::STATUS_N,cpuPaneItems->nBitLabel->text().toInt() == 0 ? false : true);
+    emit statusBitChanged(Enu::STATUS_Z,cpuPaneItems->zBitLabel->text().toInt() == 0 ? false : true);
+    emit statusBitChanged(Enu::STATUS_V,cpuPaneItems->vBitLabel->text().toInt() == 0 ? false : true);
+    emit statusBitChanged(Enu::STATUS_C,cpuPaneItems->cBitLabel->text().toInt() == 0 ? false : true);
+    emit statusBitChanged(Enu::STATUS_S,cpuPaneItems->sBitLabel->text().toInt() == 0 ? false : true);
 
 }
 
 void CpuPane::clockButtonPushed()
 {
     QString errorString;
-    if (!step(errorString)) {
+    controlSection->onClock();
+    if (controlSection->hadErrorOnStep()) {
         // simulation had issues.
-        QMessageBox::warning(0, "Pep/9", errorString);
+        QMessageBox::warning(0, "Pep/9", controlSection->getErrorMessage());
         emit stopSimulation();
     }
     scene->invalidate();
@@ -1088,30 +651,22 @@ void CpuPane::clockButtonPushed()
 
 void CpuPane::singleStepButtonPushed()
 {
-    QString errorString = "";
-
-    if (!step(errorString)) {
+    controlSection->onStep(-1);
+    if (controlSection->hadErrorOnStep()) {
         // simulation had issues.
-        QMessageBox::warning(0, "Pep/9", errorString);
+        QMessageBox::warning(0, "Pep/9", controlSection->getErrorMessage());
         emit stopSimulation();
 
     }
 
-    Sim::microProgramCounter++;
-
-    if (Sim::atEndOfSim()) { // this should be detected on the previous step, but let's be defensive:
+    if (controlSection->executionFinished()) { // this should be detected on the previous step, but let's be defensive:
         emit simulationFinished();
+        //dataSection->clearClockSignals();
+        //dataSection->clearControlSignals();
         clearCpuControlSignals();
     }
     else {
-        Sim::microCodeCurrentLine++;
-        Code *code = Sim::codeList.at(Sim::microCodeCurrentLine);
-        while (!code->isMicrocode() && !Sim::atEndOfSim()) {
-            // iterate through the code list until we're at the end of the sim,
-            // or until we're at another line of microcode
-            Sim::microCodeCurrentLine++;
-            code = Sim::codeList.at(Sim::microCodeCurrentLine);
-        }
+        const Code *code = controlSection->getCurrentMicrocodeLine();
         if (!code->isMicrocode()) {
             // this will trigger if we're at the end of the simulation and have nothing more to execute
             emit simulationFinished();
@@ -1130,27 +685,24 @@ void CpuPane::singleStepButtonPushed()
 void CpuPane::resumeButtonPushed()
 {
 
-    QString errorString;
-    bool finished = false;
+    bool finished = controlSection->executionFinished();
 
     while (!finished) { // we set the flag to false when we're done with simulation, or have errors
-        if (!step(errorString)) {
+        controlSection->onStep(-1);
+        if (controlSection->hadErrorOnStep()) {
             // simulation had issues.
-            QMessageBox::warning(0, "Pep/9", errorString);
+            QMessageBox::warning(0, "Pep/9", controlSection->getErrorMessage());
             finished = true;
             emit stopSimulation();
-//            emit simulationFinished();
             clearCpuControlSignals();
             return; // we'll just return here instead of letting it fail and go to the bottom
         }
 
-        Sim::microProgramCounter++;
-
-        if (Sim::atEndOfSim()) {
+        if (controlSection->executionFinished()) {
             finished = true; // this will fail the loop next time and go to the bottom
         }
-        else {
-            Sim::microCodeCurrentLine++;
+#pragma message "We shouldn't need to update the labels on the control section if we are just running"
+        /*else {
             Code *code = Sim::codeList.at(Sim::microCodeCurrentLine);
             while (!code->isMicrocode() && !Sim::atEndOfSim()) {
                 // iterate through the code list until we're at the end of the sim,
@@ -1166,7 +718,7 @@ void CpuPane::resumeButtonPushed()
                 code->setCpuLabels(cpuPaneItems);
                 emit updateSimulation();
             }
-        }
+        }*/
 
         scene->invalidate();
     }
@@ -1264,6 +816,7 @@ void CpuPane::ALUTextEdited(QString str)
     }
     else {
         int num = str.toInt();
+        //
         switch (num) {
         case 0:
             cpuPaneItems->ALUFunctionLabel->setText("A");
@@ -1325,9 +878,90 @@ void CpuPane::run()
     resumeButtonPushed();
 }
 
+void CpuPane::onClockChanged()
+{
+    QCheckBox* send = qobject_cast<QCheckBox*>(sender());
+    /*switch(send)
+    {
+    case cpuPaneItems->NCkCheckBox:
+        dataSection->setStatusBitPre();
+        break;
+    case cpuPaneItems->ZCkCheckBox:
+        break;
+    case cpuPaneItems->VCkCheckBox:
+        break;
+    case cpuPaneItems->CCkCheckBox:
+        break;
+    case cpuPaneItems->SCkCheckBox:
+        break;
+    case cpuPaneItems->MARCk:
+        break;
+    case cpuPaneItems->MDRCk:
+        break;
+    case cpuPaneItems->MDRECk:
+        break;
+    case cpuPaneItems->MDROCk:
+        break;
+    default:
+        break
+    }*/
+}
+
+void CpuPane::onRegisterChanged(quint8 which, quint8 , quint8 newVal)
+{
+    setRegisterByte(which,newVal);
+}
+
+void CpuPane::onMemoryRegisterChanged(EMemoryRegisters reg, quint8, quint8 newVal)
+{
+    QLatin1Char x = QLatin1Char('0');
+    switch(reg)
+    {
+    case Enu::MEM_MARA:
+        cpuPaneItems->MARALabel->setText("0x" + QString("%1").arg(newVal, 2, 16, x).toUpper());
+        break;
+    case Enu::MEM_MARB:
+        cpuPaneItems->MARBLabel->setText("0x" + QString("%1").arg(newVal, 2, 16, x).toUpper());
+        break;
+    case Enu::MEM_MDR:
+        cpuPaneItems->MDRLabel->setText("0x" + QString("%1").arg(newVal, 2, 16, x).toUpper());
+        break;
+    case Enu::MEM_MDRE:
+        cpuPaneItems->MDRELabel->setText("0x" + QString("%1").arg(newVal, 2, 16, x).toUpper());
+        break;
+    case Enu::MEM_MDRO:
+        cpuPaneItems->MDROLabel->setText("0x" + QString("%1").arg(newVal, 2, 16, x).toUpper());
+        break;
+    }
+}
+
+void CpuPane::onStatusBitChanged(EStatusBit bit, bool value)
+{
+    switch(bit)
+    {
+    case Enu::STATUS_N:
+        setStatusBit(Enu::N,value);
+        break;
+    case Enu::STATUS_Z:
+        setStatusBit(Enu::Z,value);
+        break;
+    case Enu::STATUS_V:
+        setStatusBit(Enu::V,value);
+        break;
+    case Enu::STATUS_C:
+        setStatusBit(Enu::Cbit,value);
+        break;
+    case Enu::STATUS_S:
+        setStatusBit(Enu::S,value);
+        break;
+    default:
+        break;
+    }
+}
+
 void CpuPane::repaintOnScroll(int distance)
 {
-    distance = (int)distance; //Ugly fix to get compiler to silence unused variable warning
+    (void)distance; //Ugly fix to get compiler to silence unused variable warning
     cpuPaneItems->update();
 }
 

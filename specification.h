@@ -29,9 +29,7 @@ class Specification
 public:
     virtual ~Specification() { }
     Specification();
-    virtual void setUnitPre(MainMemory *, CpuPane *) { }
     virtual void setUnitPre(CPUDataSection*) { }
-    virtual bool testUnitPost(MainMemory *, CpuPane *, QString &) { return true; }
     virtual bool testUnitPost(CPUDataSection*,QString&){return true;}
     virtual QString getSourceCode() = 0;
 };
@@ -39,9 +37,7 @@ public:
 class MemSpecification: public Specification {    
 public:
     MemSpecification(int memoryAddress, int memoryValue, int numberBytes);
-    void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane) override;
     void setUnitPre(CPUDataSection*) override;
-    bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString) override;
     bool testUnitPost(CPUDataSection *data,QString &errString) override;
     QString getSourceCode() override;
 private:
@@ -53,9 +49,7 @@ private:
 class RegSpecification: public Specification {
 public:
     RegSpecification(Enu::EKeywords registerAddress, int registerValue);
-    void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane) override;
     void setUnitPre(CPUDataSection*) override;
-    bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString) override;
     bool testUnitPost(CPUDataSection *data,QString &errString) override;
     QString getSourceCode() override;
 private:
@@ -66,9 +60,7 @@ private:
 class StatusBitSpecification: public Specification {
 public:
     StatusBitSpecification(Enu::EKeywords statusBitAddress, bool statusBitValue);
-    void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane) override;
     void setUnitPre(CPUDataSection*) override;
-    bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString) override;
     bool testUnitPost(CPUDataSection *data,QString &errString) override;
     QString getSourceCode() override;
 private:

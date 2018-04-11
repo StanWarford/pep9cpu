@@ -46,9 +46,6 @@ public:
     static QString resToString(QString fileName);
     static QString addCycleNumbers(QString codeString);
 
-    // Machine model state:
-    static Enu::CPUType cpuFeatures;
-
     // Maps between mnemonic enums and strings
     static QMap<Enu::EControlSignals, QString> decControlToMnemonMap;
     static QMap<Enu::EControlSignals, QString> memControlToMnemonMap;

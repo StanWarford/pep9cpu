@@ -23,7 +23,6 @@
 #include "ui_byteconverterinstr.h"
 
 #include "pep.h"
-#include "sim.h"
 
 ByteConverterInstr::ByteConverterInstr(QWidget *parent) :
     QWidget(parent),

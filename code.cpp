@@ -22,6 +22,7 @@
 #include "code.h"
 #include "cpugraphicsitems.h"
 #include "pep.h"
+#include "cpudatasection.h"
 #include <QMetaEnum>
 MicroCode::MicroCode():clockSignals(10),controlSignals(20)
 {
@@ -39,9 +40,9 @@ MicroCode::MicroCode():clockSignals(10),controlSignals(20)
     }
 }
 
-bool MicroCode::isMicrocode() { return true; }
+bool MicroCode::isMicrocode() const { return true; }
 
-void MicroCode::setCpuLabels(CpuGraphicsItems *cpuPaneItems)
+void MicroCode::setCpuLabels(CpuGraphicsItems *cpuPaneItems) const
 {
     cpuPaneItems->loadCk->setChecked(clockSignals[Enu::LoadCk] == 1);
     cpuPaneItems->cLineEdit->setText(controlSignals[Enu::C] == Enu::signalDisabled ? "" : QString("%1").arg(controlSignals[Enu::C]));
@@ -70,7 +71,7 @@ void MicroCode::setCpuLabels(CpuGraphicsItems *cpuPaneItems)
     cpuPaneItems->MemWriteTristateLabel->setState(controlSignals[Enu::MemWrite] == Enu::signalDisabled ? -1 : controlSignals[Enu::MemWrite] );
 }
 
-QString MicroCode::getObjectCode()
+QString MicroCode::getObjectCode() const
 {
     // QString QString::arg(int a, int fieldWidth = 0, ...)
     // fieldWidth specifies the minimum amount of space that
@@ -79,7 +80,7 @@ QString MicroCode::getObjectCode()
     //  value produces left-aligned text.
 
     QString str = "";
-    if (Pep::cpuFeatures == Enu::OneByteDataBus) {
+    if (CPUDataSection::getInstance()->getCPUFeatures() == Enu::OneByteDataBus) {
         str.append(clockSignals[Enu::LoadCk] == 0? "  " : QString("%1").arg(clockSignals[Enu::LoadCk], -2));
         str.append(controlSignals[Enu::C] == Enu::signalDisabled ? "   " : QString("%1").arg(controlSignals[Enu::C], -3));
         str.append(controlSignals[Enu::B] == Enu::signalDisabled ? "   " : QString("%1").arg(controlSignals[Enu::B], -3));
@@ -100,7 +101,7 @@ QString MicroCode::getObjectCode()
         str.append(controlSignals[Enu::MemWrite] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::MemWrite], -2));
         str.append(controlSignals[Enu::MemRead] == Enu::signalDisabled ? "  " : QString("%1").arg(controlSignals[Enu::MemRead], -2));
     }
-    else if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
+    else if (CPUDataSection::getInstance()->getCPUFeatures() == Enu::TwoByteDataBus) {
         str.append(clockSignals[Enu::LoadCk] == 0 ? "  " : QString("%1").arg(clockSignals[Enu::LoadCk], -2));
         str.append(controlSignals[Enu::C] == Enu::signalDisabled ? "   " : QString("%1").arg(controlSignals[Enu::C], -3));
         str.append(controlSignals[Enu::B] == Enu::signalDisabled ? "   " : QString("%1").arg(controlSignals[Enu::B], -3));
@@ -129,10 +130,10 @@ QString MicroCode::getObjectCode()
     return str;
 }
 
-QString MicroCode::getSourceCode()
+QString MicroCode::getSourceCode() const
 {
     QString str = "";
-    if (Pep::cpuFeatures == Enu::OneByteDataBus) {
+    if (CPUDataSection::getInstance()->getCPUFeatures() == Enu::OneByteDataBus) {
         if (controlSignals[Enu::MemRead] != Enu::signalDisabled) { str.append("MemRead, "); }
         if (controlSignals[Enu::MemWrite] != Enu::signalDisabled) { str.append("MemWrite, "); }
         if (controlSignals[Enu::A] != Enu::signalDisabled) { str.append("A=" + QString("%1").arg(controlSignals[Enu::A]) + ", "); }
@@ -161,7 +162,7 @@ QString MicroCode::getSourceCode()
             str.append(" " + cComment);
         }
     }
-    else if (Pep::cpuFeatures == Enu::TwoByteDataBus) {
+    else if (CPUDataSection::getInstance()->getCPUFeatures() == Enu::TwoByteDataBus) {
         if (controlSignals[Enu::MemRead] != Enu::signalDisabled) { str.append("MemRead, "); }
         if (controlSignals[Enu::MemWrite] != Enu::signalDisabled) { str.append("MemWrite, "); }
         if (controlSignals[Enu::A] != Enu::signalDisabled) { str.append("A=" + QString("%1").arg(controlSignals[Enu::A]) + ", "); }
@@ -227,7 +228,7 @@ bool MicroCode::getClockSignal(Enu::EClockSignals field) const
     return clockSignals[field];
 }
 
-bool MicroCode::inRange(Enu::EControlSignals field, int value)
+bool MicroCode::inRange(Enu::EControlSignals field, int value) const
 {
     switch (field) {
     case Enu::C: return 0 <= value && value <= 31;
@@ -252,39 +253,42 @@ CommentOnlyCode::CommentOnlyCode(QString comment)
     cComment = comment;
 }
 
-QString CommentOnlyCode::getSourceCode() {
+QString CommentOnlyCode::getSourceCode()const
+{
     return cComment;
 }
 
-UnitPreCode::~UnitPreCode() {
-    while (!unitPreList.isEmpty()) {
+UnitPreCode::~UnitPreCode()
+{
+    while (!unitPreList.isEmpty())
+    {
         delete unitPreList.takeFirst();
     }
 }
 
-QString UnitPreCode::getSourceCode() {
+QString UnitPreCode::getSourceCode() const
+{
     QString str = "UnitPre: ";
-    for (int i = 0; i < unitPreList.size(); i++) {
+    for (int i = 0; i < unitPreList.size(); i++)
+    {
         str.append(unitPreList.at(i)->getSourceCode() + ", ");
     }
-    if (str.endsWith(", ")) {
+    if (str.endsWith(", "))
+    {
         str.chop(2);
     }
-    if (!cComment.isEmpty()) {
+    if (!cComment.isEmpty())
+    {
         str.append(" " + cComment);
     }
     return str;
 }
 
-bool UnitPreCode::hasUnitPre() {
+bool UnitPreCode::hasUnitPre() const
+{
     return !unitPreList.isEmpty();
 }
 
-void UnitPreCode::setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane) {
-    for (int i = 0; i < unitPreList.size(); i++) {
-        unitPreList.at(i)->setUnitPre(mainMemory, cpuPane);
-    }
-}
 
 void UnitPreCode::setUnitPre(CPUDataSection *data)
 {
@@ -294,29 +298,37 @@ void UnitPreCode::setUnitPre(CPUDataSection *data)
     }
 }
 
-void UnitPreCode::appendSpecification(Specification *specification) {
+void UnitPreCode::appendSpecification(Specification *specification)
+{
     unitPreList.append(specification);
 }
 
-void UnitPreCode::setComment(QString comment) {
+void UnitPreCode::setComment(QString comment)
+{
     cComment = comment;
 }
 
-UnitPostCode::~UnitPostCode() {
-    while (!unitPostList.isEmpty()) {
+UnitPostCode::~UnitPostCode()
+{
+    while (!unitPostList.isEmpty())
+    {
         delete unitPostList.takeFirst();
     }
 }
 
-QString UnitPostCode::getSourceCode() {
+QString UnitPostCode::getSourceCode() const
+{
     QString str = "UnitPost: ";
-    for (int i = 0; i < unitPostList.size(); i++) {
+    for (int i = 0; i < unitPostList.size(); i++)
+    {
         str.append(unitPostList.at(i)->getSourceCode() + ", ");
     }
-    if (str.endsWith(", ")) {
+    if (str.endsWith(", "))
+    {
         str.chop(2);
     }
-    if (!cComment.isEmpty()) {
+    if (!cComment.isEmpty())
+    {
         str.append(" " + cComment);
     }
     return str;
@@ -337,24 +349,17 @@ bool UnitPostCode::testPostcondition(CPUDataSection *data, QString &err)
     return val;
 }
 
-bool UnitPostCode::testPostcondition(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString) {
-    for (int i = 0; i < unitPostList.size(); i++) {
-        if (!unitPostList.at(i)->testUnitPost(mainMemory, cpuPane, errorString)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-void UnitPostCode::appendSpecification(Specification *specification) {
+void UnitPostCode::appendSpecification(Specification *specification)
+{
     unitPostList.append(specification);
 }
 
-void UnitPostCode::setComment(QString comment) {
+void UnitPostCode::setComment(QString comment)
+{
     cComment = comment;
 }
 
-bool UnitPostCode::hasUnitPost()
+bool UnitPostCode::hasUnitPost() const
 {
     return true;
 }

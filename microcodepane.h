@@ -100,6 +100,7 @@ private:
 
     PepHighlighter *highlighter;
     MicrocodeEditor *editor;
+    MicrocodeProgram* program;
 
 private slots:
     void setLabelToModified(bool modified);

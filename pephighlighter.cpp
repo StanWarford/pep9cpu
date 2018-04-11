@@ -21,7 +21,7 @@
 
 #include "pephighlighter.h"
 #include "pep.h"
-
+#include "cpudatasection.h"
 PepHighlighter::PepHighlighter(PepColors::Colors color,QTextDocument *parent)
     : QSyntaxHighlighter(parent),forcedFeatures(false)
 {
@@ -103,7 +103,8 @@ void PepHighlighter::highlightBlock(const QString &text)
         highlightingRules=highlightingRulesAll;
     }
     else{
-        highlightingRules=Pep::cpuFeatures==Enu::CPUType::OneByteDataBus?highlightingRulesOne:highlightingRulesTwo;
+        highlightingRules=CPUDataSection::getInstance()->getCPUFeatures()==Enu::CPUType::OneByteDataBus
+                ? highlightingRulesOne : highlightingRulesTwo;
     }
 
     foreach (const HighlightingRule &rule, highlightingRules) {

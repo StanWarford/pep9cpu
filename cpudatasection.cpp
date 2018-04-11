@@ -202,6 +202,11 @@ CPUDataSection::~CPUDataSection()
     //This code should not be called during the normal lifetime of Pep9CPU
 }
 
+Enu::CPUType CPUDataSection::getCPUFeatures() const
+{
+    return cpuFeatures;
+}
+
 quint8 CPUDataSection::getRegisterBankByte(quint8 registerNumber) const
 {
     if(registerNumber>Enu::maxRegisterNumber) return 0;
@@ -292,7 +297,6 @@ MicroCode* CPUDataSection::getMicrocodeFromSignals() const
 
 void CPUDataSection::setStatusBitPre(Enu::EStatusBit statusBit, bool val)
 {
-    qDebug()<<"Status bit "<<statusBit<<":"<<(quint8)val;
     switch(statusBit)
     {
     //Mask out the original value, and then or it with the properly shifted bit
@@ -316,16 +320,22 @@ void CPUDataSection::setStatusBitPre(Enu::EStatusBit statusBit, bool val)
 
 void CPUDataSection::setMemoryBytePre(quint16 address, quint8 val)
 {
+    quint8 old = memory[address];
     qDebug()<<"Memory byte "<<address<<":"<<val;
     memory[address]=val;
+    emit memoryChanged(address,old,val);
 }
 
 void CPUDataSection::setMemoryWordPre(quint16 address, quint16 val)
 {
-    address&=0xFFFE; //Ignore the lowest order bit, as required by the pep9 standard
+    //address&=0xFFFE;
+    quint8 old1 = memory[address];
+    quint8 old2= memory[address+1];
     qDebug()<<"Memory word written "<<QString::number(address,16)<<":"<<val;
     memory[address]=val/256;
     memory[address+1]=val%256;
+    emit memoryChanged(address,old1,val/256);
+    emit memoryChanged(address+1,old2,val%256);
 }
 
 void CPUDataSection::setRegisterBytePre(quint8 reg, quint8 val)
@@ -372,6 +382,16 @@ bool CPUDataSection::setSignalsFromMicrocode(const MicroCode *line)
     return changed;
 }
 
+bool CPUDataSection::hadErrorOnStep() const
+{
+    return hadDataError;
+}
+
+QString CPUDataSection::getErrorMessage() const
+{
+    return errorMessage;
+}
+
 void CPUDataSection::setRegisterByte(quint8 reg, quint8 value)
 {
     //Cache old register value
@@ -410,7 +430,7 @@ void CPUDataSection::setStatusBit(Enu::EStatusBit statusBit, bool val)
 
 void CPUDataSection::handleMainBusState() noexcept
 {
-    bool marChanged= false;
+    bool marChanged = false;
     quint8 a,b;
     if(clockSignals[Enu::MARCk]&&valueOnABus(a)&&valueOnBBus(b))
     {

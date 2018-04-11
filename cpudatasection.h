@@ -19,6 +19,7 @@ public:
     virtual ~CPUDataSection();
 
 
+    Enu::CPUType getCPUFeatures() const;
     //Access CPU registers
     quint8 getRegisterBankByte(quint8 registerNumber) const;
     quint16 getRegisterBankWord(quint8 registerNumber) const; //Follows even/odd conventions of pep/9
@@ -46,17 +47,24 @@ public:
      *  Preset CPU state. These are not meant to be called once the simulation has started.
      */
     //Internally, all set...() methods will call set...Pre() code, but will emit events afterwards
-    void setStatusBitPre(Enu::EStatusBit,bool val);
-    void setMemoryBytePre(quint16 address,quint8 val);
-    void setMemoryWordPre(quint16 address,quint16 val);
-    void setRegisterBytePre(quint8 reg,quint8 val);
-    void setRegisterWordPre(quint8 reg,quint16 val);
-    void setMemoryRegisterPre(Enu::EMemoryRegisters,quint8 val);
     bool setSignalsFromMicrocode(const MicroCode* line);
 
     //Return information about errors on the last step
-    inline bool hadErrorOnStep(){return hadDataError;}
-    inline QString getErrorMessage(){return errorMessage;}
+    bool hadErrorOnStep() const;
+    QString getErrorMessage() const;
+
+    /*
+     * Information about CPU internals
+     */
+    //Is the CPU function Unary?
+    bool aluFnIsUnary() const;
+    //Return true if AMux has output, and set result equal to the value of the output.
+    //Works for one and two byte buses
+    bool getAMuxOutput(quint8 &result) const;
+    //Return  true if CSMux has an ouput, and set result equal to the output if present
+    bool calculateCSMuxOutput(bool& result) const;
+    //Return if the ALU has an ouput, and set result & NZVC bits according to the ALU function
+    bool calculateALUOutput(quint8& result,quint8 &NZVC) const;
 
 private:
     CPUDataSection(QObject* parent=0);
@@ -81,16 +89,6 @@ private:
     //Set the values values of the sequential data registers (numbers 22-31)
     void presetStaticRegisters() noexcept;
 
-    //Is the CPU function Unary?
-    bool aluFnIsUnary() const;
-    //Return true if AMux has output, and set result equal to the value of the output.
-    //Works for one and two byte buses
-    bool getAMuxOutput(quint8 &result) const;
-    //Return  true if CSMux has an ouput, and set result equal to the output if present
-    bool calculateCSMuxOutput(bool& result) const;
-    //Return if the ALU has an ouput, and set result & NZVC bits according to the ALU function
-    bool calculateALUOutput(quint8& result,quint8 &NZVC) const;
-
     //Set CPU state and emit appropriate change event
     inline void setMemoryRegister(Enu::EMemoryRegisters,quint8 value);
     inline void setRegisterByte(quint8 register,quint8 value);
@@ -110,6 +108,12 @@ private:
     void clearMemory() noexcept;
     void clearErrors() noexcept;
 public slots:
+    void setStatusBitPre(Enu::EStatusBit,bool val);
+    void setMemoryBytePre(quint16 address,quint8 val);
+    void setMemoryWordPre(quint16 address,quint16 val);
+    void setRegisterBytePre(quint8 reg,quint8 val);
+    void setRegisterWordPre(quint8 reg,quint16 val);
+    void setMemoryRegisterPre(Enu::EMemoryRegisters,quint8 val);
     void onStep() noexcept;
     void onClock() noexcept;
     void onClearCPU()noexcept;

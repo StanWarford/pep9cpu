@@ -23,7 +23,8 @@
 
 #include "microcodeeditor.h"
 #include "pep.h"
-
+#include "cpucontrolsection.h"
+#include "microcodeprogram.h"
 #include <QDebug>
 
 MicrocodeEditor::MicrocodeEditor(QWidget *parent, bool highlightCurrentLine, bool isReadOnly) : QPlainTextEdit(parent)
@@ -87,7 +88,8 @@ void MicrocodeEditor::highlightSimulatedLine()
         selection.format.setProperty(QTextFormat::FullWidthSelection, true);
         QTextCursor cursor = QTextCursor(document());
         cursor.setPosition(0);
-        for (int i = 0; i < Sim::microCodeCurrentLine; i++) {
+        CPUControlSection* inst = CPUControlSection::getInstance();
+        for (int i = 0; i < inst->getProgram()->codeLineToProgramLine(inst->getLineNumber()); i++) {
             cursor.movePosition(QTextCursor::NextBlock);
         }
 

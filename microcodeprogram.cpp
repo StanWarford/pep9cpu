@@ -1,37 +1,60 @@
 #include "microcodeprogram.h"
 #include "code.h"
-MicrocodeProgram::MicrocodeProgram():objectCode()
+
+MicrocodeProgram::MicrocodeProgram(): programVec(),preconditionsVec(),postconditionsVec(),microcodeVec()
 {
 
 }
 
 MicrocodeProgram::~MicrocodeProgram()
 {
-    for(int it = 0; it < objectCode.size();it++)
-    {
-        delete objectCode[it];
-    }
+
 }
 
 MicrocodeProgram::MicrocodeProgram(QVector<Code*>objectCode):
-    objectCode(objectCode)
+    programVec(objectCode),preconditionsVec(),postconditionsVec(),microcodeVec()
 {
+    Code* x;
+    for(int it=0; it<objectCode.size();it++)
+    {
+        x=objectCode[it];
+        if(x->hasUnitPre())preconditionsVec.append(it);
+        else if(x->hasUnitPost())postconditionsVec.append(it);
+        else if(x->isMicrocode())microcodeVec.append(it);
+    }
 }
 
 const QVector<Code*> MicrocodeProgram::getObjectCode() const
 {
-    return this->objectCode;
+    return this->programVec;
+}
+
+int MicrocodeProgram::codeLineToProgramLine(int codeLine) const
+{
+    return microcodeVec[codeLine];
+}
+
+bool MicrocodeProgram::hasMicrocode() const
+{
+    return !microcodeVec.isEmpty();
+}
+
+bool MicrocodeProgram::hasUnitPre() const
+{
+    return !preconditionsVec.empty();
 }
 
 const MicroCode *MicrocodeProgram::getCodeLine(quint16 codeLine) const
 {
-    int microCodeIt=0;
-    for(int it=0;it<objectCode.size();it++)
+    if(codeLine<microcodeVec.size())
     {
-        if(objectCode[it]->isMicrocode()) ++microCodeIt;
-        if(microCodeIt==codeLine+1) return (MicroCode*)objectCode[it];
+        return (MicroCode*) programVec[microcodeVec[codeLine]];
     }
     return nullptr;
-    //Return the n'th line of microcode;
+}
+
+int MicrocodeProgram::codeLength() const
+{
+    return microcodeVec.length();
 }
 

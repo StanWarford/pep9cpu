@@ -23,7 +23,6 @@
 #include "ui_microcodepane.h"
 #include "code.h"
 #include "pep.h"
-#include "sim.h"
 #include "microcodeprogram.h"
 
 #include <QGridLayout>
@@ -32,7 +31,7 @@
 #include "colors.h"
 MicrocodePane::MicrocodePane(QWidget *parent) :
         QWidget(parent),
-        ui(new Ui::MicrocodePane)
+        ui(new Ui::MicrocodePane),program(nullptr)
 {
     ui->setupUi(this);
 
@@ -76,13 +75,13 @@ void MicrocodePane::initCPUModelState()
 
 bool MicrocodePane::microAssemble()
 {
+    QVector<Code*> codeList;
     QString sourceLine;
     QString errorString;
     QStringList sourceCodeList;
     Code *code;
     int lineNum = 0;
     removeErrorMessages();
-    Sim::codeList.clear();
     QString sourceCode = editor->toPlainText();
     sourceCodeList = sourceCode.split('\n');
     while (lineNum < sourceCodeList.size()) {
@@ -91,29 +90,24 @@ bool MicrocodePane::microAssemble()
             appendMessageInSourceCodePaneAt(lineNum, errorString);
             return false;
         }
+        codeList.append(code);
+        /*
         Sim::codeList.append(code);
         if (code->isMicrocode()) {
             Sim::cycleCount++;
-        }
+        }*/
         lineNum++;
     }
     // we guarantee a \n at the end of our document for single step highlighting
     if (!sourceCode.endsWith("\n")) {
         editor->appendPlainText("\n");
     }
+    program = new MicrocodeProgram(codeList);
     return true;
 }
 
 MicrocodeProgram* MicrocodePane::getMicrocodeProgram() {
-    Code *code;
-    QVector<Code*> vect;
-    // this should automagically generate the appropriate code for the cpu model
-    //  since it uses the mnemon maps that get initialized when we switch models
-    for (int i = 0; i < Sim::codeList.size(); ++i) {
-        code = Sim::codeList.at(i);
-        vect.push_back(code);
-    }
-    return new MicrocodeProgram(vect);
+    return program;
 }
 
 void MicrocodePane::removeErrorMessages()

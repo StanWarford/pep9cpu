@@ -28,7 +28,6 @@ SOURCES += main.cpp \
     byteconverterchar.cpp \
     byteconverterbin.cpp \
     mainmemory.cpp \
-    sim.cpp \
     pep.cpp \
     microcodepane.cpp \
     cpupane.cpp \
@@ -57,7 +56,6 @@ HEADERS += mainwindow.h \
     byteconverterchar.h \
     byteconverterbin.h \
     mainmemory.h \
-    sim.h \
     pep.h \
     microcodepane.h \
     cpupane.h \

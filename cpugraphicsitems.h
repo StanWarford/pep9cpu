@@ -29,6 +29,7 @@
 #include "enu.h"
 #include "tristatelabel.h"
 #include "colors.h"
+class CPUDataSection;
 class CpuGraphicsItems : public QGraphicsItem
 {
 public:
@@ -137,6 +138,7 @@ public:
     QLabel *MDROLabel;
     QLabel *MDRELabel;
 private:
+    CPUDataSection* dataSection;
     PepColors::Colors colorScheme;
     QGraphicsScene *parentScene;
     QWidget *parent;

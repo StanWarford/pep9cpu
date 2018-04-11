@@ -1,5 +1,7 @@
 #include "cpucontrolsection.h"
 #include "cpudatasection.h"
+#include "code.h"
+#include "microcodeprogram.h"
 CPUControlSection *CPUControlSection::_instance = nullptr;
 CPUTester *CPUTester::_instance = nullptr;
 
@@ -24,11 +26,36 @@ void CPUControlSection::setMicrocodeProgram(MicrocodeProgram *program)
     microprogramCounter=0;
 }
 
-bool CPUControlSection::hadErrorOnStep()
+int CPUControlSection::getLineNumber() const
+{
+    return microprogramCounter;
+}
+
+const MicrocodeProgram *CPUControlSection::getProgram() const
+{
+    return program;
+}
+
+const MicroCode *CPUControlSection::getCurrentMicrocodeLine() const
+{
+    return program->getCodeLine(microprogramCounter);
+}
+
+QString CPUControlSection::getErrorMessage() const
+{
+    if(data->hadErrorOnStep()) return data->getErrorMessage();
+    else if(hadErrorOnStep()) return errorMessage;
+    else return "";
+}
+
+bool CPUControlSection::hadErrorOnStep() const
 {
     return hadControlError || data->hadErrorOnStep();
 }
-
+bool CPUControlSection::executionFinished() const
+{
+    return microprogramCounter==program->codeLength();
+}
 void CPUControlSection::onSimulationStarted()
 {
 #pragma message "todo"
@@ -36,7 +63,8 @@ void CPUControlSection::onSimulationStarted()
 
 void CPUControlSection::onSimulationFinished()
 {
-#pragma message "todo"
+    data->clearClockSignals();
+    data->clearControlSignals();
 }
 
 void CPUControlSection::onDebuggingStarted()
@@ -116,6 +144,11 @@ void CPUControlSection::onClearCPU()noexcept
 void CPUControlSection::onClearMemory() noexcept
 {
     data->onClearMemory();
+}
+
+void CPUControlSection::onCPUFeaturesChanged(Enu::CPUType cpuType) noexcept
+{
+    data->onCPUFeaturesChanged(cpuType);
 }
 
 CPUControlSection::CPUControlSection(CPUDataSection * data): QObject(nullptr),data(data),microprogramCounter(0)
