@@ -837,6 +837,7 @@ void MainWindow::simulationFinished()
     QVector<Code*> prog = microcodePane->getMicrocodeProgram()->getObjectCode();
     for (Code* x : prog) {
         if (x->hasUnitPost()&&!((UnitPostCode*)x)->testPostcondition(dataSection, errorString)) {
+            ((UnitPostCode*)x)->testPostcondition(dataSection, errorString);
             microcodePane->appendMessageInSourceCodePaneAt(-1, errorString);
             QMessageBox::warning(this, "Pep9CPU", "Failed unit test");
             return;

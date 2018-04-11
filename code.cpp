@@ -340,11 +340,7 @@ bool UnitPostCode::testPostcondition(CPUDataSection *data, QString &err)
     for(auto x : unitPostList)
     {
         val&=x->testUnitPost(data,err);
-        if(err!="")
-        {
-            qDebug()<<err;
-            err="";
-        }
+        if(!val) return false;
     }
     return val;
 }
