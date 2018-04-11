@@ -100,6 +100,7 @@ protected slots:
 public slots:
     void run();
     void onClockChanged();
+    void onBusChanged();
     void onRegisterChanged(quint8 which,quint8 oldVal,quint8 newVal);
     void onMemoryRegisterChanged(Enu::EMemoryRegisters,quint8 oldVal,quint8 newVal);
     void onStatusBitChanged(Enu::EStatusBit,bool value);

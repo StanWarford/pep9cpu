@@ -295,67 +295,96 @@ MicroCode* CPUDataSection::getMicrocodeFromSignals() const
     return nullptr;
 }
 
-void CPUDataSection::setStatusBitPre(Enu::EStatusBit statusBit, bool val)
+void CPUDataSection::onSetStatusBit(Enu::EStatusBit statusBit, bool val)
 {
+    bool oldVal=false;
     switch(statusBit)
     {
     //Mask out the original value, and then or it with the properly shifted bit
     case Enu::STATUS_N:
+        oldVal=NZVCSbits&Enu::NMask;
         NZVCSbits=(NZVCSbits&~Enu::NMask)|(val?1:0)*Enu::NMask;
         break;
     case Enu::STATUS_Z:
+        oldVal=NZVCSbits&Enu::ZMask;
         NZVCSbits=(NZVCSbits&~Enu::ZMask)|(val?1:0)*Enu::ZMask;
         break;
     case Enu::STATUS_V:
+        oldVal=NZVCSbits&Enu::VMask;
         NZVCSbits=(NZVCSbits&~Enu::VMask)|(val?1:0)*Enu::VMask;
         break;
     case Enu::STATUS_C:
+        oldVal=NZVCSbits&Enu::CMask;
         NZVCSbits=(NZVCSbits&~Enu::CMask)|(val?1:0)*Enu::CMask;
         break;
     case Enu::STATUS_S:
+        oldVal=NZVCSbits&Enu::SMask;
         NZVCSbits=(NZVCSbits&~Enu::SMask)|(val?1:0)*Enu::SMask;
         break;
     }
+    if(oldVal != val) emit statusBitChanged(statusBit,val);
 }
 
-void CPUDataSection::setMemoryBytePre(quint16 address, quint8 val)
+void CPUDataSection::onSetMemoryByte(quint16 address, quint8 val)
 {
     quint8 old = memory[address];
-    qDebug()<<"Memory byte "<<address<<":"<<val;
     memory[address]=val;
-    emit memoryChanged(address,old,val);
+    if(old != val) emit memoryChanged(address,old,val);
 }
 
-void CPUDataSection::setMemoryWordPre(quint16 address, quint16 val)
+void CPUDataSection::onSetMemoryWord(quint16 address, quint16 val)
 {
-    //address&=0xFFFE;
+    //Do not enforce aligned memory access here, as precondition code in homeworks depends on access being unaligned.
     quint8 old1 = memory[address];
     quint8 old2= memory[address+1];
     qDebug()<<"Memory word written "<<QString::number(address,16)<<":"<<val;
     memory[address]=val/256;
     memory[address+1]=val%256;
-    emit memoryChanged(address,old1,val/256);
-    emit memoryChanged(address+1,old2,val%256);
+    if(old1 != val/256) emit memoryChanged(address,old1,val/256);
+    if(old2 != val%256) emit memoryChanged(address+1,old2,val%256);
 }
 
-void CPUDataSection::setRegisterBytePre(quint8 reg, quint8 val)
+void CPUDataSection::onSetRegisterByte(quint8 reg, quint8 val)
 {
     if(reg>21) return; //Don't allow static registers to be written to
-    qDebug()<<"Register set "<<reg<<":"<<val;
+    quint8 oldVal=registerBank[reg];
     registerBank[reg]=val;
+    if(oldVal != val) emit registerChanged(reg,oldVal,val);
 }
 
-void CPUDataSection::setRegisterWordPre(quint8 reg, quint16 val)
+void CPUDataSection::onSetRegisterWord(quint8 reg, quint16 val)
 {
    if(reg+1>21) return; //Don't allow static registers to be written to
-   qDebug()<<reg<<"||"<<val;
-   registerBank[reg]=val/256;
-   registerBank[reg+1]=val%256;
+   quint8 oldVal1 = registerBank[reg], oldVal2 = registerBank[reg+1];
+   registerBank[reg] = val/256;
+   registerBank[reg+1] = val%256;
+   if(oldVal1 != val) emit registerChanged(reg,oldVal1,val/256);
+   if(oldVal2 != val) emit registerChanged(reg,oldVal2,val%256);
 }
 
-void CPUDataSection::setMemoryRegisterPre(Enu::EMemoryRegisters reg, quint8 val)
+void CPUDataSection::onSetMemoryRegister(Enu::EMemoryRegisters reg, quint8 val)
 {
-    memoryRegisters[reg]=val;
+    quint8 oldVal = memoryRegisters[reg];
+    memoryRegisters[reg] = val;
+    if(oldVal != val) emit registerChanged(reg,oldVal,val);
+}
+
+void CPUDataSection::onSetClock(Enu::EClockSignals clock, bool value)
+{
+    qDebug()<<clock<<" clock set to "<<value;
+    bool old = clockSignals[clock];
+    if(old == value) return;
+    clockSignals[clock] = value;
+    emit controlClockChanged();
+}
+
+void CPUDataSection::onSetControlSignal(Enu::EControlSignals control, quint8 value)
+{
+    quint8 old = controlSignals[control];
+    if(old == value) return;
+    controlSignals[control] = value;
+    qDebug()<<control<<" control set to "<<value;
+    emit controlClockChanged();
 }
 
 bool CPUDataSection::setSignalsFromMicrocode(const MicroCode *line)
@@ -396,8 +425,9 @@ void CPUDataSection::setRegisterByte(quint8 reg, quint8 value)
 {
     //Cache old register value
     quint8 old = registerBank[reg];
+    qDebug()<<"Register "<<reg<<" set to "<<value;
     if(old==value) return; //Don't continue if the new value is the old value
-    setRegisterBytePre(reg,value);
+    onSetRegisterByte(reg,value);
     emit registerChanged(reg,old,value);
 }
 
@@ -405,7 +435,7 @@ void CPUDataSection::setMemoryByte(quint16 address, quint8 value)
 {
     quint8 old= memory[address];
     if(old == value)return; //Don't continue if the new value is the old value
-    setMemoryBytePre(address,value);
+    onSetMemoryByte(address,value);
     emit memoryChanged(address,old,value);
 }
 
@@ -414,7 +444,7 @@ void CPUDataSection::setMemoryWord(quint16 address, quint16 value)
     address&=0xFFFE; //Memory access ignores the lowest order bit
     quint8 hi=memory[address],lo=memory[address+1]; //Cache old memory values
     if((((quint16)hi<<8)|lo)==value)return; //Don't continue if the new value is the old value
-    setMemoryWordPre(address,value);
+    onSetMemoryWord(address,value);
     emit memoryChanged(address,hi,value/256); //Signal that two bytes of memory changed
     emit memoryChanged(address+1,lo,value%256);
 }
@@ -422,7 +452,7 @@ void CPUDataSection::setMemoryWord(quint16 address, quint16 value)
 void CPUDataSection::setStatusBit(Enu::EStatusBit statusBit, bool val)
 {
     quint8 old = NZVCSbits;
-    setStatusBitPre(statusBit,val);
+    onSetStatusBit(statusBit,val);
     //Check if old is equal to new after attempting to set it, as there isn't a simple test for bit math
     if(old==val)return; //Prevent signal from being emitted if no value changed
     emit statusBitChanged(statusBit,val);
@@ -527,6 +557,7 @@ void CPUDataSection::stepOneByte() noexcept
     {
         if(controlSignals[Enu::C]==Enu::signalDisabled)
         {
+            qDebug()<<Enu::C<<controlSignals[Enu::C];
             hadDataError=true;
             errorMessage = "No destination register specified for LoadCk.";
         }

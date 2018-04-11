@@ -46,8 +46,9 @@ CpuPane::CpuPane(CPUType type, QWidget *parent) :
 {
     ui->setupUi(this);
     connect(this,&CpuPane::simulationFinished,controlSection,&CPUControlSection::onSimulationFinished);
-    connect(this,&CpuPane::registerChanged,dataSection,&CPUDataSection::setRegisterBytePre);
+    connect(this,&CpuPane::registerChanged,dataSection,&CPUDataSection::onSetRegisterByte);
     connect(dataSection,&CPUDataSection::statusBitChanged,this,&CpuPane::onStatusBitChanged);
+    connect(dataSection,&CPUDataSection::registerChanged,this,&CpuPane::onRegisterChanged);
     connect(dataSection,&CPUDataSection::memoryRegisterChanged,this,&CpuPane::onMemoryRegisterChanged);
     connect(ui->spinBox, SIGNAL(valueChanged(int)), this, SLOT(zoomFactorChanged(int)));
     cpuPaneItems = NULL;
@@ -110,9 +111,14 @@ void CpuPane::initModel(Enu::CPUType type)
     ui->graphicsView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     connect(cpuPaneItems->loadCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->loadCk, &QCheckBox::clicked,this,&CpuPane::onClockChanged);
     connect(cpuPaneItems->cLineEdit, SIGNAL(textChanged(QString)), scene, SLOT(invalidate()));
     connect(cpuPaneItems->bLineEdit, SIGNAL(textChanged(QString)), scene, SLOT(invalidate()));
     connect(cpuPaneItems->aLineEdit, SIGNAL(textChanged(QString)), scene, SLOT(invalidate()));
+    connect(cpuPaneItems->cLineEdit,&QLineEdit::textChanged,this,&CpuPane::onBusChanged);
+    connect(cpuPaneItems->bLineEdit,&QLineEdit::textChanged,this,&CpuPane::onBusChanged);
+    connect(cpuPaneItems->aLineEdit,&QLineEdit::textChanged,this,&CpuPane::onBusChanged);
+
     connect(cpuPaneItems->MARCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->MDRCk, SIGNAL(clicked()), scene, SLOT(invalidate()));
     connect(cpuPaneItems->MARCk,&QCheckBox::clicked,this,&CpuPane::onClockChanged);
@@ -627,12 +633,68 @@ void CpuPane::labelClicked()
 {
     TristateLabel *label = qobject_cast<TristateLabel *>(sender());
     label->toggle();
+    QString temp="";
+    quint8 tempVal=0;
+    Enu::EControlSignals control=(Enu::EControlSignals)128;
+    if(label == cpuPaneItems->aMuxTristateLabel)
+    {
+        temp = cpuPaneItems->aMuxTristateLabel->text();
+        control= Enu::AMux;
+    }
+    else if(label == cpuPaneItems->MDRMuxTristateLabel)
+    {
+        temp = cpuPaneItems->MDRMuxTristateLabel->text();
+        control= Enu::MDRMux;
+    }
+    else if(label == cpuPaneItems->cMuxTristateLabel)
+    {
+        temp = cpuPaneItems->cMuxTristateLabel->text();
+        control= Enu::CMux;
+    }
+    else if(label == cpuPaneItems->CSMuxTristateLabel)
+    {
+        temp = cpuPaneItems->CSMuxTristateLabel->text();
+        control= Enu::CSMux;
+    }
+    else if(label == cpuPaneItems->AndZTristateLabel)
+    {
+        temp = cpuPaneItems->AndZTristateLabel->text();
+        control= Enu::AndZ;
+    }
+    else if(label == cpuPaneItems->MemWriteTristateLabel)
+    {
+        temp = cpuPaneItems->MemWriteTristateLabel->text();
+        control= Enu::MemWrite;
+    }
+    else if(label == cpuPaneItems->MemReadTristateLabel)
+    {
+        temp = cpuPaneItems->MemReadTristateLabel->text();
+        control= Enu::MemRead;
+    }
+    else if(label == cpuPaneItems->MDREMuxTristateLabel)
+    {
+        temp = cpuPaneItems->MDREMuxTristateLabel->text();
+        control= Enu::MDREMux;
+    }
+    else if(label == cpuPaneItems->MDROMuxTristateLabel)
+    {
+        temp = cpuPaneItems->MDROMuxTristateLabel->text();
+        control= Enu::MDROMux;
+    }
+    else if(label == cpuPaneItems->EOMuxTristateLabel)
+    {
+        temp = cpuPaneItems->EOMuxTristateLabel->text();
+        control= Enu::EOMux;
+    }
+    else
+    {
 
-    emit statusBitChanged(Enu::STATUS_N,cpuPaneItems->nBitLabel->text().toInt() == 0 ? false : true);
-    emit statusBitChanged(Enu::STATUS_Z,cpuPaneItems->zBitLabel->text().toInt() == 0 ? false : true);
-    emit statusBitChanged(Enu::STATUS_V,cpuPaneItems->vBitLabel->text().toInt() == 0 ? false : true);
-    emit statusBitChanged(Enu::STATUS_C,cpuPaneItems->cBitLabel->text().toInt() == 0 ? false : true);
-    emit statusBitChanged(Enu::STATUS_S,cpuPaneItems->sBitLabel->text().toInt() == 0 ? false : true);
+    }
+    if(temp == "0") tempVal = 0;
+    else if(temp == "1") tempVal = 1;
+    else tempVal = Enu::signalDisabled;
+    if(control==(Enu::EControlSignals)128) return;
+    dataSection->onSetControlSignal(control,tempVal);
 
 }
 
@@ -816,6 +878,7 @@ void CpuPane::ALUTextEdited(QString str)
     }
     else {
         int num = str.toInt();
+        dataSection->onSetControlSignal(Enu::ALU,(Enu::EALUFunc)num);
         //
         switch (num) {
         case 0:
@@ -881,30 +944,67 @@ void CpuPane::run()
 void CpuPane::onClockChanged()
 {
     QCheckBox* send = qobject_cast<QCheckBox*>(sender());
-    /*switch(send)
+    if(send==cpuPaneItems->NCkCheckBox)
     {
-    case cpuPaneItems->NCkCheckBox:
-        dataSection->setStatusBitPre();
-        break;
-    case cpuPaneItems->ZCkCheckBox:
-        break;
-    case cpuPaneItems->VCkCheckBox:
-        break;
-    case cpuPaneItems->CCkCheckBox:
-        break;
-    case cpuPaneItems->SCkCheckBox:
-        break;
-    case cpuPaneItems->MARCk:
-        break;
-    case cpuPaneItems->MDRCk:
-        break;
-    case cpuPaneItems->MDRECk:
-        break;
-    case cpuPaneItems->MDROCk:
-        break;
-    default:
-        break
-    }*/
+        dataSection->onSetClock(Enu::NCk,cpuPaneItems->NCkCheckBox->checkState());
+    }
+    else if(send==cpuPaneItems->ZCkCheckBox)
+    {
+        dataSection->onSetClock(Enu::ZCk,cpuPaneItems->ZCkCheckBox->checkState());
+    }
+    else if(send==cpuPaneItems->VCkCheckBox)
+    {
+        dataSection->onSetClock(Enu::VCk,cpuPaneItems->VCkCheckBox->checkState());
+    }
+    else if(send==cpuPaneItems->CCkCheckBox)
+    {
+        dataSection->onSetClock(Enu::CCk,cpuPaneItems->CCkCheckBox->checkState());
+    }
+    else if(send==cpuPaneItems->SCkCheckBox)
+    {
+        dataSection->onSetClock(Enu::SCk,cpuPaneItems->SCkCheckBox->checkState());
+    }
+    else if(send==cpuPaneItems->MARCk)
+    {
+        dataSection->onSetClock(Enu::MARCk,cpuPaneItems->MARCk->checkState());
+    }
+    else if(send==cpuPaneItems->MDRCk)
+    {
+        dataSection->onSetClock(Enu::MDRCk,cpuPaneItems->MDRCk->checkState());
+    }
+    else if(send==cpuPaneItems->MDRECk)
+    {
+        dataSection->onSetClock(Enu::MDRECk,cpuPaneItems->MDRECk->checkState());
+    }
+    else if(send==cpuPaneItems->MDROCk)
+    {
+        dataSection->onSetClock(Enu::MDROCk,cpuPaneItems->MDROCk->checkState());
+    }
+    else if(send==cpuPaneItems->loadCk)
+    {
+        dataSection->onSetClock(Enu::LoadCk,cpuPaneItems->loadCk->checkState());
+    }
+}
+
+void CpuPane::onBusChanged()
+{
+    QLineEdit* bus = qobject_cast<QLineEdit*>(sender());
+    quint8 val;
+    if(bus==cpuPaneItems->aLineEdit)
+    {
+        val = cpuPaneItems->aLineEdit->text().toInt();
+        dataSection->onSetControlSignal(Enu::A,val);
+    }
+    else if(bus==cpuPaneItems->bLineEdit)
+    {
+        val = cpuPaneItems->bLineEdit->text().toInt();
+        dataSection->onSetControlSignal(Enu::B,val);
+    }
+    else if(bus==cpuPaneItems->cLineEdit)
+    {
+        val = cpuPaneItems->cLineEdit->text().toInt();
+        dataSection->onSetControlSignal(Enu::C,val);
+    }
 }
 
 void CpuPane::onRegisterChanged(quint8 which, quint8 , quint8 newVal)

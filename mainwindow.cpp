@@ -35,6 +35,7 @@
 #include <QDebug>
 #include <QFontDialog>
 #include "cpudatasection.h"
+#include "code.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -436,6 +437,7 @@ void MainWindow::on_actionEdit_UnComment_Line_triggered()
 
 void MainWindow::on_actionEdit_Auto_Format_Microcode_triggered()
 {
+    //Should format correctly anytime assembly works
 #pragma message("todo: fix bug with formatting from previous run")
     if (microcodePane->microAssemble()) {
         microcodePane->setMicrocode(microcodePane->getMicrocode());
@@ -826,23 +828,20 @@ void MainWindow::stopSimulation()
     on_actionSystem_Stop_Debugging_triggered();
 
 }
-
 void MainWindow::simulationFinished()
 {
     QString errorString;
 
     on_actionSystem_Stop_Debugging_triggered();
 
-#pragma message "Fix main window test post conditions"
-
-    /*for (int i = 0; i < Sim::codeList.size(); i++) {
-        if (!Sim::codeList.at(i)->testPostcondition(mainMemory, cpuPane, errorString)) {
+    QVector<Code*> prog = microcodePane->getMicrocodeProgram()->getObjectCode();
+    for (Code* x : prog) {
+        if (x->hasUnitPost()&&!((UnitPostCode*)x)->testPostcondition(dataSection, errorString)) {
             microcodePane->appendMessageInSourceCodePaneAt(-1, errorString);
             QMessageBox::warning(this, "Pep9CPU", "Failed unit test");
             return;
         }
-    }*/
-        controlSection->testPost();
+    }
     // feature, not a bug: we will display the "passed unit test" even
     // on the empty case - no postconditions
 

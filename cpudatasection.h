@@ -108,12 +108,14 @@ private:
     void clearMemory() noexcept;
     void clearErrors() noexcept;
 public slots:
-    void setStatusBitPre(Enu::EStatusBit,bool val);
-    void setMemoryBytePre(quint16 address,quint8 val);
-    void setMemoryWordPre(quint16 address,quint16 val);
-    void setRegisterBytePre(quint8 reg,quint8 val);
-    void setRegisterWordPre(quint8 reg,quint16 val);
-    void setMemoryRegisterPre(Enu::EMemoryRegisters,quint8 val);
+    void onSetStatusBit(Enu::EStatusBit,bool val);
+    void onSetMemoryByte(quint16 address,quint8 val);
+    void onSetMemoryWord(quint16 address,quint16 val); //This doesn't enforce aligned memory access
+    void onSetRegisterByte(quint8 reg,quint8 val);
+    void onSetRegisterWord(quint8 reg,quint16 val);
+    void onSetMemoryRegister(Enu::EMemoryRegisters,quint8 val);
+    void onSetClock(Enu::EClockSignals, bool value);
+    void onSetControlSignal(Enu::EControlSignals, quint8 value);
     void onStep() noexcept;
     void onClock() noexcept;
     void onClearCPU()noexcept;

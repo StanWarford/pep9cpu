@@ -244,7 +244,7 @@ void MainMemory::cellDataChanged(QTableWidgetItem *item)
     data = data % 256;
 
     if (contents.contains(rx) && dataOk && addrConvOk) {
-        dataSection->setMemoryBytePre(address,(quint8)data);
+        dataSection->onSetMemoryByte(address,(quint8)data);
         qDebug() << "Sim::Mem[" << address << "]: " << data;
         ui->tableWidget->item(row, 0)->setText("0x" + QString("%1").arg(data, 2, 16, QLatin1Char('0')).toUpper().trimmed());
     }
