@@ -1265,82 +1265,89 @@ void CpuGraphicsItems::drawDiagramFreeText(QPainter *painter)
 void CpuGraphicsItems::drawLabels()
 {
 
-    QPalette pal = QPalette();
-    pal.setColor(QPalette::Text,colorScheme->arrowColorOn);
-    pal.setColor(QPalette::WindowText,colorScheme->arrowColorOn);
-    pal.setColor(QPalette::Base,PepColors::transparent);
-    pal.setColor(QPalette::Background,PepColors::transparent);
+    QPalette seqColor = QPalette();
+    seqColor.setColor(QPalette::Text,colorScheme->arrowColorOn);
+    seqColor.setColor(QPalette::WindowText,colorScheme->arrowColorOn);
+    seqColor.setColor(QPalette::Base,PepColors::transparent);
+    seqColor.setColor(QPalette::Background,PepColors::transparent);
+
+    QPalette combColor = QPalette();
+    combColor.setColor(QPalette::Text,colorScheme->arrowColorOn);
+    combColor.setColor(QPalette::WindowText,colorScheme->arrowColorOn);
+    combColor.setColor(QPalette::Base,colorScheme->seqCircuitColor);
+    combColor.setColor(QPalette::Background,colorScheme->seqCircuitColor);
 
     //Set Line editors first
-    cLineEdit->setPalette(pal);
-    bLineEdit->setPalette(pal);
-    aLineEdit->setPalette(pal);
-    ALULineEdit->setPalette(pal);
+    cLineEdit->setPalette(seqColor);
+    bLineEdit->setPalette(seqColor);
+    aLineEdit->setPalette(seqColor);
+    ALULineEdit->setPalette(seqColor);
+
     //Common labels
-    cLabel->setPalette(pal);
-    bLabel->setPalette(pal);
-    aLabel->setPalette(pal);
-    MARALabel->setPalette(pal);
-    MARBLabel->setPalette(pal);
-    MARCk->setPalette(pal);
-    loadCk->setPalette(pal);
-    aMuxLabel->setPalette(pal);
-    aMuxerDataLabel->setPalette(pal);
-    aMuxTristateLabel->setPalette(pal);
-    cMuxerLabel->setPalette(pal);
-    cMuxLabel->setPalette(pal);
-    cMuxTristateLabel->setPalette(pal);
-    ALULabel->setPalette(pal);
-    ALUFunctionLabel->setPalette(pal);
-    CSMuxLabel->setPalette(pal);
-    CSMuxerDataLabel->setPalette(pal);
-    CSMuxTristateLabel->setPalette(pal);
-    SCkCheckBox->setPalette(pal);
-    sBitLabel->setPalette(pal);
-    CCkCheckBox->setPalette(pal);
-    cBitLabel->setPalette(pal);
-    VCkCheckBox->setPalette(pal);
-    vBitLabel->setPalette(pal);
-    AndZLabel->setPalette(pal);
-    AndZMuxLabel->setPalette(pal);
-    AndZTristateLabel->setPalette(pal);
-    ZCkCheckBox->setPalette(pal);
-    zBitLabel->setPalette(pal);
-    NCkCheckBox->setPalette(pal);
-    nBitLabel->setPalette(pal);
+    cLabel->setPalette(seqColor);
+    bLabel->setPalette(seqColor);
+    aLabel->setPalette(seqColor);
+    MARALabel->setPalette(seqColor);
+    MARBLabel->setPalette(seqColor);
+    MARCk->setPalette(seqColor);
+    loadCk->setPalette(seqColor);
+    aMuxLabel->setPalette(seqColor);
+    aMuxerDataLabel->setPalette(seqColor);
+    aMuxTristateLabel->setPalette(seqColor);
+    cMuxerLabel->setPalette(seqColor);
+    cMuxLabel->setPalette(seqColor);
+    cMuxTristateLabel->setPalette(seqColor);
+    ALULabel->setPalette(seqColor);
+    ALUFunctionLabel->setPalette(seqColor);
+    CSMuxLabel->setPalette(seqColor);
+    CSMuxerDataLabel->setPalette(seqColor);
+    CSMuxTristateLabel->setPalette(seqColor);
+    SCkCheckBox->setPalette(seqColor);
+    sBitLabel->setPalette(combColor);
+    CCkCheckBox->setPalette(seqColor);
+    cBitLabel->setPalette(combColor);
+    VCkCheckBox->setPalette(seqColor);
+    vBitLabel->setPalette(combColor);
+    AndZLabel->setPalette(seqColor);
+    AndZMuxLabel->setPalette(seqColor);
+    AndZTristateLabel->setPalette(seqColor);
+    ZCkCheckBox->setPalette(seqColor);
+    zBitLabel->setPalette(combColor);
+    NCkCheckBox->setPalette(seqColor);
+    nBitLabel->setPalette(combColor);
 
 
-    MemReadLabel->setPalette(pal);
-    MemReadTristateLabel->setPalette(pal);
-    MemWriteLabel->setPalette(pal);
-    MemWriteTristateLabel->setPalette(pal);
+    MemReadLabel->setPalette(seqColor);
+    MemReadTristateLabel->setPalette(seqColor);
+    MemWriteLabel->setPalette(seqColor);
+    MemWriteTristateLabel->setPalette(seqColor);
     //One byte exclusive labels
-    MDRLabel->setPalette(pal);
-    MDRMuxLabel->setPalette(pal);
-    MDRMuxTristateLabel->setPalette(pal);
-    MDRMuxerDataLabel->setPalette(pal);
-    MDRCk->setPalette(pal);
+    MDRLabel->setPalette(combColor);
+    MDRMuxLabel->setPalette(seqColor);
+    MDRMuxTristateLabel->setPalette(seqColor);
+    MDRMuxerDataLabel->setPalette(seqColor);
+    MDRCk->setPalette(seqColor);
 
 
     //Two Byte Exclusive Labels
-    MARMuxLabel->setPalette(pal);
-    MARMuxTristateLabel->setPalette(pal);
-    MARMuxerDataLabel->setPalette(pal);
+    MARMuxLabel->setPalette(seqColor);
+    MARMuxTristateLabel->setPalette(seqColor);
+    MARMuxerDataLabel->setPalette(seqColor);
 
-    MDROLabel->setPalette(pal);
-    MDROMuxTristateLabel->setPalette(pal);
-    MDROMuxLabel->setPalette(pal);
-    MDROMuxerDataLabel->setPalette(pal);
-    MDROCk->setPalette(pal);
-    MDRELabel->setPalette(pal);
-    MDREMuxTristateLabel->setPalette(pal);
-    MDREMuxLabel->setPalette(pal);
-    MDREMuxerDataLabel->setPalette(pal);
-    MDRECk->setPalette(pal);
+    MDROLabel->setPalette(combColor);
+    MDROMuxTristateLabel->setPalette(seqColor);
+    MDROMuxLabel->setPalette(seqColor);
+    MDROMuxerDataLabel->setPalette(seqColor);
+    MDROCk->setPalette(seqColor);
+    MDRELabel->setPalette(combColor);
+    MDREMuxTristateLabel->setPalette(seqColor);
+    MDREMuxLabel->setPalette(seqColor);
+    MDREMuxerDataLabel->setPalette(seqColor);
+    MDRECk->setPalette(seqColor);
 
-    EOMuxLabel->setPalette(pal);
-    EOMuxTristateLabel->setPalette(pal);
-    EOMuxerDataLabel->setPalette(pal);
+    EOMuxLabel->setPalette(seqColor);
+    EOMuxTristateLabel->setPalette(seqColor);
+    EOMuxerDataLabel->setPalette(seqColor);
 }
 
 void CpuGraphicsItems::repaintLoadCk(QPainter *painter)
