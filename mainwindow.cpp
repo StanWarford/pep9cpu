@@ -562,6 +562,8 @@ void MainWindow::on_actionOne_Byte_Data_Bus_Model_triggered()
 
     cpuPane->hide();
     cpuPane = cpuPaneOneByteDataBus;
+    cpuPane->clearCpu();
+    cpuPane->clearCpuControlSignals();
     cpuPane->show();
 
     connect(cpuPane, SIGNAL(updateSimulation()), this, SLOT(updateSimulation()));
@@ -597,6 +599,8 @@ void MainWindow::on_actionTwo_Byte_Data_Bus_Model_triggered()
 
     cpuPane->hide();
     cpuPane = cpuPaneTwoByteDataBus;
+    cpuPane->clearCpu();
+    cpuPane->clearCpuControlSignals();
     cpuPane->show();
 
     connect(cpuPane, SIGNAL(updateSimulation()), this, SLOT(updateSimulation()));

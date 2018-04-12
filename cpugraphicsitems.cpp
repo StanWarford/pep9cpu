@@ -1287,8 +1287,8 @@ void CpuGraphicsItems::drawLabels()
     cLabel->setPalette(seqColor);
     bLabel->setPalette(seqColor);
     aLabel->setPalette(seqColor);
-    MARALabel->setPalette(seqColor);
-    MARBLabel->setPalette(seqColor);
+    MARALabel->setPalette(combColor);
+    MARBLabel->setPalette(combColor);
     MARCk->setPalette(seqColor);
     loadCk->setPalette(seqColor);
     aMuxLabel->setPalette(seqColor);

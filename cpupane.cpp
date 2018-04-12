@@ -548,6 +548,22 @@ void CpuPane::regTextEdited(QString str)
         return;
     }
 
+
+}
+
+void CpuPane::regTextFinishedEditing()
+{
+    QLineEdit *lineEdit = qobject_cast<QLineEdit *>(sender());
+
+    QString str = lineEdit->text();
+    //qDebug() << "str: " << str;
+
+    // Get the hex value of the string
+    int regValue = 0;
+    bool ok;
+    regValue = str.toInt(&ok, 16);
+
+    //qDebug() << "reg val: " << regValue;
     if (lineEdit == cpuPaneItems->aRegLineEdit) {
         emit registerChanged(0,(quint8)((regValue)/256));
         emit registerChanged(1,(quint8)(regValue)%256);
@@ -593,22 +609,6 @@ void CpuPane::regTextEdited(QString str)
         emit registerChanged(20,(quint8)((regValue)/256));
         emit registerChanged(21,(quint8)(regValue)%256);
     }
-}
-
-void CpuPane::regTextFinishedEditing()
-{
-    QLineEdit *lineEdit = qobject_cast<QLineEdit *>(sender());
-
-    QString str = lineEdit->text();
-    //qDebug() << "str: " << str;
-
-    // Get the hex value of the string
-    int regValue = 0;
-    bool ok;
-    regValue = str.toInt(&ok, 16);
-
-    //qDebug() << "reg val: " << regValue;
-
     if (lineEdit == cpuPaneItems->irRegLineEdit) {
         lineEdit->setText(QString("0x%1").arg(regValue, 6, 16, QLatin1Char('0')).toUpper());
     }

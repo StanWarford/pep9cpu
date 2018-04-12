@@ -348,6 +348,7 @@ void CPUDataSection::onSetRegisterByte(quint8 reg, quint8 val)
 {
     if(reg>21) return; //Don't allow static registers to be written to
     quint8 oldVal=registerBank[reg];
+    qDebug()<<"Set register "<<reg<<" to "<<val;
     registerBank[reg]=val;
     if(oldVal != val) emit registerChanged(reg,oldVal,val);
 }
