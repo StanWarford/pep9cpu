@@ -44,23 +44,6 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
 {    
     // http://colrd.com/image-dna/23448/
 
-    // set up arrow heads:
-    arrowLeft = QImage(":/images/arrowhead.png");
-    arrowRight = arrowLeft.mirrored(true, false);
-    QTransform t;
-    t.rotate(90);
-    arrowUp = arrowLeft.transformed(t);
-    t.rotate(-180);
-    arrowDown = arrowLeft.transformed(t);
-
-    arrowLeftGray = QImage(":/images/arrowhead_gray.png");
-    arrowRightGray = arrowLeftGray.mirrored(true, false);
-    QTransform t_gray;
-    t_gray.rotate(90);
-    arrowUpGray = arrowLeftGray.transformed(t_gray);
-    t_gray.rotate(-180);
-    arrowDownGray = arrowLeftGray.transformed(t_gray);
-
     // save our current model for this set of items;
     model = type;
 
@@ -998,7 +981,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     scene->addRect(QRectF(zBitLabel->pos(), zBitLabel->size())); // Z
     scene->addRect(QRectF(nBitLabel->pos(), nBitLabel->size())); // N
     scene->addRect(QRectF(sBitLabel->pos(), sBitLabel->size())); // S
-    this->drawLabels();
+    onDarkModeChanged(false);
 }
 
 CpuGraphicsItems::~CpuGraphicsItems()
@@ -1277,6 +1260,12 @@ void CpuGraphicsItems::drawLabels()
     combColor.setColor(QPalette::Base,colorScheme->seqCircuitColor);
     combColor.setColor(QPalette::Background,colorScheme->seqCircuitColor);
 
+    QPalette aluLabel = QPalette();
+    aluLabel.setColor(QPalette::Text,colorScheme->arrowColorOn);
+    aluLabel.setColor(QPalette::WindowText,colorScheme->arrowColorOn);
+    aluLabel.setColor(QPalette::Base,PepColors::transparent);
+    aluLabel.setColor(QPalette::Background,PepColors::transparent);
+
     //Set Line editors first
     cLineEdit->setPalette(seqColor);
     bLineEdit->setPalette(seqColor);
@@ -1298,7 +1287,7 @@ void CpuGraphicsItems::drawLabels()
     cMuxLabel->setPalette(seqColor);
     cMuxTristateLabel->setPalette(seqColor);
     ALULabel->setPalette(seqColor);
-    ALUFunctionLabel->setPalette(seqColor);
+    ALUFunctionLabel->setPalette(aluLabel);
     CSMuxLabel->setPalette(seqColor);
     CSMuxerDataLabel->setPalette(seqColor);
     CSMuxTristateLabel->setPalette(seqColor);
@@ -1517,7 +1506,7 @@ void CpuGraphicsItems::repaintAMuxSelect(QPainter *painter)
                 }
                 else
                 {
-                    color=PepColors::transparent;
+                    color=colorScheme->backgroundFill;
                     pal.setColor(QPalette::Background,color);
                     aMuxerDataLabel->setPalette(pal);
                 }
@@ -1531,7 +1520,7 @@ void CpuGraphicsItems::repaintAMuxSelect(QPainter *painter)
             break;
         case (1):
             if (aLineEdit->text() == "") { // ABus.state == UNDEFINED
-                color = PepColors::transparent;
+                color = colorScheme->backgroundFill;
                 pal.setColor(QPalette::Background,color);
                 aMuxerDataLabel->setPalette(pal);
             } else {
@@ -1542,7 +1531,7 @@ void CpuGraphicsItems::repaintAMuxSelect(QPainter *painter)
             break;
         }
     } else {
-        color = PepColors::transparent;
+        color = colorScheme->backgroundFill;
         pal.setColor(QPalette::Background,color);
         aMuxerDataLabel->setPalette(pal);
     }
@@ -2101,14 +2090,14 @@ void CpuGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
             MDRMuxerDataLabel->setPalette(pal);
         }
         else{
-            color = PepColors::transparent;
+            color = colorScheme->backgroundFill;
             pal.setColor(QPalette::Background,color);
             MDRMuxerDataLabel->setPalette(pal);
         }
 
     }
     else{
-        color = PepColors::transparent;
+        color = colorScheme->backgroundFill;
         pal.setColor(QPalette::Background,color);
         MDRMuxerDataLabel->setPalette(pal);
     }
@@ -2215,15 +2204,15 @@ void CpuGraphicsItems::repaintALUSelectOneByteModel(QPainter *painter)
                 painter->setBrush(colorScheme->combCircuitBlue);
             }
             else {
-                painter->setBrush(PepColors::transparent);
+                painter->setBrush(colorScheme->backgroundFill);
             }
         }
         else {
-            painter->setBrush(PepColors::transparent);
+            painter->setBrush(colorScheme->backgroundFill);
         }
     }
     else {
-        painter->setBrush(PepColors::transparent);
+        painter->setBrush(colorScheme->backgroundFill);
     }
 
     // CBus
@@ -2276,7 +2265,7 @@ void CpuGraphicsItems::repaintMemReadOneByteModel(QPainter *painter)
     }
 
     // Draw ADDR bus stuff:
-    isHigh ? color = colorScheme->combCircuitYellow : color = PepColors::transparent;
+    isHigh ? color = colorScheme->combCircuitYellow : color = colorScheme->backgroundFill;
 
     painter->setPen(QPen(QBrush(colorScheme->arrowColorOn), 1));
     painter->setBrush(color);
@@ -2287,7 +2276,7 @@ void CpuGraphicsItems::repaintMemReadOneByteModel(QPainter *painter)
     // left arrow to addr:
     painter->drawPolygon(OneByteShapes::AddrArrow);
 
-    painter->setBrush(PepColors::transparent);
+    painter->setBrush(colorScheme->backgroundFill);
 
     // Draw DATA bus stuff:
     if (isHigh && (dataSection->getMainBusState() == Enu::MemReadReady ||
@@ -2295,7 +2284,7 @@ void CpuGraphicsItems::repaintMemReadOneByteModel(QPainter *painter)
         color = colorScheme->combCircuitGreen;
     }
     else {
-        color = PepColors::transparent;
+        color = colorScheme->backgroundFill;
     }
     painter->setBrush(color);
 
@@ -2384,7 +2373,7 @@ void CpuGraphicsItems::repaintMemWriteOneByteModel(QPainter *painter)
         color = colorScheme->combCircuitYellow;
     }
     else {
-        color = PepColors::transparent;
+        color = colorScheme->backgroundFill;
     }
 
     painter->setPen(QPen(QBrush(colorScheme->arrowColorOn), 1));
@@ -2403,7 +2392,7 @@ void CpuGraphicsItems::repaintMemWriteOneByteModel(QPainter *painter)
         color = colorScheme->combCircuitGreen;
     }
     else {
-        color = PepColors::transparent;
+        color = colorScheme->backgroundFill;
     }
     painter->setBrush(color);
 
@@ -2428,7 +2417,7 @@ void CpuGraphicsItems::repaintMemWriteOneByteModel(QPainter *painter)
     painter->drawPolygon(poly);
 
     // Main Bus to MDRMux is ALWAYS white on a memWrite:
-    painter->setBrush(PepColors::transparent);
+    painter->setBrush(colorScheme->backgroundFill);
 
     // right arrow from Bus to MDRMux:
     painter->drawPolygon(OneByteShapes::DataToMDRMuxBus);
@@ -2444,7 +2433,7 @@ void CpuGraphicsItems::repaintABusOneByteModel(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    color = ok ? colorScheme->combCircuitRed : PepColors::transparent;
+    color = ok ? colorScheme->combCircuitRed : colorScheme->backgroundFill;
 
     painter->setPen(QPen(QBrush(colorScheme->arrowColorOn), 1));
     painter->setBrush(color);
@@ -2462,7 +2451,7 @@ void CpuGraphicsItems::repaintBBusOneByteModel(QPainter *painter)
     painter->setPen(QPen(QBrush(color), 1));
     painter->setBrush(color);
 
-    color = ok ? colorScheme->combCircuitRed : PepColors::transparent;
+    color = ok ? colorScheme->combCircuitRed : colorScheme->backgroundFill;
 
     painter->setPen(QPen(QBrush(colorScheme->arrowColorOn), 1));
     painter->setBrush(color);
@@ -2485,7 +2474,7 @@ void CpuGraphicsItems::repaintCBusOneByteModel(QPainter *painter)
         if (!aluHasCorrectOutput() || ALULineEdit->text() == "15") {
             // CBus.state == UNDEFINED or NZVC A
             qDebug() << "WARNING: CMux select: There is no ALU output";
-            color = PepColors::transparent;
+            color = colorScheme->backgroundFill;
             pal.setColor(QPalette::Background,color);
             cMuxerLabel->setPalette(pal);
         }
@@ -2496,7 +2485,7 @@ void CpuGraphicsItems::repaintCBusOneByteModel(QPainter *painter)
         }
     }
     else {
-        color = PepColors::transparent;
+        color = colorScheme->backgroundFill;
         pal.setColor(QPalette::Background,color);
         cMuxerLabel->setPalette(pal);
     }
@@ -2559,7 +2548,7 @@ void CpuGraphicsItems::repaintMDRECk(QPainter *painter)
 
 void CpuGraphicsItems::repaintEOMuxOutpusBus(QPainter *painter)
 {
-    QColor color = PepColors::transparent;
+    QColor color = colorScheme->backgroundFill;
     QPalette pal = EOMuxerDataLabel->palette();
     if(EOMuxTristateLabel->text()=="1"){
         color=colorScheme->combCircuitYellow;
@@ -2612,15 +2601,15 @@ void CpuGraphicsItems::repaintALUSelectTwoByteModel(QPainter *painter)
                 painter->setBrush(colorScheme->combCircuitBlue);
             }
             else {
-                painter->setBrush(PepColors::transparent);
+                painter->setBrush(colorScheme->backgroundFill);
             }
         }
         else {
-            painter->setBrush(PepColors::transparent);
+            painter->setBrush(colorScheme->backgroundFill);
         }
     }
     else {
-        painter->setBrush(PepColors::transparent);
+        painter->setBrush(colorScheme->backgroundFill);
     }
 
     // CBus
@@ -2655,7 +2644,7 @@ void CpuGraphicsItems::repaintMemCommonTwoByte(QPainter *painter)
         color = colorScheme->combCircuitYellow;
     }
     else {
-        color = PepColors::transparent;
+        color = colorScheme->backgroundFill;
     }
 
     painter->setPen(QPen(QBrush(colorScheme->arrowColorOn), 1));
@@ -2730,7 +2719,7 @@ void CpuGraphicsItems::repaintMemCommonTwoByte(QPainter *painter)
         color = colorScheme->combCircuitGreen;
     }
     else{
-        color =PepColors::transparent;
+        color =colorScheme->backgroundFill;
     }
     painter->setPen(colorScheme->arrowColorOn);
     painter->setBrush(color);
@@ -2797,7 +2786,7 @@ void CpuGraphicsItems::repaintMemReadTwoByteModel(QPainter *painter)
         color = colorScheme->combCircuitRed;
     }
     else {
-        color = PepColors::transparent;
+        color = colorScheme->backgroundFill;
     }
     painter->setBrush(color);
     // Data bus:
@@ -2840,7 +2829,7 @@ void CpuGraphicsItems::repaintMemWriteTwoByteModel(QPainter *painter)
         color = colorScheme->combCircuitGreen;
     }
     else {
-        color = PepColors::transparent;
+        color = colorScheme->backgroundFill;
     }
     painter->setPen(colorScheme->arrowColorOn);
     painter->setBrush(color);
@@ -2850,7 +2839,7 @@ void CpuGraphicsItems::repaintMemWriteTwoByteModel(QPainter *painter)
 
     // Mem Data Bus (bidirectional arrow)
     // Main Bus to MDRMux is ALWAYS white on a memWrite:
-    painter->setBrush(PepColors::transparent);
+    painter->setBrush(colorScheme->backgroundFill);
 
     // right arrow from Bus to MDR{O,E}Mux:
     painter->drawPolygon(TwoByteShapes::DataToMDROMuxBus);
@@ -2862,7 +2851,7 @@ void CpuGraphicsItems::repaintMARMUXToMARBuses(QPainter *painter)
 {
     //Needs conditional painting based on the state of the bus.
     bool marckIsHigh = MARCk->isChecked();
-    QColor colorTop=PepColors::transparent,colorBottom=PepColors::transparent;
+    QColor colorTop=colorScheme->backgroundFill,colorBottom=colorScheme->backgroundFill;
     if(marckIsHigh && MARMuxTristateLabel->text()=="0"){
         colorTop= colorScheme->combCircuitYellow;
         colorBottom = colorScheme->combCircuitGreen;
@@ -2903,13 +2892,13 @@ void CpuGraphicsItems::repaintMDRESelect(QPainter *painter)
             MDREMuxerDataLabel->setPalette(pal);
         }
         else{
-            pal.setColor(QPalette::Background,PepColors::transparent);
+            pal.setColor(QPalette::Background,colorScheme->backgroundFill);
             MDREMuxerDataLabel->setPalette(pal);
         }
 
     }
     else{
-        pal.setColor(QPalette::Background,PepColors::transparent);
+        pal.setColor(QPalette::Background,colorScheme->backgroundFill);
         MDREMuxerDataLabel->setPalette(pal);
     }
 }
@@ -2939,13 +2928,13 @@ void CpuGraphicsItems::repaintMDROSelect(QPainter *painter)
             MDROMuxerDataLabel->setPalette(pal);
         }
         else{
-            pal.setColor(QPalette::Background,PepColors::transparent);
+            pal.setColor(QPalette::Background,colorScheme->backgroundFill);
             MDROMuxerDataLabel->setPalette(pal);
         }
 
     }
     else{
-        pal.setColor(QPalette::Background,PepColors::transparent);
+        pal.setColor(QPalette::Background,colorScheme->backgroundFill);
         MDROMuxerDataLabel->setPalette(pal);
     }
 }
@@ -2953,7 +2942,7 @@ void CpuGraphicsItems::repaintMDROSelect(QPainter *painter)
 void CpuGraphicsItems::repaintMDRMuxOutputBuses(QPainter *painter)
 {
     // MDRMuxOutBus (MDRMux to MDR arrow)
-    QColor colorMDRE = PepColors::transparent, colorMDRO = PepColors::transparent;
+    QColor colorMDRE = colorScheme->backgroundFill, colorMDRO = colorScheme->backgroundFill;
     // Depending on which input is selected on the MDRMuxes, the color might need to change.
     // For now red seems to be the most logical color to use all the time.
     QString MDREText = MDREMuxTristateLabel->text(), MDROText = MDROMuxTristateLabel->text();
@@ -2969,7 +2958,7 @@ void CpuGraphicsItems::repaintMDRMuxOutputBuses(QPainter *painter)
             colorMDRE=colorScheme->combCircuitBlue;
         }
         else{
-            colorMDRE = PepColors::transparent;
+            colorMDRE = colorScheme->backgroundFill;
         }
     }
     if(MDROCk->isChecked()&&(MDROText=="1"||MDROText=="0")){
@@ -2984,7 +2973,7 @@ void CpuGraphicsItems::repaintMDRMuxOutputBuses(QPainter *painter)
             colorMDRO=colorScheme->combCircuitBlue;
         }
         else{
-            colorMDRO = PepColors::transparent;
+            colorMDRO = colorScheme->backgroundFill;
         }
     }
     painter->setPen(colorScheme->arrowColorOn);
@@ -2995,7 +2984,7 @@ void CpuGraphicsItems::repaintMDRMuxOutputBuses(QPainter *painter)
 }
 
 void CpuGraphicsItems::repaintMDREToEOMuxBus(QPainter *painter){
-    QColor color = PepColors::transparent;
+    QColor color = colorScheme->backgroundFill;
     if(MARMuxTristateLabel->text()=="0"||EOMuxTristateLabel->text()=="1"||EOMuxTristateLabel->text()=="0"){
         color=colorScheme->combCircuitGreen;
     }
@@ -3005,7 +2994,7 @@ void CpuGraphicsItems::repaintMDREToEOMuxBus(QPainter *painter){
 }
 
 void CpuGraphicsItems::repaintMDROToEOMuxBus(QPainter *painter){
-    QColor color=PepColors::transparent;
+    QColor color=colorScheme->backgroundFill;
     if(MARMuxTristateLabel->text()=="0"||EOMuxTristateLabel->text()=="1"||EOMuxTristateLabel->text()=="0"){
         color=colorScheme->combCircuitYellow;
     }
@@ -3019,7 +3008,7 @@ void CpuGraphicsItems::repaintABusTwoByteModel(QPainter *painter)
     bool ok;
     aLineEdit->text().toInt(&ok, 10);
     QColor color;
-    color = ok ? colorScheme->combCircuitRed : PepColors::transparent;
+    color = ok ? colorScheme->combCircuitRed : colorScheme->backgroundFill;
     painter->setPen(QPen(QBrush(colorScheme->arrowColorOn), 1));
     painter->setBrush(color);
 
@@ -3032,7 +3021,7 @@ void CpuGraphicsItems::repaintBBusTwoByteModel(QPainter *painter)
     bool ok;
     bLineEdit->text().toInt(&ok, 10);
     QColor color;
-    color = ok ? colorScheme->combCircuitRed : PepColors::transparent;
+    color = ok ? colorScheme->combCircuitRed : colorScheme->backgroundFill;
     painter->setPen(QPen(QBrush(colorScheme->arrowColorOn), 1));
     painter->setBrush(color);
 
@@ -3053,7 +3042,7 @@ void CpuGraphicsItems::repaintCBusTwoByteModel(QPainter *painter)
         if (!aluHasCorrectOutput() || ALULineEdit->text() == "15") {
             // CBus.state == UNDEFINED or NZVC A
             qDebug() << "WARNING!: CMux select: There is no ALU output";
-            color = PepColors::transparent;
+            color = colorScheme->backgroundFill;
             pal.setColor(QPalette::Background,color);
             cMuxerLabel->setPalette(pal);
         }
@@ -3064,7 +3053,7 @@ void CpuGraphicsItems::repaintCBusTwoByteModel(QPainter *painter)
         }
     }
     else {
-        color = PepColors::transparent;
+        color = colorScheme->backgroundFill;
         pal.setColor(QPalette::Background,color);
         cMuxerLabel->setPalette(pal);
     }
@@ -3084,7 +3073,23 @@ void CpuGraphicsItems::onDarkModeChanged(bool darkMode)
     {
         colorScheme = &(PepColors::lightMode);
     }
-        drawLabels();
+    // set up arrow heads:
+    arrowLeft = QImage(colorScheme->arrowImageOn);
+    arrowRight = arrowLeft.mirrored(true, false);
+    QTransform t;
+    t.rotate(90);
+    arrowUp = arrowLeft.transformed(t);
+    t.rotate(-180);
+    arrowDown = arrowLeft.transformed(t);
+
+    arrowLeftGray = QImage(colorScheme->arrowImageOff);
+    arrowRightGray = arrowLeftGray.mirrored(true, false);
+    QTransform t_gray;
+    t_gray.rotate(90);
+    arrowUpGray = arrowLeftGray.transformed(t_gray);
+    t_gray.rotate(-180);
+    arrowDownGray = arrowLeftGray.transformed(t_gray);
+    drawLabels();
 }
 
 

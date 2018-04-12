@@ -19,6 +19,9 @@ const PepColors::Colors PepColors::initDark()
     retVal.muxCircuitGreen = retVal.combCircuitGreen.lighter(140); // A sightly lighter shade of combCircuitGreen that is a better background for text
     retVal.arrowColorOn = Qt::white;
     retVal.arrowColorOff = Qt::gray;
+    retVal.backgroundFill= QColor(0x31363b);
+    retVal.arrowImageOn=(":/images/arrowhead_dark.png");
+    retVal.arrowImageOff=(":/images/arrowhead_gray.png");
     return retVal;
 }
 
@@ -40,6 +43,9 @@ const PepColors::Colors PepColors::initLight()
     retVal.muxCircuitGreen = retVal.combCircuitGreen.lighter(140); // A sightly lighter shade of combCircuitGreen that is a better background for text
     retVal.arrowColorOn = Qt::black;
     retVal.arrowColorOff = Qt::gray;
+    retVal.backgroundFill= QColor(Qt::white);
+    retVal.arrowImageOn=(":/images/arrowhead.png");
+    retVal.arrowImageOff=(":/images/arrowhead_gray.png");
     return retVal;
 }
 

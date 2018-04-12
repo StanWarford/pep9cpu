@@ -1,6 +1,7 @@
 #ifndef COLORS_H
 #define COLORS_H
 #include <QColor>
+#include <QImage>
 namespace PepColors{
     struct Colors
     {
@@ -19,6 +20,9 @@ namespace PepColors{
         QColor muxCircuitGreen; // A sightly lighter shade of combCircuitGreen that is a better background for text
         QColor arrowColorOn;
         QColor arrowColorOff;
+        QColor backgroundFill;
+        QString arrowImageOn;
+        QString arrowImageOff;
     };
     static const QColor transparent = QColor(255,255,255,0);
     const Colors initLight();
