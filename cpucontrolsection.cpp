@@ -79,7 +79,7 @@ void CPUControlSection::onDebuggingFinished()
 #pragma message "todo"
 }
 
-void CPUControlSection::onStep(quint8 mode) noexcept
+void CPUControlSection::onStep() noexcept
 {
     //Do step logic
     const MicroCode* prog = program->getCodeLine(microprogramCounter);
@@ -114,7 +114,7 @@ void CPUControlSection::onRun()noexcept
             return;
         }
         //
-        onStep(-1);
+        onStep();
         //If there was a logical error on data operation
         if(data->hadErrorOnStep())
         {
