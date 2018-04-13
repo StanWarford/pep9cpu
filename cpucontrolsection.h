@@ -40,7 +40,7 @@ public:
     int getLineNumber() const;
     const MicrocodeProgram* getProgram() const;
     const MicroCode* getCurrentMicrocodeLine() const;
-    bool executionFinished() const;
+    bool getExecutionFinished() const;
     bool hadErrorOnStep() const;
     QString getErrorMessage() const;
 public slots:
@@ -63,9 +63,10 @@ private:
     CPUDataSection* data;
     MicrocodeProgram* program;
     int microprogramCounter;
-    bool inSimulation,hadControlError;
+    bool inSimulation,hadControlError,executionFinished;
     QString errorMessage;
     CPUControlSection(CPUDataSection* dataSection);
+    void branchHandler(); //Based on the current instruction, set the MPC correctly
 };
 
 class CPUTester: public QObject

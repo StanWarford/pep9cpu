@@ -721,7 +721,7 @@ void CpuPane::singleStepButtonPushed()
 
     }
 
-    if (controlSection->executionFinished()) { // this should be detected on the previous step, but let's be defensive:
+    if (controlSection->getExecutionFinished()) { // this should be detected on the previous step, but let's be defensive:
         emit simulationFinished();
         //dataSection->clearClockSignals();
         //dataSection->clearControlSignals();
@@ -747,7 +747,7 @@ void CpuPane::singleStepButtonPushed()
 void CpuPane::resumeButtonPushed()
 {
 
-    bool finished = controlSection->executionFinished();
+    bool finished = controlSection->getExecutionFinished();
 
     while (!finished) { // we set the flag to false when we're done with simulation, or have errors
         controlSection->onStep(-1);
@@ -760,7 +760,7 @@ void CpuPane::resumeButtonPushed()
             return; // we'll just return here instead of letting it fail and go to the bottom
         }
 
-        if (controlSection->executionFinished()) {
+        if (controlSection->getExecutionFinished()) {
             finished = true; // this will fail the loop next time and go to the bottom
         }
 #pragma message "We shouldn't need to update the labels on the control section if we are just running"

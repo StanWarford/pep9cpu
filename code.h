@@ -49,16 +49,24 @@ class MicroCode: public Code
 public:
     MicroCode();
     bool isMicrocode() const override;
-    void setCpuLabels(CpuGraphicsItems *cpuPaneItems)const override;
     QString getObjectCode() const override;
     QString getSourceCode() const override;
     bool hasControlSignal(Enu::EControlSignals field) const;
     bool hasClockSignal(Enu::EClockSignals field) const;
-    void setControlSignal(Enu::EControlSignals field,quint8 value);
-    void setClockSingal(Enu::EClockSignals field,bool value);
     int getControlSignal(Enu::EControlSignals field) const;
     bool getClockSignal(Enu::EClockSignals field) const;
+    Enu::EBranchFunctions getBranchFunction() const;
+    quint16 getTrueTarget() const;
+    quint16 getFalseTarget() const;
     bool inRange(Enu::EControlSignals field, int value) const;
+
+    void setCpuLabels(CpuGraphicsItems *cpuPaneItems)const override;
+    void setControlSignal(Enu::EControlSignals field,quint8 value);
+    void setClockSingal(Enu::EClockSignals field,bool value);
+    void setBranchFunction(Enu::EBranchFunctions branch);
+    void setTrueTarget(quint16 target);
+    void setFalsetarget(quint16 target);
+
 private:
     Enu::EBranchFunctions branchFunc = Enu::Unconditional;
     quint16 trueTargetAddr;

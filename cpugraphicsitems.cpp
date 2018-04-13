@@ -286,7 +286,6 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     scene->addWidget(ALUFunctionLabel);
 
     // ALU shape
-#pragma message "Remove alu drawing from constructo"
     ALUPoly = scene->addPolygon(OneByteShapes::ALUPoly,
                                 QPen(QBrush(colorScheme->combCircuitBlue),
                                      2, Qt::SolidLine,

@@ -52,9 +52,9 @@ bool CPUControlSection::hadErrorOnStep() const
 {
     return hadControlError || data->hadErrorOnStep();
 }
-bool CPUControlSection::executionFinished() const
+bool CPUControlSection::getExecutionFinished() const
 {
-    return microprogramCounter==program->codeLength();
+    return executionFinished;
 }
 void CPUControlSection::onSimulationStarted()
 {
@@ -82,7 +82,7 @@ void CPUControlSection::onStep(quint8 mode) noexcept
     //Do step logic
     const MicroCode* prog = program->getCodeLine(microprogramCounter);
     data->setSignalsFromMicrocode(prog);
-    microprogramCounter++; //prog->branchAddress();
+    branchHandler();
     data->onStep();
 }
 
@@ -102,7 +102,7 @@ void CPUControlSection::onClock()noexcept
 void CPUControlSection::onRun()noexcept
 {
     const MicroCode* prog = program->getCodeLine(microprogramCounter);
-    while(true /*prog->branchFunction!=Enu::Stop*/)
+    while(prog->getBranchFunction()!=Enu::Stop)
     {
         /*
          * Handle address decoding of next instruction
@@ -135,6 +135,7 @@ void CPUControlSection::onRun()noexcept
 void CPUControlSection::onClearCPU()noexcept
 {
     data->onClearCPU();
+    executionFinished=false;
     inSimulation=false;
     microprogramCounter=0;
     hadControlError=false;
@@ -154,6 +155,24 @@ void CPUControlSection::onCPUFeaturesChanged(Enu::CPUType cpuType) noexcept
 CPUControlSection::CPUControlSection(CPUDataSection * data): QObject(nullptr),data(data),microprogramCounter(0),hadControlError(false),inSimulation(false)
 {
 
+}
+
+void CPUControlSection::branchHandler()
+{
+    const MicroCode* prog = program->getCodeLine(microprogramCounter);
+    switch(prog->getBranchFunction())
+    {
+    case Enu::Unconditional:
+        microprogramCounter = prog->getTrueTarget();
+        break;
+    case Enu::Stop:
+        executionFinished=true;
+        break;
+    default:
+        //This should never occur
+        break;
+
+    }
 }
 
 void CPUControlSection::initCPUStateFromPreconditions()
