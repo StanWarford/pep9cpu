@@ -2170,8 +2170,8 @@ void CpuGraphicsItems::repaintMDRMuxSelect(QPainter *painter)
     painter->setPen(colorScheme->arrowColorOn);
     if(MDRCk->isChecked()){
         if(MDRMuxTristateLabel->text()=="0"&&dataSection->getMainBusState()==Enu::MemReadSecondWait){
-            color = colorScheme->combCircuitRed;
-            pal.setColor(QPalette::Background,colorScheme->muxCircuitRed);
+            color = colorScheme->combCircuitGreen;
+            pal.setColor(QPalette::Background,colorScheme->muxCircuitGreen);
             MDRMuxerDataLabel->setPalette(pal);
         }
         else if(MDRMuxTristateLabel->text()=="1"&&cMuxTristateLabel->text()=="0"){
