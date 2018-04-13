@@ -87,6 +87,7 @@ private:
 
     // List of all the rows currently in the table
     QStringList rows;
+    QSet<int> modifiedAddresses;
 
 
     int	highlightedIndex;
