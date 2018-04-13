@@ -22,19 +22,6 @@ MicrocodeProgram::MicrocodeProgram(QVector<Code*>objectCode):
         else if(x->hasUnitPost())postconditionsVec.append(it);
         else if(x->isMicrocode())microcodeVec.append(it);
     }
-    for(int it=0;it<microcodeVec.length();it++)
-    {
-        MicroCode* line = ((MicroCode*)programVec[microcodeVec[it]]);
-        if(line->getBranchFunction()==Enu::Assembler_Assigned&&it+1<microcodeVec.length())
-        {
-            line->setBranchFunction(Enu::Unconditional);
-            line->setTrueTarget(it+1);
-        }
-        else if(line->getBranchFunction()==Enu::Assembler_Assigned&&it+1==microcodeVec.length())
-        {
-            line->setBranchFunction(Enu::Stop);
-        }
-    }
 }
 
 const QVector<Code*> MicrocodeProgram::getObjectCode() const

@@ -24,7 +24,7 @@
 #include "pep.h"
 #include "cpudatasection.h"
 #include <QMetaEnum>
-MicroCode::MicroCode():clockSignals(10),controlSignals(20),branchFunc(Enu::Assembler_Assigned),trueTargetAddr(0),falseTargetAddr(0)
+MicroCode::MicroCode():clockSignals(10),controlSignals(20)
 {
     for(auto memLines : Pep::memControlToMnemonMap.keys())
     {
@@ -218,21 +218,6 @@ void MicroCode::setClockSingal(Enu::EClockSignals field, bool value)
     clockSignals[field]=value;
 }
 
-void MicroCode::setBranchFunction(Enu::EBranchFunctions branch)
-{
-    branchFunc = branch;
-}
-
-void MicroCode::setTrueTarget(quint16 target)
-{
-    trueTargetAddr = target;
-}
-
-void MicroCode::setFalsetarget(quint16 target)
-{
-    falseTargetAddr = target;
-}
-
 int MicroCode::getControlSignal(Enu::EControlSignals field) const
 {
     return controlSignals[field];
@@ -241,21 +226,6 @@ int MicroCode::getControlSignal(Enu::EControlSignals field) const
 bool MicroCode::getClockSignal(Enu::EClockSignals field) const
 {
     return clockSignals[field];
-}
-
-Enu::EBranchFunctions MicroCode::getBranchFunction() const
-{
-    return branchFunc;
-}
-
-quint16 MicroCode::getTrueTarget() const
-{
-    return trueTargetAddr;
-}
-
-quint16 MicroCode::getFalseTarget() const
-{
-    return falseTargetAddr;
 }
 
 bool MicroCode::inRange(Enu::EControlSignals field, int value) const

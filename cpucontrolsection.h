@@ -63,10 +63,9 @@ private:
     CPUDataSection* data;
     MicrocodeProgram* program;
     int microprogramCounter;
-    bool inSimulation,hadControlError,executionFinished;
+    bool inSimulation,hadControlError;
     QString errorMessage;
     CPUControlSection(CPUDataSection* dataSection);
-    void branchHandler(); //Based on the current instruction, set the MPC correctly
 };
 
 class CPUTester: public QObject

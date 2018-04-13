@@ -51,9 +51,6 @@ namespace Enu
         MemWriteReady,
     };
     Q_ENUM_NS(MainBusState)
-    enum EBranchFunctions{
-        Unconditional=0,Stop=15, Assembler_Assigned=16
-    };
     enum EControlSignals
     {
         MemRead, MemWrite,
