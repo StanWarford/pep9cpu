@@ -1226,22 +1226,20 @@ void CpuGraphicsItems::drawLabels()
 {
 
     QPalette seqColor = QPalette();
-    seqColor.setColor(QPalette::Text,colorScheme->arrowColorOn);
     seqColor.setColor(QPalette::WindowText,colorScheme->arrowColorOn);
     seqColor.setColor(QPalette::Base,PepColors::transparent);
-    seqColor.setColor(QPalette::Background,PepColors::transparent);
+    seqColor.setColor(QPalette::Window,PepColors::transparent);
+    seqColor.setBrush(QPalette::AlternateBase, PepColors::transparent);
 
     QPalette combColor = QPalette();
-    combColor.setColor(QPalette::Text,colorScheme->arrowColorOn);
     combColor.setColor(QPalette::WindowText,colorScheme->arrowColorOn);
     combColor.setColor(QPalette::Base,colorScheme->seqCircuitColor);
-    combColor.setColor(QPalette::Background,PepColors::transparent);
+    combColor.setColor(QPalette::Window,colorScheme->seqCircuitColor);
 
     QPalette aluLabel = QPalette();
-    aluLabel.setColor(QPalette::Text,colorScheme->arrowColorOn);
     aluLabel.setColor(QPalette::WindowText,colorScheme->arrowColorOn);
     aluLabel.setColor(QPalette::Base,PepColors::transparent);
-    aluLabel.setColor(QPalette::Background,PepColors::transparent);
+    aluLabel.setColor(QPalette::Window,PepColors::transparent);
 
     //Set Line editors first
     cLineEdit->setPalette(seqColor);
@@ -1336,13 +1334,13 @@ void CpuGraphicsItems::drawStaticRects(QPainter* paint)
 
         paint->drawRect(OneByteShapes::cMuxerLabel);
         paint->drawRect(OneByteShapes::aMuxerDataLabel);
-        paint->drawRect(QRectF(CSMuxTristateLabel->pos(), CSMuxTristateLabel->size()));
         paint->drawRect(QRectF(CSMuxerDataLabel->pos(), CSMuxerDataLabel->size()));
-        paint->drawRect(QRectF(AndZTristateLabel->pos(), AndZTristateLabel->size()));
         paint->drawRect(OneByteShapes::AndZMuxLabel);
         paint->drawLine(OneByteShapes::NZVCDataLine);
         // NZVC data path to CMux, vertical black line
         paint->setPen(penOff);
+        paint->drawRect(QRectF(CSMuxTristateLabel->pos(), CSMuxTristateLabel->size()));
+        paint->drawRect(QRectF(AndZTristateLabel->pos(), AndZTristateLabel->size()));
         paint->drawRect(QRectF(MemReadTristateLabel->pos(),
                               MemReadTristateLabel->size())); //gray
         paint->drawRect(QRectF(MemWriteTristateLabel->pos(),
@@ -1367,8 +1365,6 @@ void CpuGraphicsItems::drawStaticRects(QPainter* paint)
         paint->drawRect(TwoByteShapes::MARALabel);
         paint->drawRect(TwoByteShapes::cMuxerLabel);
         paint->drawRect(TwoByteShapes::aMuxerDataLabel);
-        paint->drawRect(QRectF(CSMuxerDataLabel->pos(), CSMuxerDataLabel->size()));
-        paint->drawRect(TwoByteShapes::AndZMuxLabel);
 
         paint->drawRect(TwoByteShapes::MARMuxerDataLabel);
         paint->drawRect(TwoByteShapes::MDROMuxerDataLabel);
@@ -1382,7 +1378,9 @@ void CpuGraphicsItems::drawStaticRects(QPainter* paint)
         paint->drawPolygon(TwoByteShapes::NZVCDataPath);
                           //QPen(QBrush(colorScheme->arrowColorOn), 1), QBrush(colorScheme->combCircuitYellow));
         paint->setPen(penOff);
+                paint->drawRect(TwoByteShapes::AndZMuxLabel);
         paint->drawLine(QLine(TwoByteShapes::NZVCDataLine));
+                paint->drawRect(QRectF(CSMuxerDataLabel->pos(), CSMuxerDataLabel->size()));
         paint->drawRect(QRectF(MemWriteTristateLabel->pos(),
                               MemWriteTristateLabel->size())); //gray
         paint->drawRect(QRectF(MemReadTristateLabel->pos(),
