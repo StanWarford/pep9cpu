@@ -40,7 +40,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
                                                    QGraphicsItem *itemParent,
                                                    QGraphicsScene *scene)
     : QGraphicsItem(itemParent), colorScheme(&PepColors::lightMode),
-      parent(widgetParent),dataSection(CPUDataSection::getInstance()),parentScene(scene),labelVec()
+      parent(widgetParent),dataSection(CPUDataSection::getInstance()),parentScene(scene),labelVec(),editorVector()
 {    
     // http://colrd.com/image-dna/23448/
 
@@ -439,6 +439,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     aRegLineEdit->setFrame(false);
     aRegLineEdit->setFont (QFont(Pep::codeFont, Pep::codeFontSize));
     scene->addWidget(aRegLineEdit);
+    editorVector.append(aRegLineEdit);
     //    QObject::connect(A, SIGNAL(valueChanged()),
                            //this, SLOT(slotRegisterChanged()));
 
@@ -467,6 +468,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     xRegLineEdit->setFont (QFont(Pep::codeFont, Pep::codeFontSize));
     xRegLineEdit->setFrame(false);
     scene->addWidget(xRegLineEdit);
+    editorVector.append(xRegLineEdit);
 
     ph = new QLabel("4,5");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -493,6 +495,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     spRegLineEdit->setFrame(false);
     spRegLineEdit->setFont (QFont(Pep::codeFont, Pep::codeFontSize));
     scene->addWidget(spRegLineEdit);
+    editorVector.append(spRegLineEdit);
 
     ph = new QLabel("6,7");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -519,8 +522,8 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     pcRegLineEdit->setFrame(false);
     pcRegLineEdit->setFont (QFont(Pep::codeFont, Pep::codeFontSize));
     scene->addWidget(pcRegLineEdit);
-    //    QObject::connect(X, SIGNAL(valueChanged()),
-                           //this, SLOT(slotRegisterChanged()));
+    editorVector.append(pcRegLineEdit);
+
 
     ph = new QLabel("8-10");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -547,6 +550,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     irRegLineEdit->setFrame(false);
     irRegLineEdit->setFont (QFont(Pep::codeFont, Pep::codeFontSize));
     scene->addWidget(irRegLineEdit);
+    editorVector.append(irRegLineEdit);
 
     ph = new QLabel("11");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -573,6 +577,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     t1RegLineEdit->setFrame(false);
     t1RegLineEdit->setFont (QFont(Pep::codeFont, Pep::codeFontSize));
     scene->addWidget(t1RegLineEdit);
+    editorVector.append(t1RegLineEdit);
 
     ph = new QLabel("12,13");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -599,6 +604,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     t2RegLineEdit->setFrame(false);
     t2RegLineEdit->setFont (QFont(Pep::codeFont, Pep::codeFontSize));
     scene->addWidget(t2RegLineEdit);
+    editorVector.append(t2RegLineEdit);
 
     ph = new QLabel("14,15");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -625,6 +631,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     t3RegLineEdit->setFrame(false);
     t3RegLineEdit->setFont (QFont(Pep::codeFont, Pep::codeFontSize));
     scene->addWidget(t3RegLineEdit);
+    editorVector.append(t3RegLineEdit);
 
     ph = new QLabel("16,17");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -651,6 +658,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     t4RegLineEdit->setFrame(false);
     t4RegLineEdit->setFont (QFont(Pep::codeFont, Pep::codeFontSize));
     scene->addWidget(t4RegLineEdit);
+    editorVector.append(t4RegLineEdit);
 
     ph = new QLabel("18,19");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -677,6 +685,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     t5RegLineEdit->setFrame(false);
     t5RegLineEdit->setFont (QFont(Pep::codeFont, Pep::codeFontSize));
     scene->addWidget(t5RegLineEdit);
+    editorVector.append(t5RegLineEdit);
 
     ph = new QLabel("20,21");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -703,6 +712,7 @@ CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
     t6RegLineEdit->setFrame(false);
     t6RegLineEdit->setFont (QFont(Pep::codeFont, Pep::codeFontSize));
     scene->addWidget(t6RegLineEdit);
+    editorVector.append(t6RegLineEdit);
 
     ph = new QLabel("22,23");
     ph->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -1413,7 +1423,14 @@ void CpuGraphicsItems::drawRegisterBank()
     pal.setColor(QPalette::Background,PepColors::transparent);
     for(QLabel* lab : labelVec)
     {
+
         lab->setPalette(pal);
+    }
+    pal.setColor(QPalette::Base,colorScheme->backgroundFill);
+    pal.setColor(QPalette::Background,colorScheme->backgroundFill);
+    for(QLineEdit* edit : editorVector)
+    {
+        edit->setPalette(pal);
     }
 }
 

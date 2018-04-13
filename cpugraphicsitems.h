@@ -110,6 +110,7 @@ public:
     QGraphicsRectItem* regBankOutline;
     QGraphicsRectItem* regBank;
     QVector<QLabel*> labelVec;
+    QVector<QLineEdit*> editorVector;
     QLineEdit *aRegLineEdit;
     QLineEdit *xRegLineEdit;
     QLineEdit *spRegLineEdit;

@@ -11,7 +11,7 @@ const PepColors::Colors PepColors::initDark()
     retVal.seqCircuitColor= QColor(0x3B3630).lighter(200); //Used to be 370 0x3B3630
     retVal.combCircuitRed = QColor(0xDF5A49);
     retVal.combCircuitGreen = QColor(0x008A1C);
-    retVal.combCircuitBlue = QColor(0x334D5C);
+    retVal.combCircuitBlue = QColor(0x506082);
     retVal.combCircuitYellow = QColor(0xE0B010);
 
     retVal.muxCircuitRed = retVal.combCircuitRed.darker(110); // A sightly lighter shade of combCircuitRed that is a better background for text
