@@ -107,6 +107,9 @@ public:
     TristateLabel *MemWriteTristateLabel;
 
     // REGISTER BANK
+    QGraphicsRectItem* regBankOutline;
+    QGraphicsRectItem* regBank;
+    QVector<QLabel*> labelVec;
     QLineEdit *aRegLineEdit;
     QLineEdit *xRegLineEdit;
     QLineEdit *spRegLineEdit;
@@ -140,6 +143,7 @@ public:
 private:
     CPUDataSection* dataSection;
     bool darkMode=false;
+
     const PepColors::Colors *colorScheme;
     QGraphicsScene *parentScene;
     QWidget *parent;
@@ -158,6 +162,9 @@ private:
     // Try to draw as many free-floating strings in one centralized function as possible. Both 1 & 2 byte models.
     void drawDiagramFreeText(QPainter *painter);
     void drawLabels();
+    void drawStaticRects(QPainter* painter);
+    void drawALUPoly();
+    void drawRegisterBank();
     void repaintLoadCk(QPainter *painter);
     void repaintCSelect(QPainter *painter);
     void repaintBSelect(QPainter *painter);
