@@ -26,11 +26,13 @@
 #include <QScrollBar>
 #include <QResizeEvent>
 #include "cpudatasection.h"
+#include "colors.h"
 #include <QDebug>
 
 MainMemory::MainMemory(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::MainMemory),dataSection(CPUDataSection::getInstance()),modifiedAddresses()
+    ui(new Ui::MainMemory),dataSection(CPUDataSection::getInstance()),modifiedAddresses(),
+    darkMode(false),colors(&PepColors::lightMode)
 {
     ui->setupUi(this);
 
@@ -156,7 +158,7 @@ void MainMemory::hightlightModifiedBytes()
     disconnect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
         // clear all highlighted cells
     for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
-        ui->tableWidget->item(i,0)->setBackgroundColor(Qt::white);
+        ui->tableWidget->item(i,0)->setBackgroundColor(PepColors::transparent);
     }
     // for each item in the table:
     for(int i=0;i<ui->tableWidget->rowCount();i++)
@@ -165,7 +167,7 @@ void MainMemory::hightlightModifiedBytes()
         int j = ui->tableWidget->verticalHeaderItem(i)->text().right(4).toInt(&ok, 16);
         if(ok&&modifiedAddresses.contains(j))
         {
-            ui->tableWidget->item(i,0)->setBackgroundColor(Qt::green);
+            ui->tableWidget->item(i,0)->setBackgroundColor(colors->memoryHighlight);
         }
     }
 
@@ -212,6 +214,20 @@ void MainMemory::onMemoryValueChanged(quint16 address, quint8, quint8 newVal)
 bool MainMemory::hasFocus()
 {
     return ui->tableWidget->hasFocus();
+}
+
+void MainMemory::onDarkModeChange(bool darkMode)
+{
+    if(darkMode)
+    {
+        colors = &PepColors::darkMode;
+    }
+    else
+    {
+        colors = &PepColors::lightMode;
+    }
+    populateMemoryItems();
+    hightlightModifiedBytes();
 }
 
 void MainMemory::sliderMoved(int pos)

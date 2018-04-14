@@ -7,6 +7,7 @@ const PepColors::Colors PepColors::initDark()
     retVal.comment = QColor(Qt::green).lighter();
     retVal.leftOfExpression = QColor(Qt::red).lighter();
     retVal.rightOfExpression = QColor("lightsteelblue");
+    retVal.memoryHighlight = QColor("lightgreen");
 
     retVal.seqCircuitColor= QColor(0x3B3630).lighter(200); //Used to be 370 0x3B3630
     retVal.combCircuitRed = QColor(0xDF5A49);
@@ -33,6 +34,8 @@ const PepColors::Colors PepColors::initLight()
     retVal.comment = Qt::darkGreen;
     retVal.leftOfExpression = Qt::darkBlue;
     retVal.rightOfExpression = Qt::darkMagenta;
+    retVal.memoryHighlight = QColor("green");
+
     retVal.seqCircuitColor= QColor(0x3B3630).lighter(370);
     retVal.combCircuitRed = QColor(0xD92405).lighter(140);
     retVal.muxCircuitRed = retVal.combCircuitRed.lighter(140); // A sightly lighter shade of combCircuitRed that is a better background for text
