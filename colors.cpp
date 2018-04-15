@@ -5,8 +5,8 @@ const PepColors::Colors PepColors::initDark()
 {
     auto retVal =  PepColors::Colors();
     retVal.comment = QColor(Qt::green).lighter();
-    retVal.leftOfExpression = QColor(Qt::red).lighter();
-    retVal.rightOfExpression = QColor("lightsteelblue");
+    retVal.leftOfExpression = QColor("lightsteelblue");
+    retVal.rightOfExpression = QColor(Qt::red).lighter();
     retVal.memoryHighlight = QColor("lightgreen");
 
     retVal.seqCircuitColor= QColor(0x3B3630).lighter(200); //Used to be 370 0x3B3630
