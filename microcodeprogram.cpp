@@ -32,6 +32,16 @@ const QVector<Code*> MicrocodeProgram::getObjectCode() const
     return this->programVec;
 }
 
+const QString MicrocodeProgram::format() const
+{
+    QString output = "";
+    for(Code* line : programVec)
+    {
+        output.append(line->getSourceCode() + "\n");
+    }
+    return output;
+}
+
 int MicrocodeProgram::codeLineToProgramLine(int codeLine) const
 {
     return microcodeVec[codeLine];

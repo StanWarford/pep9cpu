@@ -98,9 +98,20 @@ bool MicrocodePane::microAssemble()
         }*/
         lineNum++;
     }
+    for(int it = codeList.length()-1; it >= 0; it--)
+    {
+        if (dynamic_cast<BlankLineCode*>(codeList[it])!=nullptr)
+        {
+            delete codeList.takeAt(it);
+        }
+        else
+        {
+            break;
+        }
+    }
     // we guarantee a \n at the end of our document for single step highlighting
     if (!sourceCode.endsWith("\n")) {
-        editor->appendPlainText("\n");
+        //editor->appendPlainText("\n");
     }
     program = new MicrocodeProgram(codeList);
     return true;
@@ -296,7 +307,6 @@ void MicrocodePane::onDarkModeChanged(bool darkMode)
 {
     if(darkMode)
     {
-        qDebug()<<&PepColors::darkMode;
         highlighter->rebuildHighlightingRules(PepColors::darkMode);
     }
     else

@@ -24,7 +24,7 @@
 #include "pep.h"
 #include "cpudatasection.h"
 #include <QMetaEnum>
-MicroCode::MicroCode():clockSignals(10),controlSignals(20)
+MicroCode::MicroCode():controlSignals(20),clockSignals(10)
 {
     for(auto memLines : Pep::memControlToMnemonMap.keys())
     {

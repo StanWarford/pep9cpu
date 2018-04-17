@@ -12,6 +12,7 @@ public:
     MicrocodeProgram();
     ~MicrocodeProgram();
     MicrocodeProgram(QVector<Code*>objectCode);
+    const QString format() const;
     const QVector<Code*> getObjectCode() const;
     int codeLineToProgramLine(int codeLine) const;
     bool hasMicrocode() const;
