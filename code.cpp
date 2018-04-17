@@ -24,7 +24,7 @@
 #include "pep.h"
 #include "cpudatasection.h"
 #include <QMetaEnum>
-MicroCode::MicroCode():clockSignals(10),controlSignals(20)
+MicroCode::MicroCode():controlSignals(20),clockSignals(10)
 {
     for(auto memLines : Pep::memControlToMnemonMap.keys())
     {
@@ -181,7 +181,7 @@ QString MicroCode::getSourceCode() const
         if (str != "") { str.chop(2); str.append("; "); }
 
         if (clockSignals[Enu::NCk] != 0) { str.append("NCk, "); }
-        if (clockSignals[Enu::VCk] != 0) { str.append("ZCk, "); }
+        if (clockSignals[Enu::ZCk] != 0) { str.append("ZCk, "); }
         if (clockSignals[Enu::VCk] != 0) { str.append("VCk, "); }
         if (clockSignals[Enu::CCk] != 0) { str.append("CCk, "); }
         if (clockSignals[Enu::SCk] != 0) { str.append("SCk, "); }

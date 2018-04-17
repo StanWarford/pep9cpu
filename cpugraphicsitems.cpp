@@ -39,8 +39,9 @@
 CpuGraphicsItems::CpuGraphicsItems(Enu::CPUType type, QWidget *widgetParent,
                                                    QGraphicsItem *itemParent,
                                                    QGraphicsScene *scene)
-    : QGraphicsItem(itemParent), colorScheme(&PepColors::lightMode),
-      parent(widgetParent),dataSection(CPUDataSection::getInstance()),parentScene(scene),labelVec(),editorVector()
+    : QGraphicsItem(itemParent),labelVec(),editorVector(),
+      parent(widgetParent),parentScene(scene),dataSection(CPUDataSection::getInstance()),
+      colorScheme(&PepColors::lightMode)
 {    
     // http://colrd.com/image-dna/23448/
 
@@ -1045,6 +1046,7 @@ bool CpuGraphicsItems::aluHasCorrectOutput()
     }
     bool ok;
     int alu = ALULineEdit->text().toInt(&ok);
+    (void)alu; //Useless cast to silence unused variable warning
     if (!ok) {
         qDebug() << "ALU text to int conversion failed - non-number in the ALU";
         return false;
@@ -1224,12 +1226,11 @@ void CpuGraphicsItems::drawDiagramFreeText(QPainter *painter)
 
 void CpuGraphicsItems::drawLabels()
 {
-
     QPalette seqColor = QPalette();
+    seqColor.setColor(QPalette::Text,colorScheme->arrowColorOn);
     seqColor.setColor(QPalette::WindowText,colorScheme->arrowColorOn);
     seqColor.setColor(QPalette::Base,PepColors::transparent);
     seqColor.setColor(QPalette::Window,PepColors::transparent);
-    seqColor.setBrush(QPalette::AlternateBase, PepColors::transparent);
 
     QPalette combColor = QPalette();
     combColor.setColor(QPalette::WindowText,colorScheme->arrowColorOn);

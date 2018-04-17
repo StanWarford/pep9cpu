@@ -60,7 +60,7 @@ bool CPUControlSection::getExecutionFinished() const
 
 void CPUControlSection::onSimulationStarted()
 {
-#pragma message "todo"
+    inSimulation = true;
 }
 
 void CPUControlSection::onSimulationFinished()
@@ -71,12 +71,12 @@ void CPUControlSection::onSimulationFinished()
 
 void CPUControlSection::onDebuggingStarted()
 {
-#pragma message "todo"
+    onSimulationStarted();
 }
 
 void CPUControlSection::onDebuggingFinished()
 {
-#pragma message "todo"
+    onSimulationFinished();
 }
 
 void CPUControlSection::onStep() noexcept
@@ -153,7 +153,8 @@ void CPUControlSection::onCPUFeaturesChanged(Enu::CPUType cpuType) noexcept
     data->onCPUFeaturesChanged(cpuType);
 }
 
-CPUControlSection::CPUControlSection(CPUDataSection * data): QObject(nullptr),data(data),microprogramCounter(0),hadControlError(false),inSimulation(false)
+CPUControlSection::CPUControlSection(CPUDataSection * data): QObject(nullptr),data(data),microprogramCounter(0),
+    inSimulation(false),hadControlError(false)
 {
 
 }
@@ -200,7 +201,6 @@ bool CPUControlSection::testPost()
        ((UnitPostCode*) x)->testPostcondition(data,err);
         if(err!="")t=true;
     }
-    qDebug()<<"The postcondtions were:"<<!t;
     return !t;
 }
 

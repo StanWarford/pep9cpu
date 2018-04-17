@@ -439,10 +439,8 @@ void MainWindow::on_actionEdit_UnComment_Line_triggered()
 
 void MainWindow::on_actionEdit_Auto_Format_Microcode_triggered()
 {
-    //Should format correctly anytime assembly works
-#pragma message("todo: fix bug with formatting from previous run")
     if (microcodePane->microAssemble()) {
-        microcodePane->setMicrocode(microcodePane->getMicrocode());
+        microcodePane->setMicrocode(microcodePane->getMicrocodeProgram()->format());
     }
 }
 
