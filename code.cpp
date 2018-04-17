@@ -181,7 +181,7 @@ QString MicroCode::getSourceCode() const
         if (str != "") { str.chop(2); str.append("; "); }
 
         if (clockSignals[Enu::NCk] != 0) { str.append("NCk, "); }
-        if (clockSignals[Enu::VCk] != 0) { str.append("ZCk, "); }
+        if (clockSignals[Enu::ZCk] != 0) { str.append("ZCk, "); }
         if (clockSignals[Enu::VCk] != 0) { str.append("VCk, "); }
         if (clockSignals[Enu::CCk] != 0) { str.append("CCk, "); }
         if (clockSignals[Enu::SCk] != 0) { str.append("SCk, "); }
