@@ -33,10 +33,10 @@
 #include "microcodepane.h"
 #include "objectcodepane.h"
 #include "pep.h"
-#include "sim.h"
 #include "helpdialog.h"
 #include "aboutpep.h"
 #include "updatechecker.h"
+#include "cpucontrolsection.h"
 #include <QDir>
 
 namespace Ui {
@@ -56,6 +56,8 @@ protected:
 
 private:
     Ui::MainWindow *ui;
+    QString darkStyle;
+    QString lightStyle;
     QFont codeFont;
     UpdateChecker *updateChecker;
     // Byte converter
@@ -75,6 +77,8 @@ private:
     HelpDialog *helpDialog;
     AboutPep *aboutPepDialog;
 
+    CPUDataSection* dataSection;
+    CPUControlSection* controlSection;
     void readSettings();
     void writeSettings();
 
@@ -116,6 +120,8 @@ private slots:
     void on_actionSystem_Clear_Memory_triggered();
     void on_actionOne_Byte_Data_Bus_Model_triggered();
     void on_actionTwo_Byte_Data_Bus_Model_triggered();
+    // View
+    void on_actionDark_Mode_triggered();
     // Help
     void on_actionHelp_UsingPep9CPU_triggered();
     void on_actionHelp_InteractiveUse_triggered();
@@ -147,12 +153,13 @@ private slots:
 
     void updateMemAddress(int address);
 signals:
-    void CPUFeaturesChanged();
+    void CPUFeaturesChanged(Enu::CPUType);
     void beginUpdateCheck();
     void beginSimulation();
     void endSimulation();
     //If a sub-compnent wants to be notified that fonts should be restored to their default values, connect to this signal.
     void fontChanged(QFont font);
+    void darkModeChanged(bool);
 };
 
 #endif // MAINWINDOW_H

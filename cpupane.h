@@ -34,7 +34,8 @@
 namespace Ui {
     class CpuPane;
 }
-
+class CPUControlSection;
+class CPUDataSection;
 class CpuPane : public QWidget {
     Q_OBJECT
 public:
@@ -50,14 +51,12 @@ public:
     void startDebugging();
     void stopDebugging();
 
-    void setRegister(Enu::EMnemonic reg, int value);
-    void setRegisterByte(int reg, quint8 value);
-    void setStatusBit(Enu::EMnemonic bit, bool value);
+    void setRegister(Enu::EKeywords reg, int value);
+    void setRegisterByte(quint8 reg, quint8 value);
+    void setStatusBit(Enu::EKeywords bit, bool value);
 
-    void setRegPrecondition(Enu::EMnemonic reg, int value);
-    void setStatusPrecondition(Enu::EMnemonic bit, bool value);
-    bool testRegPostcondition(Enu::EMnemonic reg, int value);
-    bool testStatusPostcondition(Enu::EMnemonic bit, bool value);
+    void setRegPrecondition(Enu::EKeywords reg, int value);
+    void setStatusPrecondition(Enu::EKeywords bit, bool value);
 
     void clearCpu();
     void clearCpuControlSignals();
@@ -69,23 +68,17 @@ public:
 
 protected:
     void changeEvent(QEvent *e);
-
+    CPUControlSection* controlSection;
+    CPUDataSection* dataSection;
     QGraphicsScene *scene;
 
     CpuGraphicsItems *cpuPaneItems;
 
-    //simulation helper
-    void updateMainBusState();
-    // called by the push buttons to simulate a single step; returns true if
-    //  there were no issues
-    bool step(QString& errorString);
-
 private:
     Ui::CpuPane *ui;
+    void initRegisters();
 
 protected slots:
-    bool stepOneByteDataBus(QString& errorString);
-    bool stepTwoByteDataBus(QString& errorString);
 
     void regTextEdited(QString str);
     void regTextFinishedEditing();
@@ -104,7 +97,13 @@ protected slots:
 
 public slots:
     void run();
+    void onClockChanged();
+    void onBusChanged();
+    void onRegisterChanged(quint8 which,quint8 oldVal,quint8 newVal);
+    void onMemoryRegisterChanged(Enu::EMemoryRegisters,quint8 oldVal,quint8 newVal);
+    void onStatusBitChanged(Enu::EStatusBit,bool value);
     void repaintOnScroll(int distance);
+    void onDarkModeChanged(bool);
 
 signals:
     void updateSimulation();
@@ -113,6 +112,8 @@ signals:
     void appendMicrocodeLine(QString line);
     void readByte(int address);
     void writeByte(int address);
+    void registerChanged(quint8 reg,quint8 value);
+    void statusBitChanged(Enu::EStatusBit,bool value);
 };
 
 #endif // CPUPANE_H

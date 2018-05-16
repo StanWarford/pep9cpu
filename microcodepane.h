@@ -91,6 +91,7 @@ public:
 public slots:
     void onCPUFeatureChange();
     void onFontChanged(QFont font);
+    void onDarkModeChanged(bool darkMode);
 protected:
     void changeEvent(QEvent *e);
 
@@ -99,6 +100,7 @@ private:
 
     PepHighlighter *highlighter;
     MicrocodeEditor *editor;
+    MicrocodeProgram* program;
 
 private slots:
     void setLabelToModified(bool modified);

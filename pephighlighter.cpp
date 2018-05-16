@@ -21,18 +21,31 @@
 
 #include "pephighlighter.h"
 #include "pep.h"
-
-PepHighlighter::PepHighlighter(QTextDocument *parent)
+#include "cpudatasection.h"
+PepHighlighter::PepHighlighter(PepColors::Colors color,QTextDocument *parent)
     : QSyntaxHighlighter(parent),forcedFeatures(false)
+{
+    rebuildHighlightingRules(color);
+}
+
+void PepHighlighter::forceAllFeatures(bool features)
+{
+    forcedFeatures=features;
+}
+
+void PepHighlighter::rebuildHighlightingRules(PepColors::Colors color)
 {
     HighlightingRule rule;
 
-    numFormat.setForeground(Qt::darkMagenta);
+    highlightingRulesOne.clear();
+    highlightingRulesTwo.clear();
+    highlightingRulesAll.clear();
+    numFormat.setForeground(color.rightOfExpression);
     rule.pattern = QRegExp("(0x)?[0-9a-fA-F]+(?=(,|;|(\\s)*$|\\]|(\\s)*//))");
     rule.format = numFormat;
     highlightingRulesOne.append(rule);
     highlightingRulesTwo.append(rule);
-    oprndFormat.setForeground(Qt::darkBlue);
+    oprndFormat.setForeground(color.leftOfExpression);
     oprndFormat.setFontWeight(QFont::Bold);
     QStringList oprndPatterns;
         oprndPatterns << "\\bLoadCk\\b" << "\\bC\\b" << "\\bB\\b"
@@ -70,7 +83,7 @@ PepHighlighter::PepHighlighter(QTextDocument *parent)
         }
 
 
-    singleLineCommentFormat.setForeground(Qt::darkGreen);
+    singleLineCommentFormat.setForeground(color.comment);
     rule.pattern = QRegExp("//.*");
     rule.format = singleLineCommentFormat;
     highlightingRulesOne.append(rule);
@@ -83,20 +96,15 @@ PepHighlighter::PepHighlighter(QTextDocument *parent)
     commentStartExpression = QRegExp("//\\sERROR:[\\s]");
     commentEndExpression = QRegExp("$");
 }
-
-void PepHighlighter::forceAllFeatures(bool features)
-{
-    forcedFeatures=features;
-}
 void PepHighlighter::highlightBlock(const QString &text)
 {
-
     QVector<HighlightingRule> highlightingRules;
     if(forcedFeatures){
         highlightingRules=highlightingRulesAll;
     }
     else{
-        highlightingRules=Pep::cpuFeatures==Enu::CPUType::OneByteDataBus?highlightingRulesOne:highlightingRulesTwo;
+        highlightingRules=CPUDataSection::getInstance()->getCPUFeatures()==Enu::CPUType::OneByteDataBus
+                ? highlightingRulesOne : highlightingRulesTwo;
     }
 
     foreach (const HighlightingRule &rule, highlightingRules) {

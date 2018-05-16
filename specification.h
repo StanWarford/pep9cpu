@@ -23,23 +23,23 @@
 
 #include "mainmemory.h"
 #include "cpupane.h"
-
+class CPUDataSection; //Forward declare CPUDataSection to avoid inclusion loops
 class Specification
 {
 public:
     virtual ~Specification() { }
     Specification();
-    virtual void setUnitPre(MainMemory *, CpuPane *) { }
-    virtual bool testUnitPost(MainMemory *, CpuPane *, QString &) { return true; }
+    virtual void setUnitPre(CPUDataSection*) { }
+    virtual bool testUnitPost(CPUDataSection*,QString&){return true;}
     virtual QString getSourceCode() = 0;
 };
 
 class MemSpecification: public Specification {    
 public:
     MemSpecification(int memoryAddress, int memoryValue, int numberBytes);
-    void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane);
-    bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString);
-    QString getSourceCode();
+    void setUnitPre(CPUDataSection*) override;
+    bool testUnitPost(CPUDataSection *data,QString &errString) override;
+    QString getSourceCode() override;
 private:
     int memAddress;
     int memValue;
@@ -48,23 +48,23 @@ private:
 
 class RegSpecification: public Specification {
 public:
-    RegSpecification(Enu::EMnemonic registerAddress, int registerValue);
-    void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane);
-    bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString);
-    QString getSourceCode();
+    RegSpecification(Enu::EKeywords registerAddress, int registerValue);
+    void setUnitPre(CPUDataSection*) override;
+    bool testUnitPost(CPUDataSection *data,QString &errString) override;
+    QString getSourceCode() override;
 private:
-    Enu::EMnemonic regAddress;
+    Enu::EKeywords regAddress;
     int regValue;
 };
 
 class StatusBitSpecification: public Specification {
 public:
-    StatusBitSpecification(Enu::EMnemonic statusBitAddress, bool statusBitValue);
-    void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane);
-    bool testUnitPost(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString);
-    QString getSourceCode();
+    StatusBitSpecification(Enu::EKeywords statusBitAddress, bool statusBitValue);
+    void setUnitPre(CPUDataSection*) override;
+    bool testUnitPost(CPUDataSection *data,QString &errString) override;
+    QString getSourceCode() override;
 private:
-    Enu::EMnemonic nzvcsAddress;
+    Enu::EKeywords nzvcsAddress;
     bool nzvcsValue;
 };
 

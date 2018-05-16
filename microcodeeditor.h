@@ -23,13 +23,12 @@
 
 #include <QPlainTextEdit>
 #include <QObject>
-#include "sim.h"
-
 
 class QPaintEvent;
 class QResizeEvent;
 class QSize;
 class QWidget;
+class QSettings;
 
 class LineNumberArea;
 

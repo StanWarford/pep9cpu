@@ -23,6 +23,7 @@
 
 #include <QString>
 #include <QMap>
+#include <QColor>
 
 #include "enu.h"
 
@@ -39,33 +40,28 @@ public:
     static const int labelFontSizeSmall;
     static const QString cpuFont;
     static const int cpuFontSize;
-
     static QString getSystem();
 
     // Function to read text from a resource file
     static QString resToString(QString fileName);
     static QString addCycleNumbers(QString codeString);
 
-    // Machine model state:
-    static Enu::CPUType cpuFeatures;
-
     // Maps between mnemonic enums and strings
-    static QMap<Enu::EMnemonic, QString> decControlToMnemonMap;  // unused as of this writing
-    static QMap<Enu::EMnemonic, QString> memControlToMnemonMap;
-    static QMap<Enu::EMnemonic, QString> clockControlToMnemonMap;
-    static QMap<Enu::EMnemonic, QString> specificationToMnemonMap;
-    static QMap<Enu::EMnemonic, QString> memSpecToMnemonMap;
-    static QMap<Enu::EMnemonic, QString> regSpecToMnemonMap;
-    static QMap<Enu::EMnemonic, QString> statusSpecToMnemonMap;
-    static QMap<QString, Enu::EMnemonic> mnemonToDecControlMap;
-    static QMap<QString, Enu::EMnemonic> mnemonToMemControlMap;
-    static QMap<QString, Enu::EMnemonic> mnemonToClockControlMap;
-    static QMap<QString, Enu::EMnemonic> mnemonToSpecificationMap;
-    static QMap<QString, Enu::EMnemonic> mnemonToMemSpecMap;
-    static QMap<QString, Enu::EMnemonic> mnemonToRegSpecMap;
-    static QMap<QString, Enu::EMnemonic> mnemonToStatusSpecMap;
+    static QMap<Enu::EControlSignals, QString> decControlToMnemonMap;
+    static QMap<Enu::EControlSignals, QString> memControlToMnemonMap;
+    static QMap<Enu::EClockSignals, QString> clockControlToMnemonMap;
+    static QMap<Enu::EKeywords, QString> specificationToMnemonMap;
+    static QMap<Enu::EKeywords, QString> memSpecToMnemonMap;
+    static QMap<Enu::EKeywords, QString> regSpecToMnemonMap;
+    static QMap<Enu::EKeywords, QString> statusSpecToMnemonMap;
+    static QMap<QString, Enu::EControlSignals> mnemonToDecControlMap;
+    static QMap<QString, Enu::EControlSignals> mnemonToMemControlMap;
+    static QMap<QString, Enu::EClockSignals> mnemonToClockControlMap;
+    static QMap<QString, Enu::EKeywords> mnemonToSpecificationMap;
+    static QMap<QString, Enu::EKeywords> mnemonToMemSpecMap;
+    static QMap<QString, Enu::EKeywords> mnemonToRegSpecMap;
+    static QMap<QString, Enu::EKeywords> mnemonToStatusSpecMap;
     static void initEnumMnemonMaps();
 
 };
-
 #endif // PEP_H

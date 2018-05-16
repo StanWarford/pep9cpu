@@ -58,7 +58,6 @@ public:
 
     }
 };
-
 namespace OneByteShapes
 {
 
@@ -374,12 +373,12 @@ const QPolygon MDRToDataBus = QPolygon(QVector<QPoint>()  << QPoint(175, 258)
                                        << QPoint(73, 263) << QPoint(83, 273)
                                        << QPoint(83, 268) << QPoint(175, 268));
 
-const QPolygon ALUOutBus = QPolygon(QVector<QPoint>() << QPoint(346, 394)
+const QPolygon ALUOutBus = QPolygon(QVector<QPoint>() << QPoint(346, 395)
                                     << QPoint(346, 414) << QPoint(314, 414)
                                     << QPoint(314, 407) << QPoint(319, 407)
                                     << QPoint(309, 397) << QPoint(299, 407)
                                     << QPoint(304, 407) << QPoint(304, 424)
-                                    << QPoint(356, 424) << QPoint(356, 394));
+                                    << QPoint(356, 424) << QPoint(356, 395));
 
 const QPolygon MDRMuxOutBus = QPolygon(QVector<QPoint>()
                                        << QPoint(205, MDRMuxerDataLabel.y()) // 293

@@ -28,7 +28,8 @@
 
 #include "enu.h"
 #include "tristatelabel.h"
-
+#include "colors.h"
+class CPUDataSection;
 class CpuGraphicsItems : public QGraphicsItem
 {
 public:
@@ -106,6 +107,10 @@ public:
     TristateLabel *MemWriteTristateLabel;
 
     // REGISTER BANK
+    QGraphicsRectItem* regBankOutline;
+    QGraphicsRectItem* regBank;
+    QVector<QLabel*> labelVec;
+    QVector<QLineEdit*> editorVector;
     QLineEdit *aRegLineEdit;
     QLineEdit *xRegLineEdit;
     QLineEdit *spRegLineEdit;
@@ -137,19 +142,13 @@ public:
     QLabel *MDROLabel;
     QLabel *MDRELabel;
 private:
-    QGraphicsScene *parentScene;
     QWidget *parent;
-    Enu::CPUType model;
+    QGraphicsScene *parentScene;
+    CPUDataSection* dataSection;
+    bool darkMode=false;
 
-    QColor seqCircuitColor;
-    QColor combCircuitRed;
-    QColor muxCircuitRed; // A sightly lighter shade of combCircuitRed that is a better background for text
-    QColor combCircuitBlue;
-    QColor muxCircuitBlue; // A sightly lighter shade of combCircuitBlue that is a better background for text
-    QColor combCircuitYellow;
-    QColor muxCircuitYellow; // A sightly lighter shade of combCircuitYellow that is a better background for text
-    QColor combCircuitGreen;
-    QColor muxCircuitGreen; // A sightly lighter shade of combCircuitGreen that is a better background for text
+    const PepColors::Colors *colorScheme;
+    Enu::CPUType model;
 
     QImage arrowLeft;
     QImage arrowRight;
@@ -163,6 +162,10 @@ private:
 
     // Try to draw as many free-floating strings in one centralized function as possible. Both 1 & 2 byte models.
     void drawDiagramFreeText(QPainter *painter);
+    void drawLabels();
+    void drawStaticRects(QPainter* painter);
+    void drawALUPoly();
+    void drawRegisterBank();
     void repaintLoadCk(QPainter *painter);
     void repaintCSelect(QPainter *painter);
     void repaintBSelect(QPainter *painter);
@@ -228,6 +231,8 @@ private:
     void repaintABusTwoByteModel(QPainter *painter);
     void repaintBBusTwoByteModel(QPainter *painter);
     void repaintCBusTwoByteModel(QPainter *painter);
+public slots:
+    void onDarkModeChanged(bool);
 
 };
 

@@ -27,19 +27,18 @@
 #include "specification.h"
 #include "mainmemory.h"
 #include "cpupane.h"
-
+class CPUDataSection; //Forward declare CPUDataSection to avoid inclusion loops
 // Abstract code class
 class Code
 {
 public:
     virtual ~Code() { }
-    virtual bool isMicrocode() { return false; }
-    virtual void setCpuLabels(CpuGraphicsItems *) { }
-    virtual QString getObjectCode() { return ""; }
-    virtual QString getSourceCode() { return ""; }
-    virtual bool hasUnitPre() { return false; }
-    virtual void setUnitPre(MainMemory *, CpuPane *) { }
-    virtual bool testPostcondition(MainMemory *, CpuPane *, QString &) { return true; }
+    virtual bool isMicrocode() const { return false; }
+    virtual void setCpuLabels(CpuGraphicsItems *)const { }
+    virtual QString getObjectCode() const { return ""; }
+    virtual QString getSourceCode() const { return ""; }
+    virtual bool hasUnitPre() const { return false; }
+    virtual bool hasUnitPost() const{return false;}
 };
 
 // Concrete code classes
@@ -49,16 +48,22 @@ class MicroCode: public Code
     friend class Asm;
 public:
     MicroCode();
-    bool isMicrocode();
-    void setCpuLabels(CpuGraphicsItems *cpuPaneItems);
-    QString getObjectCode();
-    QString getSourceCode();
-    bool has(Enu::EMnemonic field);
-    void set(Enu::EMnemonic field, int value);
-    int get(Enu::EMnemonic field) const;
-    bool inRange(Enu::EMnemonic field, int value);
+    bool isMicrocode() const override;
+    QString getObjectCode() const override;
+    QString getSourceCode() const override;
+    bool hasControlSignal(Enu::EControlSignals field) const;
+    bool hasClockSignal(Enu::EClockSignals field) const;
+    int getControlSignal(Enu::EControlSignals field) const;
+    bool getClockSignal(Enu::EClockSignals field) const;
+    bool inRange(Enu::EControlSignals field, int value) const;
+
+    void setCpuLabels(CpuGraphicsItems *cpuPaneItems)const override;
+    void setControlSignal(Enu::EControlSignals field,quint8 value);
+    void setClockSingal(Enu::EClockSignals field,bool value);
+
 private:
-    QMap<Enu::EMnemonic,int> mnemonicMap;
+    QVector<quint8> controlSignals;
+    QVector<bool> clockSignals;
     QString cComment;
 };
 
@@ -66,7 +71,7 @@ class CommentOnlyCode: public Code
 {
 public:
     CommentOnlyCode(QString comment);
-    QString getSourceCode();
+    QString getSourceCode() const override;
 private:
     QString cComment;
 };
@@ -75,9 +80,9 @@ class UnitPreCode: public Code
 {
 public:
     ~UnitPreCode();
-    QString getSourceCode();
-    bool hasUnitPre();
-    void setUnitPre(MainMemory *mainMemory, CpuPane *cpuPane);
+    QString getSourceCode() const override;
+    bool hasUnitPre() const override;
+    void setUnitPre(CPUDataSection* data);
     void appendSpecification(Specification *specification);
     void setComment(QString comment);
 private:
@@ -89,10 +94,11 @@ class UnitPostCode: public Code
 {
 public:
     ~UnitPostCode();
-    QString getSourceCode();
-    bool testPostcondition(MainMemory *mainMemory, CpuPane *cpuPane, QString &errorString);
+    QString getSourceCode() const override;
+    bool testPostcondition(CPUDataSection *data,QString &err);
     void appendSpecification(Specification *specification);
     void setComment(QString comment);
+    bool hasUnitPost() const override;
 private:
     QList<Specification *> unitPostList;
     QString cComment;

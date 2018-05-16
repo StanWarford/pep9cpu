@@ -22,16 +22,17 @@
 #include "mainmemory.h"
 #include "ui_mainmemory.h"
 #include "pep.h"
-#include "sim.h"
 
 #include <QScrollBar>
 #include <QResizeEvent>
-
+#include "cpudatasection.h"
+#include "colors.h"
 #include <QDebug>
 
 MainMemory::MainMemory(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::MainMemory)
+    ui(new Ui::MainMemory),modifiedAddresses(),dataSection(CPUDataSection::getInstance()),
+    darkMode(false),colors(&PepColors::lightMode)
 {
     ui->setupUi(this);
 
@@ -48,7 +49,7 @@ MainMemory::MainMemory(QWidget *parent) :
     ui->tableWidget->setVerticalHeaderLabels(rows);
 
     int address = 0x0000;
-    ui->tableWidget->setItem(0, 0, new QTableWidgetItem("0x" + QString("%1").arg(Sim::readByte(address), 2, 16).toUpper().trimmed()));
+    ui->tableWidget->setItem(0, 0, new QTableWidgetItem("0x" + QString("%1").arg(dataSection->getMemoryByte(address), 2, 16).toUpper().trimmed()));
 
     refreshMemory();
 
@@ -58,7 +59,7 @@ MainMemory::MainMemory(QWidget *parent) :
     connect(ui->verticalScrollBar, SIGNAL(actionTriggered(int)), this, SLOT(sliderMoved(int)));
     connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
     connect(ui->lineEdit, SIGNAL(textChanged(QString)), this, SLOT(scrollToChanged(QString)));
-
+    connect(dataSection,&CPUDataSection::memoryChanged,this,&MainMemory::onMemoryValueChanged);
     ui->scrollToLabel->setFont(QFont(ui->scrollToLabel->font().family(), ui->scrollToLabel->font().pointSize()));
     ui->lineEdit->setFont(QFont(ui->lineEdit->font().family(), ui->lineEdit->font().pointSize()));
 
@@ -81,14 +82,12 @@ void MainMemory::populateMemoryItems()
 
     //qDebug() << "scroll value: " << QString("%1").arg(ui->verticalScrollBar->value(), 4, 16, QLatin1Char('0'));
     int scrollBarValue = ui->verticalScrollBar->value();
-
     for (int i = scrollBarValue; i < scrollBarValue + ui->tableWidget->rowCount(); i++) {
         rows << QString("%1").arg(i, 4, 16, QLatin1Char('0')).toUpper();
     }
     ui->tableWidget->setVerticalHeaderLabels(rows);
 
     connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
-
     refreshMemory();
 }
 
@@ -104,7 +103,7 @@ void MainMemory::refreshMemory()
         address = ui->tableWidget->verticalHeaderItem(i)->text().toInt(&ok, 16);
         if (ok) {
             ui->tableWidget->item(i, 0)->setText("0x" +
-                                                 QString("%1").arg(Sim::readByte(address), 2, 16, QLatin1Char('0')).toUpper());
+                                                 QString("%1").arg(dataSection->getMemoryByte(address), 2, 16, QLatin1Char('0')).toUpper());
         }
     }
 
@@ -115,7 +114,7 @@ void MainMemory::setMemAddress(int memAddress, int value)
 {
     // disconnect this signal so that modifying the text of the column next to it doesn't fire this signal; reconnect at the end
     disconnect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
-
+    modifiedAddresses.insert(memAddress);
     if (memAddress > 0xffff || memAddress < 0) {
         qDebug() << "invalid address: " << memAddress;
     }
@@ -131,26 +130,9 @@ void MainMemory::setMemAddress(int memAddress, int value)
         return;
     }
 
-    int lineAddress;
-    for (int i = firstAddress; i < lastAddress; i++) {
-        lineAddress = ui->tableWidget->verticalHeaderItem(i)->text().toInt((bool*)&lineAddress,16);
-        if (lineAddress == memAddress) {
-            ui->tableWidget->item(i, 0)->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper().trimmed());
-        }
-    }
-
+    ui->tableWidget->item(memAddress, 0)->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper().trimmed());
+    hightlightModifiedBytes();
     connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
-}
-
-void MainMemory::setMemPrecondition(int memAddress, int value)
-{
-    Sim::writeByte(memAddress, value);
-    setMemAddress(memAddress, value);
-}
-
-bool MainMemory::testMemPostcondition(int memAddress, int value)
-{
-    return Sim::readByte(memAddress) == value;
 }
 
 void MainMemory::clearMemory()
@@ -158,7 +140,9 @@ void MainMemory::clearMemory()
     for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
         ui->tableWidget->item(i, 0)->setText("0x00");
     }
-    Sim::clearMemory();
+    modifiedAddresses.clear();
+    hightlightModifiedBytes();
+    // CPU Data section clears its own memory
 }
 
 void MainMemory::showMemEdited(int address)
@@ -172,26 +156,21 @@ void MainMemory::hightlightModifiedBytes()
 {
     // disconnect this signal so that modifying the text of the column next to it doesn't fire this signal; reconnect at the end
     disconnect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
-
-    if (Sim::modifiedBytes.isEmpty()) {
         // clear all highlighted cells
-        for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
-            ui->tableWidget->itemAt(0, i)->setBackgroundColor(Qt::white);
-        }
-        return;
+    for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
+        ui->tableWidget->item(i,0)->setBackgroundColor(PepColors::transparent);
     }
-
     // for each item in the table:
-    for (int i = 0; i < ui->tableWidget->rowCount() - 1; i++) {
+    for(int i=0;i<ui->tableWidget->rowCount();i++)
+    {
         bool ok;
         int j = ui->tableWidget->verticalHeaderItem(i)->text().right(4).toInt(&ok, 16);
-        if (ok && Sim::modifiedBytes.contains(j)) {
-            ui->tableWidget->itemAt(0, i)->setBackgroundColor(Qt::green);
-        }
-        else {
-            ui->tableWidget->itemAt(0, i)->setBackgroundColor(Qt::white);
+        if(ok&&modifiedAddresses.contains(j))
+        {
+            ui->tableWidget->item(i,0)->setBackgroundColor(colors->memoryHighlight);
         }
     }
+
 
     connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
 }
@@ -199,7 +178,7 @@ void MainMemory::hightlightModifiedBytes()
 void MainMemory::scrollToAddress(int address)
 {
     // disconnect this signal so that modifying the text of the column next to it doesn't fire this signal; reconnect at the end
-    disconnect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
+    //disconnect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
 
     if (address >= 0 && address <= 0xffff) { // defensive programming!
         if (address > ui->verticalScrollBar->maximum()) { // ensure we only scroll to the bottom, and don't show values larger than 0xffff
@@ -211,8 +190,7 @@ void MainMemory::scrollToAddress(int address)
     }
     // else, ignore, we're getting told to do something out of the correct range.
 
-    connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
-
+    //connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
     hightlightModifiedBytes();
 }
 
@@ -226,9 +204,30 @@ void MainMemory::highlightOnFocus()
     }
 }
 
+void MainMemory::onMemoryValueChanged(quint16 address, quint8, quint8 newVal)
+{
+    setMemAddress(address,newVal);
+    populateMemoryItems();
+    scrollToAddress(address);
+}
+
 bool MainMemory::hasFocus()
 {
     return ui->tableWidget->hasFocus();
+}
+
+void MainMemory::onDarkModeChange(bool darkMode)
+{
+    if(darkMode)
+    {
+        colors = &PepColors::darkMode;
+    }
+    else
+    {
+        colors = &PepColors::lightMode;
+    }
+    populateMemoryItems();
+    hightlightModifiedBytes();
 }
 
 void MainMemory::sliderMoved(int pos)
@@ -256,13 +255,13 @@ void MainMemory::cellDataChanged(QTableWidgetItem *item)
     data = data % 256;
 
     if (contents.contains(rx) && dataOk && addrConvOk) {
-        Sim::writeByte(address, data);
-        qDebug() << "Sim::Mem[" << address << "]: " << Sim::readByte(address);
+        dataSection->onSetMemoryByte(address,(quint8)data);
+        qDebug() << "Sim::Mem[" << address << "]: " << data;
         ui->tableWidget->item(row, 0)->setText("0x" + QString("%1").arg(data, 2, 16, QLatin1Char('0')).toUpper().trimmed());
     }
     else if (addrConvOk && !dataOk) {
         qDebug() << "Conversion from text to int failed. data = " << item->text();
-        data = Sim::readByte(address);
+        data = dataSection->getMemoryByte(address);
         ui->tableWidget->item(row, 0)->setText("0x" + QString("%1").arg(data, 2, 16, QLatin1Char('0')).toUpper().trimmed());
     }
     else if (addrConvOk) { // we have problems, the labels are incorrectly formatted
@@ -338,7 +337,7 @@ void MainMemory::resizeEvent(QResizeEvent *)
         for (int row = oldRowCount; row < newRowCount; row++) {
             address = ui->tableWidget->verticalHeaderItem(row)->text().toInt(&addrConvOk, 16);
             if (addrConvOk) {
-                ui->tableWidget->setItem(row, 0, new QTableWidgetItem("0x" + QString("%1").arg(Sim::readByte(address), 2, 16).toUpper().trimmed()));
+                ui->tableWidget->setItem(row, 0, new QTableWidgetItem("0x" + QString("%1").arg(dataSection->getMemoryByte(address), 2, 16).toUpper().trimmed()));
                 //ui->tableWidget->itemAt(row, 0)->setFont(QFont(Pep::codeFont, Pep::codeFontSize));
             }
             else { // malformed address labels
@@ -358,6 +357,7 @@ void MainMemory::resizeEvent(QResizeEvent *)
         refreshMemory();
     }
 }
+
 bool MainMemory::eventFilter(QObject *, QEvent *e)
 {
     if (e->type() == QEvent::Wheel) {

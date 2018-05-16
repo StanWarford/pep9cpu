@@ -23,7 +23,7 @@
 #include <QDebug>
 #include <QString>
 #include <QStringList>
-
+#include "cpudatasection.h"
 #include "pep.h"
 
 using namespace Enu;
@@ -92,26 +92,24 @@ QString Pep::addCycleNumbers(QString codeString) {
     return microcodeList.join("\n");
 }
 
-// Machine model state:
-Enu::CPUType Pep::cpuFeatures = OneByteDataBus;
-
-QMap<Enu::EMnemonic, QString> Pep::decControlToMnemonMap; // unused as of this writing
-QMap<Enu::EMnemonic, QString> Pep::memControlToMnemonMap;
-QMap<Enu::EMnemonic, QString> Pep::clockControlToMnemonMap;
-QMap<Enu::EMnemonic, QString> Pep::specificationToMnemonMap;
-QMap<Enu::EMnemonic, QString> Pep::memSpecToMnemonMap;
-QMap<Enu::EMnemonic, QString> Pep::regSpecToMnemonMap;
-QMap<Enu::EMnemonic, QString> Pep::statusSpecToMnemonMap;
-QMap<QString, Enu::EMnemonic> Pep::mnemonToDecControlMap;
-QMap<QString, Enu::EMnemonic> Pep::mnemonToMemControlMap;
-QMap<QString, Enu::EMnemonic> Pep::mnemonToClockControlMap;
-QMap<QString, Enu::EMnemonic> Pep::mnemonToSpecificationMap;
-QMap<QString, Enu::EMnemonic> Pep::mnemonToMemSpecMap;
-QMap<QString, Enu::EMnemonic> Pep::mnemonToRegSpecMap;
-QMap<QString, Enu::EMnemonic> Pep::mnemonToStatusSpecMap;
+QMap<Enu::EControlSignals, QString> Pep::decControlToMnemonMap;
+QMap<Enu::EControlSignals, QString> Pep::memControlToMnemonMap;
+QMap<Enu::EClockSignals, QString> Pep::clockControlToMnemonMap;
+QMap<Enu::EKeywords, QString> Pep::specificationToMnemonMap;
+QMap<Enu::EKeywords, QString> Pep::memSpecToMnemonMap;
+QMap<Enu::EKeywords, QString> Pep::regSpecToMnemonMap;
+QMap<Enu::EKeywords, QString> Pep::statusSpecToMnemonMap;
+QMap<QString, Enu::EControlSignals> Pep::mnemonToDecControlMap;
+QMap<QString, Enu::EControlSignals> Pep::mnemonToMemControlMap;
+QMap<QString, Enu::EClockSignals> Pep::mnemonToClockControlMap;
+QMap<QString, Enu::EKeywords> Pep::mnemonToSpecificationMap;
+QMap<QString, Enu::EKeywords> Pep::mnemonToMemSpecMap;
+QMap<QString, Enu::EKeywords> Pep::mnemonToRegSpecMap;
+QMap<QString, Enu::EKeywords> Pep::mnemonToStatusSpecMap;
 
 void Pep::initEnumMnemonMaps()
 {
+    CPUDataSection* tempRef = CPUDataSection::getInstance();
     mnemonToDecControlMap.clear();  decControlToMnemonMap.clear();
     mnemonToDecControlMap.insert("C", C); decControlToMnemonMap.insert(C,"C");
     mnemonToDecControlMap.insert("B", B); decControlToMnemonMap.insert(B,"B");
@@ -121,10 +119,10 @@ void Pep::initEnumMnemonMaps()
     mnemonToDecControlMap.insert("CMUX", CMux); decControlToMnemonMap.insert(CMux,"CMUX");
     mnemonToDecControlMap.insert("ALU", ALU); decControlToMnemonMap.insert(ALU,"ALU");
     mnemonToDecControlMap.insert("CSMUX", CSMux); decControlToMnemonMap.insert(CSMux,"CSMUX");
-    if (Pep::cpuFeatures == OneByteDataBus) {
+    if (tempRef->getCPUFeatures() == OneByteDataBus) {
         mnemonToDecControlMap.insert("MDRMUX", MDRMux); decControlToMnemonMap.insert(MDRMux,"MDRMUX");
     }
-    else if (Pep::cpuFeatures == TwoByteDataBus){
+    else if (tempRef->getCPUFeatures() == TwoByteDataBus){
         mnemonToDecControlMap.insert("MARMUX", MARMux); decControlToMnemonMap.insert(MARMux,"MARMUX");
         mnemonToDecControlMap.insert("MDROMUX", MDROMux); decControlToMnemonMap.insert(MDROMux,"MDROMUX");
         mnemonToDecControlMap.insert("MDREMUX", MDREMux); decControlToMnemonMap.insert(MDREMux,"MDREMUX");
@@ -143,10 +141,10 @@ void Pep::initEnumMnemonMaps()
     clockControlToMnemonMap.insert(VCk, "VCk");         mnemonToClockControlMap.insert("VCK", VCk);
     clockControlToMnemonMap.insert(ZCk, "ZCk");         mnemonToClockControlMap.insert("ZCK", ZCk);
     clockControlToMnemonMap.insert(NCk, "NCk");         mnemonToClockControlMap.insert("NCK", NCk);
-    if (Pep::cpuFeatures == OneByteDataBus) {
+    if (tempRef->getCPUFeatures() == OneByteDataBus) {
         clockControlToMnemonMap.insert(MDRCk, "MDRCk");     mnemonToClockControlMap.insert("MDRCK", MDRCk);
     }
-    else if (Pep::cpuFeatures == TwoByteDataBus){
+    else if (tempRef->getCPUFeatures() == TwoByteDataBus){
         clockControlToMnemonMap.insert(MDROCk, "MDROCk");     mnemonToClockControlMap.insert("MDROCK", MDROCk);
         clockControlToMnemonMap.insert(MDRECk, "MDRECk");     mnemonToClockControlMap.insert("MDRECK", MDRECk);
     }
@@ -159,7 +157,7 @@ void Pep::initEnumMnemonMaps()
     memSpecToMnemonMap.insert(Mem, "Mem");              mnemonToMemSpecMap.insert("MEM", Mem);
 
     regSpecToMnemonMap.clear();                         mnemonToRegSpecMap.clear();
-    regSpecToMnemonMap.insert(A, "A");                  mnemonToRegSpecMap.insert("A", A);
+    regSpecToMnemonMap.insert(Acc, "A");                  mnemonToRegSpecMap.insert("A", Acc);
     regSpecToMnemonMap.insert(X, "X");                  mnemonToRegSpecMap.insert("X", X);
     regSpecToMnemonMap.insert(SP, "SP");                mnemonToRegSpecMap.insert("SP", SP);
     regSpecToMnemonMap.insert(PC, "PC");                mnemonToRegSpecMap.insert("PC", PC);
@@ -170,14 +168,14 @@ void Pep::initEnumMnemonMaps()
     regSpecToMnemonMap.insert(T4, "T4");                mnemonToRegSpecMap.insert("T4", T4);
     regSpecToMnemonMap.insert(T5, "T5");                mnemonToRegSpecMap.insert("T5", T5);
     regSpecToMnemonMap.insert(T6, "T6");                mnemonToRegSpecMap.insert("T6", T6);
-    regSpecToMnemonMap.insert(MARA, "MARA");            mnemonToRegSpecMap.insert("MARA", MARA);
-    regSpecToMnemonMap.insert(MARB, "MARB");            mnemonToRegSpecMap.insert("MARB", MARB);
-    regSpecToMnemonMap.insert(MDR, "MDR");              mnemonToRegSpecMap.insert("MDR", MDR);
+    regSpecToMnemonMap.insert(MARAREG, "MARA");         mnemonToRegSpecMap.insert("MARA", MARAREG);
+    regSpecToMnemonMap.insert(MARBREG, "MARB");         mnemonToRegSpecMap.insert("MARB", MARBREG);
+    regSpecToMnemonMap.insert(MDRREG, "MDR");           mnemonToRegSpecMap.insert("MDR", MDRREG);
 
     statusSpecToMnemonMap.clear();                      mnemonToStatusSpecMap.clear();
     statusSpecToMnemonMap.insert(N, "N");               mnemonToStatusSpecMap.insert("N", N);
     statusSpecToMnemonMap.insert(Z, "Z");               mnemonToStatusSpecMap.insert("Z", Z);
     statusSpecToMnemonMap.insert(V, "V");               mnemonToStatusSpecMap.insert("V", V);
-    statusSpecToMnemonMap.insert(C, "C");               mnemonToStatusSpecMap.insert("C", C);
+    statusSpecToMnemonMap.insert(Cbit, "C");            mnemonToStatusSpecMap.insert("C", Cbit);
     statusSpecToMnemonMap.insert(S, "S");               mnemonToStatusSpecMap.insert("S", S);
 }
