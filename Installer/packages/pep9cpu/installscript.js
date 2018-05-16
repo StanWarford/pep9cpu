@@ -9,9 +9,9 @@ function Component(){
 Component.prototype.createOperations = function(){
     component.createOperations();
     if(installer.value("os") == "win"){
-        component.addOperation("Execute", "@TargetDir@\\vcredist_x64.exe","/install","/passive", "/norestart");
+        component.addOperation("Execute", "@TargetDir@\\vcredist_x64.exe","/install","/passive", "/norestart","/quiet");
         component.addOperation("CreateShortcut", "@TargetDir@/Pep9CPU.exe", "@StartMenuDir@/Pep9CPU.lnk",
-                    "workingDirectory=@TargetDir@","description=Run Pep9CPU");
+                    "workingDirectory=@TargetDir@","description=Run Pep9 CPU");
     }
 }
 Component.prototype.installationFinishedPageIsShown = function(){

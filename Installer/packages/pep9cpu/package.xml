@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package>
-    <DisplayName>Pep 9 CPU</DisplayName>
-    <Description>This is the Pep9 CPU!</Description>
-    <Version>9.2.0</Version>
-    <ReleaseDate>2018-02-18</ReleaseDate>
+    <DisplayName>Pep9 CPU </DisplayName>
+    <Description>This tool simulates a CISC CPU, and allows sample programs to be run, tested and visualized.</Description>
+    <Version>9.3</Version>
+    <ReleaseDate>2018-05-02</ReleaseDate>
     <Licenses>
         <License name="GNU GENERAL PUBLIC LICENSE" file="License.txt" />
     </Licenses>
