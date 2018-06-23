@@ -56,10 +56,10 @@ MainMemory::MainMemory(QWidget *parent) :
     ui->tableWidget->resize(ui->tableWidget->size());
     populateMemoryItems();
 
-    connect(ui->verticalScrollBar, SIGNAL(actionTriggered(int)), this, SLOT(sliderMoved(int)));
-    connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
-    connect(ui->lineEdit, SIGNAL(textChanged(QString)), this, SLOT(scrollToChanged(QString)));
-    connect(dataSection,&CPUDataSection::memoryChanged,this,&MainMemory::onMemoryValueChanged);
+    connect(ui->verticalScrollBar, &QAbstractSlider::actionTriggered, this, &MainMemory::sliderMoved);
+    //connect(ui->tableWidget, &QTableWidget::itemChanged, this, &MainMemory::cellDataChanged);
+    connect(ui->lineEdit, &QLineEdit::textChanged, this, &MainMemory::scrollToChanged);
+    connect(dataSection, &CPUDataSection::memoryChanged, this, &MainMemory::onMemoryValueChanged);
     ui->scrollToLabel->setFont(QFont(ui->scrollToLabel->font().family(), ui->scrollToLabel->font().pointSize()));
     ui->lineEdit->setFont(QFont(ui->lineEdit->font().family(), ui->lineEdit->font().pointSize()));
 
@@ -76,7 +76,7 @@ MainMemory::~MainMemory()
 void MainMemory::populateMemoryItems()
 {
     // disconnect this signal so that modifying the text of the column next to it doesn't fire this signal; reconnect at the end
-    disconnect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
+    disconnect(ui->tableWidget, &QTableWidget::itemChanged, this, &MainMemory::cellDataChanged);
 
     rows.clear();
 
@@ -87,14 +87,17 @@ void MainMemory::populateMemoryItems()
     }
     ui->tableWidget->setVerticalHeaderLabels(rows);
 
-    connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
+    connect(ui->tableWidget, &QTableWidget::itemChanged, this, &MainMemory::cellDataChanged,Qt::UniqueConnection);
     refreshMemory();
 }
 
 void MainMemory::refreshMemory()
 {
     // disconnect this signal so that modifying the text of the column next to it doesn't fire this signal; reconnect at the end
-    disconnect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
+
+
+
+    disconnect(ui->tableWidget, &QTableWidget::itemChanged, this, &MainMemory::cellDataChanged);
 
     bool ok;
     int address;
@@ -107,13 +110,13 @@ void MainMemory::refreshMemory()
         }
     }
 
-    connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
+    connect(ui->tableWidget, &QTableWidget::itemChanged, this, &MainMemory::cellDataChanged,Qt::UniqueConnection);
 }
 
 void MainMemory::setMemAddress(int memAddress, int value)
 {
     // disconnect this signal so that modifying the text of the column next to it doesn't fire this signal; reconnect at the end
-    disconnect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
+    disconnect(ui->tableWidget, &QTableWidget::itemChanged, this, &MainMemory::cellDataChanged);
     modifiedAddresses.insert(memAddress);
     if (memAddress > 0xffff || memAddress < 0) {
         qDebug() << "invalid address: " << memAddress;
@@ -132,7 +135,7 @@ void MainMemory::setMemAddress(int memAddress, int value)
 
     ui->tableWidget->item(memAddress, 0)->setText("0x" + QString("%1").arg(value, 2, 16, QLatin1Char('0')).toUpper().trimmed());
     hightlightModifiedBytes();
-    connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
+    connect(ui->tableWidget, &QTableWidget::itemChanged, this, &MainMemory::cellDataChanged,Qt::UniqueConnection);
 }
 
 void MainMemory::clearMemory()
@@ -155,7 +158,7 @@ void MainMemory::showMemEdited(int address)
 void MainMemory::hightlightModifiedBytes()
 {
     // disconnect this signal so that modifying the text of the column next to it doesn't fire this signal; reconnect at the end
-    disconnect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
+    disconnect(ui->tableWidget, &QTableWidget::itemChanged, this, &MainMemory::cellDataChanged);
         // clear all highlighted cells
     for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
         ui->tableWidget->item(i,0)->setBackgroundColor(PepColors::transparent);
@@ -172,13 +175,13 @@ void MainMemory::hightlightModifiedBytes()
     }
 
 
-    connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
+    connect(ui->tableWidget, &QTableWidget::itemChanged, this, &MainMemory::cellDataChanged,Qt::UniqueConnection);
 }
 
 void MainMemory::scrollToAddress(int address)
 {
     // disconnect this signal so that modifying the text of the column next to it doesn't fire this signal; reconnect at the end
-    //disconnect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
+    //disconnect(ui->tableWidget, &QTableWidget::itemChanged, this, &MainMemory::cellDataChanged);
 
     if (address >= 0 && address <= 0xffff) { // defensive programming!
         if (address > ui->verticalScrollBar->maximum()) { // ensure we only scroll to the bottom, and don't show values larger than 0xffff
@@ -190,7 +193,7 @@ void MainMemory::scrollToAddress(int address)
     }
     // else, ignore, we're getting told to do something out of the correct range.
 
-    //connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
+    //connect(ui->tableWidget, &QTableWidget::itemChanged, this, &MainMemory::cellDataChanged);
     hightlightModifiedBytes();
 }
 
@@ -240,8 +243,8 @@ void MainMemory::sliderMoved(int pos)
 void MainMemory::cellDataChanged(QTableWidgetItem *item)
 {
     // disconnect this signal so that modifying the text of the column next to it doesn't fire this signal; reconnect at the end
-    disconnect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
-    disconnect(dataSection,&CPUDataSection::memoryChanged,this,&MainMemory::onMemoryValueChanged);
+    disconnect(ui->tableWidget, &QTableWidget::itemChanged, this, &MainMemory::cellDataChanged);
+    disconnect(dataSection, &CPUDataSection::memoryChanged, this, &MainMemory::onMemoryValueChanged);
     int row = item->row();
     QString contents = item->text();
     contents = contents.trimmed();
@@ -268,8 +271,8 @@ void MainMemory::cellDataChanged(QTableWidgetItem *item)
         populateMemoryItems(); //ui->verticalScrollBar->value());
     }
 
-    connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
-    connect(dataSection,&CPUDataSection::memoryChanged,this,&MainMemory::onMemoryValueChanged);
+    connect(ui->tableWidget, &QTableWidget::itemChanged, this, &MainMemory::cellDataChanged,Qt::UniqueConnection);
+    connect(dataSection ,&CPUDataSection::memoryChanged, this, &MainMemory::onMemoryValueChanged);
 }
 
 void MainMemory::scrollToChanged(QString string)
@@ -333,7 +336,7 @@ void MainMemory::resizeEvent(QResizeEvent *)
         }
         ui->tableWidget->setVerticalHeaderLabels(rows);
 
-        disconnect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
+        disconnect(ui->tableWidget, &QTableWidget::itemChanged, this, &MainMemory::cellDataChanged);
 
         for (int row = oldRowCount; row < newRowCount; row++) {
             address = ui->tableWidget->verticalHeaderItem(row)->text().toInt(&addrConvOk, 16);
@@ -345,7 +348,7 @@ void MainMemory::resizeEvent(QResizeEvent *)
             }
         }
 
-        connect(ui->tableWidget, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(cellDataChanged(QTableWidgetItem*)));
+        connect(ui->tableWidget, &QTableWidget::itemChanged, this, &MainMemory::cellDataChanged);
 
         refreshMemory();
     }
