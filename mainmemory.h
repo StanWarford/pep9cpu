@@ -93,7 +93,6 @@ private:
     QStringList rows;
     QSet<int> modifiedAddresses;
 
-
     int	highlightedIndex;
     int	currentMemoryOffset;
     char mem[0x10000];

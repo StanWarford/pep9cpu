@@ -36,12 +36,12 @@ MicrocodeEditor::MicrocodeEditor(QWidget *parent, bool highlightCurrentLine, boo
 
     setReadOnly(isReadOnly);
 
-    connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
-    connect(this, SIGNAL(textChanged()), this, SLOT(repaint()));
-    connect(this, SIGNAL(updateRequest(const QRect &, int)), this, SLOT(updateLineNumberArea(const QRect &, int)));
+    connect(this, &QPlainTextEdit::blockCountChanged, this, &MicrocodeEditor::updateLineNumberAreaWidth);
+    connect(this, &QPlainTextEdit::textChanged, this, static_cast<void(QWidget::*)()>(&QWidget::repaint));
+    connect(this, &QPlainTextEdit::updateRequest, this, &MicrocodeEditor::updateLineNumberArea);
     //    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
 
-    connect(this, SIGNAL(cursorPositionChanged()), lineNumberArea, SLOT(update()));
+    connect(this, &QPlainTextEdit::cursorPositionChanged, lineNumberArea, static_cast<void(QWidget::*)()>(&QWidget::update));
 
     updateLineNumberAreaWidth(0);
 }
