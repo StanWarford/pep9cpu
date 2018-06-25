@@ -121,6 +121,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, &MainWindow::darkModeChanged, cpuPaneTwoByteDataBus, &CpuPane::onDarkModeChanged);
     connect(this, &MainWindow::darkModeChanged, cpuPaneOneByteDataBus, &CpuPane::onDarkModeChanged);
     connect(this, &MainWindow::darkModeChanged, mainMemory, &MainMemory::onDarkModeChange);
+    connect(this, &MainWindow::darkModeChanged, microcodePane->getEditor(), &MicrocodeEditor::onDarkModeChanged);
     qApp->installEventFilter(this);
     //Load Style sheets
     QFile f(":qdarkstyle/dark_style.qss");
@@ -870,7 +871,8 @@ void MainWindow::helpCopyToMicrocodeButtonClicked()
         }
 
         microcodePane->setMicrocode(helpDialog->getExampleText());
-        objectCodePane->setObjectCode();
+        microcodePane->microAssemble();
+        objectCodePane->setObjectCode(microcodePane->getMicrocodeProgram());
         helpDialog->hide();
         statusBar()->showMessage("Copied to microcode", 4000);
     }
