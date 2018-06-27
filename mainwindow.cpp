@@ -870,7 +870,8 @@ void MainWindow::helpCopyToMicrocodeButtonClicked()
         }
 
         microcodePane->setMicrocode(helpDialog->getExampleText());
-        objectCodePane->setObjectCode();
+        microcodePane->microAssemble();
+        objectCodePane->setObjectCode(microcodePane->getMicrocodeProgram());
         helpDialog->hide();
         statusBar()->showMessage("Copied to microcode", 4000);
     }
