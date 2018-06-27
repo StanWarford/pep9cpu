@@ -180,7 +180,6 @@ void MicrocodePane::setMicrocode(QString microcode)
     }
     microcode = sourceCodeList.join("\n");
     editor->setPlainText(microcode);
-
     setLabelToModified(true);
 }
 
@@ -291,6 +290,11 @@ void MicrocodePane::writeSettings(QSettings &settings)
     settings.beginGroup("MicrocodePane");
     editor->writeSettings(settings);
     settings.endGroup();
+}
+
+MicrocodeEditor *MicrocodePane::getEditor()
+{
+    return editor;
 }
 
 void MicrocodePane::onCPUFeatureChange()
