@@ -88,8 +88,8 @@ bool CPUDataSection::calculateALUOutput(quint8 &res, quint8 &NZVC) const
     //This function should not set any errors.
     //Errors will be handled by step(..)
     quint8 a,b;
-    bool carryIn;
-    bool hasA=getAMuxOutput(a), hasB=valueOnBBus(b);
+    bool carryIn = 0;
+    bool hasA = getAMuxOutput(a), hasB = valueOnBBus(b);
     calculateCSMuxOutput(carryIn);
     if(!((aluFnIsUnary()&&hasA)||(hasA&&hasB)))
     {
@@ -152,7 +152,7 @@ bool CPUDataSection::calculateALUOutput(quint8 &res, quint8 &NZVC) const
         NZVC|=Enu::VMask*(((a<<1)^a)>>7); //Signed overflow if a<hi> doesn't match a<hi-1>
         break;
     case Enu::ASRA_func: //ASR A
-        carryIn=true; //RORA and ASRA only differ by whether or not carryIn is guaranteed to be high
+        carryIn=a&128; //RORA and ASRA only differ by how the carryIn is calculated
         //Intentional fallthrough
     case Enu::RORA_func: //ROR a
         res = (a>>1)|(((int)carryIn)<<7); //No need to worry about sign extension on shift with unsigned a
@@ -169,9 +169,9 @@ bool CPUDataSection::calculateALUOutput(quint8 &res, quint8 &NZVC) const
         return false;
     }
     //Get boolean value for N, then shift to correct place
-    NZVC|=(Enu::NMask*(res>127));
+    NZVC |= (res>127) ? Enu::NMask : 0;
     //Get boolean value for Z, then shift to correct place
-    NZVC|=(Enu::ZMask*(res==0));
+    NZVC |= (res==0) ? Enu::ZMask : 0;
     return true;
 
 }
@@ -250,7 +250,7 @@ bool CPUDataSection::valueOnCBus(quint8 &result) const
     }
     else if(controlSignals[Enu::CMux]==1)
     {
-        quint8 temp; //Discard NZVC bits for this calculation, they are unecessary for calculating C's output
+        quint8 temp = 0; //Discard NZVC bits for this calculation, they are unecessary for calculating C's output
         //Otherwise the value of C depends solely on the ALU
         return calculateALUOutput(result,temp);
     }
@@ -516,7 +516,7 @@ void CPUDataSection::stepOneByte() noexcept
 
     //Set up all variables needed by stepping calculation
     Enu::EALUFunc aluFunc = (Enu::EALUFunc) controlSignals[Enu::ALU];
-    quint8 a,b,c,alu,NZVC;
+    quint8 a = 0, b = 0, c = 0, alu = 0, NZVC = 0;
     bool hasA=valueOnABus(a),hasB=valueOnBBus(b),hasC=valueOnCBus(c);
     calculateALUOutput(alu,NZVC);
 
@@ -625,7 +625,7 @@ void CPUDataSection::stepTwoByte() noexcept
 
     //Set up all variables needed by stepping calculation
     Enu::EALUFunc aluFunc = (Enu::EALUFunc) controlSignals[Enu::ALU];
-    quint8 a,b,c,alu,NZVC;
+    quint8 a = 0, b = 0, c = 0, alu = 0, NZVC = 0;
     bool hasA=valueOnABus(a),hasB=valueOnBBus(b),hasC=valueOnCBus(c);
     calculateALUOutput(alu,NZVC);
 
