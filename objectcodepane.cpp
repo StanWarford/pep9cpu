@@ -129,6 +129,7 @@ void ObjectCodePane::setObjectCode(MicrocodeProgram* program)
 
         rowNum++;
     }
+    ui->codeTable->resizeRowsToContents();
     ui->codeTable->resizeColumnsToContents();
 }
 
